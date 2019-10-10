@@ -1,13 +1,15 @@
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Callable
 
 
 class TestCase:
 
     def __init__(self, *, stdin='', args=None,
-                 attach=None, files=None, copy_to_attach=False):
+                 attach=None, files=None, copy_to_attach=False,
+                 attach_callback=None):
         self.input: str = stdin
         self.args: List[str] = [] if args is None else args
         self.attach: Any = attach
+        self.attach_callback: Callable = attach_callback
         self.files: Dict[str, str] = {} if files is None else files
         if copy_to_attach:
             self.attach = stdin

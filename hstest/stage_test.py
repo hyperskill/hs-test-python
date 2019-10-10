@@ -13,6 +13,9 @@ from hstest.check_result import CheckResult
 from hstest.exceptions import *
 
 
+_kill = os.kill
+
+
 class StageTest:
 
     real_stdin = None
@@ -99,12 +102,21 @@ class StageTest:
             self.create_files(test_case.files)
             sys.argv = [self.file_to_test] + test_case.args
             self.set_input(test_case.input)
-            runpy.run_module(
-                self.module_to_test,
-                run_name="__main__"
-            )
-            self.delete_files(test_case.files)
-            return StageTest.user_output.getvalue()
+            if test_case.attach_callback:
+                import subprocess
+                proc = subprocess.Popen([self.file_to_test, *test_case.args])
+                self.delete_files(test_case.files)
+                return_value = test_case.attach_callback()
+                _kill(proc.pid, signal.SIGINT)
+                return return_value
+            else:
+                runpy.run_module(
+                    self.module_to_test,
+                    run_name="__main__"
+                )
+                self.delete_files(test_case.files)
+                return StageTest.user_output.getvalue()
+
         except SyntaxError as e:
 
             file = e.filename
