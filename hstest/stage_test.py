@@ -181,6 +181,7 @@ class StageTest:
                     self.get_print_back()
                     failed(fail_msg + '\n\n' + result.feedback)
                     break
+            passed()
 
         except SyntaxException as ex:
             self.get_print_back()

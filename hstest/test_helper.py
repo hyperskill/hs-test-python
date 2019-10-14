@@ -12,6 +12,6 @@ def failed(message: str):
         print("#educational_plugin " + line)
 
 
-def passed(name=None):
+def passed():
     """ Reports success """
-    print("#educational_plugin " + name + " test OK")
+    print("#educational_plugin test OK")
