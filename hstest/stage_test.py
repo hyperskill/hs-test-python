@@ -13,9 +13,6 @@ from hstest.check_result import CheckResult
 from hstest.exceptions import *
 
 
-_kill = os.kill
-
-
 class StageTest:
 
     real_stdin = None
@@ -96,26 +93,21 @@ class StageTest:
             if os.path.isfile(file):
                 os.remove(file)
 
+    def run(self):
+        runpy.run_module(
+            self.module_to_test,
+            run_name="__main__"
+        )
+
     def test(self, test_case: TestCase) -> str:
         self.reset()
         try:
             self.create_files(test_case.files)
             sys.argv = [self.file_to_test] + test_case.args
             self.set_input(test_case.input)
-            if test_case.attach_callback:
-                import subprocess
-                proc = subprocess.Popen([self.file_to_test, *test_case.args])
-                self.delete_files(test_case.files)
-                return_value = test_case.attach_callback()
-                _kill(proc.pid, signal.SIGINT)
-                return return_value
-            else:
-                runpy.run_module(
-                    self.module_to_test,
-                    run_name="__main__"
-                )
-                self.delete_files(test_case.files)
-                return StageTest.user_output.getvalue()
+            self.run()
+            self.delete_files(test_case.files)
+            return StageTest.user_output.getvalue()
 
         except SyntaxError as e:
 
@@ -140,6 +132,9 @@ class StageTest:
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         raise NotImplemented
+
+    def after_all_tests(self):
+        pass
 
     def get_stacktrace(self, hide_internals, skipped_traces=0):
 
@@ -181,6 +176,7 @@ class StageTest:
                     self.get_print_back()
                     failed(fail_msg + '\n\n' + result.feedback)
                     break
+            self.after_all_tests()
             passed()
 
         except SyntaxException as ex:
