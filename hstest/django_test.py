@@ -353,7 +353,7 @@ class HypercarServeNextTest(DjangoTest):
                 'inflate_tires',
                 'Please wait around 0 minutes',
                 'Inflate tires queue: 1',
-                'Waiting for a next client',
+                'Waiting for the next client',
                 False
             )),
             TestCase(attach=partial(
@@ -361,7 +361,7 @@ class HypercarServeNextTest(DjangoTest):
                 'change_oil',
                 'Please wait around 0 minutes',
                 'Change oil queue: 1',
-                'Waiting for a next client',
+                'Waiting for the next client',
                 False
             )),
             TestCase(attach=partial(
