@@ -176,7 +176,6 @@ class StageTest:
                     self.get_print_back()
                     failed(fail_msg + '\n\n' + result.feedback)
                     break
-            self.after_all_tests()
             passed()
 
         except SyntaxException as ex:
@@ -226,3 +225,5 @@ class StageTest:
 
             self.get_print_back()
             failed(exception_msg + '\n\n' + stacktrace)
+        finally:
+            self.after_all_tests()
