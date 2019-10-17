@@ -28,10 +28,10 @@ class DjangoTest(StageTest):
 
 class HypercarWelcomeToServiceTest(DjangoTest):
 
-    def get_main_page(self) -> CheckResult:
+    def get_welcome_page(self) -> CheckResult:
         for _ in range(3):
             try:
-                main_page = urlopen('http://localhost:8000').read().decode()
+                main_page = urlopen('http://localhost:8000/welcome').read().decode()
                 if 'Welcome to the Hypercar service' in main_page:
                     return CheckResult.true()
                 return CheckResult.false(
@@ -40,12 +40,12 @@ class HypercarWelcomeToServiceTest(DjangoTest):
             except (URLError, HTTPError):
                 sleep(2)
         return CheckResult.false(
-            'Cannot connect to the main page.'
+            'Cannot connect to the /welcome page.'
         )
 
     def generate(self):
         return [
-            TestCase(attach=self.get_main_page),
+            TestCase(attach=self.get_welcome_page),
         ]
 
     def check(self, reply, attach):
@@ -87,10 +87,10 @@ class HypercarClientMenuTest(DjangoTest):
 
 class HypercarElecronicQueueTest(DjangoTest):
 
-    def get_main_page(self) -> CheckResult:
+    def get_welcome_page(self) -> CheckResult:
         for _ in range(3):
             try:
-                main_page = urlopen('http://localhost:8000').read().decode()
+                main_page = urlopen('http://localhost:8000/welcome').read().decode()
                 if 'Welcome to the Hypercar service' in main_page:
                     return CheckResult.true()
                 return CheckResult.false(
@@ -99,7 +99,7 @@ class HypercarElecronicQueueTest(DjangoTest):
             except (URLError, HTTPError):
                 sleep(2)
         return CheckResult.false(
-            'Cannot connect to the main page.'
+            'Cannot connect to the /welcome page.'
         )
 
     def get_ticket(self, service: str, content: str) -> CheckResult:
@@ -118,7 +118,7 @@ class HypercarElecronicQueueTest(DjangoTest):
 
     def generate(self):
         return [
-            TestCase(attach=self.get_main_page),
+            TestCase(attach=self.get_welcome_page),
             TestCase(attach=partial(
                 self.get_ticket,
                 'inflate_tires',
@@ -157,10 +157,10 @@ class HypercarOperatorMenuTest(DjangoTest):
         'make_diagnostics': 'Make diagnostics queue',
     }
 
-    def get_main_page(self) -> CheckResult:
+    def get_welcome_page(self) -> CheckResult:
         for _ in range(3):
             try:
-                main_page = urlopen('http://localhost:8000').read().decode()
+                main_page = urlopen('http://localhost:8000/welcome').read().decode()
                 if 'Welcome to the Hypercar service' in main_page:
                     return CheckResult.true()
                 return CheckResult.false(
@@ -169,7 +169,7 @@ class HypercarOperatorMenuTest(DjangoTest):
             except (URLError, HTTPError):
                 sleep(2)
         return CheckResult.false(
-            'Cannot connect to the main page.'
+            'Cannot connect to the /welcome page.'
         )
 
     def get_ticket(self, service: str, content: str) -> CheckResult:
@@ -206,7 +206,7 @@ class HypercarOperatorMenuTest(DjangoTest):
 
     def generate(self):
         return [
-            TestCase(attach=self.get_main_page),
+            TestCase(attach=self.get_welcome_page),
             TestCase(attach=partial(
                 self.check_menu,
                 'inflate_tires',
@@ -250,10 +250,10 @@ class HypercarServeNextTest(DjangoTest):
         'make_diagnostics': 'Make diagnostics queue',
     }
 
-    def get_main_page(self) -> CheckResult:
+    def get_welcome_page(self) -> CheckResult:
         for _ in range(3):
             try:
-                main_page = urlopen('http://localhost:8000').read().decode()
+                main_page = urlopen('http://localhost:8000/welcome').read().decode()
                 if 'Welcome to the Hypercar service' in main_page:
                     return CheckResult.true()
                 return CheckResult.false(
@@ -262,7 +262,7 @@ class HypercarServeNextTest(DjangoTest):
             except (URLError, HTTPError):
                 sleep(2)
         return CheckResult.false(
-            'Cannot connect to the main page.'
+            'Cannot connect to the /welcome page.'
         )
 
     def get_ticket(self, service: str, content: str) -> CheckResult:
@@ -347,7 +347,7 @@ class HypercarServeNextTest(DjangoTest):
 
     def generate(self):
         return [
-            TestCase(attach=self.get_main_page),
+            TestCase(attach=self.get_welcome_page),
             TestCase(attach=partial(
                 self.check_next,
                 'inflate_tires',
