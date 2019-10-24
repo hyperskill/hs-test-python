@@ -77,7 +77,7 @@ class StageTest:
     def reset(self):
         StageTest.user_output = io.StringIO()
         top_module = self.module_to_test[:self.module_to_test.index('.')]
-        for name, module in sys.modules.items():
+        for name, module in list(sys.modules.items()):
             if name.startswith(top_module):
                 importlib.reload(module)
 
