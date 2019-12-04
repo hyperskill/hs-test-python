@@ -13,8 +13,9 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/hyperskill/hs-test-python",
     packages=find_packages(),
+    python_requires=">=3.6",
     install_requires=[],
     classifiers=[
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.6"
     ],
 )
