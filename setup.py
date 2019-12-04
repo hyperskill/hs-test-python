@@ -5,7 +5,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="hstest",
-    version="1.0.0",
+    version="v1",
     author="Valdimir Turov",
     author_email="vladimir.turov@stepik.org",
     description="A small framework that simplifies testing educational projects for https://hyperskill.org/.",
