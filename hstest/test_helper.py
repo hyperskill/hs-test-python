@@ -14,4 +14,4 @@ def failed(message: str):
 
 def passed():
     """ Reports success """
-    print("#educational_plugin test OK")
+    print("\n#educational_plugin test OK")
