@@ -6,7 +6,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class ExceptionInUserCode2Test(StageTest):
+class ExceptionWhileReading(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
@@ -20,8 +20,8 @@ class ExceptionInUserCode2Test(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = ExceptionInUserCode2Test(
-            'tests.outcomes.exception_in_user_code_2.program'
+        status, feedback = ExceptionWhileReading(
+            'tests.outcomes.exception_while_reading.program'
         ).run_tests()
 
         self.assertEqual(status, -1)
