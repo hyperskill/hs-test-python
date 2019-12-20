@@ -173,23 +173,34 @@ class StageTest:
 
         test_number = 0
         try:
-            for test in self.generate():
+            tests = self.generate()
+            if len(tests) == 0:
+                exception_msg = (
+                        'Fatal error during testing, ' +
+                        'please send the report to Hyperskill team.\n\n'
+                        'No tests provided by \"generate\" method'
+                )
+                self.revert_globals()
+                return failed(exception_msg)
+
+            for test in tests:
                 test_number += 1
                 reply = self.test(test)
                 result = self.check(reply, test.attach)
                 if not result.result:
                     fail_msg = f'Wrong answer in test #{test_number}'
-                    self.get_print_back()
+                    self.revert_globals()
                     return failed(fail_msg + '\n\n' + result.feedback)
+            self.revert_globals()
             return passed()
 
         except SyntaxException as ex:
-            self.get_print_back()
+            self.revert_globals()
             return failed(ex.message)
 
         except ExitException as ex:
             error_msg = f'Error in test #{test_number}'
-            self.get_print_back()
+            self.revert_globals()
             return failed(error_msg + '\n\n' + ex.message)
 
         except Exception:
@@ -228,8 +239,7 @@ class StageTest:
                     skipped_traces=skipped_traces
                 )
 
-            self.get_print_back()
+            self.revert_globals()
             return failed(exception_msg + '\n\n' + stacktrace)
         finally:
-            self.revert_globals()
             self.after_all_tests()
