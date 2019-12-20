@@ -137,7 +137,7 @@ class StageTest:
         raise NotImplementedError('Can\'t create tests: override "generate" method')
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        raise NotImplemented
+        raise NotImplementedError('Can\'t check result: override "check" method')
 
     def after_all_tests(self):
         pass
