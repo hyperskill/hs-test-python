@@ -6,7 +6,7 @@ import importlib
 import signal
 import builtins
 import traceback
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Tuple
 from hstest.test_helper import *
 from hstest.test_case import TestCase
 from hstest.check_result import CheckResult
@@ -76,7 +76,7 @@ class StageTest:
 
     def reset(self):
         StageTest.user_output = io.StringIO()
-        top_module = self.module_to_test[:self.module_to_test.index('.')]
+        top_module = self.module_to_test[:self.module_to_test.rindex('.')]
         for name, module in list(sys.modules.items()):
             if name.startswith(top_module):
                 importlib.reload(module)
@@ -163,7 +163,7 @@ class StageTest:
 
         return traceback_msg
 
-    def run_tests(self):
+    def run_tests(self) -> Tuple[int, str]:
 
         test_number = 0
         try:
@@ -174,18 +174,17 @@ class StageTest:
                 if not result.result:
                     fail_msg = f'Wrong answer in test #{test_number}'
                     self.get_print_back()
-                    failed(fail_msg + '\n\n' + result.feedback)
-                    break
-            passed()
+                    return failed(fail_msg + '\n\n' + result.feedback)
+            return passed()
 
         except SyntaxException as ex:
             self.get_print_back()
-            failed(ex.message)
+            return failed(ex.message)
 
         except ExitException as ex:
             error_msg = f'Error in test #{test_number}'
             self.get_print_back()
-            failed(error_msg + '\n\n' + ex.message)
+            return failed(error_msg + '\n\n' + ex.message)
 
         except Exception:
 
@@ -224,6 +223,6 @@ class StageTest:
                 )
 
             self.get_print_back()
-            failed(exception_msg + '\n\n' + stacktrace)
+            return failed(exception_msg + '\n\n' + stacktrace)
         finally:
             self.after_all_tests()
