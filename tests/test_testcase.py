@@ -1,25 +1,73 @@
+import unittest
 from hstest.test_case import TestCase
 
 
-def test_testcase_attach():
-    testcase = TestCase()
-    assert testcase.attach is None
+class TestTestCase(unittest.TestCase):
+    def test_attach_none_default(self):
+        test_case = TestCase()
+        self.assertIsNone(test_case.attach)
 
-    attach = (1, "abc")
-    testcase = TestCase(attach=attach)
-    assert attach == testcase.attach
+    def test_attach(self):
+        attach = (1, "abc")
+        test_case = TestCase(attach=attach)
+        self.assertEqual(attach, test_case.attach)
 
-    testcase = TestCase(stdin='abc', copy_to_attach=True)
-    assert testcase.attach == 'abc'
+    def test_copy_to_attach(self):
+        test_case = TestCase(stdin='abc', copy_to_attach=True)
+        self.assertEqual(test_case.attach, 'abc')
 
-    testcase = TestCase(stdin='abc', attach=attach, copy_to_attach=True)
-    assert testcase.attach == 'abc'
+    def test_copy_to_attach_exception(self):
+        with self.assertRaises(Exception):
+            TestCase(stdin='abc', attach=(1, 2, 3), copy_to_attach=True)
 
+    def test_stdin_empty(self):
+        test_case = TestCase()
+        self.assertEqual(test_case.input, '')
 
-def test_testcase_stdin():
-    testcase = TestCase()
-    assert testcase.input == ''
+    def test_stdin_passed(self):
+        stdin = 'abc'
+        test_case = TestCase(stdin=stdin)
+        self.assertEqual(test_case.input, stdin)
 
-    input = 'abc'
-    testcase = TestCase(stdin=input)
-    assert testcase.input == input
+    def test_from_stepik_length(self):
+        tests = TestCase.from_stepik(['123', '234', '345'])
+        self.assertEqual(len(tests), 3)
+
+    def test_from_stepik_simple(self):
+        tests = TestCase.from_stepik(['123', '234', '345'])
+        self.assertEqual(tests[0].input, '123')
+        self.assertEqual(tests[0].attach, None)
+        self.assertEqual(tests[1].input, '234')
+        self.assertEqual(tests[1].attach, None)
+        self.assertEqual(tests[2].input, '345')
+        self.assertEqual(tests[2].attach, None)
+
+    def test_from_stepik_with_attach(self):
+        tests = TestCase.from_stepik(
+            [('123', 234), ('234', 345), ('345', 456)]
+        )
+        self.assertEqual(tests[0].input, '123')
+        self.assertEqual(tests[0].attach, 234)
+        self.assertEqual(tests[1].input, '234')
+        self.assertEqual(tests[1].attach, 345)
+        self.assertEqual(tests[2].input, '345')
+        self.assertEqual(tests[2].attach, 456)
+
+    def test_from_stepik_mixed(self):
+        tests = TestCase.from_stepik(
+            [('mixed1', 234567), 'mixed234', ('mixed345', 456234), '567']
+        )
+        self.assertEqual(tests[0].input, 'mixed1')
+        self.assertEqual(tests[0].attach, 234567)
+        self.assertEqual(tests[1].input, 'mixed234')
+        self.assertEqual(tests[1].attach, None)
+        self.assertEqual(tests[2].input, 'mixed345')
+        self.assertEqual(tests[2].attach, 456234)
+        self.assertEqual(tests[3].input, '567')
+        self.assertEqual(tests[3].attach, None)
+
+    def test_from_stepik_bad_data(self):
+        with self.assertRaises(ValueError):
+            TestCase.from_stepik(
+                [('mixed1', 234567), 234345, ('mixed345', 456234), '567']
+            )

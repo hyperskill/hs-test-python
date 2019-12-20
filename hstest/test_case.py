@@ -1,4 +1,9 @@
-from typing import List, Dict, Any, Tuple, Callable
+from typing import List, Dict, Any, Tuple, Callable, Union
+
+
+SimpleStepikTest = str
+AdvancedStepikTest = Tuple[str, Any]
+StepikTest = Union[SimpleStepikTest, AdvancedStepikTest]
 
 
 class TestCase:
@@ -12,10 +17,15 @@ class TestCase:
         self.attach_callback: Callable = attach_callback
         self.files: Dict[str, str] = {} if files is None else files
         if copy_to_attach:
+            if attach is not None:
+                raise Exception(
+                    'Attach is not None '
+                    'but copying from stdin is specified'
+                )
             self.attach = stdin
 
     @staticmethod
-    def from_stepik(stepik_tests: List[Tuple[str, Any]]) -> List['TestCase']:
+    def from_stepik(stepik_tests: List[StepikTest]) -> List['TestCase']:
         hs_tests = []
         for test in stepik_tests:
             hs_test = TestCase()
