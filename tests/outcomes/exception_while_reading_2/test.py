@@ -25,6 +25,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(status, -1)
         self.assertTrue('Exception in test #1' in feedback)
+        self.assertTrue('Probably your program run out of input' in feedback)
         self.assertTrue('Traceback (most recent call last):' in feedback)
         self.assertTrue('    print(input())' in feedback)
         self.assertTrue('EOFError: EOF when reading a line' in feedback)
