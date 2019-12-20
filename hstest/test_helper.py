@@ -1,9 +1,4 @@
 
-def set_congratulation_message(message):
-    """ Overrides default 'Congratulations!' message """
-    print("#educational_plugin CONGRATS_MESSAGE " + message)
-
-
 def failed(message: str):
     """ Reports failure """
     lines = message.splitlines()
