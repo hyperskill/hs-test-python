@@ -134,7 +134,7 @@ class StageTest:
             raise ExitException('Tried to exit.')
 
     def generate(self) -> List[TestCase]:
-        raise NotImplemented
+        raise NotImplementedError('Can\'t create tests: override "generate" method')
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         raise NotImplemented
