@@ -15,6 +15,8 @@ class UnitTesting:
         loader = TestLoader()
 
         for module in UnitTesting.find_modules(dirname(__file__)):
+            if module.endswith('.program'):
+                continue
             imported = import_module(f'tests.{module}')
             for name, obj in getmembers(imported):
                 if isclass(obj) and issubclass(obj, TestCase):
