@@ -236,6 +236,8 @@ class StageTest:
                     hide_internals=True,
                     skipped_traces=skipped_traces
                 )
+                if stacktrace.strip().endswith('EOFError: EOF when reading a line'):
+                    exception_msg += '\n\nProbably your program run out of input'
 
             self.revert_globals()
             return failed(exception_msg + '\n\n' + stacktrace)
