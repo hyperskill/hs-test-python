@@ -61,6 +61,12 @@ class StageTest:
         builtins.input = StageTest.input
 
     @staticmethod
+    def revert_globals():
+        sys.stdin = StageTest.real_stdin
+        builtins.print = StageTest.real_print
+        builtins.input = StageTest.real_input
+
+    @staticmethod
     def get_print_back():
         builtins.print = StageTest.real_print
         sys.stdin = StageTest.real_stdin
@@ -225,4 +231,5 @@ class StageTest:
             self.get_print_back()
             return failed(exception_msg + '\n\n' + stacktrace)
         finally:
+            self.revert_globals()
             self.after_all_tests()
