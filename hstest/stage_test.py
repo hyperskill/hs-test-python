@@ -175,13 +175,7 @@ class StageTest:
         try:
             tests = self.generate()
             if len(tests) == 0:
-                exception_msg = (
-                        'Fatal error during testing, ' +
-                        'please send the report to Hyperskill team.\n\n'
-                        'No tests provided by \"generate\" method'
-                )
-                self.revert_globals()
-                return failed(exception_msg)
+                raise Exception('No tests provided by "generate" method')
 
             for test in tests:
                 test_number += 1
@@ -226,9 +220,13 @@ class StageTest:
                 exc_tb = exc_tb.tb_next
 
             if not trace_frames:
+                if test_number == 0:
+                    when_error_happened = ' during testing'
+                else:
+                    when_error_happened = f' in test #{test_number}'
                 exception_msg = (
-                        f"Fatal error in test #{test_number}, " +
-                        "please send the report to Hyperskill team."
+                    f"Fatal error{when_error_happened}, " +
+                    "please send the report to Hyperskill team."
                 )
                 stacktrace = self.get_stacktrace(hide_internals=False)
 
