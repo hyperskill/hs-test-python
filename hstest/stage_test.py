@@ -226,7 +226,7 @@ class StageTest:
                     when_error_happened = f' in test #{test_number}'
                 exception_msg = (
                     f"Fatal error{when_error_happened}, " +
-                    "please send the report to Hyperskill team."
+                    "please send the report to support@hyperskill.org"
                 )
                 stacktrace = self.get_stacktrace(hide_internals=False)
 

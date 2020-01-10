@@ -26,4 +26,4 @@ class Test(unittest.TestCase):
 
         self.assertEqual(status, -1)
         self.assertTrue('Fatal error during testing, please '
-                        'send the report to Hyperskill team.' in feedback)
+                        'send the report to support@hyperskill.org' in feedback)
