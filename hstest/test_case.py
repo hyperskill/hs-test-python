@@ -8,13 +8,15 @@ StepikTest = Union[SimpleStepikTest, AdvancedStepikTest]
 
 class TestCase:
 
-    def __init__(self, *, stdin='', args=None,
-                 attach=None, files=None, copy_to_attach=False,
-                 attach_callback=None):
+    def __init__(self, *,
+                 stdin: str = '',
+                 args: List[str] = None,
+                 attach: Any = None,
+                 files: Dict[str, str] = None,
+                 copy_to_attach=False):
         self.input: str = stdin
         self.args: List[str] = [] if args is None else args
         self.attach: Any = attach
-        self.attach_callback: Callable = attach_callback
         self.files: Dict[str, str] = {} if files is None else files
         if copy_to_attach:
             if attach is not None:
