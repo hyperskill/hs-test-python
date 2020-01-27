@@ -6,82 +6,90 @@ import importlib
 import signal
 import builtins
 import traceback
-from typing import List, Any, Dict, Tuple
+from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError
+from typing import List, Any, Dict, Tuple, Optional
 from hstest.test_helper import *
 from hstest.test_case import TestCase
 from hstest.check_result import CheckResult
 from hstest.exceptions import *
+from hstest.outcomes import Outcome
+from hstest.dynamic.handle import SystemHandler
+from hstest.dynamic.handle import StdoutHandler
+from hstest.dynamic.handle import StdinHandler
+from hstest.test_run import TestRun
 
 
 class StageTest:
 
-    real_stdin = None
+    #real_stdin = None
     real_print = None
     real_input = None
     user_output: io.StringIO = None
 
-    @staticmethod
-    def remove_kill_methods():
-        os.kill = lambda *x, **y: exit(0)
-        os._exit = lambda *x, **y: exit(0)
-        os.killpg = lambda *x, **y: exit(0)
-        signal.pthread_kill = lambda *x, **y: exit(0)
-        signal.siginterrupt = lambda *x, **y: exit(0)
+    #@staticmethod
+    #def remove_kill_methods():
+    #    os.kill = lambda *x, **y: exit(0)
+    #    os._exit = lambda *x, **y: exit(0)
+    #    os.killpg = lambda *x, **y: exit(0)
+    #    signal.pthread_kill = lambda *x, **y: exit(0)
+    #    signal.siginterrupt = lambda *x, **y: exit(0)
 
-    @staticmethod
-    def set_input(user_input: str):
-        sys.stdin = io.StringIO(user_input)
+    #@staticmethod
+    #def set_input(user_input: str):
+    #    sys.stdin = io.StringIO(user_input)
 
-    @staticmethod
-    def add_input(user_input: str):
-        sys.stdin: io.StringIO
-        curr_position = sys.stdin.seek(0, io.SEEK_CUR)
-        sys.stdin.seek(0)
-        sys.stdin = io.StringIO(sys.stdin.read() + user_input)
-        sys.stdin.seek(curr_position)
+    #@staticmethod
+    #def add_input(user_input: str):
+    #    sys.stdin: io.StringIO
+    #    curr_position = sys.stdin.seek(0, io.SEEK_CUR)
+    #    sys.stdin.seek(0)
+    #    sys.stdin = io.StringIO(sys.stdin.read() + user_input)
+    #    sys.stdin.seek(curr_position)
 
-    @staticmethod
-    def print(*args, **kwargs):
-        StageTest.real_print(*args, **kwargs)
-        StageTest.real_print(*args, **kwargs, file=StageTest.user_output)
+    #@staticmethod
+    #def print(*args, **kwargs):
+    #    StageTest.real_print(*args, **kwargs)
+    #    StageTest.real_print(*args, **kwargs, file=StageTest.user_output)
 
-    @staticmethod
-    def input(arg=''):
-        StageTest.print(arg, end='')
-        user_input = StageTest.real_input()
-        # StageTest.print()
-        return user_input
+    #@staticmethod
+    #def input(arg=''):
+    #    StageTest.print(arg, end='')
+    #    user_input = StageTest.real_input()
+    #    # StageTest.print()
+    #    return user_input
 
-    @staticmethod
-    def replace_globals():
-        StageTest.real_stdin = sys.stdin
-        StageTest.real_print = builtins.print
-        StageTest.real_input = builtins.input
-        builtins.print = StageTest.print
-        builtins.input = StageTest.input
+    #@staticmethod
+    #def replace_globals():
+    #    StageTest.real_stdin = sys.stdin
+    #    StageTest.real_print = builtins.print
+    #    StageTest.real_input = builtins.input
+    #    builtins.print = StageTest.print
+    #    builtins.input = StageTest.input
 
-    @staticmethod
-    def revert_globals():
-        sys.stdin = StageTest.real_stdin
-        builtins.print = StageTest.real_print
-        builtins.input = StageTest.real_input
+    #@staticmethod
+    #def revert_globals():
+    #    sys.stdin = StageTest.real_stdin
+    #    builtins.print = StageTest.real_print
+    #    builtins.input = StageTest.real_input
 
-    @staticmethod
-    def get_print_back():
-        builtins.print = StageTest.real_print
-        sys.stdin = StageTest.real_stdin
+    #@staticmethod
+    #def get_print_back():
+    #    builtins.print = StageTest.real_print
+    #    sys.stdin = StageTest.real_stdin
 
     def __init__(self, module_to_test: str):
-        self.remove_kill_methods()
-        self.replace_globals()
+    #    self.remove_kill_methods()
+    #    self.replace_globals()
         self.module_to_test = module_to_test
         self.this_test_file = __file__
         self.file_to_test = module_to_test.replace('.', os.sep) + '.py'
         self.full_file_to_test = ''
-        self.tests: List[TestCase] = []
+        self.curr_test_run: Optional[TestRun] = None
+        self.need_reload = True
+        # self.tests: List[TestCase] = []
 
     def reset(self):
-        StageTest.user_output = io.StringIO()
+        # StageTest.user_output = io.StringIO()
         top_module = self.module_to_test[:self.module_to_test.rindex('.')]
         for name, module in list(sys.modules.items()):
             if name.startswith(top_module):
@@ -243,3 +251,103 @@ class StageTest:
             return failed(exception_msg + '\n\n' + stacktrace)
         finally:
             self.after_all_tests()
+
+    def _exec_file(self, args: List[str]):
+        if self.need_reload:
+            try:
+                self.reset()
+            except BaseException as ex:
+                self.curr_test_run.error_in_test = ex
+        try:
+            sys.argv = [self.file_to_test] + args
+            runpy.run_module(
+                self.module_to_test,
+                run_name="__main__"
+            )
+        except ImportError as ex:
+            self.curr_test_run.error_in_test = FatalErrorException(
+                ex, f'Cannot find file {self.file_to_test}')
+        except SyntaxError as ex:
+            self.curr_test_run.error_in_test = SyntaxException(
+                ex, self.file_to_test)
+        except BaseException as ex:
+            if self.curr_test_run.error_in_test is None:
+                # ExitException is thrown in case of exit() or quit()
+                # consider them like normal exit
+                if not isinstance(ex, ExitException):
+                    self.curr_test_run.error_in_test = BadSolutionException(ex)
+
+    def _run_file(self, args: List[str], time_limit: int):
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            try:
+                future: Future = executor.submit(lambda: self._exec_file(args))
+                future.result(timeout=time_limit / 1000)
+            except TimeoutError:
+                self.curr_test_run.error_in_test = TimeLimitException(time_limit)
+            except BaseException as ex:
+                self.curr_test_run.error_in_test = ex
+
+    def _run_test(self, test: TestCase) -> str:
+        StdinHandler.set_input_funcs(test.input_funcs) # todo proper input funcs
+        StdoutHandler.reset_output()
+        self.curr_test_run.error_in_test = None
+
+        self._run_file(test.args, test.time_limit) # todo add time limit
+        self._check_errors(test)
+
+        return StdoutHandler.get_output()
+
+    def _check_errors(self, test: TestCase):
+        if self.curr_test_run.error_in_test is None:
+            return
+
+        error_in_test = self.curr_test_run.error_in_test
+        if isinstance(error_in_test, TestPassedException):
+            return
+
+        # todo exception with feedback
+
+        raise error_in_test
+
+    def _check_solution(self, test: TestCase, output: str):
+        if isinstance(self.curr_test_run.error_in_test, TestPassedException):
+            return CheckResult.true()
+        return self.check(output, test.attach) # todo change to check_func
+
+    def start(self):
+        curr_test: int = 0
+        try:
+            SystemHandler.set_up()
+            tests = self.generate()
+
+            for test in tests:
+                curr_test += 1
+
+                red_bold = '\033[1;31m'
+                reset = '\033[0m'
+                StdoutHandler.real_stdout.write(
+                    red_bold + f'\nStart test {curr_test}' + reset + '\n'
+                )
+
+                self.curr_test_run = TestRun(curr_test, test)
+
+                self.create_files(test.files)
+                # todo start threads
+
+                output: str = self._run_test(test)
+                result: CheckResult = self._check_solution(test, output)
+
+                # todo stop threads
+                self.delete_files(test.files)
+
+                if not result.result:
+                    raise WrongAnswerException(result.feedback)
+            SystemHandler.tear_down()
+            # todo print success
+
+        except BaseException as ex:
+            outcome: Outcome = Outcome.get_outcome()  # todo implement get_outcome
+            fail_text = str(outcome)
+            self.curr_test_run = None
+            SystemHandler.tear_down()
+            # todo print fail
