@@ -12,3 +12,7 @@ class SyntaxException(BadSolutionException):
 class ExitException(BadSolutionException):
     def __init__(self, message):
         super().__init__(message)
+
+
+class UnexpectedErrorException(Exception):
+    pass

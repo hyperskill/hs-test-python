@@ -8,6 +8,7 @@ from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
 from hstest.stage_test import StageTest
 from hstest.check_result import CheckResult
+from hstest.exceptions import UnexpectedErrorException
 
 
 EMPTY_DATABASE = 'empty.sqlite3'
@@ -33,8 +34,13 @@ class DjangoTest(StageTest):
         if os.path.exists(EMPTY_DATABASE):
             shutil.copyfile(EMPTY_DATABASE, TEST_DATABASE)
             os.environ['HYPERSKILL_TEST_DATABASE'] = TEST_DATABASE
-            migrate = subprocess.Popen([sys.executable, self.file_to_test, 'migrate'])
-            migrate.wait()
+            migrate = subprocess.Popen(
+                [sys.executable, self.file_to_test, 'migrate'],
+                stderr=subprocess.PIPE
+            )
+            exit_code = migrate.wait()
+            if exit_code != 0:
+                raise UnexpectedErrorException(migrate.stderr.read().decode())
 
     def check_server(self):
         if self.port == '0':
