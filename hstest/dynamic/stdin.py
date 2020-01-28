@@ -1,5 +1,5 @@
 from typing import Callable, List, Optional
-from hstest.dynamic.handle import StdoutHandler
+from hstest.dynamic.handle_stdout import StdoutHandler
 from hstest.check_result import CheckResult
 from hstest.exceptions import TestPassedException
 from hstest.exceptions import WrongAnswerException
