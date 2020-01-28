@@ -266,7 +266,7 @@ class StageTest:
             )
         except ImportError as ex:
             self.curr_test_run.error_in_test = FatalErrorException(
-                ex, f'Cannot find file {self.file_to_test}')
+                f'Cannot find file {self.file_to_test}', ex)
         except SyntaxError as ex:
             self.curr_test_run.error_in_test = SyntaxException(
                 ex, self.file_to_test)

@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class BadSolutionException(BaseException):
     def __init__(self, user_exception: BaseException):
         self.user_exception = user_exception
@@ -22,7 +25,7 @@ class ExceptionWithFeedback(BaseException):
 
 
 class FatalErrorException(BaseException):
-    def __init__(self, ex: BaseException, error_text: str):
+    def __init__(self, error_text: str, ex: Optional[BaseException] = None):
         self.error_text = error_text
         self.exception = ex
 
