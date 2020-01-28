@@ -4,7 +4,7 @@ from hstest.exceptions import ExceptionWithFeedback
 from hstest.exceptions import TimeLimitException
 from hstest.exceptions import FatalErrorException
 from hstest.utils import get_stacktrace, get_report
-from hstest.dynamic.handle import StdoutHandler
+from hstest.dynamic.handle_stdout import StdoutHandler
 from hstest.test_run import TestRun
 
 

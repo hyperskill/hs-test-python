@@ -10,8 +10,8 @@ from hstest.check_result import CheckResult
 from hstest.exceptions import *
 from hstest.outcomes import Outcome
 from hstest.dynamic.handle import SystemHandler
-from hstest.dynamic.handle import StdoutHandler
-from hstest.dynamic.handle import StdinHandler
+from hstest.dynamic.handle_stdout import StdoutHandler
+from hstest.dynamic.handle_stdin import StdinHandler
 from hstest.test_run import TestRun
 
 
