@@ -1,11 +1,6 @@
 from typing import Optional
 
 
-class BadSolutionException(BaseException):
-    def __init__(self, user_exception: BaseException):
-        self.user_exception = user_exception
-
-
 class SyntaxException(BaseException):
     def __init__(self, exception: BaseException, file: str):
         self.file: str = file
@@ -19,8 +14,8 @@ class ExitException(BaseException):
 
 
 class ExceptionWithFeedback(BaseException):
-    def __init__(self, error_text: str, real_exception: BaseException):
-        self.error_text: str = error_text
+    def __init__(self, feedback: str, real_exception: BaseException):
+        self.feedback: str = feedback
         self.real_exception: BaseException = real_exception
 
 
@@ -40,5 +35,5 @@ class TimeLimitException(BaseException):
 
 
 class WrongAnswerException(BaseException):
-    def __init__(self, error_text: str):
-        self.error_text = error_text
+    def __init__(self, feedback: str):
+        self.feedback = feedback

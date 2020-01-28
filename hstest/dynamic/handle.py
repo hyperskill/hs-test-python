@@ -9,6 +9,7 @@ from hstest.dynamic.stdin import InputMock
 from hstest.dynamic.stdin import DynamicInputFunction
 from hstest.utils import normalize_line_endings
 from hstest.exceptions import ExitException
+from hstest.test_run import TestRun
 
 
 class SystemHandler:
@@ -61,7 +62,8 @@ class StdoutHandler:
 
     @staticmethod
     def inject_input(user_input: str):
-        # todo add test run check
+        if TestRun.curr_test_run is not None:
+            TestRun.curr_test_run.input_used = True
         StdoutHandler.mock_stdout.inject_input(user_input)
 
 

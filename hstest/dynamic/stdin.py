@@ -4,6 +4,7 @@ from hstest.check_result import CheckResult
 from hstest.exceptions import TestPassedException
 from hstest.exceptions import WrongAnswerException
 from hstest.utils import normalize_line_endings
+from hstest.test_run import TestRun
 
 InputFunction = Callable[[str], object]
 
@@ -28,12 +29,11 @@ class InputMock:
         self.input_text_funcs = texts
 
     def readline(self):
-
-        # todo check test run and throw EOFError
-
-        next_line = self.eject_next_line()
-        if next_line is not None:
-            return next_line
+        test_run = TestRun.curr_test_run
+        if test_run is None or test_run.error_in_test is None:
+            next_line = self.eject_next_line()
+            if next_line is not None:
+                return next_line
 
         raise EOFError('EOF when reading a line')
 
@@ -68,8 +68,8 @@ class InputMock:
                 else:
                     raise WrongAnswerException(obj.feedback)
         except BaseException as ex:
-            # todo add test run
-            pass
+            TestRun.curr_test_run.error_in_test = ex
+            return []
 
         if input_function.trigger_count == 0:
             self.input_text_funcs.pop(0)
