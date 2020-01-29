@@ -16,7 +16,6 @@ class OutputForTest:
 
     def write(self, text):
         text = re.sub(r'(?<!\\)\\n', '\n', text)
-        text = re.sub(r'(?<!\\)\\t', '\t', text)
         text = re.sub(r'(?<!\\)\\\'', '\'', text)
         text = re.sub(r'\\\\', r'\\', text)
         if 'FAIL' in text or 'Traceback' in text or 'failures' in text:

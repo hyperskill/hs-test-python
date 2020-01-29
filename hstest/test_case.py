@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Tuple, Callable, Union, Optional
+from typing import List, Dict, Any, Tuple, Callable, Union, Optional, Type
 from hstest.check_result import CheckResult
 from hstest.dynamic.stdin import DynamicInputFunction, InputFunction
 from hstest.exceptions import FatalErrorException
@@ -23,7 +23,7 @@ class TestCase:
                  files: Dict[str, str] = None,
                  time_limit: int = 15000,
                  check_function: CheckFunction = None,
-                 feedback_on_exception: Dict[type, str] = None,
+                 feedback_on_exception: Dict[Type[Exception], str] = None,
                  copy_to_attach=False,
                  ):
         self.input: Optional[str] = None
