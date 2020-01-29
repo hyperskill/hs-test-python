@@ -6,7 +6,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class SuccessTest(StageTest):
+class SuccessDynamicInput(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
@@ -39,7 +39,7 @@ class SuccessTest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = SuccessTest(
+        status, feedback = SuccessDynamicInput(
             'tests.outcomes.success_dynamic_input.program'
         ).run_tests()
         self.assertEqual(status, 0)

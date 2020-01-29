@@ -8,7 +8,7 @@ from hstest.test_case import TestCase
 from hstest.test_run import TestRun
 
 
-class TestCurrTestCase(StageTest):
+class TestCurrTestNum(StageTest):
     tc_1 = None
     tc_2 = None
 
@@ -18,16 +18,15 @@ class TestCurrTestCase(StageTest):
         return [self.tc_1, self.tc_2]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        tc = TestRun.curr_test_run.test_case
-        if (tc.input == '1' and tc.attach == 1 and tc is self.tc_1 or
-                tc.input == '2' and tc.attach == 2 and tc is self.tc_2):
+        tn = TestRun.curr_test_run.test_num
+        if reply == '1\n' and tn == 1 or reply == '2\n' and tn == 2:
             return CheckResult.true()
         return CheckResult.false()
 
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCurrTestCase(
+        status, feedback = TestCurrTestNum(
             'tests.outcomes.test_curr_test_case.program'
         ).run_tests()
 
