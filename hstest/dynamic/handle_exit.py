@@ -1,4 +1,5 @@
 import os
+import sys
 import builtins
 import signal
 from hstest.exceptions import ExitException
@@ -11,6 +12,7 @@ class ExitHandler:
     _builtins_exit = None
     _os_kill = None
     _os__exit = None
+    _sys_exit = None
     _os_killpg = None
     _signal_pthread_kill = None
     _signal_siginterrupt = None
@@ -26,6 +28,7 @@ class ExitHandler:
             ExitHandler._os_kill = os.exit if hasattr(os, 'exit') else None
             ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
             ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
+            ExitHandler._sys_exit = sys.exit if hasattr(os, '_exit') else None
             ExitHandler._signal_pthread_kill = signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
             ExitHandler._signal_siginterrupt = signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
 
@@ -34,6 +37,7 @@ class ExitHandler:
         os.kill = ExitHandler._exit_func
         os._exit = ExitHandler._exit_func
         os.killpg = ExitHandler._exit_func
+        sys.exit = ExitHandler._exit_func
         signal.pthread_kill = ExitHandler._exit_func
         signal.siginterrupt = ExitHandler._exit_func
 
@@ -44,5 +48,6 @@ class ExitHandler:
         os.kill = ExitHandler._os_kill
         os._exit = ExitHandler._os__exit
         os.killpg = ExitHandler._os_killpg
+        sys.exit = ExitHandler._sys_exit
         signal.pthread_kill = ExitHandler._signal_pthread_kill
         signal.siginterrupt = ExitHandler._signal_siginterrupt
