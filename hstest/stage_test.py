@@ -4,7 +4,7 @@ import os
 import importlib
 from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError
 from typing import List, Any, Dict, Tuple
-from hstest.test_helper import *
+from hstest.utils import failed, passed
 from hstest.test_case import TestCase
 from hstest.check_result import CheckResult
 from hstest.exceptions import *
@@ -126,7 +126,13 @@ class StageTest:
         else:
             return self.check(output, test.attach)
 
-    def run_tests(self) -> Tuple[int, str]:
+    def run_tests(self, debug=False) -> Tuple[int, str]:
+        if debug:
+            import hstest.utils as hs
+            hs.failed_msg_start = ''
+            hs.failed_msg_continue = ''
+            hs.success_msg = ''
+
         curr_test: int = 0
         try:
             SystemHandler.set_up()
@@ -143,7 +149,7 @@ class StageTest:
                     red_bold + f'\nStart test {curr_test}' + reset + '\n'
                 )
 
-                StageTest.curr_test_run = TestRun(curr_test, test)
+                TestRun.curr_test_run = TestRun(curr_test, test)
 
                 self.create_files(test.files)
 

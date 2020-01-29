@@ -1,15 +1,6 @@
-import io
-import os
-import builtins
-import sys
-import signal
-from typing import List
-from hstest.dynamic.stdout import OutputMock
-from hstest.dynamic.stdin import InputMock
-from hstest.dynamic.stdin import DynamicInputFunction
-from hstest.utils import normalize_line_endings
-from hstest.exceptions import ExitException
-from hstest.test_run import TestRun
+from hstest.dynamic.handle_stdout import StdoutHandler
+from hstest.dynamic.handle_stdin import StdinHandler
+from hstest.dynamic.handle_exit import ExitHandler
 
 
 class SystemHandler:
@@ -24,7 +15,3 @@ class SystemHandler:
         StdoutHandler.revert_stdout()
         StdinHandler.revert_stdin()
         ExitHandler.revert_exit()
-
-
-
-

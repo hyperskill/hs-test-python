@@ -17,6 +17,7 @@ class StdoutHandler:
     def revert_stdout():
         StdoutHandler.reset_output()
         sys.stdout = StdoutHandler.real_stdout
+        #sys.stdout.getvalue = lambda *a, **k: ''  # PyCharm cannot test without defining getvalue
 
     @staticmethod
     def reset_output():

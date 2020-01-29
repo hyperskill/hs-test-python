@@ -37,8 +37,8 @@ class Outcome:
         full_log = StdoutHandler.get_dynamic_output()
 
         if len(full_log.strip()) > 0:
-            result = ('\n\nPlease find below the output '
-                      'of your program during this failed test.\n')
+            result += ('\n\nPlease find below the output '
+                       'of your program during this failed test.\n')
             if TestRun.curr_test_run.input_used:
                 result += ("Note that the '>' character indicates "
                            "the beginning of the input line.\n")
@@ -79,7 +79,7 @@ class ExceptionOutcome(Outcome):
         self.stack_trace = get_stacktrace(stage, cause)
 
         if self.stack_trace.strip().endswith('EOFError: EOF when reading a line'):
-            feedback += '\n\nProbably your program run out of input'
+            self.error_text += '\n\nProbably your program run out of input'
 
     def get_type(self) -> str:
         return 'Exception'
@@ -111,7 +111,7 @@ class FatalErrorOutcome(Outcome):
         super().__init__()
         self.test_number = test_num
         self.error_text = get_report()
-        self.stack_trace = get_stacktrace(cause, stage)
+        self.stack_trace = get_stacktrace(stage, cause)
 
     def get_type(self) -> str:
         return 'Fatal error'

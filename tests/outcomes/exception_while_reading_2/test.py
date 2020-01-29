@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = ExceptionWhileReading2(
             'tests.outcomes.exception_while_reading_2.program'
-        ).run_tests()
+        ).run_tests(True)
 
         self.assertEqual(status, -1)
         self.assertTrue('Exception in test #1' in feedback)

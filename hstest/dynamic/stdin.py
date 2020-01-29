@@ -30,6 +30,10 @@ class InputMock:
 
     def readline(self):
         test_run = TestRun.curr_test_run
+
+        if test_run is not None and test_run.error_in_test is not None:
+            raise EOFError('EOF when reading a line')
+
         if test_run is None or test_run.error_in_test is None:
             next_line = self.eject_next_line()
             if next_line is not None:
@@ -45,6 +49,7 @@ class InputMock:
 
         next_line = self.input_lines.pop(0) + '\n'
         StdoutHandler.inject_input('> ' + next_line)
+        return next_line
 
     def eject_next_input(self) -> List[str]:
         if len(self.input_text_funcs) == 0:

@@ -1,5 +1,6 @@
 import unittest
 from hstest.test_case import TestCase
+from hstest.exceptions import FatalErrorException
 
 
 class TestTestCase(unittest.TestCase):
@@ -17,7 +18,7 @@ class TestTestCase(unittest.TestCase):
         self.assertEqual(test_case.attach, 'abc')
 
     def test_copy_to_attach_exception(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(FatalErrorException):
             TestCase(stdin='abc', attach=(1, 2, 3), copy_to_attach=True)
 
     def test_stdin_empty(self):

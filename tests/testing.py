@@ -4,12 +4,17 @@ from inspect import getmembers, isclass
 from importlib import import_module
 from os.path import dirname, isfile, isdir
 from os import listdir
+import hstest.utils as hs
 
 
 class UnitTesting:
 
     @staticmethod
     def test_all() -> None:
+
+        hs.failed_msg_start = ''
+        hs.failed_msg_continue = ''
+        hs.success_msg = ''
 
         tests_suite = []
         loader = TestLoader()

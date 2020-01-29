@@ -5,18 +5,30 @@ from hstest.exceptions import ExitException
 
 
 class ExitHandler:
-    _builtins_quit = builtins.quit
-    _builtins_exit = builtins.exit
-    _os_kill = os.kill
-    _os__exit = os._exit
-    _os_killpg = os.killpg
-    _signal_pthread_kill = signal.pthread_kill
-    _signal_siginterrupt = signal.siginterrupt
+    _saved = False
+
+    _builtins_quit = None
+    _builtins_exit = None
+    _os_kill = None
+    _os__exit = None
+    _os_killpg = None
+    _signal_pthread_kill = None
+    _signal_siginterrupt = None
 
     _exit_func = lambda *x, **y: ExitException.throw()
 
     @staticmethod
     def replace_exit():
+        if not ExitHandler._saved:
+            ExitHandler._saved = True
+            ExitHandler._builtins_quit = builtins.quit if hasattr(builtins, 'quit') else None
+            ExitHandler._builtins_exit = builtins.exit if hasattr(builtins, 'exit') else None
+            ExitHandler._os_kill = os.exit if hasattr(os, 'exit') else None
+            ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
+            ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
+            ExitHandler._signal_pthread_kill = signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
+            ExitHandler._signal_siginterrupt = signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
+
         builtins.quit = ExitHandler._exit_func
         builtins.exit = ExitHandler._exit_func
         os.kill = ExitHandler._exit_func
