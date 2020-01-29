@@ -85,4 +85,4 @@ class InputMock:
             self.input_text_funcs.pop(0)
 
         new_input = normalize_line_endings(new_input)
-        return new_input.split('\n')
+        return new_input.strip().split('\n')
