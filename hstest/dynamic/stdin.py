@@ -1,4 +1,4 @@
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 from hstest.dynamic.handle_stdout import StdoutHandler
 from hstest.check_result import CheckResult
 from hstest.exceptions import TestPassedException
@@ -6,7 +6,7 @@ from hstest.exceptions import WrongAnswerException
 from hstest.utils import normalize_line_endings
 from hstest.test_run import TestRun
 
-InputFunction = Callable[[str], object]
+InputFunction = Callable[[str], Union[str, CheckResult]]
 
 
 class DynamicInputFunction:

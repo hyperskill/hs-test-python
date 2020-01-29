@@ -11,7 +11,7 @@ CheckFunction = Callable[[str, Any], CheckResult]
 
 PredefinedInput = str
 RuntimeEvaluatedInput = Union[
-    DynamicInputFunction, Tuple[InputFunction], Tuple[int, InputFunction]]
+    DynamicInputFunction, InputFunction, Tuple[int, InputFunction]]
 DynamicInput = Union[PredefinedInput, List[RuntimeEvaluatedInput]]
 
 
@@ -55,10 +55,13 @@ class TestCase:
                 raise FatalErrorException(
                     'Stdin should be either of type str ot list '
                     f'but found type {type(stdin)}')
-            for elem in stdin:
-                elem: RuntimeEvaluatedInput
+            for elem in stdin:  # type: RuntimeEvaluatedInput
                 if type(elem) == DynamicInputFunction:
                     self.input_funcs += [elem]
+
+                elif str(type(elem)) == "<class 'function'>":
+                    self.input_funcs += [DynamicInputFunction(1, elem)]
+
                 elif type(elem) in (tuple, list):
                     if len(elem) == 1:
                         self.input_funcs += [DynamicInputFunction(1, elem[0])]
@@ -67,6 +70,7 @@ class TestCase:
                     else:
                         raise FatalErrorException(
                             f'Stdin element should have size 1 or 2, found {len(elem)}')
+
                 else:
                     raise FatalErrorException(
                         f'Stdin element should have type DynamicInputFunction or '
@@ -86,3 +90,15 @@ class TestCase:
                 raise ValueError("Bad test: " + str(test))
             hs_tests += [hs_test]
         return hs_tests
+
+
+class SimpleTestCase(TestCase):
+    def __init__(self, *, stdin: str, stdout: str, feedback: str, **kwargs):
+        super().__init__(stdin=stdin, **kwargs)
+        self.stdout = stdout
+        self.feedback = feedback
+        self.check_function = self._custom_check
+
+    def _custom_check(self, reply: str, expected: str):
+        is_correct = reply.strip() == expected.strip()
+        return CheckResult(is_correct, self.feedback)
