@@ -76,7 +76,7 @@ class ExceptionOutcome(Outcome):
         super().__init__()
         self.test_number = test_num
         self.error_text = feedback
-        self.stack_trace = get_stacktrace(stage, cause)
+        self.stack_trace = get_stacktrace(stage.file_to_test, cause, hide_internals=True)
 
         if self.stack_trace.strip().endswith('EOFError: EOF when reading a line'):
             self.error_text += '\n\nProbably your program run out of input'
@@ -111,7 +111,7 @@ class FatalErrorOutcome(Outcome):
         super().__init__()
         self.test_number = test_num
         self.error_text = get_report()
-        self.stack_trace = get_stacktrace(stage, cause)
+        self.stack_trace = get_stacktrace(stage.file_to_test, cause, hide_internals=False)
 
     def get_type(self) -> str:
         return 'Fatal error'

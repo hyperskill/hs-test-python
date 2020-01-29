@@ -1,3 +1,5 @@
+import sys
+import io
 from typing import List
 from unittest import TestLoader, TextTestRunner, TestSuite, TestCase
 from inspect import getmembers, isclass
@@ -7,10 +9,29 @@ from os import listdir
 import hstest.utils as hs
 
 
+class OutputForTest:
+    def __init__(self, real_out: io.TextIOWrapper):
+        self.original: io.TextIOWrapper = real_out
+
+    def write(self, text):
+        if 'FAIL' in text or 'Traceback' in text or 'failures' in text:
+            self.original.write("\033[1;31m")
+        else:
+            self.original.write("\033[1;32m")
+        self.original.write(text)
+        self.original.write("\033[0m")
+
+    def flush(self):
+        self.original.flush()
+
+    def close(self):
+        self.original.close()
+
+
 class UnitTesting:
 
     @staticmethod
-    def test_all() -> None:
+    def test_all() -> bool:
 
         hs.failed_msg_start = ''
         hs.failed_msg_continue = ''
@@ -28,10 +49,8 @@ class UnitTesting:
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
         suite = TestSuite(tests_suite)
-
-        runner = TextTestRunner(verbosity=2)
-
-        assert runner.run(suite).wasSuccessful()
+        runner = TextTestRunner(stream=OutputForTest(sys.stdout), verbosity=2)
+        return runner.run(suite).wasSuccessful()
 
     @staticmethod
     def find_modules(from_directory: str) -> List[str]:
@@ -57,4 +76,4 @@ class UnitTesting:
 
 
 if __name__ == '__main__':
-    UnitTesting.test_all()
+    exit(0 if UnitTesting.test_all() else -1)

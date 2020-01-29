@@ -26,8 +26,6 @@ class Test(unittest.TestCase):
         self.assertEqual(status, -1)
         self.assertTrue('Exception in test #1' in feedback)
         self.assertTrue('Traceback (most recent call last):' in feedback)
-        self.assertTrue(r'  File "tests\outcomes'
-                        r'\exception_in_user_code'
-                        r'\program.py", line 2' in feedback)
+        self.assertTrue(r'  File "program.py", line 2' in feedback)
         self.assertTrue('    print(0 / 0)' in feedback)
         self.assertTrue('ZeroDivisionError: division by zero' in feedback)
