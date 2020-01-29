@@ -1,5 +1,6 @@
 import sys
 import io
+import re
 from typing import List
 from unittest import TestLoader, TextTestRunner, TestSuite, TestCase
 from inspect import getmembers, isclass
@@ -14,6 +15,10 @@ class OutputForTest:
         self.original: io.TextIOWrapper = real_out
 
     def write(self, text):
+        text = re.sub(r'(?<!\\)\\n', '\n', text)
+        text = re.sub(r'(?<!\\)\\t', '\t', text)
+        text = re.sub(r'(?<!\\)\\\'', '\'', text)
+        text = re.sub(r'\\\\', r'\\', text)
         if 'FAIL' in text or 'Traceback' in text or 'failures' in text:
             self.original.write("\033[1;31m")
         else:

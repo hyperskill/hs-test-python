@@ -62,7 +62,7 @@ class TestCase:
                 elif type(elem) == str:
                     self.input_funcs += [DynamicInputFunction(1, lambda x: elem)]
 
-                elif str(type(elem)) == "<class 'function'>":
+                elif str(type(elem)) in ["<class 'function'>", "<class 'method'>"]:
                     self.input_funcs += [DynamicInputFunction(1, elem)]
 
                 elif type(elem) in (tuple, list):
