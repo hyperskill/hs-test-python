@@ -1,4 +1,5 @@
 import unittest
+import textwrap
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -6,22 +7,22 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class SuccessButNotUsedInput(StageTest):
+class TestOpenFileAndNotClose(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin='1\nnotnum\n', attach='1\n'),
-            TestCase(stdin='2\nnotnum\n', attach='2\nnotnum\n'),
+            TestCase(files={'in.txt': '123'})
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(True, '')
 
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = SuccessButNotUsedInput(
-            'tests.outcomes.success_but_not_used_input.program'
+        status, feedback = TestOpenFileAndNotClose(
+            'tests.outcomes.test_open_file_and_not_close.program'
         ).run_tests()
+
+        self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
