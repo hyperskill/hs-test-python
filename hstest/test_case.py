@@ -11,7 +11,7 @@ CheckFunction = Callable[[str, Any], CheckResult]
 
 PredefinedInput = str
 RuntimeEvaluatedInput = Union[
-    DynamicInputFunction, InputFunction, Tuple[int, InputFunction]]
+    PredefinedInput, InputFunction, Tuple[int, InputFunction], DynamicInputFunction]
 DynamicInput = Union[PredefinedInput, List[RuntimeEvaluatedInput]]
 
 
@@ -59,17 +59,18 @@ class TestCase:
                 if type(elem) == DynamicInputFunction:
                     self.input_funcs += [elem]
 
+                elif type(elem) == str:
+                    self.input_funcs += [DynamicInputFunction(1, lambda x: elem)]
+
                 elif str(type(elem)) == "<class 'function'>":
                     self.input_funcs += [DynamicInputFunction(1, elem)]
 
                 elif type(elem) in (tuple, list):
-                    if len(elem) == 1:
-                        self.input_funcs += [DynamicInputFunction(1, elem[0])]
-                    elif len(elem) == 2:
+                    if len(elem) == 2:
                         self.input_funcs += [DynamicInputFunction(*elem)]
                     else:
                         raise FatalErrorException(
-                            f'Stdin element should have size 1 or 2, found {len(elem)}')
+                            f'Stdin element should have size 2, found {len(elem)}')
 
                 else:
                     raise FatalErrorException(

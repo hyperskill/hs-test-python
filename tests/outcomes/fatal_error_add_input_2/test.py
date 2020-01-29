@@ -1,0 +1,30 @@
+import unittest
+from typing import Any, List
+
+from hstest.check_result import CheckResult
+from hstest.stage_test import StageTest
+from hstest.test_case import TestCase
+
+
+class FatalErrorAddInput2(StageTest):
+
+    def generate(self) -> List[TestCase]:
+        return [
+            TestCase(stdin=[(2, lambda x: f'{0/0}')])
+        ]
+
+    def check(self, reply: str, attach: Any) -> CheckResult:
+        return CheckResult(True, '')
+
+
+class Test(unittest.TestCase):
+    def test(self):
+        status, feedback = FatalErrorAddInput2(
+            'tests.outcomes.fatal_error_add_input_2.program'
+        ).run_tests()
+
+        self.assertEqual(status, -1)
+        self.assertTrue('Fatal error in test #1, please '
+                        'send the report to support@hyperskill.org' in feedback)
+
+        self.assertTrue('ZeroDivisionError: division by zero' in feedback)
