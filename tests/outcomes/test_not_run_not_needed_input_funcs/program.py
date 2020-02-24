@@ -1,0 +1,6 @@
+print('1')
+print('2')
+line_3 = input()
+print('5')
+line_4 = input()
+print('6')

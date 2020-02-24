@@ -79,7 +79,7 @@ class ExceptionOutcome(Outcome):
         self.stack_trace = get_stacktrace(stage.file_to_test, cause, hide_internals=True)
 
         if self.stack_trace.strip().endswith('EOFError: EOF when reading a line'):
-            self.error_text += '\n\nProbably your program run out of input'
+            self.error_text += '\n\nProbably your program run out of input (tried to read more than expected)'
 
     def get_type(self) -> str:
         return 'Exception'

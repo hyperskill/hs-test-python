@@ -60,7 +60,7 @@ class TestCase:
                     self.input_funcs += [elem]
 
                 elif type(elem) == str:
-                    self.input_funcs += [DynamicInputFunction(1, lambda x: elem)]
+                    self.input_funcs += [DynamicInputFunction(1, lambda x, inp=elem: inp)]
 
                 elif str(type(elem)) in ["<class 'function'>", "<class 'method'>"]:
                     self.input_funcs += [DynamicInputFunction(1, elem)]
@@ -95,8 +95,7 @@ class TestCase:
 
 class SimpleTestCase(TestCase):
     def __init__(self, *, stdin: str, stdout: str, feedback: str, **kwargs):
-        super().__init__(stdin=stdin, **kwargs)
-        self.stdout = stdout
+        super().__init__(stdin=stdin, attach=stdout, **kwargs)
         self.feedback = feedback
         self.check_function = self._custom_check
 
