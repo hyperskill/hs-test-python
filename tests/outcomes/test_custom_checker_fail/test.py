@@ -1,11 +1,9 @@
 import unittest
-import textwrap
 from typing import Any, List
 
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
-from hstest.test_run import TestRun
 
 
 class TestCustomChecker(StageTest):
@@ -35,6 +33,6 @@ class Test(unittest.TestCase):
 
         self.assertIn("Fatal error in test #2, please send the report "
                       "to support@hyperskill.org", feedback)
-        self.assertIn("NotImplementedError: Can't "
+        self.assertIn("FatalErrorException: Can't "
                       "check result: override \"check\" method", feedback)
         self.assertEqual(status, -1)

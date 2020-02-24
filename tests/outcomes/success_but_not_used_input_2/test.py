@@ -15,11 +15,11 @@ class SuccessButNotUsedInput2(StageTest):
 
     def add_input(self, out: str):
         if out == 'HELLO\n':
-            return CheckResult.true()
+            return CheckResult.correct()
         return ''
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult.true()
+        return CheckResult.correct()
 
 
 class Test(unittest.TestCase):

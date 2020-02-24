@@ -1,5 +1,4 @@
 import unittest
-import textwrap
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -20,8 +19,8 @@ class TestCurrTestNum(StageTest):
     def check(self, reply: str, attach: Any) -> CheckResult:
         tn = TestRun.curr_test_run.test_num
         if reply == '1\n' and tn == 1 or reply == '2\n' and tn == 2:
-            return CheckResult.true()
-        return CheckResult.false()
+            return CheckResult.correct()
+        return CheckResult.wrong('')
 
 
 class Test(unittest.TestCase):

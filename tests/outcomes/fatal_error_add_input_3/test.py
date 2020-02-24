@@ -11,7 +11,7 @@ class FatalErrorAddInput3(StageTest):
     def generate(self) -> List[TestCase]:
         return [
             TestCase(stdin=['12'], attach='1\n12\n'),
-            TestCase(stdin=[lambda x: CheckResult.true()]),
+            TestCase(stdin=[lambda x: CheckResult.correct()]),
             TestCase(stdin=[lambda x: CheckResult(x == '1\n', x + '56')]),
             TestCase(stdin=[lambda x: 78])
         ]

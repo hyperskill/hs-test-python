@@ -1,5 +1,4 @@
 import unittest
-import textwrap
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -21,8 +20,8 @@ class TestCurrTestCase(StageTest):
         tc = TestRun.curr_test_run.test_case
         if (tc.input == '1' and tc.attach == 1 and tc is self.tc_1 or
                 tc.input == '2' and tc.attach == 2 and tc is self.tc_2):
-            return CheckResult.true()
-        return CheckResult.false()
+            return CheckResult.correct()
+        return CheckResult.wrong('')
 
 
 class Test(unittest.TestCase):

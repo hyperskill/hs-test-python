@@ -48,10 +48,10 @@ class StageTest:
         )
 
     def generate(self) -> List[TestCase]:
-        raise NotImplementedError('Can\'t create tests: override "generate" method')
+        raise FatalErrorException('Can\'t create tests: override "generate" method')
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        raise NotImplementedError('Can\'t check result: override "check" method')
+        raise FatalErrorException('Can\'t check result: override "check" method')
 
     def after_all_tests(self):
         pass
@@ -120,7 +120,7 @@ class StageTest:
 
     def _check_solution(self, test: TestCase, output: str):
         if isinstance(TestRun.curr_test_run.error_in_test, TestPassedException):
-            return CheckResult.true()
+            return CheckResult.correct()
         if test.check_function is not None:
             return test.check_function(output, test.attach)
         else:

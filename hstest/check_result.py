@@ -5,17 +5,9 @@ class CheckResult:
         self.feedback = feedback
 
     @staticmethod
-    def true():
+    def correct():
         return CheckResult(True, '')
 
     @staticmethod
-    def false(feedback: str = ''):
+    def wrong(feedback) -> 'CheckResult':
         return CheckResult(False, feedback)
-
-
-def wrong(feedback: str = '') -> CheckResult:
-    return CheckResult.false(feedback)
-
-
-def accept():
-    return CheckResult.true()
