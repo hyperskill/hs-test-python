@@ -4,7 +4,7 @@ from hstest.check_result import CheckResult
 from hstest.exceptions import TestPassedException
 from hstest.exceptions import WrongAnswerException
 from hstest.exceptions import FatalErrorException
-from hstest.utils import normalize_line_endings
+from hstest.utils import clear_text
 from hstest.test_run import TestRun
 
 InputFunction = Callable[[str], Union[str, CheckResult]]
@@ -84,5 +84,5 @@ class InputMock:
         if input_function.trigger_count == 0:
             self.input_text_funcs.pop(0)
 
-        new_input = normalize_line_endings(new_input)
+        new_input = clear_text(new_input)
         return new_input.strip().split('\n')

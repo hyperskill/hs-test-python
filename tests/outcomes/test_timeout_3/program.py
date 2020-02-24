@@ -1,2 +1,2 @@
 while True:
-    pass
+    break

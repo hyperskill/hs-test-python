@@ -23,8 +23,8 @@ def passed():
     return 0, 'test OK'
 
 
-def normalize_line_endings(text: str) -> str:
-    return text.replace('\r\n', '\n').replace('\r', '\n')
+def clear_text(text: str) -> str:
+    return text.replace('\r\n', '\n').replace('\r', '\n').replace('\u00a0', '\u0020')
 
 
 def get_report():

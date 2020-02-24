@@ -2,7 +2,7 @@ import sys
 import runpy
 import os
 import importlib
-from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, Future, TimeoutError
 from typing import List, Any, Dict, Tuple
 from hstest.utils import failed, passed
 from hstest.test_case import TestCase
@@ -82,6 +82,8 @@ class StageTest:
                     TestRun.curr_test_run.error_in_test = ExceptionWithFeedback('', ex)
 
     def _run_file(self, args: List[str], time_limit: int):
+        # Doesn't work with infinite loop
+        # Probable solution - https://stackoverflow.com/a/44719580
         with ThreadPoolExecutor(max_workers=1) as executor:
             try:
                 future: Future = executor.submit(lambda: self._exec_file(args))

@@ -2,7 +2,7 @@ import io
 import sys
 from hstest.dynamic.stdout import OutputMock
 from hstest.test_run import TestRun
-from hstest.utils import normalize_line_endings
+from hstest.utils import clear_text
 
 
 class StdoutHandler:
@@ -25,19 +25,19 @@ class StdoutHandler:
 
     @staticmethod
     def get_output() -> str:
-        return normalize_line_endings(
+        return clear_text(
             ''.join(StdoutHandler.mock_stdout.cloned))
 
     @staticmethod
     def get_partial_output() -> str:
-        output = normalize_line_endings(
+        output = clear_text(
             ''.join(StdoutHandler.mock_stdout.partial))
         StdoutHandler.mock_stdout.partial = []
         return output
 
     @staticmethod
     def get_dynamic_output() -> str:
-        return normalize_line_endings(
+        return clear_text(
             ''.join(StdoutHandler.mock_stdout.dynamic))
 
     @staticmethod
