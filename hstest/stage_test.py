@@ -87,7 +87,10 @@ class StageTest:
         with ThreadPoolExecutor(max_workers=1) as executor:
             try:
                 future: Future = executor.submit(lambda: self._exec_file(args))
-                future.result(timeout=time_limit / 1000)
+                if time_limit <= 0:
+                    future.result()
+                else:
+                    future.result(timeout=time_limit / 1000)
             except TimeoutError:
                 TestRun.curr_test_run.error_in_test = TimeLimitException(time_limit)
             except BaseException as ex:

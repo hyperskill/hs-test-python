@@ -6,11 +6,11 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestTimeout3(StageTest):
+class TestDefaultTimeLimit(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(time_limit=2000),
+            TestCase()
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
@@ -19,14 +19,14 @@ class TestTimeout3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestTimeout3(
-            'tests.outcomes.test_timeout_3.program'
+        status, feedback = TestDefaultTimeLimit(
+            'tests.outcomes.test_default_time_limit.program'
         ).run_tests()
 
         self.assertTrue("Error in test #1" in feedback)
         self.assertTrue(
             "In this test, " +
-            "the program is running for a long time, more than 2 seconds. " +
+            "the program is running for a long time, more than 15 seconds. " +
             "Most likely, the program has gone into an infinite loop." in feedback)
 
         self.assertTrue("Fatal error" not in feedback)
