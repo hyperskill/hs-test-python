@@ -27,5 +27,3 @@ class StdinHandler:
             DynamicInputFunction(func.trigger_count, func.input_function)
             for func in input_funcs
         ])
-
-
