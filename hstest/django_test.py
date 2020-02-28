@@ -25,20 +25,20 @@ class DjangoTest(StageTest):
 
     def check_server(self):
         if self.port == '0':
-            return CheckResult.false(
+            return CheckResult.wrong(
                 f'Please free one of the ports: {", ".join(self.tryout_ports)}'
             )
 
         for _ in range(15):
             try:
                 urlopen(f'http://localhost:{self.port}/not-existing-link-by-default')
-                return CheckResult.true()
+                return CheckResult.correct()
             except URLError as err:
                 if isinstance(err, HTTPError):
-                    return CheckResult.true()
+                    return CheckResult.correct()
                 sleep(1)
         else:
-            return CheckResult.false(
+            return CheckResult.wrong(
                 'Cannot start the ./manage.py runserver for 15 seconds'
             )
 
