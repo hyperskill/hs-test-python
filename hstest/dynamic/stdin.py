@@ -63,7 +63,7 @@ class InputMock:
         curr_output = StdoutHandler.get_partial_output()
         next_func = input_function.input_function
 
-        new_input: str = ''
+        new_input: str
         try:
             obj = next_func(curr_output)
             if isinstance(obj, str):
