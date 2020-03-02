@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
@@ -12,7 +12,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/hyperskill/hs-test-python",
-    packages=find_packages(exclude=['tests']),
+    packages=find_namespace_packages(exclude=['tests']),
     python_requires=">=3.6",
     install_requires=[],
     classifiers=[
