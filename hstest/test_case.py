@@ -81,12 +81,10 @@ class TestCase:
     def from_stepik(stepik_tests: List[StepikTest]) -> List['TestCase']:
         hs_tests = []
         for test in stepik_tests:
-            hs_test = TestCase()
             if type(test) in (list, tuple):
-                hs_test.input = test[0]
-                hs_test.attach = test[1]
+                hs_test = TestCase(stdin=test[0], attach=test[1])
             elif type(test) is str:
-                hs_test.input = test
+                hs_test = TestCase(stdin=test)
             else:
                 raise ValueError("Bad test: " + str(test))
             hs_tests += [hs_test]
