@@ -2,9 +2,9 @@ from typing import Optional
 
 
 class SyntaxException(BaseException):
-    def __init__(self, exception: BaseException, file: str):
+    def __init__(self, exception: SyntaxError, file: str):
         self.file: str = file
-        self.exception: BaseException = exception
+        self.exception: SyntaxError = exception
 
 
 class ExitException(BaseException):

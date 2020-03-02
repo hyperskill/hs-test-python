@@ -1,6 +1,7 @@
 import os
 from hstest.exceptions import WrongAnswerException
 from hstest.exceptions import ExceptionWithFeedback
+from hstest.exceptions import SyntaxException
 from hstest.exceptions import TimeLimitException
 from hstest.exceptions import FatalErrorException
 from hstest.utils import get_stacktrace, get_report
@@ -55,6 +56,8 @@ class Outcome:
             return ExceptionOutcome(test_num, ex.real_exception, ex.feedback, stage)
         elif isinstance(ex, TimeLimitException):
             return ErrorOutcome(test_num, ex)
+        elif isinstance(ex, SyntaxException):
+            return SyntaxErrorOutcome(ex.exception, stage)
 
         if isinstance(ex, FatalErrorException) and ex.exception is not None:
             ex = ex.exception
@@ -131,7 +134,7 @@ class SyntaxErrorOutcome(Outcome):
 
         output = f'File "{file}", line {cause.lineno}\n' \
                  + cause.text.strip()[: cause.offset - 1] + '\n' \
-                 'SyntaxError: invalid syntax'
+                 f'SyntaxError: {cause.msg}'
 
         self.error_text = output
 
