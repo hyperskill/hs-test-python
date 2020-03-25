@@ -4,8 +4,8 @@ with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
 setup(
-    name="hstest",
-    version="2.0.0",
+    name="hs-test-python",
+    version="2.0.1",
     author="Valdimir Turov",
     author_email="vladimir.turov@stepik.org",
     description="A small framework that simplifies testing educational projects for https://hyperskill.org/.",
