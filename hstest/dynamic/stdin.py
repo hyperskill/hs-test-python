@@ -1,8 +1,8 @@
 from typing import Callable, List, Optional, Union
 from hstest.dynamic.handle_stdout import StdoutHandler
 from hstest.check_result import CheckResult
-from hstest.exceptions import TestPassedException
-from hstest.exceptions import WrongAnswerException
+from hstest.exceptions import TestPassed
+from hstest.exceptions import WrongAnswer
 from hstest.exceptions import FatalErrorException
 from hstest.utils import clear_text
 from hstest.test_run import TestRun
@@ -70,9 +70,9 @@ class InputMock:
                 new_input = obj
             elif isinstance(obj, CheckResult):
                 if obj.result:
-                    raise TestPassedException()
+                    raise TestPassed()
                 else:
-                    raise WrongAnswerException(obj.feedback)
+                    raise WrongAnswer(obj.feedback)
             else:
                 raise FatalErrorException(
                     'Dynamic input should return ' +

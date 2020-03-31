@@ -19,6 +19,7 @@ class TestTimeout2(StageTest):
         return CheckResult.correct()
 
 
+@unittest.skip
 class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestTimeout2(

@@ -17,6 +17,7 @@ class TestDefaultTimeLimit(StageTest):
         return CheckResult.correct()
 
 
+@unittest.skip
 class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestDefaultTimeLimit(

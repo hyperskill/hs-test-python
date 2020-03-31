@@ -1,5 +1,5 @@
 import os
-from hstest.exceptions import WrongAnswerException
+from hstest.exceptions import WrongAnswer
 from hstest.exceptions import ExceptionWithFeedback
 from hstest.exceptions import SyntaxException
 from hstest.exceptions import TimeLimitException
@@ -50,7 +50,7 @@ class Outcome:
 
     @staticmethod
     def get_outcome(ex: BaseException, stage, test_num: int):
-        if isinstance(ex, WrongAnswerException):
+        if isinstance(ex, WrongAnswer):
             return WrongAnswerOutcome(test_num, ex.feedback)
         elif isinstance(ex, ExceptionWithFeedback):
             return ExceptionOutcome(test_num, ex.real_exception, ex.feedback, stage)

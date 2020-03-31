@@ -111,7 +111,7 @@ class StageTest:
             return
 
         error_in_test = TestRun.curr_test_run.error_in_test
-        if isinstance(error_in_test, TestPassedException):
+        if isinstance(error_in_test, TestPassed):
             return
 
         if isinstance(error_in_test, ExceptionWithFeedback):
@@ -124,12 +124,17 @@ class StageTest:
         raise error_in_test
 
     def _check_solution(self, test: TestCase, output: str):
-        if isinstance(TestRun.curr_test_run.error_in_test, TestPassedException):
+        if isinstance(TestRun.curr_test_run.error_in_test, TestPassed):
             return CheckResult.correct()
-        if test.check_function is not None:
-            return test.check_function(output, test.attach)
-        else:
-            return self.check(output, test.attach)
+        try:
+            if test.check_function is not None:
+                return test.check_function(output, test.attach)
+            else:
+                return self.check(output, test.attach)
+        except WrongAnswer as ex:
+            return CheckResult.wrong(ex.feedback)
+        except TestPassed:
+            return CheckResult.correct()
 
     def run_tests(self, debug=False) -> Tuple[int, str]:
         if debug:
@@ -164,7 +169,7 @@ class StageTest:
                 self.delete_files(test.files)
 
                 if not result.result:
-                    raise WrongAnswerException(result.feedback)
+                    raise WrongAnswer(result.feedback)
 
             return passed()
 

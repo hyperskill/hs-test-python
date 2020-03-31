@@ -25,7 +25,7 @@ class FatalErrorException(BaseException):
         self.exception = ex
 
 
-class TestPassedException(BaseException):
+class TestPassed(BaseException):
     pass
 
 
@@ -34,6 +34,6 @@ class TimeLimitException(BaseException):
         self.time_limit_ms: int = time_limit_ms
 
 
-class WrongAnswerException(BaseException):
+class WrongAnswer(BaseException):
     def __init__(self, feedback: str):
         self.feedback = feedback
