@@ -14,7 +14,7 @@ class TestNbspInOutput(StageTest):
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == "1 2 3", '')
+        return CheckResult(reply == "1\u00202\u00203", '')
 
 
 class Test(unittest.TestCase):
