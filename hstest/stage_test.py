@@ -84,17 +84,19 @@ class StageTest:
     def _run_file(self, args: List[str], time_limit: int):
         # Doesn't work with infinite loop
         # Probable solution - https://stackoverflow.com/a/44719580
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            try:
-                future: Future = executor.submit(lambda: self._exec_file(args))
-                if time_limit <= 0:
-                    future.result()
-                else:
-                    future.result(timeout=time_limit / 1000)
-            except TimeoutError:
-                TestRun.curr_test_run.error_in_test = TimeLimitException(time_limit)
-            except BaseException as ex:
-                TestRun.curr_test_run.error_in_test = ex
+        executor = ThreadPoolExecutor(max_workers=1)
+        try:
+            future: Future = executor.submit(lambda: self._exec_file(args))
+            if time_limit <= 0:
+                future.result()
+            else:
+                future.result(timeout=time_limit / 1000)
+        except TimeoutError:
+            TestRun.curr_test_run.error_in_test = TimeLimitException(time_limit)
+        except BaseException as ex:
+            TestRun.curr_test_run.error_in_test = ex
+        finally:
+            executor.shutdown(wait=False)
 
     def _run_test(self, test: TestCase) -> str:
         StdinHandler.set_input_funcs(test.input_funcs)
