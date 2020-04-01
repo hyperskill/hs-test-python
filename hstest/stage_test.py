@@ -2,6 +2,7 @@ import sys
 import runpy
 import os
 import importlib
+import concurrent.futures.thread
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, Future, TimeoutError
 from typing import List, Any, Dict, Tuple
 from hstest.utils import failed, passed
@@ -82,11 +83,14 @@ class StageTest:
                     TestRun.curr_test_run.error_in_test = ExceptionWithFeedback('', ex)
 
     def _run_file(self, args: List[str], time_limit: int):
-        # Doesn't work with infinite loop
-        # Probable solution - https://stackoverflow.com/a/44719580
         executor = ThreadPoolExecutor(max_workers=1)
         try:
             future: Future = executor.submit(lambda: self._exec_file(args))
+            # Without this the Python interpreter cannot stop when the user writes an infinite loop
+            # Even though all threads in ThreadPoolExecutor are created as daemon threads
+            # They are not stopped on Python's shutdown but Python waits for them to stop on their own
+            # See https://stackoverflow.com/a/49992422/13160001
+            del concurrent.futures.thread._threads_queues[list(executor._threads)[0]]
             if time_limit <= 0:
                 future.result()
             else:
