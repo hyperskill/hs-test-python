@@ -6,18 +6,19 @@ from hstest.utils import clear_text
 
 
 class StdoutHandler:
-    real_stdout: io.TextIOWrapper = sys.stdout
-    mock_stdout: OutputMock = OutputMock(real_stdout)
+    real_stdout: io.TextIOWrapper = None
+    mock_stdout: OutputMock = None
 
     @staticmethod
     def replace_stdout():
+        StdoutHandler.real_stdout = sys.stdout
+        StdoutHandler.mock_stdout = OutputMock(sys.stdout)
         sys.stdout = StdoutHandler.mock_stdout
 
     @staticmethod
     def revert_stdout():
         StdoutHandler.reset_output()
         sys.stdout = StdoutHandler.real_stdout
-        #sys.stdout.getvalue = lambda *a, **k: ''  # PyCharm cannot test without defining getvalue
 
     @staticmethod
     def reset_output():

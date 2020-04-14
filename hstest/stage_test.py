@@ -3,7 +3,7 @@ import runpy
 import os
 import importlib
 import concurrent.futures.thread
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, Future, TimeoutError
+from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError
 from typing import List, Any, Dict, Tuple
 from hstest.utils import failed, passed
 from hstest.test_case import TestCase
@@ -17,10 +17,13 @@ from hstest.test_run import TestRun
 
 
 class StageTest:
-    def __init__(self, module_to_test: str):
-        self.module_to_test = module_to_test
+    module = ''
+
+    def __init__(self, method: str):
+        super().__init__(method)
+        self.module_to_test = self.module
         self.this_test_file = __file__
-        self.file_to_test = module_to_test.replace('.', os.sep) + '.py'
+        self.file_to_test = self.module.replace('.', os.sep) + '.py'
         self.full_file_to_test = ''
         self.need_reload = True
 
@@ -29,6 +32,11 @@ class StageTest:
         for name, module in list(sys.modules.items()):
             if name.startswith(top_module):
                 importlib.reload(module)
+
+    def test_program(self):
+        result, feedback = self.run_tests()
+        if result != 0:
+            self.fail(feedback)
 
     @staticmethod
     def create_files(files: Dict[str, str]):
@@ -41,12 +49,6 @@ class StageTest:
         for file in files.keys():
             if os.path.isfile(file):
                 os.remove(file)
-
-    def run(self):
-        runpy.run_module(
-            self.module_to_test,
-            run_name="__main__"
-        )
 
     def generate(self) -> List[TestCase]:
         raise FatalErrorException('Can\'t create tests: override "generate" method')
