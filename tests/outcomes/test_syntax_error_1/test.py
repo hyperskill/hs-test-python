@@ -1,3 +1,4 @@
+import os
 import unittest
 from typing import Any, List
 
@@ -20,7 +21,9 @@ class Test(unittest.TestCase):
             'tests.outcomes.test_syntax_error_1.program'
         ).run_tests()
 
-        self.assertEqual('File "tests\\outcomes\\test_syntax_error_1\\program.py", line 2\n\n'
+        self.assertEqual('File "tests' + os.sep +
+                            'outcomes' + os.sep +
+                            'test_syntax_error_1' + os.sep + 'program.py", line 2\n\n'
                          'SyntaxError: unexpected EOF while parsing', feedback)
         self.assertNotEqual(status, 0)
 
