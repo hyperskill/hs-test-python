@@ -20,7 +20,9 @@ class StageTest:
     module = ''
 
     def __init__(self, method: str):
-        super().__init__(method)
+        # super().__init__(method)
+        self.module = method
+
         self.module_to_test = self.module
         self.this_test_file = __file__
         self.file_to_test = self.module.replace('.', os.sep) + '.py'
