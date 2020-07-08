@@ -23,8 +23,9 @@ class Test(unittest.TestCase):
 
         self.assertEqual('File "tests' + os.sep +
                             'outcomes' + os.sep +
-                            'test_syntax_error_1' + os.sep + 'program.py", line 2\n\n'
-                         'SyntaxError: unexpected EOF while parsing', feedback)
+                            'test_syntax_error_1' + os.sep + 'program.py", line 1\n'
+                         'print\n'
+                         'SyntaxError: unmatched \')\'', feedback)
         self.assertNotEqual(status, 0)
 
 
