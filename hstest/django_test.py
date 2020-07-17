@@ -57,7 +57,7 @@ class DjangoTest(StageTest):
                 sleep(1)
         else:
             return CheckResult.wrong(
-                'Cannot start the ./manage.py runserver for 15 seconds'
+                "Django server hasn't started within 15 seconds time limit"
             )
 
     def __find_free_port(self):
