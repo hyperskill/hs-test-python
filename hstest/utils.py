@@ -34,36 +34,34 @@ def get_report():
     return (
         f'OS {name_os}\n'
         f'{implementation} {python}\n'
-        f'Testing library version 2'
+        f'Testing library version 3'
     )
 
 
 def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> str:
-    try:
-        raise ex
-    except BaseException:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
+    exc_tb = ex.__traceback__
+    traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
 
-        traceback_stack = []
+    if not hide_internals:
+        return ''.join(traceback_stack)
 
-        for line in traceback.TracebackException(
-                type(exc_obj), exc_obj, exc_tb, limit=None).format(chain=None):
-            traceback_stack += [line]
+    user_dir = ''
+    while exc_tb is not None:
+        filename = exc_tb.tb_frame.f_code.co_filename
+        if filename.endswith(user_file):
+            user_dir = os.path.dirname(filename) + os.sep
+            break
+        exc_tb = exc_tb.tb_next
 
-        if not hide_internals:
-            return ''.join(traceback_stack)
+    if not user_dir:
+        return 'File "' + user_file + '" not found. Check if you deleted it.\n\n' + traceback_stack[-1]
 
-        user_dir = ''
-        while exc_tb is not None:
-            filename = exc_tb.tb_frame.f_code.co_filename
-            if filename.endswith(user_file):
-                user_dir = os.path.dirname(filename) + os.sep
-                break
-            exc_tb = exc_tb.tb_next
+    cleaned_traceback = []
+    for trace in traceback_stack[1:-1]:
+        if user_dir in trace:
+            cleaned_traceback += [trace.replace(user_dir, '')]
 
-        cleaned_traceback = []
-        for trace in traceback_stack[1:-1]:
-            if user_dir in trace:
-                cleaned_traceback += [trace.replace(user_dir, '')]
+    return traceback_stack[0] + ''.join(cleaned_traceback) + traceback_stack[-1]
 
-        return traceback_stack[0] + ''.join(cleaned_traceback) + traceback_stack[-1]
+
+

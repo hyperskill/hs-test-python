@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestDynamicInput(
             'tests.outcomes.test_dynamic_input.program'
-        ).run_tests(debug=True)
+        ).run_tests()
 
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)

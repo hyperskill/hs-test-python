@@ -25,7 +25,7 @@ class DjangoTest(StageTest):
             self.__find_free_port()
             self.__prepare_database()
             self.process = subprocess.Popen([
-                sys.executable, self.file_to_test,
+                sys.executable, self.path_to_test,
                 'runserver', self.port, '--noreload',
             ])
 
@@ -34,7 +34,7 @@ class DjangoTest(StageTest):
             shutil.copyfile(EMPTY_DATABASE, TEST_DATABASE)
             os.environ['HYPERSKILL_TEST_DATABASE'] = TEST_DATABASE
             migrate = subprocess.Popen(
-                [sys.executable, self.file_to_test, 'migrate'],
+                [sys.executable, self.path_to_test, 'migrate'],
                 stderr=subprocess.PIPE
             )
             exit_code = migrate.wait()

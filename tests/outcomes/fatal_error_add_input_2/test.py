@@ -28,3 +28,7 @@ class Test(unittest.TestCase):
                         '\n\nWe have recorded this bug and will fix it soon.' in feedback)
 
         self.assertTrue('ZeroDivisionError: division by zero' in feedback)
+
+
+if __name__ == '__main__':
+    Test().test()

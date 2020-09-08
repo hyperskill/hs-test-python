@@ -45,7 +45,7 @@ class UnitTesting:
         loader = TestLoader()
 
         for module in UnitTesting.find_modules(dirname(__file__)):
-            if module.endswith('.program'):
+            if module.endswith('.main') or module.endswith('.main2') or module.endswith('.program'):
                 continue
             imported = import_module(f'tests.{module}')
             for name, obj in getmembers(imported):

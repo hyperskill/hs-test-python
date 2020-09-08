@@ -29,3 +29,7 @@ class Test(unittest.TestCase):
         self.assertTrue(r'  File "program.py", line 2' in feedback)
         self.assertTrue('    print(0 / 0)' in feedback)
         self.assertTrue('ZeroDivisionError: division by zero' in feedback)
+
+
+if __name__ == '__main__':
+    Test().test()

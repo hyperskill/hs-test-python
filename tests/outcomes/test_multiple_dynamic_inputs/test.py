@@ -66,7 +66,7 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestMultipleDynamicInputs(
             'tests.outcomes.test_multiple_dynamic_inputs.program'
-        ).run_tests(debug=True)
+        ).run_tests()
 
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)

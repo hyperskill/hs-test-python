@@ -32,10 +32,10 @@ class InputMock:
     def readline(self):
         test_run = TestRun.curr_test_run
 
-        if test_run is not None and test_run.error_in_test is not None:
+        if test_run is not None and test_run.get_error_in_test() is not None:
             raise EOFError('EOF when reading a line')
 
-        if test_run is None or test_run.error_in_test is None:
+        if test_run is None or test_run.get_error_in_test() is None:
             next_line = self.eject_next_line()
             if next_line is not None:
                 return next_line
@@ -78,7 +78,7 @@ class InputMock:
                     'Dynamic input should return ' +
                     f'str or CheckResult objects only. Found: {type(obj)}')
         except BaseException as ex:
-            TestRun.curr_test_run.error_in_test = ex
+            TestRun.curr_test_run.set_error_in_test(ex)
             return []
 
         if input_function.trigger_count == 0:

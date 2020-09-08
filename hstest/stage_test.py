@@ -5,7 +5,7 @@ import importlib
 import concurrent.futures.thread
 from concurrent.futures import ThreadPoolExecutor, Future, TimeoutError
 from typing import List, Any, Dict, Tuple
-from hstest.utils import failed, passed
+from hstest.utils import failed, passed, get_stacktrace
 from hstest.test_case import TestCase
 from hstest.check_result import CheckResult
 from hstest.exceptions import *
@@ -24,8 +24,14 @@ class StageTest:
         self.module = method
 
         self.module_to_test = self.module
+        self.py_file_to_test = self.module[self.module.rfind('.') + 1:]
+
         self.this_test_file = __file__
-        self.file_to_test = self.module.replace('.', os.sep) + '.py'
+
+        self.path_to_test = self.module.replace('.', os.sep) + '.py'
+        self.folder_to_test = os.path.dirname(self.path_to_test)
+        self.filename_to_test = os.path.basename(self.path_to_test)
+
         self.full_file_to_test = ''
         self.need_reload = True
 
@@ -66,25 +72,37 @@ class StageTest:
             try:
                 self.reset()
             except BaseException as ex:
-                TestRun.curr_test_run.error_in_test = ex
+                TestRun.curr_test_run.set_error_in_test(ex)
+
+        old_dir = os.getcwd()
+        #os.chdir(self.folder_to_test)
         try:
-            sys.argv = [self.file_to_test] + args
+            sys.argv = [self.path_to_test] + args
+            sys.path += [self.folder_to_test]
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"
             )
+
         except ImportError as ex:
-            TestRun.curr_test_run.error_in_test = UnexpectedError(
-                f'Cannot find file {self.file_to_test}', ex)
+            error_text = get_stacktrace(self.path_to_test, ex, hide_internals=True)
+            TestRun.curr_test_run.set_error_in_test(ErrorWithFeedback(error_text))
+
         except SyntaxError as ex:
-            TestRun.curr_test_run.error_in_test = SyntaxException(
-                ex, self.file_to_test)
+            TestRun.curr_test_run.set_error_in_test(
+                SyntaxException(ex, self.path_to_test)
+            )
         except BaseException as ex:
-            if TestRun.curr_test_run.error_in_test is None:
+            if TestRun.curr_test_run.get_error_in_test() is None:
                 # ExitException is thrown in case of exit() or quit()
                 # consider them like normal exit
                 if not isinstance(ex, ExitException):
-                    TestRun.curr_test_run.error_in_test = ExceptionWithFeedback('', ex)
+                    TestRun.curr_test_run.set_error_in_test(ExceptionWithFeedback('', ex))
+
+        finally:
+            sys.path.pop()
+            #os.chdir(old_dir)
+            pass
 
     def _run_file(self, args: List[str], time_limit: int):
         executor = ThreadPoolExecutor(max_workers=1)
@@ -95,21 +113,21 @@ class StageTest:
             # They are not stopped on Python's shutdown but Python waits for them to stop on their own
             # See https://stackoverflow.com/a/49992422/13160001
             del concurrent.futures.thread._threads_queues[list(executor._threads)[0]]
-            if time_limit <= 0:
+            if time_limit <= 0 or sys.gettrace() is not None:
                 future.result()
             else:
                 future.result(timeout=time_limit / 1000)
         except TimeoutError:
-            TestRun.curr_test_run.error_in_test = TimeLimitException(time_limit)
+            TestRun.curr_test_run.set_error_in_test(TimeLimitException(time_limit))
         except BaseException as ex:
-            TestRun.curr_test_run.error_in_test = ex
+            TestRun.curr_test_run.set_error_in_test(ex)
         finally:
             executor.shutdown(wait=False)
 
     def _run_test(self, test: TestCase) -> str:
         StdinHandler.set_input_funcs(test.input_funcs)
         StdoutHandler.reset_output()
-        TestRun.curr_test_run.error_in_test = None
+        TestRun.curr_test_run.set_error_in_test(None)
 
         self._run_file(test.args, test.time_limit)
         self._check_errors(test)
@@ -117,10 +135,10 @@ class StageTest:
         return StdoutHandler.get_output()
 
     def _check_errors(self, test: TestCase):
-        if TestRun.curr_test_run.error_in_test is None:
+        if TestRun.curr_test_run.get_error_in_test() is None:
             return
 
-        error_in_test = TestRun.curr_test_run.error_in_test
+        error_in_test = TestRun.curr_test_run.get_error_in_test()
         if isinstance(error_in_test, TestPassed):
             return
 
@@ -134,7 +152,7 @@ class StageTest:
         raise error_in_test
 
     def _check_solution(self, test: TestCase, output: str):
-        if isinstance(TestRun.curr_test_run.error_in_test, TestPassed):
+        if isinstance(TestRun.curr_test_run.get_error_in_test(), TestPassed):
             return CheckResult.correct()
         try:
             if test.check_function is not None:
@@ -146,8 +164,8 @@ class StageTest:
         except TestPassed:
             return CheckResult.correct()
 
-    def run_tests(self, debug=False) -> Tuple[int, str]:
-        if debug:
+    def run_tests(self) -> Tuple[int, str]:
+        if self.module_to_test.startswith('tests.'):
             import hstest.utils as hs
             hs.failed_msg_start = ''
             hs.failed_msg_continue = ''

@@ -1,5 +1,5 @@
 import os
-from hstest.exceptions import WrongAnswer
+from hstest.exceptions import WrongAnswer, ErrorWithFeedback
 from hstest.exceptions import ExceptionWithFeedback
 from hstest.exceptions import SyntaxException
 from hstest.exceptions import TimeLimitException
@@ -47,14 +47,18 @@ class Outcome:
 
     @staticmethod
     def get_outcome(ex: BaseException, stage, test_num: int):
-        if isinstance(ex, WrongAnswer):
+        if isinstance(ex, SyntaxException):
+            return SyntaxErrorOutcome(ex.exception, stage)
+
+        elif isinstance(ex, WrongAnswer):
             return WrongAnswerOutcome(test_num, ex.feedback)
+
         elif isinstance(ex, ExceptionWithFeedback):
             return ExceptionOutcome(test_num, ex.real_exception, ex.feedback, stage)
-        elif isinstance(ex, TimeLimitException):
+
+        elif isinstance(ex, ErrorWithFeedback) or \
+                isinstance(ex, TimeLimitException):
             return ErrorOutcome(test_num, ex)
-        elif isinstance(ex, SyntaxException):
-            return SyntaxErrorOutcome(ex.exception, stage)
 
         if isinstance(ex, UnexpectedError) and ex.exception is not None:
             ex = ex.exception
@@ -76,7 +80,7 @@ class ExceptionOutcome(Outcome):
         super().__init__()
         self.test_number = test_num
         self.error_text = feedback
-        self.stack_trace = get_stacktrace(stage.file_to_test, cause, hide_internals=True)
+        self.stack_trace = get_stacktrace(stage.path_to_test, cause, hide_internals=True)
 
         if self.stack_trace.strip().endswith('EOFError: EOF when reading a line'):
             self.error_text += '\n\nProbably your program run out of input (tried to read more than expected)'
@@ -102,6 +106,9 @@ class ErrorOutcome(Outcome):
                 'the program has gone into an infinite loop.'
             )
 
+        elif isinstance(cause, ErrorWithFeedback):
+            self.error_text = cause.error_text
+
     def get_type(self) -> str:
         return 'Error'
 
@@ -112,7 +119,7 @@ class UnexpectedErrorOutcome(Outcome):
         self.test_number = test_num
         self.error_text = 'We have recorded this bug ' \
                           'and will fix it soon.\n\n' + get_report()
-        self.stack_trace = get_stacktrace(stage.file_to_test, cause, hide_internals=False)
+        self.stack_trace = get_stacktrace(stage.path_to_test, cause, hide_internals=False)
 
     def get_type(self) -> str:
         return 'Unexpected error'
