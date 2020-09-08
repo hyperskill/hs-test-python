@@ -29,6 +29,10 @@ class TestPassed(BaseException):
     pass
 
 
+# simple rename, but have to be sure old tests work as expected
+TestPassedException = TestPassed
+
+
 class TimeLimitException(BaseException):
     def __init__(self, time_limit_ms: int):
         self.time_limit_ms: int = time_limit_ms
@@ -37,3 +41,7 @@ class TimeLimitException(BaseException):
 class WrongAnswer(BaseException):
     def __init__(self, feedback: str):
         self.feedback = feedback
+
+
+# simple rename, but have to be sure old tests work as expected
+WrongAnswerException = WrongAnswer
