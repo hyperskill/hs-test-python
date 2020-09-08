@@ -8,23 +8,25 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportRelative(StageTest):
+class WrongAnswerInTest2(StageTest):
 
     def generate(self) -> List[TestCase]:
-        return [TestCase()]
+        return [
+            TestCase(attach=True),
+            TestCase(attach=False)
+        ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '10\n', '')
+        return CheckResult(attach, '')
 
 
 class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = TestImportRelative(file).run_tests()
+        status, feedback = WrongAnswerInTest2(file).run_tests()
 
-        self.assertEqual("test OK", feedback)
+        self.assertTrue("Wrong answer in test #2" in feedback)
+        self.assertTrue("Fatal error" not in feedback)
 
-
-if __name__ == '__main__':
-    Test().test()
+        self.assertNotEqual(status, 0)

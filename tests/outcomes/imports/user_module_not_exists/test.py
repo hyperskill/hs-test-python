@@ -1,6 +1,7 @@
 import unittest
 from typing import Any, List
 import os
+from inspect import cleandoc
 
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest

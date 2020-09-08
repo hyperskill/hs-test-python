@@ -8,23 +8,27 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportRelative(StageTest):
+class FatalErrorRuntimeExitInGenerate(StageTest):
 
     def generate(self) -> List[TestCase]:
-        return [TestCase()]
+        import os
+        os.__dict__['_exit'](0)
+        return [
+            TestCase()
+        ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '10\n', '')
+        return CheckResult(True, '')
 
 
 class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = TestImportRelative(file).run_tests()
+        status, feedback = FatalErrorRuntimeExitInGenerate(file).run_tests()
 
-        self.assertEqual("test OK", feedback)
+        self.assertIn('Unexpected error during testing'
+                      '\n\nWe have recorded this bug and will fix it soon.', feedback)
 
-
-if __name__ == '__main__':
-    Test().test()
+        self.assertIn('ExitException', feedback)
+        self.assertEqual(status, -1)
