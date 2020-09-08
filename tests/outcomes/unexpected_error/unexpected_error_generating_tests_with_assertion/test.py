@@ -7,7 +7,7 @@ from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 
 
-class FatalErrorGeneratingTestsWithAssertion(StageTest):
+class UnexpectedErrorGeneratingTestsWithAssertion(StageTest):
 
     def generate(self):
         assert False
@@ -20,7 +20,7 @@ class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = FatalErrorGeneratingTestsWithAssertion(file).run_tests()
+        status, feedback = UnexpectedErrorGeneratingTestsWithAssertion(file).run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Unexpected error during testing'

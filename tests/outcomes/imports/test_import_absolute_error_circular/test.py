@@ -8,7 +8,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportAbsoluteError2(StageTest):
+class TestImportAbsoluteErrorCircular(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = TestImportAbsoluteError2(file).run_tests()
+        status, feedback = TestImportAbsoluteErrorCircular(file).run_tests()
 
         self.assertIn(cleandoc(
             """

@@ -8,7 +8,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportAbsolute(StageTest):
+class TestImportAbsolute2(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'random_module.main'
-        status, feedback = TestImportAbsolute(file).run_tests()
+        status, feedback = TestImportAbsolute2(file).run_tests()
 
         self.assertEqual("test OK", feedback)
 

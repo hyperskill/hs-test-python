@@ -8,7 +8,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class FatalErrorUserMainFileNotExists(StageTest):
+class UnexpectedErrorUserModuleNotExists(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -19,7 +19,7 @@ class FatalErrorUserMainFileNotExists(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = FatalErrorUserMainFileNotExists('tests.bad_module').run_tests()
+        status, feedback = UnexpectedErrorUserModuleNotExists('tests.bad_module').run_tests()
 
         self.assertIn(
             'Error in test #1\n\n'

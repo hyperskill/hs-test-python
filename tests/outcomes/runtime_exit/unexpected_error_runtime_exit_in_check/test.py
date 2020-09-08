@@ -8,7 +8,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class FatalErrorRuntimeExitInCheck(StageTest):
+class UnexpectedErrorRuntimeExitInCheck(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = FatalErrorRuntimeExitInCheck(file).run_tests()
+        status, feedback = UnexpectedErrorRuntimeExitInCheck(file).run_tests()
 
         self.assertIn('Unexpected error in test #1'
                       '\n\nWe have recorded this bug and will fix it soon.', feedback)

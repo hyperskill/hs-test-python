@@ -8,7 +8,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class FatalErrorGeneratingTests(StageTest):
+class UnexpectedErrorGeneratingTests(StageTest):
 
     def generate(self) -> List[TestCase]:
         x = 0 / 0
@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
     def test(self):
         file = __file__.replace(os.sep, '.')[:-3]
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = FatalErrorGeneratingTests(file).run_tests()
+        status, feedback = UnexpectedErrorGeneratingTests(file).run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Unexpected error during testing'
