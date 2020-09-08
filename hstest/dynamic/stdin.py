@@ -3,7 +3,7 @@ from hstest.dynamic.handle_stdout import StdoutHandler
 from hstest.check_result import CheckResult
 from hstest.exceptions import TestPassed
 from hstest.exceptions import WrongAnswer
-from hstest.exceptions import FatalErrorException
+from hstest.exceptions import UnexpectedError
 from hstest.utils import clear_text
 from hstest.test_run import TestRun
 
@@ -74,7 +74,7 @@ class InputMock:
                 else:
                     raise WrongAnswer(obj.feedback)
             else:
-                raise FatalErrorException(
+                raise UnexpectedError(
                     'Dynamic input should return ' +
                     f'str or CheckResult objects only. Found: {type(obj)}')
         except BaseException as ex:

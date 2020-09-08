@@ -53,10 +53,10 @@ class StageTest:
                 os.remove(file)
 
     def generate(self) -> List[TestCase]:
-        raise FatalErrorException('Can\'t create tests: override "generate" method')
+        raise UnexpectedError('Can\'t create tests: override "generate" method')
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        raise FatalErrorException('Can\'t check result: override "check" method')
+        raise UnexpectedError('Can\'t check result: override "check" method')
 
     def after_all_tests(self):
         pass
@@ -74,7 +74,7 @@ class StageTest:
                 run_name="__main__"
             )
         except ImportError as ex:
-            TestRun.curr_test_run.error_in_test = FatalErrorException(
+            TestRun.curr_test_run.error_in_test = UnexpectedError(
                 f'Cannot find file {self.file_to_test}', ex)
         except SyntaxError as ex:
             TestRun.curr_test_run.error_in_test = SyntaxException(
@@ -158,7 +158,7 @@ class StageTest:
             SystemHandler.set_up()
             tests = self.generate()
             if len(tests) == 0:
-                raise FatalErrorException('No tests provided by "generate" method')
+                raise UnexpectedError('No tests provided by "generate" method')
 
             for test in tests:
                 curr_test += 1

@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Tuple, Callable, Union, Optional, Type
 from hstest.check_result import CheckResult
 from hstest.dynamic.stdin import DynamicInputFunction, InputFunction
-from hstest.exceptions import FatalErrorException
+from hstest.exceptions import UnexpectedError
 
 SimpleStepikTest = str
 AdvancedStepikTest = Tuple[str, Any]
@@ -38,11 +38,11 @@ class TestCase:
 
         if copy_to_attach:
             if attach is not None:
-                raise FatalErrorException(
+                raise UnexpectedError(
                     'Attach is not None '
                     'but copying from stdin is specified')
             if type(stdin) != str:
-                raise FatalErrorException(
+                raise UnexpectedError(
                     'To copy stdin to attach stdin should be of type str '
                     f'but found type {type(stdin)}')
             self.attach = stdin
@@ -52,7 +52,7 @@ class TestCase:
             self.input_funcs = [DynamicInputFunction(1, lambda x: stdin)]
         else:
             if type(stdin) != list:
-                raise FatalErrorException(
+                raise UnexpectedError(
                     'Stdin should be either of type str ot list '
                     f'but found type {type(stdin)}')
             for elem in stdin:  # type: RuntimeEvaluatedInput
@@ -69,11 +69,11 @@ class TestCase:
                     if len(elem) == 2:
                         self.input_funcs += [DynamicInputFunction(*elem)]
                     else:
-                        raise FatalErrorException(
+                        raise UnexpectedError(
                             f'Stdin element should have size 2, found {len(elem)}')
 
                 else:
-                    raise FatalErrorException(
+                    raise UnexpectedError(
                         f'Stdin element should have type DynamicInputFunction or '
                         f'tuple of size 1 or 2, found element of type {type(elem)}')
 

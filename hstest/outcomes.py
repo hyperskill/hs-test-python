@@ -3,7 +3,7 @@ from hstest.exceptions import WrongAnswer
 from hstest.exceptions import ExceptionWithFeedback
 from hstest.exceptions import SyntaxException
 from hstest.exceptions import TimeLimitException
-from hstest.exceptions import FatalErrorException
+from hstest.exceptions import UnexpectedError
 from hstest.utils import get_stacktrace, get_report
 from hstest.dynamic.handle_stdout import StdoutHandler
 from hstest.test_run import TestRun
@@ -18,16 +18,13 @@ class Outcome:
     def get_type(self) -> str:
         raise NotImplementedError()
 
-    def get_type_suffix(self) -> str:
-        return ''
-
     def __str__(self):
         if self.test_number == 0:
             when_error_happened = ' during testing'
         else:
             when_error_happened = f' in test #{self.test_number}'
 
-        result = self.get_type() + when_error_happened + self.get_type_suffix()
+        result = self.get_type() + when_error_happened
 
         if self.error_text:
             result += '\n\n' + self.error_text.strip()
@@ -59,9 +56,9 @@ class Outcome:
         elif isinstance(ex, SyntaxException):
             return SyntaxErrorOutcome(ex.exception, stage)
 
-        if isinstance(ex, FatalErrorException) and ex.exception is not None:
+        if isinstance(ex, UnexpectedError) and ex.exception is not None:
             ex = ex.exception
-        return FatalErrorOutcome(test_num, ex, stage)
+        return UnexpectedErrorOutcome(test_num, ex, stage)
 
 
 class WrongAnswerOutcome(Outcome):
@@ -109,18 +106,16 @@ class ErrorOutcome(Outcome):
         return 'Error'
 
 
-class FatalErrorOutcome(Outcome):
+class UnexpectedErrorOutcome(Outcome):
     def __init__(self, test_num: int, cause: BaseException, stage):
         super().__init__()
         self.test_number = test_num
-        self.error_text = get_report()
+        self.error_text = 'We have recorded this bug ' \
+                          'and will fix it soon.\n\n' + get_report()
         self.stack_trace = get_stacktrace(stage.file_to_test, cause, hide_internals=False)
 
     def get_type(self) -> str:
-        return 'Fatal error'
-
-    def get_type_suffix(self) -> str:
-        return ', please send the report to support@hyperskill.org'
+        return 'Unexpected error'
 
 
 class SyntaxErrorOutcome(Outcome):

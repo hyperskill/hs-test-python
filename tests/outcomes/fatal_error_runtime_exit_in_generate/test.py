@@ -25,8 +25,8 @@ class Test(unittest.TestCase):
             'tests.outcomes.fatal_error_runtime_exit_in_generate.program'
         ).run_tests()
 
-        self.assertIn('Fatal error during testing, please '
-                      'send the report to support@hyperskill.org', feedback)
+        self.assertIn('Unexpected error during testing'
+                      '\n\nWe have recorded this bug and will fix it soon.', feedback)
 
         self.assertIn('ExitException', feedback)
         self.assertEqual(status, -1)

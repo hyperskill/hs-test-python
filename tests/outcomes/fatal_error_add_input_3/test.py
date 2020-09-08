@@ -26,9 +26,9 @@ class Test(unittest.TestCase):
             'tests.outcomes.fatal_error_add_input_3.program'
         ).run_tests()
 
-        self.assertIn('Fatal error in test #4, please '
-                      'send the report to support@hyperskill.org', feedback)
+        self.assertIn('Unexpected error in test #4'
+                      '\n\nWe have recorded this bug and will fix it soon.', feedback)
 
-        self.assertIn('FatalErrorException: Dynamic input should return '
+        self.assertIn('UnexpectedError: Dynamic input should return '
                       'str or CheckResult objects only. Found: <class \'int\'>', feedback)
         self.assertEqual(status, -1)

@@ -22,8 +22,8 @@ class Test(unittest.TestCase):
         ).run_tests()
 
         self.assertEqual(status, -1)
-        self.assertTrue('Fatal error in test #1, please '
-                        'send the report to support@hyperskill.org' in feedback)
+        self.assertTrue('Unexpected error in test #1'
+                        '\n\nWe have recorded this bug and will fix it soon.' in feedback)
 
         self.assertTrue('ImportError: Error while finding module specification for '
                         '\'tests.outcomes.fatal_error_user_main_file_not_exists.program\' '

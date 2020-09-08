@@ -8,7 +8,7 @@ from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
 from hstest.stage_test import StageTest
 from hstest.check_result import CheckResult
-from hstest.exceptions import FatalErrorException
+from hstest.exceptions import UnexpectedError
 
 EMPTY_DATABASE = 'empty.sqlite3'
 TEST_DATABASE = 'db.test.sqlite3'
@@ -39,7 +39,7 @@ class DjangoTest(StageTest):
             )
             exit_code = migrate.wait()
             if exit_code != 0:
-                raise FatalErrorException(migrate.stderr.read().decode())
+                raise UnexpectedError(migrate.stderr.read().decode())
 
     def check_server(self):
         if self.port == '0':

@@ -31,8 +31,8 @@ class Test(unittest.TestCase):
             'tests.outcomes.test_custom_checker.program'
         ).run_tests()
 
-        self.assertIn("Fatal error in test #2, please send the report "
-                      "to support@hyperskill.org", feedback)
-        self.assertIn("FatalErrorException: Can't "
+        self.assertIn("Unexpected error in test #2", feedback)
+
+        self.assertIn("UnexpectedError: Can't "
                       "check result: override \"check\" method", feedback)
         self.assertEqual(status, -1)

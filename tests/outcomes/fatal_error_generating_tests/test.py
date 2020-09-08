@@ -25,5 +25,5 @@ class Test(unittest.TestCase):
         ).run_tests()
 
         self.assertEqual(status, -1)
-        self.assertTrue('Fatal error during testing, please '
-                        'send the report to support@hyperskill.org' in feedback)
+        self.assertTrue('Unexpected error during testing'
+                        '\n\nWe have recorded this bug and will fix it soon.' in feedback)
