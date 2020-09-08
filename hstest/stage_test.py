@@ -24,13 +24,9 @@ class StageTest:
         self.module = method
 
         self.module_to_test = self.module
-        self.py_file_to_test = self.module[self.module.rfind('.') + 1:]
-
-        self.this_test_file = __file__
 
         self.path_to_test = self.module.replace('.', os.sep) + '.py'
         self.folder_to_test = os.path.dirname(self.path_to_test)
-        self.filename_to_test = os.path.basename(self.path_to_test)
 
         self.full_file_to_test = ''
         self.need_reload = True
@@ -74,8 +70,6 @@ class StageTest:
             except BaseException as ex:
                 TestRun.curr_test_run.set_error_in_test(ex)
 
-        old_dir = os.getcwd()
-        #os.chdir(self.folder_to_test)
         try:
             sys.argv = [self.path_to_test] + args
             sys.path += [self.folder_to_test]
@@ -101,8 +95,6 @@ class StageTest:
 
         finally:
             sys.path.pop()
-            #os.chdir(old_dir)
-            pass
 
     def _run_file(self, args: List[str], time_limit: int):
         executor = ThreadPoolExecutor(max_workers=1)
