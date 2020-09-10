@@ -80,6 +80,7 @@ class StageTest:
         try:
             sys.argv = [self.path_to_test] + args
             sys.path += [self.folder_to_test]
+            open(self.folder_to_test + os.sep + "__init__.py", 'a').close()
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"
@@ -101,6 +102,10 @@ class StageTest:
                     TestRun.curr_test_run.set_error_in_test(ExceptionWithFeedback('', ex))
 
         finally:
+            try:
+                os.remove(self.folder_to_test + os.sep + "__init__.py")
+            except OSError:
+                pass
             sys.path.pop()
 
     def _run_file(self, args: List[str], time_limit: int):
