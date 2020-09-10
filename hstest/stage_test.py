@@ -80,7 +80,8 @@ class StageTest:
         try:
             sys.argv = [self.path_to_test] + args
             sys.path += [self.folder_to_test]
-            open(self.folder_to_test + os.sep + "__init__.py", 'a').close()
+            if os.path.exists(self.folder_to_test):
+                open(self.folder_to_test + os.sep + "__init__.py", 'a').close()
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"
