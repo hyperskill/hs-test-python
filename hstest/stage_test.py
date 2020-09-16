@@ -27,6 +27,7 @@ class StageTest:
 
         self.path_to_test = self.module.replace('.', os.sep) + '.py'
         self.folder_to_test = os.path.dirname(self.path_to_test)
+        self.init_file = self.folder_to_test + os.sep + "__init__.py"
 
         self.full_file_to_test = ''
         self.need_reload = True
@@ -81,7 +82,7 @@ class StageTest:
             sys.argv = [self.path_to_test] + args
             sys.path += [self.folder_to_test]
             if os.path.exists(self.folder_to_test):
-                open(self.folder_to_test + os.sep + "__init__.py", 'a').close()
+                open(self.init_file, 'a').close()
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"
@@ -104,7 +105,7 @@ class StageTest:
 
         finally:
             try:
-                os.remove(self.folder_to_test + os.sep + "__init__.py")
+                os.remove(self.init_file)
             except OSError:
                 pass
             sys.path.pop()
@@ -212,6 +213,12 @@ class StageTest:
             return failed(fail_text)
 
         finally:
+            if os.path.exists(self.init_file):
+                try:
+                    os.remove(self.init_file)
+                except OSError:
+                    pass
+
             StageTest.curr_test_run = None
             self.after_all_tests()
             SystemHandler.tear_down()
