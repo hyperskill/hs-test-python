@@ -34,7 +34,7 @@ def get_report():
     return (
         f'OS {name_os}\n'
         f'{implementation} {python}\n'
-        f'Testing library version 3'
+        f'Testing library version 3.0.1'
     )
 
 

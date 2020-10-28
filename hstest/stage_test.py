@@ -30,7 +30,7 @@ class StageTest:
         self.init_file = self.folder_to_test + os.sep + "__init__.py"
 
         self.full_file_to_test = ''
-        self.need_reload = True
+        self.need_reload = False
 
     def reset(self):
         top_module = self.module_to_test[:self.module_to_test.rindex('.')]
