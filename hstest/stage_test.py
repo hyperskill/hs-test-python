@@ -53,14 +53,7 @@ class StageTest:
     def delete_files(files: Dict[str, str]):
         for file in files.keys():
             if os.path.isfile(file):
-                try:
-                    os.remove(file)
-                except PermissionError:
-                    raise ErrorWithFeedback(
-                        "The file " + file
-                        + " can't be deleted after the end of the test. "
-                        + "Probably you didn't close it."
-                    )
+                os.remove(file)
 
     def generate(self) -> List[TestCase]:
         raise UnexpectedError('Can\'t create tests: override "generate" method')

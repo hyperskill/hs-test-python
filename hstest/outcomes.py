@@ -57,7 +57,8 @@ class Outcome:
             return ExceptionOutcome(test_num, ex.real_exception, ex.feedback, stage)
 
         elif isinstance(ex, ErrorWithFeedback) or \
-                isinstance(ex, TimeLimitException):
+                isinstance(ex, TimeLimitException) or \
+                isinstance(ex, PermissionError):
             return ErrorOutcome(test_num, ex)
 
         if isinstance(ex, UnexpectedError) and ex.exception is not None:
@@ -104,6 +105,13 @@ class ErrorOutcome(Outcome):
                 'In this test, the program is running for a long time, ' +
                 f'more than {time_limit} {time_unit}. Most likely, ' +
                 'the program has gone into an infinite loop.'
+            )
+
+        elif isinstance(cause, PermissionError):
+            self.error_text = (
+                "The file you opened " +
+                "can't be deleted after the end of the test. " +
+                "Probably you didn't close it."
             )
 
         elif isinstance(cause, ErrorWithFeedback):
