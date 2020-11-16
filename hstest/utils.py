@@ -45,7 +45,14 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
     if not hide_internals:
         return ''.join(traceback_stack)
 
-    user_dir = ''
+    if isinstance(ex, SyntaxError):
+        if ex.filename.startswith('<'):  # "<string>", or "<module>"
+            user_dir = ex.filename
+        else:
+            user_dir = os.path.dirname(ex.filename) + os.sep
+    else:
+        user_dir = ''
+
     while exc_tb is not None:
         filename = exc_tb.tb_frame.f_code.co_filename
         if filename.endswith(user_file):
@@ -58,8 +65,22 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
 
     cleaned_traceback = []
     for trace in traceback_stack[1:-1]:
-        if user_dir in trace:
-            cleaned_traceback += [trace.replace(user_dir, '')]
+        if trace.startswith(' ' * 4):
+            # Trace line that starts with 4 is just code example used in SyntaxError
+            cleaned_traceback += [trace]
+        elif user_dir in trace or ('<' in trace and '>' in trace and '<frozen ' not in trace):
+            # avoid including <frozen importlib...> lines that are always in the stacktrace
+            # but include <string>, <module> because it's definitely user's code
+            if not user_dir.startswith('<'):
+                if user_dir in trace:
+                    trace = trace.replace(user_dir, '')
+                else:
+                    folder_name = os.path.basename(user_dir[:-1])
+                    if folder_name in trace:
+                        index = trace.index(folder_name)
+                        trace = '  File "' + trace[index + len(folder_name + os.sep):]
+
+            cleaned_traceback += [trace]
 
     return traceback_stack[0] + ''.join(cleaned_traceback) + traceback_stack[-1]
 

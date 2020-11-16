@@ -22,10 +22,10 @@ class Test(unittest.TestCase):
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
         status, feedback = TestSyntaxError1(file).run_tests()
 
-        self.assertEqual('File "tests' + os.sep +
-                            'outcomes' + os.sep + 'syntax_error' + os.sep +
-                            'test_syntax_error_1' + os.sep + 'main.py", line 1\n'
-                         'print\n'
+        self.assertEqual('Traceback (most recent call last):\n'
+                         '  File "main.py", line 1\n'
+                         '    print)\n'
+                         '         ^\n'
                          'SyntaxError: unmatched \')\'', feedback)
         self.assertNotEqual(status, 0)
 

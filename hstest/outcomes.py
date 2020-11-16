@@ -136,17 +136,7 @@ class UnexpectedErrorOutcome(Outcome):
 class SyntaxErrorOutcome(Outcome):
     def __init__(self, cause: SyntaxError, stage):
         super().__init__()
-
-        file = cause.filename
-        file = file.replace(os.sep, '.')
-        file = file[file.index(stage.module_to_test):-3]
-        file = file.replace('.', os.sep) + '.py'
-
-        output = f'File "{file}", line {cause.lineno}\n' \
-                 + cause.text.strip()[: cause.offset - 1] + '\n' \
-                 f'SyntaxError: {cause.msg}'
-
-        self.error_text = output
+        self.error_text = get_stacktrace(stage.path_to_test, cause, hide_internals=True).strip()
 
     def get_type(self) -> str:
         return 'Syntax error'

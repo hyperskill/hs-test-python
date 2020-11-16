@@ -23,15 +23,20 @@ class Test(unittest.TestCase):
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
         status, feedback = TestImportAbsoluteErrorCircular(file).run_tests()
 
-        self.assertIn(cleandoc(
-            """
+        correct_feedback = cleandoc("""
             Exception in test #1
 
             Traceback (most recent call last):
               File "main.py", line 1, in <module>
                 import main2
+              File "main2.py", line 1, in <module>
+                import main
+              File "main.py", line 2, in <module>
+                print(main2.x)
             AttributeError: partially initialized module 'main2' has no attribute 'x' (most likely due to a circular import)
-            """), feedback)
+            """)
+
+        self.assertEqual(correct_feedback, feedback)
 
 
 if __name__ == '__main__':
