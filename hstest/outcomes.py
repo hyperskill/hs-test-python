@@ -47,10 +47,7 @@ class Outcome:
 
     @staticmethod
     def get_outcome(ex: BaseException, stage, test_num: int):
-        if isinstance(ex, SyntaxException):
-            return SyntaxErrorOutcome(ex.exception, stage)
-
-        elif isinstance(ex, WrongAnswer):
+        if isinstance(ex, WrongAnswer):
             return WrongAnswerOutcome(test_num, ex.feedback)
 
         elif isinstance(ex, ExceptionWithFeedback):
@@ -131,15 +128,3 @@ class UnexpectedErrorOutcome(Outcome):
 
     def get_type(self) -> str:
         return 'Unexpected error'
-
-
-class SyntaxErrorOutcome(Outcome):
-    def __init__(self, cause: SyntaxError, stage):
-        super().__init__()
-        self.error_text = get_stacktrace(stage.path_to_test, cause, hide_internals=True).strip()
-
-    def get_type(self) -> str:
-        return 'Syntax error'
-
-    def __str__(self):
-        return self.error_text

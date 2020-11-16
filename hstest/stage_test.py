@@ -85,10 +85,6 @@ class StageTest:
             error_text = get_stacktrace(self.path_to_test, ex, hide_internals=True)
             TestRun.curr_test_run.set_error_in_test(ErrorWithFeedback(error_text))
 
-        except SyntaxError as ex:
-            TestRun.curr_test_run.set_error_in_test(
-                SyntaxException(ex, self.path_to_test)
-            )
         except BaseException as ex:
             if TestRun.curr_test_run.get_error_in_test() is None:
                 # ExitException is thrown in case of exit() or quit()
