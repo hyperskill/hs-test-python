@@ -28,7 +28,7 @@ class ExitHandler:
             ExitHandler._os_kill = os.exit if hasattr(os, 'exit') else None
             ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
             ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
-            ExitHandler._sys_exit = sys.exit if hasattr(os, '_exit') else None
+            ExitHandler._sys_exit = sys.exit if hasattr(sys, '_exit') else None
             ExitHandler._signal_pthread_kill = signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
             ExitHandler._signal_siginterrupt = signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
 
