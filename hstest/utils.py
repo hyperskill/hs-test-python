@@ -66,7 +66,7 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
     cleaned_traceback = []
     for trace in traceback_stack[1:-1]:
         if trace.startswith(' ' * 4):
-            # Trace line that starts with 4 is just code example used in SyntaxError
+            # Trace line that starts with 4 is a line with SyntaxError
             cleaned_traceback += [trace]
         elif user_dir in trace or ('<' in trace and '>' in trace and '<frozen ' not in trace):
             # avoid including <frozen importlib...> lines that are always in the stacktrace
