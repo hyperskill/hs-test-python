@@ -159,8 +159,8 @@ class StageTest:
         except TestPassed:
             return CheckResult.correct()
 
-    def run_tests(self) -> Tuple[int, str]:
-        if self.module_to_test.startswith('tests.'):
+    def run_tests(self, *, debug=False) -> Tuple[int, str]:
+        if self.module_to_test.startswith('tests.') or debug:
             import hstest.utils as hs
             hs.failed_msg_start = ''
             hs.failed_msg_continue = ''
