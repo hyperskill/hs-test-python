@@ -1,6 +1,7 @@
 import unittest
+
+from hstest.exception.outcomes import UnexpectedError
 from hstest.test_case import TestCase
-from hstest.exceptions import UnexpectedError
 
 
 class TestTestCase(unittest.TestCase):
@@ -68,7 +69,7 @@ class TestTestCase(unittest.TestCase):
         self.assertEqual(tests[3].attach, None)
 
     def test_from_stepik_bad_data(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(UnexpectedError):
             TestCase.from_stepik(
                 [('mixed1', 234567), 234345, ('mixed345', 456234), '567']
             )

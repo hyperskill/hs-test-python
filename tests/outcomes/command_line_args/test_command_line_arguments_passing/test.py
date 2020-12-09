@@ -30,3 +30,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(status, 0)
         self.assertEqual(feedback, 'test OK')
+
+
+if __name__ == '__main__':
+    Test().test()

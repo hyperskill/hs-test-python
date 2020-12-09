@@ -1,7 +1,8 @@
 from typing import List, Dict, Any, Tuple, Callable, Union, Optional, Type
 from hstest.check_result import CheckResult
-from hstest.dynamic.stdin import DynamicInputFunction, InputFunction
-from hstest.exceptions import UnexpectedError
+from hstest.dynamic.input.dynamic_input_func import InputFunction, DynamicInputFunction
+from hstest.dynamic.input.dynamic_testing import DynamicTesting, to_dynamic_testing
+from hstest.exception.outcomes import UnexpectedError
 
 SimpleStepikTest = str
 AdvancedStepikTest = Tuple[str, Any]
@@ -16,25 +17,32 @@ DynamicInput = Union[PredefinedInput, List[RuntimeEvaluatedInput]]
 
 
 class TestCase:
-    def __init__(self, *,
-                 stdin: DynamicInput = '',
-                 args: List[str] = None,
-                 attach: Any = None,
-                 files: Dict[str, str] = None,
-                 time_limit: int = 15000,
-                 check_function: CheckFunction = None,
-                 feedback_on_exception: Dict[Type[Exception], str] = None,
-                 copy_to_attach=False,
-                 ):
+    def __init__(
+            self, *,
+            stdin: DynamicInput = '',
+            args: List[str] = None,
+            attach: Any = None,
+            files: Dict[str, str] = None,
+            time_limit: int = 15000,
+            check_function: CheckFunction = None,
+            feedback_on_exception: Dict[Type[Exception], str] = None,
+            copy_to_attach: bool = False,
+            dynamic_testing: DynamicTesting = None
+    ):
+
+        self.source_name = None
+
         self.input: Optional[str] = None
         self.args: List[str] = [] if args is None else args
         self.attach: Any = attach
         self.files: Dict[str, str] = {} if files is None else files
         self.time_limit: int = time_limit
-        self.check_function: CheckFunction = check_function
-        self.feedback_on_exception: Dict[type, str] = (
+        self.check_func: CheckFunction = check_function
+        self.feedback_on_exception: Dict[Type[Exception], str] = (
             {} if feedback_on_exception is None else feedback_on_exception)
         self.input_funcs = []
+
+        self._dynamic_testing: DynamicTesting = dynamic_testing
 
         if copy_to_attach:
             if attach is not None:
@@ -53,7 +61,7 @@ class TestCase:
         else:
             if type(stdin) != list:
                 raise UnexpectedError(
-                    'Stdin should be either of type str ot list '
+                    'Stdin should be either of type str or list '
                     f'but found type {type(stdin)}')
             for elem in stdin:  # type: RuntimeEvaluatedInput
                 if type(elem) == DynamicInputFunction:
@@ -67,7 +75,18 @@ class TestCase:
 
                 elif type(elem) in (tuple, list):
                     if len(elem) == 2:
-                        self.input_funcs += [DynamicInputFunction(*elem)]
+                        trigger_count: int = elem[0]
+                        input_function: InputFunction = elem[1]
+
+                        if type(trigger_count) != int:
+                            raise UnexpectedError(f'Stdin element\'s 1st element should be of type int, '
+                                                  f'found {type(trigger_count)}')
+
+                        if type(input_function) not in ["<class 'function'>", "<class 'method'>"]:
+                            raise UnexpectedError(f'Stdin element\'s 2nd element should be of type function, '
+                                                  f'found {type(input_function)}')
+
+                        self.input_funcs += [DynamicInputFunction(trigger_count, input_function)]
                     else:
                         raise UnexpectedError(
                             f'Stdin element should have size 2, found {len(elem)}')
@@ -76,6 +95,14 @@ class TestCase:
                     raise UnexpectedError(
                         f'Stdin element should have type DynamicInputFunction or '
                         f'tuple of size 1 or 2, found element of type {type(elem)}')
+
+    @property
+    def dynamic_testing(self) -> DynamicTesting:
+        if self._dynamic_testing is None:
+            self._dynamic_testing = to_dynamic_testing(
+                self.source_name, self.args, self.input_funcs
+            )
+        return self._dynamic_testing
 
     @staticmethod
     def from_stepik(stepik_tests: List[StepikTest]) -> List['TestCase']:
@@ -86,7 +113,7 @@ class TestCase:
             elif type(test) is str:
                 hs_test = TestCase(stdin=test)
             else:
-                raise ValueError("Bad test: " + str(test))
+                raise UnexpectedError("Bad test: " + str(test))
             hs_tests += [hs_test]
         return hs_tests
 
@@ -95,7 +122,7 @@ class SimpleTestCase(TestCase):
     def __init__(self, *, stdin: str, stdout: str, feedback: str, **kwargs):
         super().__init__(stdin=stdin, attach=stdout, **kwargs)
         self.feedback = feedback
-        self.check_function = self._custom_check
+        self.check_func = self._custom_check
 
     def _custom_check(self, reply: str, expected: str):
         is_correct = reply.strip() == expected.strip()

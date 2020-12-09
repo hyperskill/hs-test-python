@@ -1,12 +1,9 @@
-import os
-from hstest.exceptions import WrongAnswer, ErrorWithFeedback
-from hstest.exceptions import ExceptionWithFeedback
-from hstest.exceptions import SyntaxException
-from hstest.exceptions import TimeLimitException
-from hstest.exceptions import UnexpectedError
-from hstest.utils import get_stacktrace, get_report
-from hstest.dynamic.handle_stdout import StdoutHandler
-from hstest.test_run import TestRun
+from hstest.common.utils import get_stacktrace, get_report
+from hstest.dynamic.output.output_handler import OutputHandler
+from hstest.exception.outcomes import ExceptionWithFeedback, ErrorWithFeedback, UnexpectedError
+from hstest.exception.testing import TimeLimitException
+from hstest.exceptions import WrongAnswer
+from hstest.testing.test_run import TestRun
 
 
 class Outcome:
@@ -32,7 +29,7 @@ class Outcome:
         if self.stack_trace:
             result += '\n\n' + self.stack_trace.strip()
 
-        full_log = StdoutHandler.get_dynamic_output()
+        full_log = OutputHandler.get_dynamic_output()
 
         if len(full_log.strip()) > 0:
             result += ('\n\nPlease find below the output '

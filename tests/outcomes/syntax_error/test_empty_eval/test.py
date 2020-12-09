@@ -22,15 +22,17 @@ class Test(unittest.TestCase):
         file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
         status, feedback = TestEmptyEval(file).run_tests()
 
-        self.assertEqual('Exception in test #1\n'
-                         '\n'
-                         'Traceback (most recent call last):\n'
-                         '  File "main.py", line 1, in <module>\n'
-                         '    print(eval(""))\n'
-                         '  File "<string>", line 0\n'
-                         '    \n'
-                         '    ^\n'
-                         'SyntaxError: unexpected EOF while parsing', feedback)
+        self.assertIn('Exception in test #1\n'
+                      '\n'
+                      'Traceback (most recent call last):\n'
+                      '  File "main.py", line 1, in <module>\n'
+                      '    print(eval(""))\n'
+                      '  File "<string>", line 0\n'
+                      '    \n', feedback)
+
+        self.assertIn('SyntaxError: unexpected EOF while parsing',
+                      feedback)
+
         self.assertNotEqual(status, 0)
 
 

@@ -7,7 +7,7 @@ from inspect import getmembers, isclass
 from importlib import import_module
 from os.path import dirname, isfile, isdir
 from os import listdir
-import hstest.utils as hs
+import hstest.common.utils as hs
 
 
 class OutputForTest:
