@@ -1,7 +1,7 @@
-import os
-import sys
 import builtins
+import os
 import signal
+import sys
 
 from hstest.dynamic.security.exit_exception import ExitException
 

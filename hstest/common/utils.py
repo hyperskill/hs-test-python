@@ -1,7 +1,6 @@
 import os
-import sys
-import traceback
 import platform
+import traceback
 from typing import List
 
 failed_msg_start = '#educational_plugin FAILED + '

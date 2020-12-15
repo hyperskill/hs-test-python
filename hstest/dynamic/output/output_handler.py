@@ -1,8 +1,8 @@
 import io
 import sys
 
-from hstest.dynamic.output.output_mock import OutputMock
 from hstest.common.utils import clean_text
+from hstest.dynamic.output.output_mock import OutputMock
 
 
 class OutputHandler:

@@ -7,9 +7,9 @@ from time import sleep
 from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
 
+from hstest.check_result import CheckResult
 from hstest.exception.outcomes import UnexpectedError
 from hstest.stage_test import StageTest
-from hstest.check_result import CheckResult
 
 EMPTY_DATABASE = 'empty.sqlite3'
 TEST_DATABASE = 'db.test.sqlite3'
