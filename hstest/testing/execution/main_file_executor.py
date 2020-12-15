@@ -35,11 +35,9 @@ class MainModuleExecutor(ProgramExecutor):
             self._machine.set_state(ProgramState.RUNNING)
 
             sys.argv = [self.path_to_test] + list(args)
-            sys.path += [self.folder_to_test, ]
-
+            sys.path += [self.folder_to_test]
             if os.path.exists(self.folder_to_test):
                 open(self.init_file, 'a').close()
-
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"

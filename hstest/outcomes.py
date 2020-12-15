@@ -3,7 +3,6 @@ from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import ExceptionWithFeedback, ErrorWithFeedback, UnexpectedError
 from hstest.exception.testing import TimeLimitException, InfiniteLoopException
 from hstest.exceptions import WrongAnswer
-from hstest.testing.test_run import TestRun
 
 
 class Outcome:
@@ -78,9 +77,8 @@ class Outcome:
                 isinstance(ex, InfiniteLoopException):
             return ErrorOutcome(curr_test, ex)
 
-        # if isinstance(ex, UnexpectedError) and ex.exception is not None:
-        #     ex = ex.exception
-        return UnexpectedErrorOutcome(curr_test, ex)
+        else:
+            return UnexpectedErrorOutcome(curr_test, ex)
 
 
 class WrongAnswerOutcome(Outcome):
