@@ -21,6 +21,7 @@ class StageTest:
 
     runner: Type[TestRunner] = AsyncMainFileRunner
     curr_test_run: Optional[TestRun] = None
+    curr_test_global: int = 0
 
     # def run_tests(self):
     #     for i in self._dynamic_methods.get(type(self), []):
@@ -81,8 +82,13 @@ class StageTest:
 
             for test_run in test_runs:
                 curr_test += 1
+                StageTest.curr_test_global += 1
+                if curr_test == StageTest.curr_test_global:
+                    total_tests = ""
+                else:
+                    total_tests = f' ({StageTest.curr_test_global})'
                 OutputHandler.get_real_out().write(
-                    RED_BOLD + f'\nStart test {curr_test}' + RESET + '\n'
+                    RED_BOLD + f'\nStart test {curr_test}{total_tests}' + RESET + '\n'
                 )
 
                 StageTest.curr_test_run = test_run
