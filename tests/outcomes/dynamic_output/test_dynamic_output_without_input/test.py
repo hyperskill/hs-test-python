@@ -36,3 +36,7 @@ class Test(unittest.TestCase):
         self.assertTrue("Fatal error" not in feedback)
 
         self.assertNotEqual(status, 0)
+
+
+if __name__ == '__main__':
+    Test().test()

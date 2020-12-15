@@ -2,6 +2,7 @@ import os
 import sys
 import traceback
 import platform
+from typing import List
 
 failed_msg_start = '#educational_plugin FAILED + '
 failed_msg_continue = '#educational_plugin '
@@ -23,7 +24,7 @@ def passed():
     return 0, 'test OK'
 
 
-def clear_text(text: str) -> str:
+def clean_text(text: str) -> str:
     return text.replace('\r\n', '\n').replace('\r', '\n').replace('\u00a0', '\u0020')
 
 
@@ -53,12 +54,32 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
     else:
         user_dir = ''
 
-    while exc_tb is not None:
-        filename = exc_tb.tb_frame.f_code.co_filename
-        if filename.endswith(user_file):
-            user_dir = os.path.dirname(filename) + os.sep
+    user_traceback = []
+    for tr in traceback_stack[::-1][1:-1]:
+        if f'{os.sep}lib{os.sep}runpy.py"' in tr:
             break
-        exc_tb = exc_tb.tb_next
+        user_traceback += [tr]
+
+    user_traceback: List[str] = user_traceback[::-1]
+    dir_names = []
+    for tr in user_traceback:
+        try:
+            start_index = tr.index('"') + 1
+            end_index = tr.index('"', start_index)
+        except ValueError:
+            continue
+
+        user_file = tr[start_index: end_index]
+
+        if user_file.startswith('<'):
+            continue
+
+        dir_name = os.path.dirname(tr[start_index: end_index])
+        if os.path.isdir(dir_name):
+            dir_names += [os.path.abspath(dir_name)]
+
+    if dir_names:
+        user_dir = os.path.commonpath(dir_names) + os.sep
 
     if not user_dir:
         return 'File "' + user_file + '" not found. Check if you deleted it.\n\n' + traceback_stack[-1]
@@ -83,6 +104,3 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
             cleaned_traceback += [trace]
 
     return traceback_stack[0] + ''.join(cleaned_traceback) + traceback_stack[-1]
-
-
-

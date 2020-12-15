@@ -1,5 +1,5 @@
 from threading import Condition
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, Callable
 
 from hstest.exception.outcomes import UnexpectedError
 
@@ -33,11 +33,11 @@ class StateMachine:
 
     def wait_state(self, waiting_state: Any):
         with self.cv:
-            self.cv.wait_for(lambda: self.state == waiting_state)
+            self._wait_while(lambda: self.state != waiting_state)
 
     def wait_not_state(self, state_to_avoid: Any):
         with self.cv:
-            self.cv.wait_for(lambda: self.state != state_to_avoid)
+            self._wait_while(lambda: self.state == state_to_avoid)
 
     def wait_not_states(self, *states_to_avoid: Any):
         def wait_func():
@@ -46,7 +46,12 @@ class StateMachine:
                     return True
             return False
         with self.cv:
-            self.cv.wait_for(wait_func)
+            self._wait_while(wait_func)
+
+    def _wait_while(self, check_wait: Callable[[], bool]):
+        with self.cv:
+            while check_wait():
+                self.cv.wait()
 
     def set_state(self, new_state: Any):
         with self.cv:

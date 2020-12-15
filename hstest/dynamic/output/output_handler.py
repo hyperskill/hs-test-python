@@ -2,7 +2,7 @@ import io
 import sys
 
 from hstest.dynamic.output.output_mock import OutputMock
-from hstest.common.utils import clear_text
+from hstest.common.utils import clean_text
 
 
 class OutputHandler:
@@ -44,15 +44,15 @@ class OutputHandler:
 
     @staticmethod
     def get_output() -> str:
-        return clear_text(OutputHandler._mock_out.cloned)
+        return clean_text(OutputHandler._mock_out.cloned)
 
     @staticmethod
     def get_dynamic_output() -> str:
-        return clear_text(OutputHandler._mock_err.dynamic)
+        return clean_text(OutputHandler._mock_out.dynamic)
 
     @staticmethod
     def get_partial_output() -> str:
-        return clear_text(OutputHandler._mock_err.partial)
+        return clean_text(OutputHandler._mock_out.partial)
 
     @staticmethod
     def inject_input(user_input: str):

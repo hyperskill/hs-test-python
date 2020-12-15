@@ -1,7 +1,7 @@
 from typing import List, Callable, Optional
 
 from hstest.check_result import CheckResult
-from hstest.common.utils import clear_text
+from hstest.common.utils import clean_text
 from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
 from hstest.exception.outcomes import UnexpectedError
 from hstest.exceptions import TestPassed, WrongAnswer
@@ -54,7 +54,7 @@ def to_dynamic_testing(source: str, args: List[str],
                 self.input_funcs.pop(0)
 
             if new_input is not None:
-                new_input = clear_text(new_input)
+                new_input = clean_text(new_input)
 
             return new_input
 

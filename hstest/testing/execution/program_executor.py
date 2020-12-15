@@ -63,11 +63,11 @@ class ProgramExecutor:
                     "It finished execution too early, should continue running."))
             raise TestedProgramFinishedEarly()
 
-        if self._input is None:
+        if stdin is None:
             self.stop_input()
             return ""
 
-        if self.is_waiting_input():
+        if not self.is_waiting_input():
             raise UnexpectedError(
                 "Program " + str(self) + " is not waiting for the input "
                 + "(state == \"" + str(self._machine.state) + "\")")

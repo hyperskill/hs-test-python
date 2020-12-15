@@ -38,6 +38,10 @@ class TestRun:
         return self._input_used
 
     @property
+    def tested_programs(self) -> List[TestedProgram]:
+        return self._tested_programs
+
+    @property
     def error_in_test(self) -> Optional[BaseException]:
         return self._error_in_test
 

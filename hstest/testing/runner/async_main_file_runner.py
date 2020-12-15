@@ -1,4 +1,4 @@
-from concurrent.futures import Future
+from concurrent.futures import Future, TimeoutError
 from typing import Optional
 
 from hstest.check_result import CheckResult, correct, wrong

@@ -44,3 +44,7 @@ class Test(unittest.TestCase):
             Hello World'''), feedback)
 
         self.assertEqual(status, -1)
+
+
+if __name__ == '__main__':
+    Test().test()

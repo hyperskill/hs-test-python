@@ -27,4 +27,8 @@ class Test(unittest.TestCase):
         self.assertTrue('Unexpected error during testing'
                         '\n\nWe have recorded this bug and will fix it soon.' in feedback)
 
-        self.assertTrue('No tests provided by "generate" method' in feedback)
+        self.assertTrue('No tests found' in feedback)
+
+
+if __name__ == '__main__':
+    Test().test()

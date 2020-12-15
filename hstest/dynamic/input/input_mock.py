@@ -28,7 +28,7 @@ class InputMock:
         self.handler = DynamicInputHandler(func)
 
     def readline(self) -> str:
-        line = self.handler.elect_line()
+        line = self.handler.eject_next_line()
         if line is None:
             raise EOFError('EOF when reading a line')
         return line

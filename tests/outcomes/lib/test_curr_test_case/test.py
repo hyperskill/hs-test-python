@@ -18,7 +18,7 @@ class TestCurrTestCase(StageTest):
         return [self.tc_1, self.tc_2]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        tc = TestRun.curr_test_run.test_case
+        tc = StageTest.curr_test_run.test_case
         if (tc.input == '1' and tc.attach == 1 and tc is self.tc_1 or
                 tc.input == '2' and tc.attach == 2 and tc is self.tc_2):
             return CheckResult.correct()

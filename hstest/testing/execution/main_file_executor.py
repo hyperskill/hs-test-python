@@ -35,9 +35,11 @@ class MainModuleExecutor(ProgramExecutor):
             self._machine.set_state(ProgramState.RUNNING)
 
             sys.argv = [self.path_to_test] + list(args)
-            sys.path += [self.folder_to_test]
+            sys.path += [self.folder_to_test, ]
+
             if os.path.exists(self.folder_to_test):
                 open(self.init_file, 'a').close()
+
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"
@@ -48,6 +50,7 @@ class MainModuleExecutor(ProgramExecutor):
         except ImportError as ex:
             error_text = get_stacktrace(self.path_to_test, ex, hide_internals=True)
             StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(error_text))
+            self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         except BaseException as ex:
             if StageTest.curr_test_run.error_in_test is None:

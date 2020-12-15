@@ -13,5 +13,5 @@ class TestedProgramFinishedEarly(BaseException):
 
 
 class InfiniteLoopException(BaseException):
-    def __init__(self, reason: str):
-        self.reason = reason
+    def __init__(self, message: str):
+        self.message = message

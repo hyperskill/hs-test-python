@@ -82,7 +82,7 @@ class TestCase:
                             raise UnexpectedError(f'Stdin element\'s 1st element should be of type int, '
                                                   f'found {type(trigger_count)}')
 
-                        if type(input_function) not in ["<class 'function'>", "<class 'method'>"]:
+                        if str(type(input_function)) not in ["<class 'function'>", "<class 'method'>"]:
                             raise UnexpectedError(f'Stdin element\'s 2nd element should be of type function, '
                                                   f'found {type(input_function)}')
 

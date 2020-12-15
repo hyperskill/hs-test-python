@@ -18,7 +18,7 @@ class TestCurrTestNum(StageTest):
         return [self.tc_1, self.tc_2]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        tn = TestRun.curr_test_run.test_num
+        tn = StageTest.curr_test_run.test_num
         if reply == '1\n' and tn == 1 or reply == '2\n' and tn == 2:
             return CheckResult.correct()
         return CheckResult.wrong('')

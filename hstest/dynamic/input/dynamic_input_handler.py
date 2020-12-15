@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from hstest.common.utils import clear_text
+from hstest.common.utils import clean_text
 from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
 from hstest.dynamic.output.output_handler import OutputHandler
@@ -11,7 +11,7 @@ class DynamicInputHandler:
         self._dynamic_input_function: DynamicTestFunction = func
         self._input_lines: List[str] = []
 
-    def elect_line(self) -> Optional[str]:
+    def eject_next_line(self) -> Optional[str]:
         if len(self._input_lines) == 0:
             self._eject_next_input()
             if len(self._input_lines) == 0:
@@ -28,5 +28,5 @@ class DynamicInputHandler:
         if new_input is None:
             return
 
-        new_input = clear_text(new_input)
+        new_input = clean_text(new_input)
         self._input_lines += new_input.strip().split('\n')

@@ -132,7 +132,7 @@ class StageTest:
             return passed()
 
         except BaseException as ex:
-            outcome: Outcome = Outcome.get_outcome(ex, self, curr_test)
+            outcome: Outcome = Outcome.get_outcome(ex, curr_test)
             fail_text = str(outcome)
             return failed(fail_text)
 
