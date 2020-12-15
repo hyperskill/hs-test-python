@@ -5,7 +5,7 @@ from concurrent.futures import Future
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
-from hstest.common.utils import get_stacktrace
+from hstest.common.reflection_utils import get_stacktrace
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException

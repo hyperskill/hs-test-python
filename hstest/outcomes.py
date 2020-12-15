@@ -1,4 +1,5 @@
-from hstest.common.utils import get_stacktrace, get_report
+from hstest.common.reflection_utils import get_stacktrace
+from hstest.common.utils import get_report
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import ExceptionWithFeedback, ErrorWithFeedback, UnexpectedError
 from hstest.exception.testing import TimeLimitException, InfiniteLoopException
