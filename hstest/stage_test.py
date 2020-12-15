@@ -27,9 +27,8 @@ class StageTest:
     #     for i in self._dynamic_methods.get(type(self), []):
     #         i(self)
 
-    def __init__(self, source_name):
-        self.source_name = source_name
-        pass
+    def __init__(self, source_name: str = ''):
+        self.source_name: str = source_name
         # super().__init__(method)
         # self.module =
 

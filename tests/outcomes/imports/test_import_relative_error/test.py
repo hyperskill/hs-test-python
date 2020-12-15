@@ -1,9 +1,9 @@
 import unittest
-import os
 from inspect import cleandoc
 from typing import Any, List
 
 from hstest.check_result import CheckResult
+from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -19,9 +19,7 @@ class TestImportRelativeError(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        file = __file__.replace(os.sep, '.')[:-3]
-        file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + 'main'
-        status, feedback = TestImportRelativeError(file).run_tests()
+        status, feedback = TestImportRelativeError(get_main()).run_tests()
 
         self.assertEqual(cleandoc(
             """
