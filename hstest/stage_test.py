@@ -83,10 +83,7 @@ class StageTest:
             for test_run in test_runs:
                 curr_test += 1
                 StageTest.curr_test_global += 1
-                if curr_test == StageTest.curr_test_global:
-                    total_tests = ""
-                else:
-                    total_tests = f' ({StageTest.curr_test_global})'
+                total_tests = '' if curr_test == StageTest.curr_test_global else f' ({StageTest.curr_test_global})'
                 OutputHandler.get_real_out().write(
                     RED_BOLD + f'\nStart test {curr_test}{total_tests}' + RESET + '\n'
                 )
