@@ -1,6 +1,3 @@
-import importlib
-import os
-import sys
 from typing import List, Any, Tuple, Optional, Type
 
 from hstest.check_result import CheckResult
@@ -21,10 +18,8 @@ from hstest.testing.test_run import TestRun
 class StageTest:
     _dynamic_methods = {}
     _dynamic_variables = {}
-    module = ''
 
     runner: Type[TestRunner] = AsyncMainFileRunner
-
     curr_test_run: Optional[TestRun] = None
 
     # def run_tests(self):
@@ -37,16 +32,16 @@ class StageTest:
         # super().__init__(method)
         # self.module =
 
-    def reset(self):
-        top_module = self.module_to_test[:self.module_to_test.rindex('.')]
-        for name, module in list(sys.modules.items()):
-            if name.startswith(top_module):
-                importlib.reload(module)
+    # def reset(self):
+    #     top_module = self.module_to_test[:self.module_to_test.rindex('.')]
+    #     for name, module in list(sys.modules.items()):
+    #         if name.startswith(top_module):
+    #             importlib.reload(module)
 
-    def test_program(self):
-        result, feedback = self.run_tests()
-        if result != 0:
-            self.fail(feedback)
+    # def test_program(self):
+    #    result, feedback = self.run_tests()
+    #     if result != 0:
+    #         self.fail(feedback)
 
     def after_all_tests(self):
         pass
@@ -104,12 +99,6 @@ class StageTest:
             return failed(fail_text)
 
         finally:
-            if os.path.exists(self.init_file):
-                try:
-                    os.remove(self.init_file)
-                except OSError:
-                    pass
-
             StageTest.curr_test_run = None
             self.after_all_tests()
             SystemHandler.tear_down()

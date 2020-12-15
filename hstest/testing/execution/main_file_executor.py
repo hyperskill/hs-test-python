@@ -63,10 +63,11 @@ class MainModuleExecutor(ProgramExecutor):
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         finally:
-            try:
-                os.remove(self.init_file)
-            except OSError:
-                pass
+            if os.path.exists(self.init_file):
+                try:
+                    os.remove(self.init_file)
+                except OSError:
+                    pass
             sys.path.pop()
 
     def _launch(self, *args: str):
