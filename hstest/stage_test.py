@@ -1,11 +1,11 @@
 import importlib
+import os
 import sys
 from typing import List, Any, Tuple, Optional, Type
 
 from hstest.check_result import CheckResult
 from hstest.common.utils import failed, passed
 from hstest.dynamic.input.dynamic_testing import search_dynamic_tests
-from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.colored_output import RED_BOLD, RESET
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
@@ -50,36 +50,6 @@ class StageTest:
 
     def after_all_tests(self):
         pass
-
-    def _exec_file(self, args: List[str]):
-        if self.need_reload:
-            try:
-                self.reset()
-            except BaseException as ex:
-                TestRun.curr_test_run.set_error_in_test(ex)
-
-    def _run_test(self, test: TestCase) -> str:
-        InputHandler.set_input_funcs(test.input_funcs)
-        OutputHandler.reset_output()
-        TestRun.curr_test_run.set_error_in_test(None)
-
-        self._run_file(test.args, test.time_limit)
-        self._check_errors(test)
-
-        return OutputHandler.get_output()
-
-    def _check_solution(self, test: TestCase, output: str):
-        if isinstance(TestRun.curr_test_run.get_error_in_test(), TestPassed):
-            return CheckResult.correct()
-        try:
-            if test.check_function is not None:
-                return test.check_function(output, test.attach)
-            else:
-                return self.check(output, test.attach)
-        except WrongAnswer as ex:
-            return CheckResult.wrong(ex.feedback)
-        except TestPassed:
-            return CheckResult.correct()
 
     def _init_tests(self) -> List[TestRun]:
         test_runs: List[TestRun] = []
@@ -134,11 +104,11 @@ class StageTest:
             return failed(fail_text)
 
         finally:
-            # if os.path.exists(self.init_file):
-            #     try:
-            #         os.remove(self.init_file)
-            #     except OSError:
-            #         pass
+            if os.path.exists(self.init_file):
+                try:
+                    os.remove(self.init_file)
+                except OSError:
+                    pass
 
             StageTest.curr_test_run = None
             self.after_all_tests()
