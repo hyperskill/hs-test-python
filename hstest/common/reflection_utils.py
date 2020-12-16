@@ -32,6 +32,9 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
             break
         user_traceback += [tr]
 
+    user_traceback = [tr for tr in user_traceback
+                      if f'{os.sep}hstest{os.sep}' not in tr]
+
     user_traceback: List[str] = user_traceback[::-1]
     dir_names = []
     for tr in user_traceback:

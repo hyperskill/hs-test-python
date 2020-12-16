@@ -1,26 +1,32 @@
-import concurrent.futures.thread
-from concurrent.futures import ThreadPoolExecutor, Future
-from typing import Callable
+import threading
+import weakref
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures.thread import _worker
 
 
 class DaemonThreadPoolExecutor(ThreadPoolExecutor):
-    def __init__(self, max_workers: int = 1):
-        super().__init__(max_workers=max_workers)
+    def __init__(self, max_workers: int = 1, name: str = ''):
+        super().__init__(max_workers=max_workers, thread_name_prefix=name)
 
-    def _remove_threads_from_queue(self):
-        try:
-            # Without this the Python interpreter cannot stop when the user writes an infinite loop
-            # Even though all threads in ThreadPoolExecutor are created as daemon threads
-            # They are not stopped on Python's shutdown but Python waits for them to stop on their own
-            # See https://stackoverflow.com/a/49992422/13160001
-            queue = concurrent.futures.thread._threads_queues
-            for t in self._threads:
-                if t in queue:
-                    del queue[t]
-        except BaseException:
-            pass
+    # Adjusted method from the ThreadPoolExecutor class just to create threads as daemons
+    def _adjust_thread_count(self):
+        # if idle threads are available, don't spin new threads
+        if self._idle_semaphore.acquire(timeout=0):
+            return
 
-    def submit(self, func: Callable, *args, **kwargs) -> Future:
-        future: Future = super().submit(func, *args, **kwargs)
-        self._remove_threads_from_queue()
-        return future
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+
+        num_threads = len(self._threads)
+        if num_threads < self._max_workers:
+            thread_name = '%s_%d' % (self._thread_name_prefix or self,
+                                     num_threads)
+            t = threading.Thread(name=thread_name, target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue,
+                                       self._initializer,
+                                       self._initargs), daemon=True)
+            t.start()
+            self._threads.add(t)

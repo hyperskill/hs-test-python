@@ -23,8 +23,8 @@ class AsyncMainFileRunner(TestRunner):
         except (TestedProgramThrewException, TestedProgramFinishedEarly) as _:
             result = None
 
-        # if result is None or result.is_correct:
-        test_run.stop_tested_programs()
+        if result is None or result.is_correct:
+            test_run.stop_tested_programs()
 
         return result
 
@@ -32,7 +32,7 @@ class AsyncMainFileRunner(TestRunner):
         test_case = test_run.test_case
         time_limit = test_case.time_limit
 
-        executor = DaemonThreadPoolExecutor()
+        executor = DaemonThreadPoolExecutor(name=f"AsyncMainFileRunner test #{test_run.test_num}")
         try:
             future: Future = executor.submit(lambda: self._run_dynamic_test(test_run))
             if time_limit <= 0 or debug_mode:

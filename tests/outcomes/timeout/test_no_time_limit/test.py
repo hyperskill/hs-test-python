@@ -24,3 +24,7 @@ class Test(unittest.TestCase):
         status, feedback = TestNoTimeLimit(get_main()).run_tests()
         self.assertTrue('test OK', feedback)
         self.assertEqual(status, 0)
+
+
+if __name__ == '__main__':
+    Test().test()

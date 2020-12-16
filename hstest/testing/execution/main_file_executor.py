@@ -77,12 +77,15 @@ class MainModuleExecutor(ProgramExecutor):
             sys.path.pop()
 
     def _launch(self, *args: str):
+        from hstest.stage_test import StageTest
+        test_num = StageTest.curr_test_run.test_num
+
         InputHandler.set_dynamic_input_func(lambda: self._request_input())
-        self.__executor = DaemonThreadPoolExecutor()
+        self.__executor = DaemonThreadPoolExecutor(name=f"MainModuleExecutor test #{test_num}")
         self.__task = self.__executor.submit(lambda: self._invoke_method(*args))
 
     def stop(self):
-        self.__executor.shutdown()
+        self.__executor.shutdown(wait=False)
         self.__task.cancel()
         with self._machine.cv:
             while not self.is_finished():
