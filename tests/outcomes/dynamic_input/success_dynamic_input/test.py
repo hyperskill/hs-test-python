@@ -32,6 +32,9 @@ class SuccessDynamicInput(StageTest):
 
             TestCase(stdin=[lambda x: 'Hi before', lambda x: 'Hi after'],
                      attach="Hello\nHi before\n"),
+
+            TestCase(stdin=[lambda x: "řĦπ"],
+                     attach="Hello\nřĦπ\n")
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
