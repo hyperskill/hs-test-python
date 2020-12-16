@@ -7,8 +7,8 @@ from hstest.exception.outcomes import UnexpectedError
 from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.testing.tested_program import TestedProgram
 
-DynamicTesting = Callable[[], Optional[CheckResult]]
-DynamicTestingWithoutParams = Callable[[List[Any]], Optional[CheckResult]]
+DynamicTesting = Callable[['StageTest'], Optional[CheckResult]]
+DynamicTestingWithoutParams = Callable[['StageTest', Any], Optional[CheckResult]]
 
 
 class DynamicTestElement:
@@ -20,7 +20,7 @@ class DynamicTestElement:
                  time_limit: int,
                  data: List[Any]):
         self.test: DynamicTestingWithoutParams = test
-        self.name: str = name
+        self.name: str = f"Data passed to dynamic method \"{name}\""
         self.order: Tuple[int, int] = order
         self.repeat: int = repeat
         self.time_limit: int = time_limit
@@ -28,12 +28,38 @@ class DynamicTestElement:
         self.args_list: Optional[List[List[Any]]] = None
 
     def extract_parametrized_data(self):
-        pass
+        if self.data is None:
+            self.data = [[]]
+
+        if type(self.data) not in [list, tuple]:
+            raise UnexpectedError(f"{self.name} should be of type "
+                                  f"\"list\" or \"tuple\", found {type(self.data)}.")
+
+        if len(self.data) == 0:
+            raise UnexpectedError(f"{self.name} should not be empty.")
+
+        found_lists_inside = True
+        for obj in self.data:
+            if type(obj) not in [list, tuple]:
+                found_lists_inside = False
+                break
+
+        if found_lists_inside:
+            self.args_list = self.data
+        else:
+            self.args_list = [[obj] for obj in self.data]
 
     def check_errors(self):
-        if self.repeat <= 0:
+        if self.repeat < 0:
             raise UnexpectedError(f'Dynamic test "{self.name}" '
-                                  f'should not be repeated <= 1 times, found {self.repeat}')
+                                  f'should not be repeated < 0 times, found {self.repeat}')
+
+    def get_tests(self, obj) -> List[DynamicTesting]:
+        tests = []
+        for i in range(self.repeat):
+            for args in self.args_list:
+                tests += [lambda o=obj, a=args: self.test(o, *a)]
+        return tests
 
 
 def to_dynamic_testing(source: str, args: List[str],
@@ -113,10 +139,10 @@ def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
     tests: List[TestCase] = []
 
     for dte in sorted(methods, key=lambda x: x.order):
-        for i in range(dte.repeat):
+        for test in dte.get_tests(obj):
             tests += [
                 TestCase(
-                    dynamic_testing=lambda fn=dte: fn.test(obj),
+                    dynamic_testing=test,
                     time_limit=dte.time_limit
                 )
             ]

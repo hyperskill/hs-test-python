@@ -60,8 +60,9 @@ class InfiniteLoopDetector:
     def reset(self):
         self._curr_line = []
         self._chars_since_last_input = 0
+        self._lines_since_last_input = 0
         self._chars_since_last_check = 0
-        self._chars_since_last_input = 0
+        self._since_last_input = []
         self._between_input_requests = []
         self._every_line = []
 
