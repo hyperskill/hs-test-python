@@ -31,6 +31,11 @@ class InfiniteLoopDetector:
         if not self.working:
             return
 
+        if len(output) > 1:
+            for c in output:
+                self.write(c)
+            return
+
         self._curr_line += [output]
         self._since_last_input += [output]
 

@@ -92,17 +92,18 @@ class StageTest:
                 if not result.is_correct:
                     raise WrongAnswer(result.feedback)
 
+            SystemHandler.tear_down()
             return passed()
 
         except BaseException as ex:
             outcome: Outcome = Outcome.get_outcome(ex, curr_test)
             fail_text = str(outcome)
+            SystemHandler.tear_down()
             return failed(fail_text)
 
         finally:
             StageTest.curr_test_run = None
             self.after_all_tests()
-            SystemHandler.tear_down()
 
     def generate(self) -> List[TestCase]:
         return []
