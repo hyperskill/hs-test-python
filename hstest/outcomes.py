@@ -1,8 +1,8 @@
 from hstest.common.reflection_utils import get_stacktrace
 from hstest.common.utils import get_report
 from hstest.dynamic.output.output_handler import OutputHandler
-from hstest.exception.outcomes import ExceptionWithFeedback, ErrorWithFeedback, UnexpectedError
-from hstest.exception.testing import TimeLimitException, InfiniteLoopException
+from hstest.exception.outcomes import ErrorWithFeedback, ExceptionWithFeedback, UnexpectedError
+from hstest.exception.testing import InfiniteLoopException, TimeLimitException
 from hstest.exceptions import WrongAnswer
 
 
@@ -47,6 +47,8 @@ class Outcome:
                     arguments += f' for {pr}'
                 pr_args = [f'"{arg}"' if ' ' in arg else arg for arg in pr.run_args]
                 arguments += f': {" ".join(pr_args)}\n'
+
+            arguments = arguments.strip()
 
         if worth_showing_log or len(arguments):
             result += '\n\n'

@@ -1,4 +1,4 @@
-from typing import List, Callable, Optional
+from typing import Any, Callable, List, Optional, Tuple
 
 from hstest.check_result import CheckResult
 from hstest.common.utils import clean_text
@@ -8,6 +8,32 @@ from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.testing.tested_program import TestedProgram
 
 DynamicTesting = Callable[[], Optional[CheckResult]]
+DynamicTestingWithoutParams = Callable[[List[Any]], Optional[CheckResult]]
+
+
+class DynamicTestElement:
+    def __init__(self,
+                 test: DynamicTestingWithoutParams,
+                 name: str,
+                 order: Tuple[int, int],
+                 repeat: int,
+                 time_limit: int,
+                 data: List[Any]):
+        self.test: DynamicTestingWithoutParams = test
+        self.name: str = name
+        self.order: Tuple[int, int] = order
+        self.repeat: int = repeat
+        self.time_limit: int = time_limit
+        self.data: Optional[List[Any]] = data
+        self.args_list: Optional[List[List[Any]]] = None
+
+    def extract_parametrized_data(self):
+        pass
+
+    def check_errors(self):
+        if self.repeat <= 0:
+            raise UnexpectedError(f'Dynamic test "{self.name}" '
+                                  f'should not be repeated <= 1 times, found {self.repeat}')
 
 
 def to_dynamic_testing(source: str, args: List[str],
@@ -76,6 +102,23 @@ def to_dynamic_testing(source: str, args: List[str],
     return dynamic_testing_function
 
 
-def search_dynamic_tests() -> List['TestCase']:
-    pass  # TODO
-    return []
+def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
+    from hstest.test_case import TestCase
+    methods: List[DynamicTestElement] = obj._dynamic_methods.get(type(obj), [])
+
+    for m in methods:
+        m.extract_parametrized_data()
+        m.check_errors()
+
+    tests: List[TestCase] = []
+
+    for dte in sorted(methods, key=lambda x: x.order):
+        for i in range(dte.repeat):
+            tests += [
+                TestCase(
+                    dynamic_testing=lambda fn=dte: fn.test(obj),
+                    time_limit=dte.time_limit
+                )
+            ]
+
+    return tests

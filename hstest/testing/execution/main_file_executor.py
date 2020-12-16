@@ -29,6 +29,12 @@ class MainModuleExecutor(ProgramExecutor):
         self.full_file_to_test = ''
         self.need_reload = False
 
+        if os.sep in self.path_to_test:
+            index = self.path_to_test.rfind(os.sep)
+            self.file_to_test = self.path_to_test[index + 1:]
+        else:
+            self.file_to_test = self.path_to_test
+
     def _invoke_method(self, *args: str):
         from hstest.stage_test import StageTest
         try:
@@ -89,4 +95,4 @@ class MainModuleExecutor(ProgramExecutor):
         return OutputHandler.get_partial_output()
 
     def __str__(self) -> str:
-        return self.__module_name
+        return self.file_to_test

@@ -4,7 +4,7 @@ from typing import Optional
 from hstest.check_result import CheckResult, correct, wrong
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.output.output_handler import OutputHandler
-from hstest.exception.testing import TestedProgramThrewException, TestedProgramFinishedEarly, TimeLimitException
+from hstest.exception.testing import TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
 from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner
@@ -23,8 +23,8 @@ class AsyncMainFileRunner(TestRunner):
         except (TestedProgramThrewException, TestedProgramFinishedEarly) as _:
             result = None
 
-        if result is None or result.is_correct:
-            test_run.stop_tested_programs()
+        # if result is None or result.is_correct:
+        test_run.stop_tested_programs()
 
         return result
 
@@ -70,3 +70,5 @@ class AsyncMainFileRunner(TestRunner):
                 return wrong(error.feedback)
             else:
                 return None
+
+        return result

@@ -1,13 +1,15 @@
-import sys
 import io
 import re
-from typing import List
-from unittest import TestLoader, TextTestRunner, TestSuite, TestCase
-from inspect import getmembers, isclass
+import sys
 from importlib import import_module
-from os.path import dirname, isfile, isdir
+from inspect import getmembers, isclass
 from os import listdir
+from os.path import dirname, isdir, isfile
+from typing import List
+from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
+
 import hstest.common.utils as hs
+from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
 
 
 class OutputForTest:
@@ -19,11 +21,11 @@ class OutputForTest:
         text = re.sub(r'(?<!\\)\\\'', '\'', text)
         text = re.sub(r'\\\\', r'\\', text)
         if 'FAIL' in text or 'Traceback' in text or 'failures' in text:
-            self.original.write("\033[1;31m")
+            self.original.write(RED_BOLD)
         else:
-            self.original.write("\033[1;32m")
+            self.original.write(GREEN_BOLD)
         self.original.write(text)
-        self.original.write("\033[0m")
+        self.original.write(RESET)
 
     def flush(self):
         self.original.flush()

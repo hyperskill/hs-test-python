@@ -1,7 +1,7 @@
-from typing import List, Dict, Any, Tuple, Callable, Union, Optional, Type
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 from hstest.check_result import CheckResult
-from hstest.dynamic.input.dynamic_input_func import InputFunction, DynamicInputFunction
+from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction, InputFunction
 from hstest.dynamic.input.dynamic_testing import DynamicTesting, to_dynamic_testing
 from hstest.exception.outcomes import UnexpectedError
 
@@ -17,6 +17,9 @@ RuntimeEvaluatedInput = Union[
 DynamicInput = Union[PredefinedInput, List[RuntimeEvaluatedInput]]
 
 
+DEFAULT_TIME_LIMIT: int = 15000
+
+
 class TestCase:
     def __init__(
             self, *,
@@ -24,7 +27,7 @@ class TestCase:
             args: List[str] = None,
             attach: Any = None,
             files: Dict[str, str] = None,
-            time_limit: int = 15000,
+            time_limit: int = DEFAULT_TIME_LIMIT,
             check_function: CheckFunction = None,
             feedback_on_exception: Dict[Type[Exception], str] = None,
             copy_to_attach: bool = False,
@@ -44,6 +47,9 @@ class TestCase:
         self.input_funcs = []
 
         self._dynamic_testing: DynamicTesting = dynamic_testing
+
+        if dynamic_testing is not None:
+            return
 
         if copy_to_attach:
             if attach is not None:

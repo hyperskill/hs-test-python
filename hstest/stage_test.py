@@ -1,8 +1,8 @@
-from typing import List, Any, Tuple, Optional, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 from hstest.check_result import CheckResult
 from hstest.common.utils import failed, passed
-from hstest.dynamic.input.dynamic_testing import search_dynamic_tests
+from hstest.dynamic.input.dynamic_testing import DynamicTestElement, search_dynamic_tests
 from hstest.dynamic.output.colored_output import RED_BOLD, RESET
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
@@ -16,8 +16,7 @@ from hstest.testing.test_run import TestRun
 
 
 class StageTest:
-    _dynamic_methods = {}
-    _dynamic_variables = {}
+    _dynamic_methods: Dict[Type['StageTest'], List[DynamicTestElement]] = {}
 
     runner: Type[TestRunner] = AsyncMainFileRunner
     curr_test_run: Optional[TestRun] = None
@@ -49,7 +48,7 @@ class StageTest:
     def _init_tests(self) -> List[TestRun]:
         test_runs: List[TestRun] = []
         test_cases: List[TestCase] = list(self.generate())
-        test_cases += search_dynamic_tests()
+        test_cases += search_dynamic_tests(self)
 
         if len(test_cases) == 0:
             raise UnexpectedError("No tests found")
