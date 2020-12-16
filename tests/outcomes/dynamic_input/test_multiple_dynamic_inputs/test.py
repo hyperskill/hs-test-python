@@ -57,6 +57,20 @@ class TestMultipleDynamicInputs(StageTest):
                             lambda x: '7',
                             lambda x: '8'],
                      attach="1\n2\n1\n2\n1\n"),
+
+            TestCase(stdin=[(-1, lambda x: '1'),
+                            lambda x: '2',
+                            lambda x: '3',
+                            lambda x: '4',
+                            lambda x: '5'],
+                     attach="1\n1\n1\n1\n1\n"),
+
+            TestCase(stdin=[lambda x: '1',
+                            lambda x: '2',
+                            (-1, lambda x: '3'),
+                            lambda x: '4',
+                            lambda x: '5'],
+                     attach="1\n2\n3\n3\n3\n"),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
