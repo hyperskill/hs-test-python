@@ -21,6 +21,7 @@ class DynamicTestElement:
                  data: List[Any]):
         self.test: DynamicTestingWithoutParams = test
         self.name: str = f"Data passed to dynamic method \"{name}\""
+        self.method_name = name
         self.order: Tuple[int, int] = order
         self.repeat: int = repeat
         self.time_limit: int = time_limit
@@ -51,7 +52,7 @@ class DynamicTestElement:
 
     def check_errors(self):
         if self.repeat < 0:
-            raise UnexpectedError(f'Dynamic test "{self.name}" '
+            raise UnexpectedError(f'Dynamic test "{self.method_name}" '
                                   f'should not be repeated < 0 times, found {self.repeat}')
 
     def get_tests(self, obj) -> List[DynamicTesting]:
