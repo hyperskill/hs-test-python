@@ -26,7 +26,7 @@ class TestDynamicMethodEarlyExit(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodEarlyExit().run_tests(debug=True)
+        status, feedback = TestDynamicMethodEarlyExit().run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,

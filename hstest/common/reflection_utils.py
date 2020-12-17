@@ -11,6 +11,17 @@ def get_main(filename: str = 'main') -> str:
     return file
 
 
+def is_tests(stage):
+    return inspect.getmodule(stage).__package__.startswith('tests.outcomes.') or \
+           f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in inspect.getmodule(stage).__file__
+
+
+def setup_cwd(stage):
+    test_file = inspect.getmodule(stage).__file__
+    test_folder = os.path.dirname(test_file)
+    os.chdir(test_folder)
+
+
 def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> str:
     exc_tb = ex.__traceback__
     traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)

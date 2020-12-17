@@ -86,7 +86,7 @@ class TestRightSequenceOfTests(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestRightSequenceOfTests().run_tests(debug=True)
+        status, feedback = TestRightSequenceOfTests().run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual(
             "Wrong answer in test #15\n" +

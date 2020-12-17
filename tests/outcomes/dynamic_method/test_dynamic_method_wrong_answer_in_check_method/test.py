@@ -23,7 +23,7 @@ class TestDynamicMethodUnexpectedErrorNoCheckMethod(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodUnexpectedErrorNoCheckMethod().run_tests(debug=True)
+        status, feedback = TestDynamicMethodUnexpectedErrorNoCheckMethod().run_tests()
         self.assertNotEqual(status, 0)
         self.assertIn(
             "Wrong answer in test #1\n" +

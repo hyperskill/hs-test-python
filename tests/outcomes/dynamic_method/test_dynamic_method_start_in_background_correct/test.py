@@ -37,7 +37,7 @@ class TestDynamicMethodStartInBackgroundCorrect(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodStartInBackgroundCorrect().run_tests(debug=True)
+        status, feedback = TestDynamicMethodStartInBackgroundCorrect().run_tests()
         self.assertEqual(status, 0)
         self.assertEqual(
             feedback,

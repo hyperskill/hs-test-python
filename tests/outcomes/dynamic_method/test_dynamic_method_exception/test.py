@@ -26,7 +26,7 @@ class TestDynamicMethodException(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodException().run_tests(debug=True)
+        status, feedback = TestDynamicMethodException().run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,

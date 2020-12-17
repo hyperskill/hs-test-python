@@ -27,7 +27,7 @@ class TestDynamicMethodProgramNotFinishedAfterTestButShutDown(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodProgramNotFinishedAfterTestButShutDown().run_tests(debug=True)
+        status, feedback = TestDynamicMethodProgramNotFinishedAfterTestButShutDown().run_tests()
         self.assertEqual(status, 0)
         self.assertEqual(
             feedback,

@@ -21,7 +21,7 @@ class TestDynamicMethodStartInBackgroundWrongAnswer(StageTest):
 @unittest.skip
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodStartInBackgroundWrongAnswer().run_tests(debug=True)
+        status, feedback = TestDynamicMethodStartInBackgroundWrongAnswer().run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,

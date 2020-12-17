@@ -19,7 +19,7 @@ class InfiniteLoopTestInputRequest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = InfiniteLoopTestInputRequest().run_tests(debug=True)
+        status, feedback = InfiniteLoopTestInputRequest().run_tests()
         self.assertIn(
             "Error in test #1\n" +
             "\n" +

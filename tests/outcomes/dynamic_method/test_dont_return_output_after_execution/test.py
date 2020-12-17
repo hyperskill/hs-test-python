@@ -43,7 +43,7 @@ class TestDontReturnOutputAfterExecution(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDontReturnOutputAfterExecution().run_tests(debug=True)
+        status, feedback = TestDontReturnOutputAfterExecution().run_tests()
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)
 

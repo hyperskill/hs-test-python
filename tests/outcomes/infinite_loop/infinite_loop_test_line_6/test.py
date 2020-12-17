@@ -17,7 +17,7 @@ class InfiniteLoopTestLine6(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = InfiniteLoopTestLine6().run_tests(debug=True)
+        status, feedback = InfiniteLoopTestLine6().run_tests()
         self.assertIn(
             "Error in test #1\n" +
             "\n" +

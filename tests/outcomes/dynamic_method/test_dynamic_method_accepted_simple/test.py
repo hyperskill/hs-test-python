@@ -29,7 +29,7 @@ class TestDynamicMethodAcceptedSimple(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicMethodAcceptedSimple().run_tests(debug=True)
+        status, feedback = TestDynamicMethodAcceptedSimple().run_tests()
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)
 

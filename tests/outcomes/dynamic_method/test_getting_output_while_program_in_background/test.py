@@ -40,7 +40,7 @@ class TestGettingOutputWhileProgramInBackground(StageTest):
 @unittest.skip
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestGettingOutputWhileProgramInBackground().run_tests(debug=True)
+        status, feedback = TestGettingOutputWhileProgramInBackground().run_tests()
         self.assertEqual(
             "test OK",
             feedback

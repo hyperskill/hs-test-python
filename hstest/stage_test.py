@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from hstest.check_result import CheckResult
+from hstest.common.reflection_utils import is_tests, setup_cwd
 from hstest.common.utils import failed, passed
 from hstest.dynamic.input.dynamic_testing import DynamicTestElement, search_dynamic_tests
 from hstest.dynamic.output.colored_output import RED_BOLD, RESET
@@ -21,10 +22,6 @@ class StageTest:
     runner: Type[TestRunner] = AsyncMainFileRunner
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
-
-    # def run_tests(self):
-    #     for i in self._dynamic_methods.get(type(self), []):
-    #         i(self)
 
     def __init__(self, source_name: str = ''):
         self.source_name: str = source_name
@@ -67,7 +64,9 @@ class StageTest:
         return test_runs
 
     def run_tests(self, *, debug=False) -> Tuple[int, str]:
-        if self.source_name.startswith('tests.') or debug:
+        if is_tests(self) or debug:
+            setup_cwd(self)
+
             import hstest.common.utils as hs
             hs.failed_msg_start = ''
             hs.failed_msg_continue = ''

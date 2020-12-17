@@ -22,7 +22,7 @@ class Test(unittest.TestCase):
         loop_detector.working = False
 
         try:
-            status, feedback = InfiniteLoopTestNotWorking().run_tests(debug=True)
+            status, feedback = InfiniteLoopTestNotWorking().run_tests()
             self.assertEqual(
                 "test OK",
                 feedback)
