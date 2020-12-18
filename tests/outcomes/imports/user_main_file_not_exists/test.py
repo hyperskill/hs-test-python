@@ -1,4 +1,3 @@
-import os
 import unittest
 from typing import Any, List
 
@@ -24,11 +23,8 @@ class Test(unittest.TestCase):
         self.assertIn(
             'Error in test #1\n\n'
                         
-            f'File "tests{os.sep}outcomes{os.sep}imports{os.sep}'
-            f'user_main_file_not_exists{os.sep}bad_file.py" '
-            'not found. Check if you deleted it.\n\n'
-            
-            'ImportError: No module named tests.outcomes.imports.user_main_file_not_exists.bad_file',
+            'Cannot find a file to import and run your code.\n'
+            'Are your project files located at "',
 
             feedback
         )

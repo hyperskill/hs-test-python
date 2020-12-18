@@ -13,7 +13,7 @@ class TestImportPackage2(StageTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '30\n', '')
+        return CheckResult(reply == '3065\n', '')
 
 
 class Test(unittest.TestCase):

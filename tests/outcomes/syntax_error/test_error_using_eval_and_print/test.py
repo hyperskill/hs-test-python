@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestEmptyEval(get_main()).run_tests()
 
-        self.assertEqual('Exception in test #1\n'
+        self.assertIn('Exception in test #1\n'
                          '\n'
                          'Traceback (most recent call last):\n'
                          '  File "main.py", line 2, in <module>\n'
@@ -26,13 +26,16 @@ class Test(unittest.TestCase):
                          '  File "<string>", line 1\n'
                          '    )\n'
                          '    ^\n'
-                         'SyntaxError: unmatched \')\'\n'
-                         '\n'
-                         'Please find below the output of your program during this failed test.\n'
-                         '\n'
-                         '---\n'
-                         '\n'
-                         '123', feedback)
+                         'SyntaxError: '
+                         , feedback)
+
+        self.assertIn('\n'
+                      'Please find below the output of your program during this failed test.\n'
+                      '\n'
+                      '---\n'
+                      '\n'
+                      '123', feedback)
+
         self.assertNotEqual(status, 0)
 
 

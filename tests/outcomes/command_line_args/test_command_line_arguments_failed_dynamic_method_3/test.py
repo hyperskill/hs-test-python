@@ -10,10 +10,10 @@ from hstest.testing.tested_program import TestedProgram
 class TestCommandLineArgumentsFailedDynamicMethod3(StageTest):
     @dynamic_test
     def test1(self):
-        pr = TestedProgram(get_main())
+        pr = TestedProgram('main')
         pr.start("-in", "123", "-out", "234")
 
-        pr2 = TestedProgram(get_main('main2'))
+        pr2 = TestedProgram('main2')
         pr2.start("--second", "main")
 
         return wrong('')

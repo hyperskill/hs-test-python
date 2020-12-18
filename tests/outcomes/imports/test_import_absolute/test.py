@@ -13,7 +13,7 @@ class TestImportAbsolute(StageTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '10\n', '')
+        return CheckResult(reply == '101\n', '')
 
 
 class Test(unittest.TestCase):

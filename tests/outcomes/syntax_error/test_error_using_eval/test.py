@@ -18,15 +18,15 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestEmptyEval(get_main()).run_tests()
 
-        self.assertEqual('Exception in test #1\n'
-                         '\n'
-                         'Traceback (most recent call last):\n'
-                         '  File "main.py", line 1, in <module>\n'
-                         '    print(eval(")"))\n'
-                         '  File "<string>", line 1\n'
-                         '    )\n'
-                         '    ^\n'
-                         'SyntaxError: unmatched \')\'', feedback)
+        self.assertIn('Exception in test #1\n'
+                      '\n'
+                      'Traceback (most recent call last):\n'
+                      '  File "main.py", line 1, in <module>\n'
+                      '    print(eval(")"))\n'
+                      '  File "<string>", line 1\n'
+                      '    )\n'
+                      '    ^\n'
+                      'SyntaxError: ', feedback)
         self.assertNotEqual(status, 0)
 
 

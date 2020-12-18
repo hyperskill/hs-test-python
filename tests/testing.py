@@ -56,7 +56,8 @@ class UnitTesting:
 
         suite = TestSuite(tests_suite)
         runner = TextTestRunner(stream=OutputForTest(sys.stdout), verbosity=2)
-        return runner.run(suite).wasSuccessful()
+        result = runner.run(suite)
+        return result.wasSuccessful()
 
     @staticmethod
     def find_modules(from_directory: str) -> List[str]:

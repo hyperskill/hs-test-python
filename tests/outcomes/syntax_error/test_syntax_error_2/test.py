@@ -18,13 +18,16 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestSyntaxError2(get_main()).run_tests()
 
-        self.assertEqual('Exception in test #1\n'
-                         '\n'
-                         'Traceback (most recent call last):\n'
-                         '  File "main.py", line 1\n'           
-                         '    print(12 23)\n'
-                         '             ^\n'
-                         'SyntaxError: invalid syntax', feedback)
+        self.assertIn('Exception in test #1\n'
+                      '\n'
+                      'Traceback (most recent call last):\n'
+                      '  File "main.py", line 1\n'           
+                      '    print(12 23)\n'
+                      '             ', feedback)
+
+        self.assertIn('^\n'
+                      'SyntaxError: invalid syntax', feedback)
+
         self.assertNotEqual(status, 0)
 
 

@@ -1,2 +1,1 @@
-import main
-x = 10
+x = 1040

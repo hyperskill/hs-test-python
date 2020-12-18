@@ -5,6 +5,7 @@ from typing import List
 
 
 def get_main(filename: str = 'main') -> str:
+    return filename
     file = inspect.stack()[1].filename
     file = file.replace(os.sep, '.')[:-3]
     file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + filename
@@ -22,7 +23,7 @@ def setup_cwd(stage):
     os.chdir(test_folder)
 
 
-def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> str:
+def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
     exc_tb = ex.__traceback__
     traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
 
@@ -66,9 +67,6 @@ def get_stacktrace(user_file: str, ex: BaseException, hide_internals=False) -> s
 
     if dir_names:
         user_dir = os.path.commonpath(dir_names) + os.sep
-
-    if not user_dir:
-        return 'File "' + user_file + '" not found. Check if you deleted it.\n\n' + traceback_stack[-1]
 
     cleaned_traceback = []
     for trace in traceback_stack[1:-1]:

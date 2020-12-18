@@ -1,7 +1,5 @@
 import unittest
 from typing import Any, List
-import os
-from inspect import cleandoc
 
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
@@ -23,11 +21,9 @@ class Test(unittest.TestCase):
 
         self.assertIn(
             'Error in test #1\n\n'
-                                    
-            f'File "tests{os.sep}bad_module.py" '
-            'not found. Check if you deleted it.\n\n'
-            
-            'ImportError: No module named tests.bad_module',
+                        
+            'Cannot find a file to import and run your code.\n'
+            'Are your project files located at "',
 
             feedback
         )

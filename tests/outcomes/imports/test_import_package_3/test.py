@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -13,12 +12,12 @@ class TestImportPackage2(StageTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '30\n', '')
+        return CheckResult(reply == '3025\n', '')
 
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportPackage2(get_main('random_module.main')).run_tests()
+        status, feedback = TestImportPackage2('random_module.main').run_tests()
         self.assertEqual("test OK", feedback)
 
 

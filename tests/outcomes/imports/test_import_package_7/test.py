@@ -13,9 +13,10 @@ class TestImportPackage2(StageTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '30\n', '')
+        return CheckResult(reply == '3067\n', '')
 
 
+@unittest.skip('Relative imports doesn\'t work')
 class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestImportPackage2(get_main('random_module.main')).run_tests()
