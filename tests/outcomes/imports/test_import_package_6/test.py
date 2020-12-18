@@ -7,7 +7,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportPackage2(StageTest):
+class TestImportPackage6(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -18,7 +18,7 @@ class TestImportPackage2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportPackage2(get_main('random_module.main')).run_tests()
+        status, feedback = TestImportPackage6(get_main('random_module.main')).run_tests()
         self.assertEqual("test OK", feedback)
 
 

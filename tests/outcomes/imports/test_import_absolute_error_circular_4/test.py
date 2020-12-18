@@ -7,7 +7,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportAbsoluteErrorCircular(StageTest):
+class TestImportAbsoluteErrorCircular4(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -18,7 +18,7 @@ class TestImportAbsoluteErrorCircular(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportAbsoluteErrorCircular().run_tests()
+        status, feedback = TestImportAbsoluteErrorCircular4().run_tests()
 
         correct_feedback = cleandoc("""
             Error in test #1

@@ -6,7 +6,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class TestImportAbsoluteErrorCircular(StageTest):
+class TestImportAbsoluteErrorCircular6(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -17,7 +17,7 @@ class TestImportAbsoluteErrorCircular(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportAbsoluteErrorCircular().run_tests()
+        status, feedback = TestImportAbsoluteErrorCircular6().run_tests()
         self.assertEqual('test OK', feedback)
 
 
