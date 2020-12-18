@@ -4,14 +4,6 @@ import traceback
 from typing import List
 
 
-def get_main(filename: str = 'main') -> str:
-    return filename
-    file = inspect.stack()[1].filename
-    file = file.replace(os.sep, '.')[:-3]
-    file = file[file.find('.tests.') + 1: file.rfind('.') + 1] + filename
-    return file
-
-
 def is_tests(stage):
     return inspect.getmodule(stage).__package__.startswith('tests.outcomes.') or \
            f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in inspect.getmodule(stage).__file__
