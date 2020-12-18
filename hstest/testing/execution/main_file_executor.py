@@ -74,13 +74,13 @@ class MainModuleExecutor(ProgramExecutor):
                     contents[file] = self._contents_cached[path]
                 elif os.path.exists(path):
                     with open(path) as f:
-                        c = f.read()
+                        file_content = f.read()
                         contents[file] = [
-                            c,
+                            file_content,
                             re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
                             re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
                         ]
-                        self._contents_cached[path] = c
+                        self._contents_cached[path] = contents[file]
 
             is_imported = {f: False for f in files}
             has_name_main = {f: False for f in files}
