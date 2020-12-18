@@ -1,0 +1,35 @@
+import unittest
+
+from hstest.check_result import CheckResult, correct
+from hstest.dynamic.dynamic_test import dynamic_test
+from hstest.stage_test import StageTest
+from hstest.testing.tested_program import TestedProgram
+
+
+class FindModuleNoInfoAnalyzeImports(StageTest):
+    @dynamic_test
+    def test(self):
+        main = TestedProgram()
+        result = main.start()
+        return CheckResult(
+            result ==
+            'Main 3\n'
+            'Main 4\n'
+            'Main 2\n'
+            'Module no info\n', '')
+
+
+class Test(unittest.TestCase):
+    def test(self):
+        status, feedback = FindModuleNoInfoAnalyzeImports().run_tests()
+        self.assertNotEqual(status, 0)
+        self.assertEqual(
+            feedback,
+            'Error in test #1\n\n'
+
+            'Cannot decide which file to run out of the following: "main.py", "main4.py"\n'
+            'Write "if __name__ == \'__main__\'" in one of them to mark it as an entry point.')
+
+
+if __name__ == '__main__':
+    Test().test()

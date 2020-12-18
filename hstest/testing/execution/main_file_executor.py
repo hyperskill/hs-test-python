@@ -77,8 +77,8 @@ class MainModuleExecutor(ProgramExecutor):
                         c = f.read()
                         contents[file] = [
                             c,
-                            re.compile(rf'^import\s+{file[:-3]}\s*$', re.M),
-                            re.compile(rf'^from\s+\.?\s*{file[:-3]}\s+import\s+', re.M)
+                            re.compile(rf'(^|\n)import[\t ]+[\w.,\t ]*\b{file[:-3]}\b[\w.,\t ]*', re.M),
+                            re.compile(rf'(^|\n)from[\t ]+\.?[\t ]*\b{file[:-3]}\b[\t ]+import[\t ]+', re.M)
                         ]
                         self._contents_cached[path] = c
 
@@ -93,7 +93,6 @@ class MainModuleExecutor(ProgramExecutor):
                 for f, (s, r1, r2) in contents.items():
                     if r1.search(source) is not None or r2.search(source) is not None:
                         is_imported[f] = True
-                        break
 
             candidates_by_import = [f for f in files if not is_imported[f]]
 
