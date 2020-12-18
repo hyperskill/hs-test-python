@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -26,7 +25,7 @@ class WrongAnswerDynamicInput2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = WrongAnswerDynamicInput2(get_main()).run_tests()
+        status, feedback = WrongAnswerDynamicInput2('main').run_tests()
 
         self.assertTrue("Wrong answer in test #2" in feedback)
         self.assertTrue("WA TEST 2" in feedback)

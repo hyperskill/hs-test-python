@@ -3,7 +3,6 @@ from inspect import cleandoc
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -24,7 +23,7 @@ class FeedbackOnExceptionTest3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = FeedbackOnExceptionTest3(get_main()).run_tests()
+        status, feedback = FeedbackOnExceptionTest3('main').run_tests()
 
         self.assertEqual(cleandoc('''\
             Exception in test #1

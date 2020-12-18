@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.exceptions import TestPassed
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
@@ -32,7 +31,7 @@ class TestPassedThrownInDynamicInput2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPassedThrownInDynamicInput2(get_main()).run_tests()
+        status, feedback = TestPassedThrownInDynamicInput2('main').run_tests()
 
         self.assertTrue("Wrong answer in test #1\n\n"
                         "fail inside check" in feedback)

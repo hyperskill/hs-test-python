@@ -2,7 +2,6 @@ import unittest
 from typing import List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 from hstest.testing.tested_program import TestedProgram
@@ -10,7 +9,7 @@ from hstest.testing.tested_program import TestedProgram
 
 class TestCommandLineArgumentsFailedWithSpaces(StageTest):
     def test(self):
-        pr = TestedProgram(get_main())
+        pr = TestedProgram('main')
         pr.start("-spaces", "some argument with spaces",
                  "-number", "234", "-onlySpaces", "      ")
         return CheckResult(False, "See arguments below:")
@@ -23,7 +22,7 @@ class TestCommandLineArgumentsFailedWithSpaces(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCommandLineArgumentsFailedWithSpaces(get_main()).run_tests()
+        status, feedback = TestCommandLineArgumentsFailedWithSpaces('main').run_tests()
         self.assertNotEqual(status, 0)
 
         self.assertEqual(

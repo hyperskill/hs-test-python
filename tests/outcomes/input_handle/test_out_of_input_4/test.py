@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -21,7 +20,7 @@ class TestOutOfInput4(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOutOfInput4(get_main()).run_tests()
+        status, feedback = TestOutOfInput4('main').run_tests()
 
         self.assertTrue("Exception in test #1" in feedback)
         self.assertTrue(

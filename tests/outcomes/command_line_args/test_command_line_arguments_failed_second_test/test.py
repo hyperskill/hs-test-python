@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -20,7 +19,7 @@ class TestCommandLineArgumentsFailedSecondTest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCommandLineArgumentsFailedSecondTest(get_main()).run_tests()
+        status, feedback = TestCommandLineArgumentsFailedSecondTest('main').run_tests()
         self.assertNotEqual(status, 0)
 
         self.assertEqual(

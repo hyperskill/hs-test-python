@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -18,7 +17,7 @@ class UnexpectedErrorUserMainFileNotExists(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorUserMainFileNotExists(get_main('bad_file')).run_tests()
+        status, feedback = UnexpectedErrorUserMainFileNotExists('bad_file').run_tests()
 
         self.assertIn(
             'Error in test #1\n\n'

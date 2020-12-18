@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -23,7 +22,7 @@ class TestTimeout2(StageTest):
 @unittest.skip
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestTimeout2(get_main()).run_tests()
+        status, feedback = TestTimeout2('main').run_tests()
 
         self.assertTrue("Error in test #3" in feedback)
         self.assertTrue(

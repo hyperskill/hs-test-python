@@ -3,7 +3,6 @@ from inspect import cleandoc
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -20,7 +19,7 @@ class TestImportRelativeErrorCircular(StageTest):
 @unittest.skip('Relative imports doesn\'t work')
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportRelativeErrorCircular(get_main()).run_tests()
+        status, feedback = TestImportRelativeErrorCircular('main').run_tests()
 
         self.assertIn(cleandoc(
             """

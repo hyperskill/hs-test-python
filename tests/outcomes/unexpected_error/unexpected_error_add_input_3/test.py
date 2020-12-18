@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -23,7 +22,7 @@ class UnexpectedErrorAddInput3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorAddInput3(get_main()).run_tests()
+        status, feedback = UnexpectedErrorAddInput3('main').run_tests()
 
         self.assertIn('Unexpected error in test #4'
                       '\n\nWe have recorded this bug and will fix it soon.', feedback)

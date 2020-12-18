@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -20,7 +19,7 @@ class ExceptionWhileReading2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = ExceptionWhileReading2(get_main()).run_tests()
+        status, feedback = ExceptionWhileReading2('main').run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Exception in test #1' in feedback)

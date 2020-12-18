@@ -2,7 +2,6 @@ import unittest
 from time import sleep
 
 from hstest.check_result import correct, wrong
-from hstest.common.reflection_utils import get_main
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
 from hstest.testing.tested_program import TestedProgram
@@ -11,7 +10,7 @@ from hstest.testing.tested_program import TestedProgram
 class TestDynamicMethodStartInBackgroundCorrect(StageTest):
     @dynamic_test
     def test(self):
-        server = TestedProgram(get_main())
+        server = TestedProgram('main')
 
         server.start_in_background()
         sleep(0.05)

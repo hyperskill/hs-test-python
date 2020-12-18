@@ -2,7 +2,6 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.common.reflection_utils import get_main
 from hstest.exceptions import TestPassed
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
@@ -24,7 +23,7 @@ class TestPassedThrownInCheck1(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPassedThrownInCheck1(get_main()).run_tests()
+        status, feedback = TestPassedThrownInCheck1('main').run_tests()
 
         self.assertTrue("Wrong answer in test #1\n\n"
                         "test is not passed attach true" in feedback)

@@ -1,6 +1,5 @@
 import unittest
 
-from hstest.common.reflection_utils import get_main
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
 from hstest.testing.tested_program import TestedProgram
@@ -9,7 +8,7 @@ from hstest.testing.tested_program import TestedProgram
 class TestDynamicMethodUnexpectedErrorNoCheckMethod(StageTest):
     @dynamic_test
     def test(self):
-        main = TestedProgram(get_main())
+        main = TestedProgram('main')
         main.start()
         main.execute('main')
         main.execute("main2")

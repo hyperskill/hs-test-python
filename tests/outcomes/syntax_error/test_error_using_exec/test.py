@@ -1,7 +1,6 @@
 import unittest
 from typing import List
 
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -16,7 +15,7 @@ class TestSyntaxError1(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSyntaxError1(get_main()).run_tests()
+        status, feedback = TestSyntaxError1('main').run_tests()
 
         self.assertIn('Exception in test #1\n'
                       '\n'

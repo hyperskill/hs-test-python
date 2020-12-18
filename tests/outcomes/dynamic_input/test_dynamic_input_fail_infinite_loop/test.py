@@ -2,7 +2,6 @@ import unittest
 from typing import List
 
 from hstest.check_result import wrong
-from hstest.common.reflection_utils import get_main
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
@@ -17,7 +16,7 @@ class TestDynamicInputFailInfiniteLoop(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicInputFailInfiniteLoop(get_main()).run_tests()
+        status, feedback = TestDynamicInputFailInfiniteLoop('main').run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,
