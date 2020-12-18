@@ -77,8 +77,8 @@ class MainModuleExecutor(ProgramExecutor):
                         c = f.read()
                         contents[file] = [
                             c,
-                            re.compile(rf'(^|\n)import[\t ]+[\w.,\t ]*\b{file[:-3]}\b[\w.,\t ]*', re.M),
-                            re.compile(rf'(^|\n)from[\t ]+\.?[\t ]*\b{file[:-3]}\b[\t ]+import[\t ]+', re.M)
+                            re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
+                            re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
                         ]
                         self._contents_cached[path] = c
 
