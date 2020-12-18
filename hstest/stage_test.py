@@ -28,12 +28,6 @@ class StageTest:
         # super().__init__(method)
         # self.module =
 
-    # def reset(self):
-    #     top_module = self.module_to_test[:self.module_to_test.rindex('.')]
-    #     for name, module in list(sys.modules.items()):
-    #         if name.startswith(top_module):
-    #             importlib.reload(module)
-
     # def test_program(self):
     #    result, feedback = self.run_tests()
     #     if result != 0:

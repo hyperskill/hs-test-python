@@ -1,11 +1,11 @@
 import os
+import re
 import runpy
 import sys
 from concurrent.futures import Future
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
-from hstest.common.reflection_utils import get_stacktrace
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
@@ -14,47 +14,140 @@ from hstest.testing.execution.program_executor import ProgramExecutor, ProgramSt
 
 
 class MainModuleExecutor(ProgramExecutor):
+    _contents_cached = {}
+
     def __init__(self, source_name: str = None):
         super().__init__()
+
+        if source_name is None:
+            self._init_by_nothing()
+        else:
+            self._init_by_source_name(source_name)
+
         self.__module_name: str = source_name
         self.__run_module = None
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
 
-        self.source_name = source_name
-        self.module_to_test = source_name
-        self.path_to_test = source_name.replace('.', os.sep) + '.py'
-        self.folder_to_test = os.path.dirname(self.path_to_test)
-        self.init_file = self.folder_to_test + os.sep + "__init__.py"
-        self.full_file_to_test = ''
-        self.need_reload = False
+    def _init_by_source_name(self, source: str):
+        path_to_test = source.replace('.', os.sep) + '.py'
+        if not os.path.exists(path_to_test):
+            self._init_by_nothing()
+            return
 
-        if os.sep in self.path_to_test:
-            index = self.path_to_test.rfind(os.sep)
-            self.file_to_test = self.path_to_test[index + 1:]
-        else:
-            self.file_to_test = self.path_to_test
+        path, sep, module = source.rpartition('.')
+        module_abs_path = os.path.abspath(path.replace('.', os.sep))
+        self._init_by_module(module_abs_path, module)
+
+    def _init_by_module(self, module_abs_path: str, module_name: str):
+        self.module_to_test = module_name
+        self.file_to_test = module_name + '.py'
+        self.folder_to_test = module_abs_path
+        self.path_to_test = os.path.join(self.folder_to_test, self.file_to_test)
+        self.init_file = self.folder_to_test + os.sep + "__init__.py"
+
+    def _init_by_nothing(self):
+        for where, dirs, files in os.walk('.'):
+            if where.startswith(f'.{os.sep}test{os.sep}'):
+                continue
+
+            if where == '.':
+                for file in 'test.py', 'tests.py', '__init__.py':
+                    if file in files:
+                        files.remove(file)
+
+            files = [f for f in files if f.endswith('.py')]
+
+            if len(files) == 0:
+                continue
+
+            if len(files) == 1:
+                without_py = files[0][:-3]
+                self._init_by_module(os.path.abspath(where), without_py)
+                return
+
+            contents = {}
+
+            for file in files:
+                path = os.path.abspath(os.path.join(where, file))
+                if path in self._contents_cached:
+                    contents[file] = self._contents_cached[path]
+                elif os.path.exists(path):
+                    with open(path) as f:
+                        c = f.read()
+                        contents[file] = [
+                            c,
+                            re.compile(rf'^import\s+{file[:-3]}\s*$', re.M),
+                            re.compile(rf'^from\s+\.?\s*{file[:-3]}\s+import\s+', re.M)
+                        ]
+                        self._contents_cached[path] = c
+
+            is_imported = {f: False for f in files}
+            has_name_main = {f: False for f in files}
+
+            for file in files:
+                source = contents[file][0]
+                if '__name__' in source and '__main__' in source:
+                    has_name_main[file] = True
+
+                for f, (s, r1, r2) in contents.items():
+                    if r1.search(source) is not None or r2.search(source) is not None:
+                        is_imported[f] = True
+                        break
+
+            candidates_by_import = [f for f in files if not is_imported[f]]
+
+            if len(candidates_by_import) == 1:
+                without_py = candidates_by_import[0][:-3]
+                self._init_by_module(os.path.abspath(where), without_py)
+                return
+
+            candidates_by_name_main = [f for f in files if has_name_main[f]]
+
+            if len(candidates_by_name_main) == 1:
+                without_py = candidates_by_name_main[0][:-3]
+                self._init_by_module(os.path.abspath(where), without_py)
+                return
+
+            candidates_import_main = [f for f in candidates_by_import if has_name_main[f]]
+
+            if len(candidates_import_main) == 1:
+                without_py = candidates_import_main[0][:-3]
+                self._init_by_module(os.path.abspath(where), without_py)
+                return
+
+            if len(candidates_import_main) > 1:
+                str_files = ', '.join(f'"{f}"' for f in candidates_import_main)
+                raise ErrorWithFeedback(
+                    'Cannot decide which file to run out of the following: ' + str_files + '\n'
+                    'They all have "if __name__ == \'__main__\'". Leave one file with this line.')
+
+            str_files = ', '.join(f'"{f}"' for f in
+                                  (candidates_by_import if len(candidates_by_import) else files))
+            raise ErrorWithFeedback(
+                'Cannot decide which file to run out of the following: ' + str_files + '\n'
+                'Write "if __name__ == \'__main__\'" in one of them to mark it as an entry point.')
+
+        raise ErrorWithFeedback(
+            'Cannot find a file to import and run your code.\n'
+            'Are your project files located at \"' + os.path.abspath('.') + '\"?')
 
     def _invoke_method(self, *args: str):
+        modules_before = [k for k in sys.modules.keys()]
+
         from hstest.stage_test import StageTest
         try:
             self._machine.set_state(ProgramState.RUNNING)
 
-            sys.argv = [self.path_to_test] + list(args)
-            sys.path += [self.folder_to_test]
-            if os.path.exists(self.folder_to_test):
-                open(self.init_file, 'a').close()
+            sys.argv = [self.file_to_test] + list(args)
+            sys.path.append(self.folder_to_test)
+
             runpy.run_module(
                 self.module_to_test,
                 run_name="__main__"
             )
 
             self._machine.set_state(ProgramState.FINISHED)
-
-        except ImportError as ex:
-            error_text = get_stacktrace(self.path_to_test, ex, hide_internals=True)
-            StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(error_text))
-            self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         except BaseException as ex:
             if StageTest.curr_test_run.error_in_test is None:
@@ -69,12 +162,13 @@ class MainModuleExecutor(ProgramExecutor):
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         finally:
-            if os.path.exists(self.init_file):
-                try:
-                    os.remove(self.init_file)
-                except OSError:
-                    pass
-            sys.path.pop()
+            modules_to_delete = []
+            for m in sys.modules:
+                if m not in modules_before:
+                    modules_to_delete += [m]
+            for m in modules_to_delete:
+                del sys.modules[m]
+            sys.path.remove(self.folder_to_test)
 
     def _launch(self, *args: str):
         from hstest.stage_test import StageTest
