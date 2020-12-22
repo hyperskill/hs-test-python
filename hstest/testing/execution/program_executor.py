@@ -41,8 +41,7 @@ class ProgramExecutor:
 
     def start(self, *args: str):
         if not self._machine.in_state(ProgramState.NOT_STARTED):
-            raise UnexpectedError(
-                "Cannot start the program " + str(self) + " twice")
+            raise UnexpectedError(f"Cannot start the program {self} twice")
 
         self._launch(*args)
 
@@ -59,7 +58,7 @@ class ProgramExecutor:
         if self.is_finished():
             from hstest.stage_test import StageTest
             StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(
-                    "The program " + str(self) + " has unexpectedly terminated.\n" +
+                    f"The program {self} has unexpectedly terminated.\n" +
                     "It finished execution too early, should continue running."))
             raise TestedProgramFinishedEarly()
 
@@ -69,13 +68,12 @@ class ProgramExecutor:
 
         if not self.is_waiting_input():
             raise UnexpectedError(
-                "Program " + str(self) + " is not waiting for the input "
-                + "(state == \"" + str(self._machine.state) + "\")")
+                f"Program {self} is not waiting for the input " +
+                f"(state == \"{self._machine.state}\")")
 
         if self.__no_more_input:
             raise UnexpectedError(
-                "Can't pass input to the program " + str(self)
-                + " - input was prohibited.")
+                f"Can't pass input to the program {self} - input was prohibited.")
 
         self._input = stdin
         if self.__in_background:
