@@ -1,8 +1,6 @@
 from typing import Callable, Union
 
-from hstest.test_case.check_result import CheckResult
-
-InputFunction = Callable[[str], Union[str, CheckResult]]
+InputFunction = Callable[[str], Union[str, 'CheckResult']]
 DynamicTestFunction = Callable[[], str]
 
 

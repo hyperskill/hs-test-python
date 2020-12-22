@@ -7,7 +7,7 @@ from time import sleep
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
-from hstest.check_result import CheckResult
+from hstest.test_case.check_result import CheckResult
 from hstest.exception.outcomes import UnexpectedError
 from hstest.stage_test import StageTest
 

@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Tuple, Type
 
-from hstest.check_result import CheckResult
 from hstest.common.reflection_utils import is_tests, setup_cwd
 from hstest.common.utils import failed, passed
 from hstest.dynamic.input.dynamic_testing import DynamicTestElement, search_dynamic_tests
@@ -9,6 +8,7 @@ from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import UnexpectedError, WrongAnswer
 from hstest.outcomes.outcome import Outcome
+from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
 from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 from hstest.testing.runner.test_runner import TestRunner

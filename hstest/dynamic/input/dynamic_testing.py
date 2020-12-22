@@ -1,14 +1,11 @@
 from typing import Any, Callable, List, Optional, Tuple
 
 from hstest.common.utils import clean_text
-from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
-from hstest.exception.outcomes import UnexpectedError
-from hstest.exceptions import TestPassed, WrongAnswer
-from hstest.test_case.check_result import CheckResult
+from hstest.exception.outcomes import TestPassed, UnexpectedError, WrongAnswer
 from hstest.testing.tested_program import TestedProgram
 
-DynamicTesting = Callable[['StageTest'], Optional[CheckResult]]
-DynamicTestingWithoutParams = Callable[['StageTest', Any], Optional[CheckResult]]
+DynamicTesting = Callable[['StageTest'], Optional['CheckResult']]
+DynamicTestingWithoutParams = Callable[['StageTest', Any], Optional['CheckResult']]
 
 
 class DynamicTestElement:
@@ -64,7 +61,10 @@ class DynamicTestElement:
 
 
 def to_dynamic_testing(source: str, args: List[str],
-                       input_funcs: List[DynamicInputFunction]) -> DynamicTesting:
+                       input_funcs: List['DynamicInputFunction']) -> DynamicTesting:
+
+    from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
+    from hstest.test_case.check_result import CheckResult
 
     class InputFunctionHandler:
         def __init__(self, funcs: List[DynamicInputFunction]):
@@ -130,7 +130,7 @@ def to_dynamic_testing(source: str, args: List[str],
 
 
 def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
-    from hstest.test_case import TestCase
+    from hstest.test_case.test_case import TestCase
     methods: List[DynamicTestElement] = obj._dynamic_methods.get(type(obj), [])
 
     for m in methods:
