@@ -7,10 +7,9 @@ from hstest.dynamic.input.dynamic_testing import DynamicTestElement, search_dyna
 from hstest.dynamic.output.colored_output import RED_BOLD, RESET
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
-from hstest.exception.outcomes import UnexpectedError
-from hstest.exceptions import *
-from hstest.outcomes import Outcome
-from hstest.test_case import TestCase
+from hstest.exception.outcomes import UnexpectedError, WrongAnswer
+from hstest.outcomes.outcome import Outcome
+from hstest.test_case.test_case import TestCase
 from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun

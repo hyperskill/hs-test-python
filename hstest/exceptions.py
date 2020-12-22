@@ -1,10 +1,5 @@
-from hstest.exception.outcomes import TestPassed as Tp, WrongAnswer as Wa
+from hstest.exception.outcomes import TestPassed, WrongAnswer
 
-
-# old location of these classes to ensure backwards compatibility
-TestPassed = Tp
-WrongAnswer = Wa
-
-# simple rename, but have to be sure old tests work as expected
+# deprecated, but have to be sure old tests work as expected
 TestPassedException = TestPassed
 WrongAnswerException = WrongAnswer

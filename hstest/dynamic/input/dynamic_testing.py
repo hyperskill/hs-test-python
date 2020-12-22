@@ -1,10 +1,10 @@
 from typing import Any, Callable, List, Optional, Tuple
 
-from hstest.check_result import CheckResult
 from hstest.common.utils import clean_text
 from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
 from hstest.exception.outcomes import UnexpectedError
 from hstest.exceptions import TestPassed, WrongAnswer
+from hstest.test_case.check_result import CheckResult
 from hstest.testing.tested_program import TestedProgram
 
 DynamicTesting = Callable[['StageTest'], Optional[CheckResult]]

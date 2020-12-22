@@ -1,11 +1,11 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from hstest.check_result import CheckResult, correct
 from hstest.common.file_utils import create_files, delete_files
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.exceptions import TestPassed
-from hstest.test_case import TestCase
+from hstest.test_case.test_case import TestCase
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.tested_program import TestedProgram
 

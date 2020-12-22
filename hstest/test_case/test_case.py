@@ -1,9 +1,9 @@
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
-from hstest.check_result import CheckResult
 from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction, InputFunction
 from hstest.dynamic.input.dynamic_testing import DynamicTesting, to_dynamic_testing
 from hstest.exception.outcomes import UnexpectedError
+from hstest.test_case.check_result import CheckResult
 
 SimpleStepikTest = str
 AdvancedStepikTest = Tuple[str, Any]

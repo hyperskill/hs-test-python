@@ -4,7 +4,7 @@ import signal
 import subprocess
 import sys
 from time import sleep
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 from hstest.check_result import CheckResult

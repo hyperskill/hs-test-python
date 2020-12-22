@@ -1,9 +1,8 @@
 import inspect
 from typing import Any, List
 
-from hstest.dynamic.input.dynamic_testing import DynamicTestElement
 from hstest.stage_test import StageTest
-from hstest.test_case import DEFAULT_TIME_LIMIT
+from hstest.test_case.test_case import DEFAULT_TIME_LIMIT
 
 
 def dynamic_test(func=None, *,
@@ -24,13 +23,13 @@ def dynamic_test(func=None, *,
             # print(f"Decorating {self.fn} and using {owner}")
             self.fn.class_name = owner.__name__
 
-            if not issubclass(owner, StageTest):
-                setattr(owner, name, self.fn)
-                return
-
             # then replace ourself with the original method
             setattr(owner, name, self.fn)
 
+            if not issubclass(owner, StageTest):
+                return
+
+            from hstest.dynamic.input.dynamic_testing import DynamicTestElement
             methods: List[DynamicTestElement] = StageTest._dynamic_methods.get(owner, [])
             methods += [
                 DynamicTestElement(lambda *a, **k: self.fn(*a, **k),
