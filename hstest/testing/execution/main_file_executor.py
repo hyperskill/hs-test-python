@@ -1,23 +1,25 @@
 import os
-import re
 import runpy
 import sys
 from concurrent.futures import Future
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
+from hstest.dynamic.file_searcher import runnable_searcher
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
-from hstest.exception.outcomes import ErrorWithFeedback, ExceptionWithFeedback
+from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
 
 
 class MainModuleExecutor(ProgramExecutor):
-    _contents_cached = {}
-
     def __init__(self, source_name: str = None):
         super().__init__()
+
+        if source_name is None:
+            from hstest.stage_test import StageTest
+            source_name = StageTest.curr_test_run.test_case.source_name
 
         if source_name is None:
             self._init_by_nothing()
@@ -43,93 +45,11 @@ class MainModuleExecutor(ProgramExecutor):
         self.module_to_test = module_name
         self.file_to_test = module_name + '.py'
         self.folder_to_test = module_abs_path
-        self.path_to_test = os.path.join(self.folder_to_test, self.file_to_test)
-        self.init_file = self.folder_to_test + os.sep + "__init__.py"
 
     def _init_by_nothing(self):
-        for where, dirs, files in os.walk('.'):
-            if where.startswith(f'.{os.sep}test{os.sep}'):
-                continue
-
-            if where == '.':
-                for file in 'test.py', 'tests.py', '__init__.py':
-                    if file in files:
-                        files.remove(file)
-
-            files = [f for f in files if f.endswith('.py')]
-
-            if len(files) == 0:
-                continue
-
-            if len(files) == 1:
-                without_py = files[0][:-3]
-                self._init_by_module(os.path.abspath(where), without_py)
-                return
-
-            contents = {}
-
-            for file in files:
-                path = os.path.abspath(os.path.join(where, file))
-                if path in self._contents_cached:
-                    contents[file] = self._contents_cached[path]
-                elif os.path.exists(path):
-                    with open(path) as f:
-                        file_content = f.read()
-                        contents[file] = [
-                            file_content,
-                            re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
-                            re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
-                        ]
-                        self._contents_cached[path] = contents[file]
-
-            is_imported = {f: False for f in files}
-            has_name_main = {f: False for f in files}
-
-            for file in files:
-                source = contents[file][0]
-                if '__name__' in source and '__main__' in source:
-                    has_name_main[file] = True
-
-                for f, (s, r1, r2) in contents.items():
-                    if r1.search(source) is not None or r2.search(source) is not None:
-                        is_imported[f] = True
-
-            candidates_by_import = [f for f in files if not is_imported[f]]
-
-            if len(candidates_by_import) == 1:
-                without_py = candidates_by_import[0][:-3]
-                self._init_by_module(os.path.abspath(where), without_py)
-                return
-
-            candidates_by_name_main = [f for f in files if has_name_main[f]]
-
-            if len(candidates_by_name_main) == 1:
-                without_py = candidates_by_name_main[0][:-3]
-                self._init_by_module(os.path.abspath(where), without_py)
-                return
-
-            candidates_import_main = [f for f in candidates_by_import if has_name_main[f]]
-
-            if len(candidates_import_main) == 1:
-                without_py = candidates_import_main[0][:-3]
-                self._init_by_module(os.path.abspath(where), without_py)
-                return
-
-            if len(candidates_import_main) > 1:
-                str_files = ', '.join(f'"{f}"' for f in candidates_import_main)
-                raise ErrorWithFeedback(
-                    'Cannot decide which file to run out of the following: ' + str_files + '\n'
-                    'They all have "if __name__ == \'__main__\'". Leave one file with this line.')
-
-            str_files = ', '.join(f'"{f}"' for f in
-                                  (candidates_by_import if len(candidates_by_import) else files))
-            raise ErrorWithFeedback(
-                'Cannot decide which file to run out of the following: ' + str_files + '\n'
-                'Write "if __name__ == \'__main__\'" in one of them to mark it as an entry point.')
-
-        raise ErrorWithFeedback(
-            'Cannot find a file to import and run your code.\n'
-            'Are your project files located at \"' + os.path.abspath('.') + '\"?')
+        folder, file = runnable_searcher(os.getcwd())
+        without_py = file[:-3]
+        self._init_by_module(os.path.abspath(folder), without_py)
 
     def _invoke_method(self, *args: str):
         modules_before = [k for k in sys.modules.keys()]
