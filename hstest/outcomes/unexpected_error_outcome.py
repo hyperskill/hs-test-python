@@ -1,5 +1,5 @@
 from hstest.common.reflection_utils import get_stacktrace
-from hstest.common.utils import get_report
+from hstest.exception.failure_handler import get_report
 from hstest.exception.outcomes import UnexpectedError
 from hstest.outcomes.outcome import Outcome
 

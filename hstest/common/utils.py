@@ -1,7 +1,3 @@
-import platform
-
-from hstest.testing.execution_options import inside_docker
-
 failed_msg_start = '#educational_plugin FAILED + '
 failed_msg_continue = '#educational_plugin '
 success_msg = '#educational_plugin test OK'
@@ -28,19 +24,3 @@ def clean_text(text: str) -> str:
             .replace('\r', '\n')
             .replace('\u00a0', '\u0020')
     )
-
-
-def get_report():
-    if not inside_docker:
-        name_os = platform.system() + " " + platform.release()
-        python = platform.python_version()
-        implementation = platform.python_implementation()
-        return (
-            'Submitted via IDE\n'
-            '\n'
-            f'OS {name_os}\n'
-            f'{implementation} {python}\n'
-            f'Testing library version 4'
-        )
-    else:
-        return 'Submitted via web'
