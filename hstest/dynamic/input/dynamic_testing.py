@@ -4,7 +4,7 @@ from hstest.common.utils import clean_text
 from hstest.exception.outcomes import TestPassed, UnexpectedError, WrongAnswer
 from hstest.testing.tested_program import TestedProgram
 
-DynamicTesting = Callable[['StageTest'], Optional['CheckResult']]
+DynamicTesting = Callable[[], Optional['CheckResult']]
 DynamicTestingWithoutParams = Callable[['StageTest', Any], Optional['CheckResult']]
 
 
@@ -131,7 +131,7 @@ def to_dynamic_testing(source: str, args: List[str],
 
 def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
     from hstest.test_case.test_case import TestCase
-    methods: List[DynamicTestElement] = obj._dynamic_methods.get(type(obj), [])
+    methods: List[DynamicTestElement] = obj.dynamic_methods()
 
     for m in methods:
         m.extract_parametrized_data()

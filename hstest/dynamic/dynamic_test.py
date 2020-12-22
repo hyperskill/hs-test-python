@@ -30,12 +30,11 @@ def dynamic_test(func=None, *,
                 return
 
             from hstest.dynamic.input.dynamic_testing import DynamicTestElement
-            methods: List[DynamicTestElement] = StageTest._dynamic_methods.get(owner, [])
+            methods: List[DynamicTestElement] = owner.dynamic_methods()
             methods += [
                 DynamicTestElement(lambda *a, **k: self.fn(*a, **k),
                                    self.fn.__name__, (order, len(methods)), repeat, time_limit, data)
             ]
-            owner._dynamic_methods[owner] = methods
 
     is_method = inspect.ismethod(func)
     is_func = inspect.isfunction(func)

@@ -16,8 +16,6 @@ from hstest.testing.test_run import TestRun
 
 
 class StageTest:
-    _dynamic_methods: Dict[Type['StageTest'], List[DynamicTestElement]] = {}
-
     runner: Type[TestRunner] = AsyncMainFileRunner
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
@@ -96,6 +94,16 @@ class StageTest:
         finally:
             StageTest.curr_test_run = None
             self.after_all_tests()
+
+    _dynamic_methods: Dict[Type['StageTest'], List[DynamicTestElement]] = {}
+
+    @classmethod
+    def dynamic_methods(cls) -> List[DynamicTestElement]:
+        if cls in StageTest._dynamic_methods:
+            return StageTest._dynamic_methods[cls]
+        empty = []
+        StageTest._dynamic_methods[cls] = empty
+        return empty
 
     def generate(self) -> List[TestCase]:
         return []
