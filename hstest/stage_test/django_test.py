@@ -7,15 +7,18 @@ from time import sleep
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
-from hstest.test_case.check_result import CheckResult
 from hstest.exception.outcomes import UnexpectedError
 from hstest.stage_test import StageTest
+from hstest.test_case.check_result import CheckResult
+from hstest.testing.runner.django_application_runner import DjangoApplicationRunner
 
 EMPTY_DATABASE = 'empty.sqlite3'
 TEST_DATABASE = 'db.test.sqlite3'
 
 
 class DjangoTest(StageTest):
+    runner = DjangoApplicationRunner
+
     _kill = os.kill
     port = '0'
     tryout_ports = ['8000', '8001', '8002', '8003', '8004']

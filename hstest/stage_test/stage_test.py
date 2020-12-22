@@ -17,11 +17,16 @@ from hstest.testing.test_run import TestRun
 
 class StageTest:
     runner: Type[TestRunner] = AsyncMainFileRunner
-    curr_test_run: Optional[TestRun] = None
-    curr_test_global: int = 0
+    source: str = None
+
+    _curr_test_run: Optional[TestRun] = None
+    _curr_test_global: int = 0
 
     def __init__(self, source_name: str = ''):
-        self.source_name: str = source_name
+        if self.source:
+            self.source_name: str = self.source
+        else:
+            self.source_name: str = source_name
         # super().__init__(method)
         # self.module =
 
@@ -70,8 +75,8 @@ class StageTest:
 
             for test_run in test_runs:
                 curr_test += 1
-                StageTest.curr_test_global += 1
-                total_tests = '' if curr_test == StageTest.curr_test_global else f' ({StageTest.curr_test_global})'
+                StageTest._curr_test_global += 1
+                total_tests = '' if curr_test == StageTest._curr_test_global else f' ({StageTest._curr_test_global})'
                 OutputHandler.get_real_out().write(
                     RED_BOLD + f'\nStart test {curr_test}{total_tests}' + RESET + '\n'
                 )

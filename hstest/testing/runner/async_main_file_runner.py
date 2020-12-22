@@ -1,11 +1,11 @@
 from concurrent.futures import Future, TimeoutError
 from typing import Optional
 
-from hstest.check_result import CheckResult, correct, wrong
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.testing import TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
 from hstest.exceptions import TestPassed, WrongAnswer
+from hstest.test_case.check_result import CheckResult, correct, wrong
 from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun

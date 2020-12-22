@@ -97,7 +97,7 @@ class MainModuleExecutor(ProgramExecutor):
         self.__executor = DaemonThreadPoolExecutor(name=f"MainModuleExecutor test #{test_num}")
         self.__task = self.__executor.submit(lambda: self._invoke_method(*args))
 
-    def stop(self):
+    def _terminate(self):
         self.__executor.shutdown(wait=False)
         self.__task.cancel()
         with self._machine.cv:
