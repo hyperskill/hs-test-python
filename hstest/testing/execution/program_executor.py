@@ -33,10 +33,10 @@ class ProgramExecutor:
     def _launch(self, *args: str):
         raise NotImplementedError('Method "_launch" isn\'t implemented')
 
-    def get_output(self) -> str:
-        raise NotImplementedError('Method "get_output" isn\'t implemented')
+    def _terminate(self):
+        raise NotImplementedError('Method "_terminate" isn\'t implemented')
 
-    def stop(self):
+    def get_output(self) -> str:
         raise NotImplementedError('Method "get_output" isn\'t implemented')
 
     def start(self, *args: str):
@@ -84,6 +84,10 @@ class ProgramExecutor:
         # waits for non-RUNNING state to be reached
         self._machine.set_and_wait(ProgramState.RUNNING)
         return self.__get_execution_output()
+
+    def stop(self):
+        self.__no_more_input = True
+        self._terminate()
 
     def __get_execution_output(self) -> str:
         if self._machine.in_state(ProgramState.EXCEPTION_THROWN):
