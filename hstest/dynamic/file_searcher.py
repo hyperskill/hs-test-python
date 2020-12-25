@@ -1,13 +1,14 @@
 import os
 import re
-from typing import Tuple
+from typing import Callable, Tuple
 
 from hstest.exception.outcomes import ErrorWithFeedback
 
 _contents_cached = {}
 
 
-def runnable_searcher(abs_path_to_search: str) -> Tuple[str, str]:
+def runnable_searcher(abs_path_to_search: str,
+                      file_filter: Callable[[str, str], bool] = lambda x, y: True) -> Tuple[str, str]:
     curr_folder = os.path.abspath(abs_path_to_search)
     test_folder = os.path.join(curr_folder, 'test')
 
@@ -20,7 +21,7 @@ def runnable_searcher(abs_path_to_search: str) -> Tuple[str, str]:
                 if file in files:
                     files.remove(file)
 
-        files = [f for f in files if f.endswith('.py')]
+        files = [f for f in files if f.endswith('.py') and file_filter(folder, f)]
 
         if len(files) == 0:
             continue

@@ -7,8 +7,10 @@ from time import sleep
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
+from hstest.dynamic.output.infinite_loop_detector import loop_detector
 from hstest.exception.outcomes import UnexpectedError
 from hstest.stage_test import StageTest
+from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.testing.runner.django_application_runner import DjangoApplicationRunner
 
@@ -18,11 +20,17 @@ TEST_DATABASE = 'db.test.sqlite3'
 
 class DjangoTest(StageTest):
     runner = DjangoApplicationRunner
+    attach = DjangoSettings()
+
+    use_database = attach.use_database
+
+    def __init__(self):
+        super().__init__()
+        self.attach.use_database = self.use_database
+        loop_detector.working = False
 
     _kill = os.kill
     port = '0'
-    tryout_ports = ['8000', '8001', '8002', '8003', '8004']
-    process = None
 
     def run(self):
         if self.process is None:
@@ -42,6 +50,7 @@ class DjangoTest(StageTest):
                 stderr=subprocess.PIPE
             )
             exit_code = migrate.wait()
+            migrate.terminate()
             if exit_code != 0:
                 raise UnexpectedError(migrate.stderr.read().decode())
 
@@ -84,3 +93,11 @@ class DjangoTest(StageTest):
                 self._kill(self.process.pid, signal.SIGINT)
             except ProcessLookupError:
                 pass
+
+
+class DJ2(DjangoTest):
+    use_database = True
+
+
+if __name__ == '__main__':
+    DJ2()
