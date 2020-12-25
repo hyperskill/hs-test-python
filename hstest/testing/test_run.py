@@ -7,6 +7,7 @@ from hstest.exception.outcomes import ExceptionWithFeedback, UnexpectedError
 from hstest.exceptions import TestPassed
 from hstest.test_case.test_case import TestCase
 from hstest.testing.runner.test_runner import TestRunner
+from hstest.testing.settings import Settings
 from hstest.testing.tested_program import TestedProgram
 
 
@@ -75,7 +76,9 @@ class TestRun:
         create_files(self._test_case.files)
         # startThreads(testCase.getProcesses())
 
-        OutputHandler.reset_output()
+        if Settings.do_reset_output:
+            OutputHandler.reset_output()
+
         result = self._test_runner.test(self)
 
         # stopThreads(testCase.getProcesses(), pool)

@@ -13,6 +13,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.testing.runner.django_application_runner import DjangoApplicationRunner
+from hstest.testing.settings import Settings
 
 EMPTY_DATABASE = 'empty.sqlite3'
 TEST_DATABASE = 'db.test.sqlite3'
@@ -28,6 +29,7 @@ class DjangoTest(StageTest):
         super().__init__()
         self.attach.use_database = self.use_database
         loop_detector.working = False
+        Settings.do_reset_output = False
 
     _kill = os.kill
     port = '0'
