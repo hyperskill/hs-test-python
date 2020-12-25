@@ -3,7 +3,7 @@ from typing import List, Optional
 from hstest.check_result import CheckResult, correct
 from hstest.common.file_utils import create_files, delete_files
 from hstest.dynamic.output.output_handler import OutputHandler
-from hstest.exception.outcomes import ExceptionWithFeedback
+from hstest.exception.outcomes import ExceptionWithFeedback, UnexpectedError
 from hstest.exceptions import TestPassed
 from hstest.test_case.test_case import TestCase
 from hstest.testing.runner.test_runner import TestRunner
@@ -20,6 +20,12 @@ class TestRun:
         self._input_used: bool = False
         self._error_in_test: Optional[BaseException] = None
         self._tested_programs: List[TestedProgram] = []
+
+    def is_first_test(self) -> bool:
+        return self._test_num == 1
+
+    def is_last_test(self) -> bool:
+        return self._test_num == self._test_count
 
     @property
     def test_num(self) -> int:
@@ -59,6 +65,12 @@ class TestRun:
         for tested_program in self._tested_programs:
             tested_program.stop()
 
+    def set_up(self):
+        self._test_runner.set_up(self._test_case)
+
+    def tear_down(self):
+        self._test_runner.tear_down(self._test_case)
+
     def test(self) -> CheckResult:
         create_files(self._test_case.files)
         # startThreads(testCase.getProcesses())
@@ -73,7 +85,10 @@ class TestRun:
             self._check_errors()
 
         if isinstance(self._error_in_test, TestPassed):
-            return correct()
+            result = correct()
+
+        if result is None:
+            raise UnexpectedError("Result is None after testing")
 
         return result
 
