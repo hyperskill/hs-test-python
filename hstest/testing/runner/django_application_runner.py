@@ -1,6 +1,8 @@
 import os
 import subprocess
 import sys
+from threading import Thread
+from time import sleep
 from typing import Optional
 
 from hstest.common.file_utils import safe_delete
@@ -13,12 +15,53 @@ from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
+class PopenWrapper:
+    def check_stdout(self):
+        while self.alive:
+            sleep(0.01)
+            new_stdout = self.process.stdout.read().decode()
+            sys.stdout.write(new_stdout)
+            self.stdout += new_stdout
+            if self.process.returncode is not None:
+                self.alive = False
+
+    def check_stderr(self):
+        while self.alive:
+            sleep(0.01)
+            new_stderr = self.process.stderr.read().decode()
+            sys.stdout.write(new_stderr)
+            self.stderr += new_stderr
+            if self.process.returncode is not None:
+                self.alive = False
+
+    def __init__(self, *args):
+        self.process = subprocess.Popen(
+            args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+
+        self.stdout = ''
+        self.stderr = ''
+        self.alive = True
+
+        Thread(target=lambda: self.check_stdout(), daemon=True).start()
+        Thread(target=lambda: self.check_stderr(), daemon=True).start()
+
+    def terminate(self):
+        self.alive = False
+        self.process.terminate()
+
+    def is_error_happened(self) -> bool:
+        return len(self.stderr) > 0
+
+
 class DjangoApplicationRunner(TestRunner):
 
     tryout_ports = [i for i in range(8000, 8101)]
     TEST_DATABASE = 'db.test.sqlite3'
 
-    process: Optional[subprocess.Popen] = None
+    process: PopenWrapper = None
     port: Optional[int] = None
     full_path: Optional[str] = None
 
@@ -44,11 +87,19 @@ class DjangoApplicationRunner(TestRunner):
             if test_case.attach.use_database:
                 self.__prepare_database()
 
-        self.process = subprocess.Popen(
-            [sys.executable, self.full_path, 'runserver', str(self.port), '--noreload'],
-            stdout=subprocess.STDOUT,
-            stderr=subprocess.STDOUT
-        )
+        self.process = PopenWrapper(
+            [sys.executable, self.full_path, 'runserver', str(self.port), '--noreload'])
+
+        i: int = 100
+        search_phrase = 'Starting development server at'
+        while i:
+            if search_phrase in self.process.stdout:
+                break
+            i -= 1
+            sleep(0.1)
+        else:
+            raise ErrorWithFeedback(
+                f'Cannot start Django server because cannot find "{search_phrase}" in process\' output')
 
     def __find_free_port(self) -> int:
         for port in self.tryout_ports:
@@ -88,11 +139,20 @@ class DjangoApplicationRunner(TestRunner):
         if self.process:
             self.process.terminate()
 
+    def _check_errors(self):
+        if self.process.is_error_happened():
+            self.process.terminate()
+            raise WrongAnswer(self.process.stderr)
+
     def test(self, test_run: TestRun) -> Optional[CheckResult]:
+        self._check_errors()
+
         test_case = test_run.test_case
 
         try:
-            return test_case.dynamic_testing()
+            result = test_case.dynamic_testing()
+            self._check_errors()
+            return result
         except BaseException as ex:
             test_run.set_error_in_test(ex)
 
