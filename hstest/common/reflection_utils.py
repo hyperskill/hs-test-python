@@ -5,8 +5,10 @@ from typing import List
 
 
 def is_tests(stage):
-    return inspect.getmodule(stage).__package__.startswith('tests.outcomes.') or \
-           f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in inspect.getmodule(stage).__file__
+    package = inspect.getmodule(stage).__package__
+    file = inspect.getmodule(stage).__file__
+    return package and package.startswith('tests.outcomes.') or \
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file
 
 
 def setup_cwd(stage):

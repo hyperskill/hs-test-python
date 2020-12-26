@@ -15,8 +15,8 @@ class DjangoTest(StageTest):
     TEST_DATABASE = 'db.test.sqlite3'
     use_database = attach.use_database
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, source_name: str = ''):
+        super().__init__(source_name)
         self.attach.use_database = self.use_database
         loop_detector.working = False
         Settings.do_reset_output = False
