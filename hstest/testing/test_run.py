@@ -79,7 +79,11 @@ class TestRun:
         if Settings.do_reset_output:
             OutputHandler.reset_output()
 
-        result = self._test_runner.test(self)
+        result = None
+        try:
+            result = self._test_runner.test(self)
+        except BaseException as ex:
+            self.set_error_in_test(ex)
 
         # stopThreads(testCase.getProcesses(), pool)
         delete_files(self._test_case.files)
