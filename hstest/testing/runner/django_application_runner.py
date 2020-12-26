@@ -36,7 +36,7 @@ class PopenWrapper:
 
     def __init__(self, *args):
         self.process = subprocess.Popen(
-            args,
+            [str(a) for a in args],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
@@ -88,7 +88,7 @@ class DjangoApplicationRunner(TestRunner):
                 self.__prepare_database()
 
         self.process = PopenWrapper(
-            [sys.executable, self.full_path, 'runserver', str(self.port), '--noreload'])
+            sys.executable, self.full_path, 'runserver', self.port, '--noreload')
 
         i: int = 100
         search_phrase = 'Starting development server at'
