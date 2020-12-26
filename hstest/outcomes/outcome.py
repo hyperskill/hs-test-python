@@ -51,7 +51,7 @@ class Outcome:
             result += '\n\n'
             if worth_showing_log:
                 result += "Please find below the output of your program during this failed test.\n"
-                if test_run.input_used:
+                if test_run and test_run.input_used:
                     result += "Note that the '>' character indicates the beginning of the input line.\n"
                 result += "\n---\n\n"
 
