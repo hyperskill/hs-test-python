@@ -12,7 +12,7 @@ class DjangoTest(StageTest):
     runner = DjangoApplicationRunner
     attach = DjangoSettings()
 
-    TEST_DATABASE = 'db.test.sqlite3'
+    test_database = attach.test_database
     use_database = attach.use_database
 
     def __init__(self, source_name: str = ''):
