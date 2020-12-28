@@ -3,11 +3,11 @@ import subprocess
 import sys
 from threading import Thread
 from time import sleep
-from typing import Optional
+from typing import List, Optional
 
 from hstest.common.file_utils import safe_delete
 from hstest.common.process_utils import is_port_in_use
-from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, WrongAnswer
+from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedError, WrongAnswer
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
@@ -57,15 +57,16 @@ class PopenWrapper:
 
 
 class DjangoApplicationRunner(TestRunner):
-
-    tryout_ports = [i for i in range(8000, 8101)]
-    TEST_DATABASE = 'db.test.sqlite3'
-
     process: PopenWrapper = None
     port: Optional[int] = None
     full_path: Optional[str] = None
 
     def launch_django_application(self, test_case: TestCase):
+        if not isinstance(test_case.attach, DjangoSettings):
+            return UnexpectedError(
+                f'Django tests should have DjangoSettings class as an attach, '
+                f'found {type(test_case.attach)}')
+
         source = test_case.source_name
 
         if source is None:
@@ -81,11 +82,10 @@ class DjangoApplicationRunner(TestRunner):
                 f'Check if you deleted it.')
 
         self.full_path = full_path
-        self.port = self.__find_free_port()
+        self.port = self.__find_free_port(test_case.attach.tryout_ports)
 
-        if isinstance(test_case.attach, DjangoSettings):
-            if test_case.attach.use_database:
-                self.__prepare_database()
+        if test_case.attach.use_database:
+            self.__prepare_database(test_case.attach.test_database)
 
         self.process = PopenWrapper(
             sys.executable, self.full_path, 'runserver', self.port, '--noreload')
@@ -101,17 +101,17 @@ class DjangoApplicationRunner(TestRunner):
             raise ErrorWithFeedback(
                 f'Cannot start Django server because cannot find "{search_phrase}" in process\' output')
 
-    def __find_free_port(self) -> int:
-        for port in self.tryout_ports:
+    def __find_free_port(self, ports: List[int]) -> int:
+        for port in ports:
             if not is_port_in_use(port):
                 return port
         raise ErrorWithFeedback(
             'Cannot find a port to start Django application '
-            f'(tried ports form {self.tryout_ports[0]} to {self.tryout_ports[-1]})')
+            f'(tried ports form {ports[0]} to {ports[-1]})')
 
-    def __prepare_database(self):
-        os.environ['HYPERSKILL_TEST_DATABASE'] = self.TEST_DATABASE
-        with open(self.TEST_DATABASE, 'w'):
+    def __prepare_database(self, test_database: str):
+        os.environ['HYPERSKILL_TEST_DATABASE'] = test_database
+        with open(test_database, 'w'):
             pass
         migrate = subprocess.Popen(
             [sys.executable, self.full_path, 'migrate'],
@@ -135,7 +135,8 @@ class DjangoApplicationRunner(TestRunner):
         self.launch_django_application(test_case)
 
     def tear_down(self, test_case: TestCase):
-        safe_delete(self.TEST_DATABASE)
+        if isinstance(test_case.attach, DjangoSettings):
+            safe_delete(test_case.attach.test_database)
         if self.process:
             self.process.terminate()
 
