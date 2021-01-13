@@ -19,12 +19,19 @@ class FlaskTest(StageTest):
         Settings.do_reset_output = False
 
         if self.source_name:
-            if type(self.source_name) == str:
-                self.attach.sources += [(self.source_name, None)]
-            elif type(self.source_name) == tuple:
-                self.attach.sources += [self.source_name]
-            elif type(self.source_name) == list:
-                self.attach.sources += self.source_name
+            sources = self.source_name
+
+            if type(self.source_name) != list:
+                sources = [self.source_name]
+
+            for item in sources:
+                if type(item) == str:
+                    self.attach.sources += [(item, None)]
+                elif type(item) == tuple:
+                    if len(item) == 1:
+                        self.attach.sources += [(item[0], None)]
+                    else:
+                        self.attach.sources += [item]
 
     def get_url(self, source: None):
         create_url = lambda port: f'http://localhost:{port}/'
