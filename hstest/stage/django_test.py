@@ -2,7 +2,7 @@ from urllib.request import urlopen
 
 from hstest.common.utils import clean_text
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
-from hstest.stage_test import StageTest
+from hstest.stage.stage_test import StageTest
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.testing.runner.django_application_runner import DjangoApplicationRunner
 from hstest.testing.settings import Settings
@@ -10,10 +10,10 @@ from hstest.testing.settings import Settings
 
 class DjangoTest(StageTest):
     runner = DjangoApplicationRunner
-    attach = DjangoSettings()
+    attach: DjangoSettings = DjangoSettings()
 
-    test_database = attach.test_database
-    use_database = attach.use_database
+    test_database: str = attach.test_database
+    use_database: bool = attach.use_database
 
     def __init__(self, source_name: str = ''):
         super().__init__(source_name)

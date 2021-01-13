@@ -1,7 +1,6 @@
 import os
 import subprocess
 import sys
-from threading import Thread
 from time import sleep
 from typing import List, Optional
 
@@ -11,49 +10,9 @@ from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedE
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
+from hstest.testing.popen_wrapper import PopenWrapper
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
-
-
-class PopenWrapper:
-    def check_stdout(self):
-        while self.alive:
-            sleep(0.01)
-            new_stdout = self.process.stdout.read().decode()
-            sys.stdout.write(new_stdout)
-            self.stdout += new_stdout
-            if self.process.returncode is not None:
-                self.alive = False
-
-    def check_stderr(self):
-        while self.alive:
-            sleep(0.01)
-            new_stderr = self.process.stderr.read().decode()
-            sys.stdout.write(new_stderr)
-            self.stderr += new_stderr
-            if self.process.returncode is not None:
-                self.alive = False
-
-    def __init__(self, *args):
-        self.process = subprocess.Popen(
-            [str(a) for a in args],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-
-        self.stdout = ''
-        self.stderr = ''
-        self.alive = True
-
-        Thread(target=lambda: self.check_stdout(), daemon=True).start()
-        Thread(target=lambda: self.check_stderr(), daemon=True).start()
-
-    def terminate(self):
-        self.alive = False
-        self.process.terminate()
-
-    def is_error_happened(self) -> bool:
-        return len(self.stderr) > 0
 
 
 class DjangoApplicationRunner(TestRunner):
@@ -63,7 +22,7 @@ class DjangoApplicationRunner(TestRunner):
 
     def launch_django_application(self, test_case: TestCase):
         if not isinstance(test_case.attach, DjangoSettings):
-            return UnexpectedError(
+            raise UnexpectedError(
                 f'Django tests should have DjangoSettings class as an attach, '
                 f'found {type(test_case.attach)}')
 
@@ -77,7 +36,7 @@ class DjangoApplicationRunner(TestRunner):
 
         if not os.path.exists(full_path):
             raise ErrorWithFeedback(
-                f'Cannot find file named "{os.path.dirname(full_path)}" '
+                f'Cannot find file named "{os.path.basename(full_path)}" '
                 f'in folder "{os.path.dirname(full_path)}". '
                 f'Check if you deleted it.')
 
@@ -143,7 +102,7 @@ class DjangoApplicationRunner(TestRunner):
     def _check_errors(self):
         if self.process.is_error_happened():
             self.process.terminate()
-            raise WrongAnswer(self.process.stderr)
+            raise ErrorWithFeedback(self.process.stderr)
 
     def test(self, test_run: TestRun) -> Optional[CheckResult]:
         self._check_errors()
