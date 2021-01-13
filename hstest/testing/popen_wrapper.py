@@ -8,7 +8,7 @@ class PopenWrapper:
     def check_stdout(self):
         while self.alive:
             sleep(0.01)
-            new_stdout = self.process.stdout.read(1).decode()
+            new_stdout = self.process.stdout.read(1)
             sys.stdout.write(new_stdout)
             self.stdout += new_stdout
             if self.process.returncode is not None:
@@ -17,7 +17,7 @@ class PopenWrapper:
     def check_stderr(self):
         while self.alive:
             sleep(0.01)
-            new_stderr = self.process.stderr.read(1).decode()
+            new_stderr = self.process.stderr.read(1)
             sys.stderr.write(new_stderr)
             self.stderr += new_stderr
             if self.process.returncode is not None:
@@ -26,6 +26,8 @@ class PopenWrapper:
     def __init__(self, *args):
         self.process = subprocess.Popen(
             [str(a) for a in args],
+            bufsize=0,
+            universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
