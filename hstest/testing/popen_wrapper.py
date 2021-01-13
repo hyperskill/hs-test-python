@@ -1,13 +1,11 @@
 import subprocess
 import sys
 from threading import Thread
-from time import sleep
 
 
 class PopenWrapper:
     def check_stdout(self):
         while self.alive:
-            sleep(0.01)
             new_stdout = self.process.stdout.read(1)
             sys.stdout.write(new_stdout)
             self.stdout += new_stdout
@@ -16,7 +14,6 @@ class PopenWrapper:
 
     def check_stderr(self):
         while self.alive:
-            sleep(0.01)
             new_stderr = self.process.stderr.read(1)
             sys.stderr.write(new_stderr)
             self.stderr += new_stderr
