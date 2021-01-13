@@ -55,7 +55,11 @@ class DjangoApplicationRunner(TestRunner):
             if search_phrase in self.process.stdout:
                 break
             i -= 1
-            sleep(0.1)
+
+            if self.process.is_error_happened():
+                i = 0
+            else:
+                sleep(0.1)
         else:
             stdout = self.process.stdout.strip()
             stderr = self.process.stderr.strip()

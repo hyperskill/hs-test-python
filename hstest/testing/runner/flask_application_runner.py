@@ -54,7 +54,11 @@ class FlaskApplicationRunner(TestRunner):
                 if search_phrase in process.stderr:
                     break
                 i -= 1
-                sleep(0.1)
+
+                if process.is_error_happened():
+                    i = 0
+                else:
+                    sleep(0.1)
             else:
                 stdout = process.stdout.strip()
                 stderr = process.stderr.strip()
