@@ -2,6 +2,8 @@ import subprocess
 import sys
 from threading import Thread
 
+from psutil import NoSuchProcess, Process
+
 
 class PopenWrapper:
     def check_stdout(self):
@@ -38,7 +40,13 @@ class PopenWrapper:
 
     def terminate(self):
         self.alive = False
-        self.process.terminate()
+        try:
+            parent = Process(self.process.pid)
+            for child in parent.children(recursive=True):
+                child.kill()
+            parent.kill()
+        except NoSuchProcess:
+            pass
 
     def is_error_happened(self) -> bool:
         return self.process.returncode is not None and len(self.stderr) > 0
