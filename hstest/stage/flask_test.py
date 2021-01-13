@@ -21,8 +21,8 @@ class FlaskTest(StageTest):
         if self.source_name:
             sources = self.source_name
 
-            if type(self.source_name) != list:
-                sources = [self.source_name]
+            if type(sources) != list:
+                sources = [sources]
 
             for item in sources:
                 if type(item) == str:
