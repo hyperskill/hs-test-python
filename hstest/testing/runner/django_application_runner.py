@@ -57,8 +57,16 @@ class DjangoApplicationRunner(TestRunner):
             i -= 1
             sleep(0.1)
         else:
-            raise ErrorWithFeedback(
-                f'Cannot start Django server because cannot find "{search_phrase}" in process\' output')
+            stdout = self.process.stdout.strip()
+            stderr = self.process.stderr.strip()
+
+            error_info = f'Cannot start Django server because cannot find "{search_phrase}" in process\' output'
+            if len(stdout):
+                error_info += '\n\nstdout:\n' + stdout
+            if len(stderr):
+                error_info += '\n\nstderr:\n' + stderr
+
+            raise ErrorWithFeedback(error_info)
 
     def __find_free_port(self, ports: List[int]) -> int:
         for port in ports:

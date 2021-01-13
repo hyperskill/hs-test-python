@@ -56,9 +56,20 @@ class FlaskApplicationRunner(TestRunner):
                 i -= 1
                 sleep(0.1)
             else:
-                raise ErrorWithFeedback(
+                stdout = process.stdout.strip()
+                stderr = process.stderr.strip()
+
+                error_info = (
                     f'Cannot start Flask server {full_source} '
-                    f'because cannot find "{search_phrase}" in process\' output')
+                    f'because cannot find "{search_phrase}" in process\' output'
+                )
+
+                if len(stdout):
+                    error_info += '\n\nstdout:\n' + stdout
+                if len(stderr):
+                    error_info += '\n\nstderr:\n' + stderr
+
+                raise ErrorWithFeedback(error_info)
 
             new_sources += [(filename, port)]
 
