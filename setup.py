@@ -1,4 +1,4 @@
-from setuptools import setup, find_namespace_packages
+from setuptools import find_namespace_packages, setup
 
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
@@ -14,7 +14,9 @@ setup(
     url="https://github.com/hyperskill/hs-test-python",
     packages=find_namespace_packages(exclude=['tests']),
     python_requires=">=3.6",
-    install_requires=[],
+    install_requires=[
+        "psutil==5.8.0"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3.6"
     ],
