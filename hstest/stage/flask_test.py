@@ -47,7 +47,7 @@ class FlaskTest(StageTest):
         elif len(sources_fits) > 1:
             raise UnexpectedError(f'Multiple sources ({len(sources_fits)}) found: {source}')
 
-        return create_url(sources_fits[1])
+        return create_url(sources_fits[0][1])
 
     def get(self, link: str, source: str = None) -> str:
         if link.startswith('/'):
