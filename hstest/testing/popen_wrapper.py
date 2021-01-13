@@ -18,7 +18,7 @@ class PopenWrapper:
         while self.alive:
             sleep(0.01)
             new_stderr = self.process.stderr.read(1).decode()
-            sys.stdout.write(new_stderr)
+            sys.stderr.write(new_stderr)
             self.stderr += new_stderr
             if self.process.returncode is not None:
                 self.alive = False
