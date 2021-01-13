@@ -33,7 +33,7 @@ class FlaskTest(StageTest):
                     else:
                         self.attach.sources += [item]
 
-    def get_url(self, source: None):
+    def get_url(self, source: str = None):
         create_url = lambda port: f'http://localhost:{port}/'
 
         if len(self.attach.sources) == 1:
@@ -49,7 +49,7 @@ class FlaskTest(StageTest):
 
         return create_url(sources_fits[1])
 
-    def get(self, link: str, source: None) -> str:
+    def get(self, link: str, source: str = None) -> str:
         if link.startswith('/'):
             link = link[1:]
 
