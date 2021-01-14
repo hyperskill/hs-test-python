@@ -10,7 +10,7 @@ class InfiniteLoopDetector:
         self.working: bool = True
 
         self.check_same_input_between_requests = True
-        self.check_no_input_requests_for_long = True
+        self.check_no_input_requests_for_long = False
         self.check_repeatable_output = True
 
         self._curr_line: List[str] = []
