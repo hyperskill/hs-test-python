@@ -9,6 +9,10 @@ class InfiniteLoopDetector:
     def __init__(self):
         self.working: bool = True
 
+        self.check_same_input_between_requests = True
+        self.check_no_input_requests_for_long = True
+        self.check_repeatable_output = True
+
         self._curr_line: List[str] = []
         self._since_last_input: List[str] = []
 
@@ -80,14 +84,19 @@ class InfiniteLoopDetector:
         self._lines_since_last_input = 0
 
     def _check_inf_loop_chars(self):
-        if self._chars_since_last_input >= self._CHARS_SINCE_LAST_INPUT_MAX:
+        if self.check_no_input_requests_for_long and \
+           self._chars_since_last_input >= self._CHARS_SINCE_LAST_INPUT_MAX:
             self._fail("No input request for the last " +
                        str(self._chars_since_last_input) + " characters being printed.")
 
     def _check_inf_loop_lines(self):
-        if self._lines_since_last_input >= self._LINES_SINCE_LAST_INPUT_MAX:
+        if self.check_no_input_requests_for_long and \
+           self._lines_since_last_input >= self._LINES_SINCE_LAST_INPUT_MAX:
             self._fail("No input request for the last " +
                        str(self._lines_since_last_input) + " lines being printed.")
+
+        if not self.check_repeatable_output:
+            return
 
         if len(self._every_line) != self._EVERY_LINE_SAVED_SIZE:
             return
@@ -119,6 +128,9 @@ class InfiniteLoopDetector:
                        + str(lines_repeated) + " lines of the same text.")
 
     def _check_inf_loop_input_requests(self):
+        if not self.check_no_input_requests_for_long:
+            return
+
         first_elem = self._between_input_requests[0]
         for curr in self._between_input_requests:
             if curr != first_elem:
