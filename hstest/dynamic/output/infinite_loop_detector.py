@@ -80,6 +80,7 @@ class InfiniteLoopDetector:
             self._check_inf_loop_input_requests()
 
         self._since_last_input = []
+        self._every_line = []
         self._chars_since_last_input = 0
         self._lines_since_last_input = 0
 
