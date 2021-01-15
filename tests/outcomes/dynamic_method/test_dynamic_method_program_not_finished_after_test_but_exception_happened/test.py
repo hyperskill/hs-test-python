@@ -24,14 +24,9 @@ class Test(unittest.TestCase):
         self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,
-            "Exception in test #1\n" +
+            "Error in test #1\n" +
             "\n" +
-            "Probably your program run out of input (tried to read more than expected)\n" +
-            "\n" +
-            "Traceback (most recent call last):\n" +
-            "  File \"main.py\", line 2, in <module>\n" +
-            "    print(\"S1: \" + input())\n" +
-            "EOFError: EOF when reading a line\n" +
+            "Program run out of input. You tried to read more, than expected.\n" +
             "\n" +
             "Please find below the output of your program during this failed test.\n" +
             "\n" +

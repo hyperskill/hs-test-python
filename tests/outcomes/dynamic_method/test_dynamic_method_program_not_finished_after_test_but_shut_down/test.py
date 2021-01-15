@@ -27,10 +27,19 @@ class TestDynamicMethodProgramNotFinishedAfterTestButShutDown(StageTest):
 class Test(unittest.TestCase):
     def test(self):
         status, feedback = TestDynamicMethodProgramNotFinishedAfterTestButShutDown().run_tests()
-        self.assertEqual(status, 0)
+        self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,
-            "test OK"
+            "Error in test #1\n" +
+            "\n" +
+            "Program run out of input. You tried to read more, than expected.\n" +
+            "\n" +
+            "Please find below the output of your program during this failed test.\n" +
+            "\n" +
+            "---\n" +
+            "\n" +
+            "Server started!\n" +
+            "Server stopped!"
         )
 
 

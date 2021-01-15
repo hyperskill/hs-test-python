@@ -19,11 +19,11 @@ class DynamicInputHandler:
 
         next_line = self._input_lines.pop(0) + '\n'
         OutputHandler.inject_input('> ' + next_line)
+        loop_detector.input_requested()
         return next_line
 
     def _eject_next_input(self):
         new_input = self._dynamic_input_function()
-        loop_detector.input_requested()
 
         if new_input is None:
             return

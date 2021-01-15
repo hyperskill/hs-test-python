@@ -22,8 +22,22 @@ class Test(unittest.TestCase):
         status, feedback = ExceptionWhileReading2('main').run_tests()
 
         self.assertEqual(status, -1)
-        self.assertTrue('Exception in test #1' in feedback)
-        self.assertTrue('Probably your program run out of input' in feedback)
-        self.assertTrue('Traceback (most recent call last):' in feedback)
-        self.assertTrue('    print(input())' in feedback)
-        self.assertTrue('EOFError: EOF when reading a line' in feedback)
+        self.assertEqual(
+            "Error in test #1\n" +
+            "\n" +
+            "Program run out of input. You tried to read more, than expected.\n" +
+            "\n" +
+            "Please find below the output of your program during this failed test.\n" +
+            "Note that the '>' character indicates the beginning of the input line.\n" +
+            "\n" +
+            "---\n" +
+            "\n" +
+            "> line1\n" +
+            "line1\n" +
+            "> line2\n" +
+            "line2",
+            feedback)
+
+
+if __name__ == '__main__':
+    Test().test()

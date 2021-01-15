@@ -2,6 +2,8 @@ from typing import List
 
 from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction, DynamicTestFunction
 from hstest.dynamic.input.dynamic_input_handler import DynamicInputHandler
+from hstest.dynamic.security.exit_exception import ExitException
+from hstest.exception.outcomes import ErrorWithFeedback
 
 
 class InputMock:
@@ -30,5 +32,8 @@ class InputMock:
     def readline(self) -> str:
         line = self.handler.eject_next_line()
         if line is None:
-            raise EOFError('EOF when reading a line')
+            from hstest import StageTest
+            StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(
+                "Program run out of input. You tried to read more, than expected."))
+            raise ExitException()
         return line

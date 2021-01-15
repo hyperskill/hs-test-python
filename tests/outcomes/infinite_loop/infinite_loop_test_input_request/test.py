@@ -19,11 +19,16 @@ class InfiniteLoopTestInputRequest(StageTest):
 class Test(unittest.TestCase):
     def test(self):
         status, feedback = InfiniteLoopTestInputRequest().run_tests()
-        self.assertIn(
+        self.assertEqual(
             "Error in test #1\n" +
             "\n" +
-            "Infinite loop detected.\n" +
-            "Between the last 20 input requests the texts being printed are identical.",
+            "Program run out of input. You tried to read more, than expected.\n" +
+            "\n" +
+            "Please find below the output of your program during this failed test.\n" +
+            "\n" +
+            "---\n" +
+            "\n" +
+            "Long Line Long Line Long Line",
             feedback)
         self.assertNotEqual(status, 0)
 
