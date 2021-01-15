@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
         self.assertEqual(
             "Error in test #1\n" +
             "\n" +
-            "Program run out of input. You tried to read more, than expected.\n" +
+            "Program ran out of input. You tried to read more, than expected.\n" +
             "\n" +
             "Please find below the output of your program during this failed test.\n" +
             "Note that the '>' character indicates the beginning of the input line.\n" +

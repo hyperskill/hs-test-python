@@ -34,6 +34,6 @@ class InputMock:
         if line is None:
             from hstest import StageTest
             StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(
-                "Program run out of input. You tried to read more, than expected."))
+                "Program ran out of input. You tried to read more, than expected."))
             raise ExitException()
         return line
