@@ -1,6 +1,4 @@
 # hs-test-python
-It is a small framework that simplifies testing educational projects for [Hyperskill](https://hyperskill.org).
-
 It is a framework that simplifies testing educational projects for [Hyperskill](https://hyperskill.org).
 
 It is required to use for Hyperskill projects. The main features are:
