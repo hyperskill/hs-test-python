@@ -25,8 +25,8 @@ class Test(unittest.TestCase):
             Exception in test #1
 
             Traceback (most recent call last):
-              File "main.py", line 1, in <module>
-                raise_error_here
+              File "main.py", line 2, in <module>
+                Coffee is ready!\"\"\", raise_error_here)
             NameError: name 'raise_error_here' is not defined
             """), feedback)
 

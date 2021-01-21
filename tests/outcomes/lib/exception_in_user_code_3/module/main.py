@@ -1,1 +1,2 @@
-raise_error_here
+print("""
+Coffee is ready!""", raise_error_here)
