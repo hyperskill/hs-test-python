@@ -34,7 +34,7 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
 
     user_traceback = []
     for tr in traceback_stack[::-1][1:-1]:
-        if f'{os.sep}lib{os.sep}runpy.py"' in tr:
+        if f'{os.sep}runpy.py"' in tr:
             break
         user_traceback += [tr]
 
