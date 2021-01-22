@@ -1,10 +1,8 @@
 import unittest
-from typing import Any
 
-from hstest.check_result import CheckResult, wrong
+from hstest.check_result import CheckResult
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
-from hstest.testing.tested_program import TestedProgram
 
 
 class TestFeedback(StageTest):
