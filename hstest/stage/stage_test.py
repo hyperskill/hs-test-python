@@ -96,7 +96,8 @@ class StageTest:
                 result: CheckResult = test_run.test()
 
                 if not result.is_correct:
-                    raise WrongAnswer(result.feedback)
+                    full_feedback = result.feedback + '\n\n' + test_run.test_case.feedback
+                    raise WrongAnswer(full_feedback.strip())
 
                 if test_run.is_last_test():
                     need_tear_down = False

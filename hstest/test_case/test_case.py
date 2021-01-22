@@ -26,6 +26,7 @@ class TestCase:
             stdin: DynamicInput = '',
             args: List[str] = None,
             attach: Any = None,
+            feedback: str = '',
             files: Dict[str, str] = None,
             time_limit: int = DEFAULT_TIME_LIMIT,
             check_function: CheckFunction = None,
@@ -39,6 +40,7 @@ class TestCase:
         self.input: Optional[str] = None
         self.args: List[str] = [] if args is None else args
         self.attach: Any = attach
+        self.feedback = feedback
         self.files: Dict[str, str] = {} if files is None else files
         self.time_limit: int = time_limit
         self.check_func: CheckFunction = check_function
@@ -127,10 +129,9 @@ class TestCase:
 
 class SimpleTestCase(TestCase):
     def __init__(self, *, stdin: str, stdout: str, feedback: str, **kwargs):
-        super().__init__(stdin=stdin, attach=stdout, **kwargs)
-        self.feedback = feedback
+        super().__init__(stdin=stdin, attach=stdout, feedback=feedback, **kwargs)
         self.check_func = self._custom_check
 
     def _custom_check(self, reply: str, expected: str):
         is_correct = reply.strip() == expected.strip()
-        return CheckResult(is_correct, self.feedback)
+        return CheckResult(is_correct, '')

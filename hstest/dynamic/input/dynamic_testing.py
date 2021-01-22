@@ -15,6 +15,7 @@ class DynamicTestElement:
                  order: Tuple[int, int],
                  repeat: int,
                  time_limit: int,
+                 feedback: str,
                  data: List[Any]):
         self.test: DynamicTestingWithoutParams = test
         self.name: str = f"Data passed to dynamic method \"{name}\""
@@ -22,6 +23,7 @@ class DynamicTestElement:
         self.order: Tuple[int, int] = order
         self.repeat: int = repeat
         self.time_limit: int = time_limit
+        self.feedback: str = feedback
         self.data: Optional[List[Any]] = data
         self.args_list: Optional[List[List[Any]]] = None
 
@@ -144,7 +146,8 @@ def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
             tests += [
                 TestCase(
                     dynamic_testing=test,
-                    time_limit=dte.time_limit
+                    time_limit=dte.time_limit,
+                    feedback=dte.feedback,
                 )
             ]
 

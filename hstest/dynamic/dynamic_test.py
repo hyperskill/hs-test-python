@@ -9,6 +9,7 @@ def dynamic_test(func=None, *,
                  order: int = 0,
                  time_limit: int = DEFAULT_TIME_LIMIT,
                  data: List[Any] = None,
+                 feedback: str = "",
                  repeat: int = 1):
     """
     Decorator for creating dynamic tests
@@ -32,8 +33,15 @@ def dynamic_test(func=None, *,
             from hstest.dynamic.input.dynamic_testing import DynamicTestElement
             methods: List[DynamicTestElement] = owner.dynamic_methods()
             methods += [
-                DynamicTestElement(lambda *a, **k: self.fn(*a, **k),
-                                   self.fn.__name__, (order, len(methods)), repeat, time_limit, data)
+                DynamicTestElement(
+                    test=lambda *a, **k: self.fn(*a, **k),
+                    name=self.fn.__name__,
+                    order=(order, len(methods)),
+                    repeat=repeat,
+                    time_limit=time_limit,
+                    feedback=feedback,
+                    data=data
+                )
             ]
 
     is_method = inspect.ismethod(func)

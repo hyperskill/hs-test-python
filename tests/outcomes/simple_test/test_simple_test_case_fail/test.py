@@ -1,4 +1,5 @@
 import unittest
+from inspect import cleandoc
 from typing import List
 
 from hstest.stage_test import StageTest
@@ -22,7 +23,23 @@ class Test(unittest.TestCase):
     def test(self):
         status, feedback = TesSimpleTestCaseFail('main').run_tests()
 
-        self.assertTrue("Wrong answer in test #1" in feedback)
-        self.assertTrue("Fatal error" not in feedback)
+        self.assertEquals(cleandoc(
+            """
+            Wrong answer in test #1
+
+            You should output a number twice
+            
+            Please find below the output of your program during this failed test.
+            Note that the '>' character indicates the beginning of the input line.
+            
+            ---
+            
+            > 123
+            123
+            """), feedback)
 
         self.assertNotEqual(status, 0)
+
+
+if __name__ == '__main__':
+    Test().test()
