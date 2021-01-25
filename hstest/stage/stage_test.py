@@ -16,7 +16,7 @@ from hstest.testing.test_run import TestRun
 
 
 class StageTest:
-    runner: Type[TestRunner] = AsyncMainFileRunner
+    runner: TestRunner = AsyncMainFileRunner()
     attach: Any = None
 
     source: str = None
@@ -57,7 +57,7 @@ class StageTest:
                 test_case.attach = self.attach
             curr_test += 1
             test_runs += [
-                TestRun(curr_test, test_count, test_case, self.runner())
+                TestRun(curr_test, test_count, test_case, self.runner)
             ]
 
         return test_runs
