@@ -7,8 +7,11 @@ from hstest.exception.outcomes import ErrorWithFeedback
 _contents_cached = {}
 
 
-def runnable_searcher(abs_path_to_search: str,
-                      file_filter: Callable[[str, str], bool] = lambda x, y: True) -> Tuple[str, str]:
+def runnable_searcher(abs_path_to_search: str = None,
+                      file_filter: Callable[[str, str], bool] = lambda folder, file: True) -> Tuple[str, str]:
+    if abs_path_to_search is None:
+        abs_path_to_search = os.getcwd()
+
     curr_folder = os.path.abspath(abs_path_to_search)
     test_folder = os.path.join(curr_folder, 'test')
 

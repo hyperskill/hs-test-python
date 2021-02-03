@@ -6,6 +6,7 @@ from typing import List, Optional
 
 from hstest.common.file_utils import safe_delete
 from hstest.common.process_utils import is_port_in_use
+from hstest.dynamic.file_searcher import runnable_searcher
 from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedError, WrongAnswer
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
@@ -28,17 +29,16 @@ class DjangoApplicationRunner(TestRunner):
 
         source = test_case.source_name
 
-        if source is None:
+        if source is None or not len(source):
             source = 'manage'
 
         full_source = source.replace('.', os.sep) + '.py'
         full_path = os.path.abspath(full_source)
 
         if not os.path.exists(full_path):
-            raise ErrorWithFeedback(
-                f'Cannot find file named "{os.path.basename(full_path)}" '
-                f'in folder "{os.path.dirname(full_path)}". '
-                f'Check if you deleted it.')
+            filename = os.path.basename(full_source)
+            folder, file = runnable_searcher(file_filter=lambda _, f: f == filename)
+            full_path = os.path.abspath(folder + os.sep + file)
 
         self.full_path = full_path
         self.port = self.__find_free_port(test_case.attach.tryout_ports)
@@ -53,6 +53,7 @@ class DjangoApplicationRunner(TestRunner):
         search_phrase = 'Starting development server at'
         while i:
             if search_phrase in self.process.stdout:
+                test_case.attach.port = self.port
                 break
             i -= 1
 

@@ -22,4 +22,19 @@ class DjangoTest(StageTest):
         Settings.do_reset_output = False
 
     def read_page(self, link: str) -> str:
+        """
+        Deprecated, use get(...) instead
+        """
+        return clean_text(urlopen(link).read().decode())
+
+    def get_url(self):
+        return f'http://localhost:{self.attach.port}/'
+
+    def get(self, link: str) -> str:
+        if link.startswith('/'):
+            link = link[1:]
+
+        if not link.startswith('http://'):
+            link = self.get_url() + link
+
         return clean_text(urlopen(link).read().decode())
