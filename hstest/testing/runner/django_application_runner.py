@@ -38,7 +38,7 @@ class DjangoApplicationRunner(TestRunner):
         if not os.path.exists(full_path):
             filename = os.path.basename(full_source)
             folder, file = runnable_searcher(file_filter=lambda _, f: f == filename)
-            full_path = folder
+            full_path = os.path.abspath(folder + os.sep + file)
 
         self.full_path = full_path
         self.port = self.__find_free_port(test_case.attach.tryout_ports)
