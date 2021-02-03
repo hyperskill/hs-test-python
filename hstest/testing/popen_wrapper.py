@@ -28,7 +28,8 @@ class PopenWrapper:
             bufsize=0,
             universal_newlines=True,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
+            encoding='utf-8'
         )
 
         self.stdout = ''
