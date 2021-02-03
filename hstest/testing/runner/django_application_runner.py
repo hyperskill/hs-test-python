@@ -29,7 +29,7 @@ class DjangoApplicationRunner(TestRunner):
 
         source = test_case.source_name
 
-        if source is None:
+        if source is None or not len(source):
             source = 'manage'
 
         full_source = source.replace('.', os.sep) + '.py'
