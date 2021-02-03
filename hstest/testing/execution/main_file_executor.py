@@ -59,7 +59,7 @@ class MainModuleExecutor(ProgramExecutor):
             self._machine.set_state(ProgramState.RUNNING)
 
             sys.argv = [self.file_to_test] + list(args)
-            sys.path.append(self.folder_to_test)
+            sys.path.insert(0, self.folder_to_test)
 
             runpy.run_module(
                 self.module_to_test,
