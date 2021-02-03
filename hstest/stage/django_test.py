@@ -9,7 +9,7 @@ from hstest.testing.settings import Settings
 
 
 class DjangoTest(StageTest):
-    runner = DjangoApplicationRunner
+    runner = DjangoApplicationRunner()
     attach: DjangoSettings = DjangoSettings()
 
     test_database: str = attach.test_database

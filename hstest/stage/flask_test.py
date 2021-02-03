@@ -10,7 +10,7 @@ from hstest.testing.settings import Settings
 
 
 class FlaskTest(StageTest):
-    runner = FlaskApplicationRunner
+    runner = FlaskApplicationRunner()
     attach: FlaskSettings = FlaskSettings()
 
     def __init__(self, source_name: str = ''):
