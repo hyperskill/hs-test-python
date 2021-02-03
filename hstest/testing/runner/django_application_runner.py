@@ -6,6 +6,7 @@ from typing import List, Optional
 
 from hstest.common.file_utils import safe_delete
 from hstest.common.process_utils import is_port_in_use
+from hstest.dynamic.file_searcher import runnable_searcher
 from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedError, WrongAnswer
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
@@ -35,10 +36,9 @@ class DjangoApplicationRunner(TestRunner):
         full_path = os.path.abspath(full_source)
 
         if not os.path.exists(full_path):
-            raise ErrorWithFeedback(
-                f'Cannot find file named "{os.path.basename(full_path)}" '
-                f'in folder "{os.path.dirname(full_path)}". '
-                f'Check if you deleted it.')
+            filename = os.path.basename(full_source)
+            folder, file = runnable_searcher(file_filter=lambda _, f: f == filename)
+            full_path = folder
 
         self.full_path = full_path
         self.port = self.__find_free_port(test_case.attach.tryout_ports)

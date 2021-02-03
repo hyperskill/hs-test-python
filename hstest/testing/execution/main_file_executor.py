@@ -47,7 +47,7 @@ class MainModuleExecutor(ProgramExecutor):
         self.folder_to_test = module_abs_path
 
     def _init_by_nothing(self):
-        folder, file = runnable_searcher(os.getcwd())
+        folder, file = runnable_searcher()
         without_py = file[:-3]
         self._init_by_module(os.path.abspath(folder), without_py)
 
