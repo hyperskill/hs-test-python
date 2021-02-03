@@ -53,6 +53,7 @@ class DjangoApplicationRunner(TestRunner):
         search_phrase = 'Starting development server at'
         while i:
             if search_phrase in self.process.stdout:
+                test_case.attach.port = self.port
                 break
             i -= 1
 
