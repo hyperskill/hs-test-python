@@ -4,6 +4,8 @@ from threading import Thread
 
 from psutil import NoSuchProcess, Process
 
+from hstest.dynamic.security.exit_handler import ExitHandler
+
 
 class PopenWrapper:
     def check_stdout(self):
@@ -41,6 +43,9 @@ class PopenWrapper:
 
     def terminate(self):
         self.alive = False
+        is_exit_replaced = ExitHandler.is_replaced()
+        if is_exit_replaced:
+            ExitHandler.revert_exit()
         try:
             parent = Process(self.process.pid)
             for child in parent.children(recursive=True):
@@ -48,6 +53,9 @@ class PopenWrapper:
             parent.kill()
         except NoSuchProcess:
             pass
+        finally:
+            if is_exit_replaced:
+                ExitHandler.replace_exit()
 
     def is_error_happened(self) -> bool:
         return self.process.returncode is not None and len(self.stderr) > 0

@@ -8,6 +8,7 @@ from hstest.dynamic.security.exit_exception import ExitException
 
 class ExitHandler:
     _saved = False
+    _replaced = False
 
     _builtins_quit = None
     _builtins_exit = None
@@ -19,6 +20,10 @@ class ExitHandler:
     _signal_siginterrupt = None
 
     _exit_func = lambda *x, **y: ExitException.throw()
+
+    @staticmethod
+    def is_replaced():
+        return ExitHandler._replaced
 
     @staticmethod
     def replace_exit():
@@ -42,13 +47,18 @@ class ExitHandler:
         signal.pthread_kill = ExitHandler._exit_func
         signal.siginterrupt = ExitHandler._exit_func
 
+        ExitHandler._replaced = True
+
     @staticmethod
     def revert_exit():
-        builtins.quit = ExitHandler._builtins_quit
-        builtins.exit = ExitHandler._builtins_exit
-        os.kill = ExitHandler._os_kill
-        os._exit = ExitHandler._os__exit
-        os.killpg = ExitHandler._os_killpg
-        sys.exit = ExitHandler._sys_exit
-        signal.pthread_kill = ExitHandler._signal_pthread_kill
-        signal.siginterrupt = ExitHandler._signal_siginterrupt
+        if ExitHandler._replaced:
+            builtins.quit = ExitHandler._builtins_quit
+            builtins.exit = ExitHandler._builtins_exit
+            os.kill = ExitHandler._os_kill
+            os._exit = ExitHandler._os__exit
+            os.killpg = ExitHandler._os_killpg
+            sys.exit = ExitHandler._sys_exit
+            signal.pthread_kill = ExitHandler._signal_pthread_kill
+            signal.siginterrupt = ExitHandler._signal_siginterrupt
+
+            ExitHandler._replaced = False
