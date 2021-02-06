@@ -31,7 +31,7 @@ class ExitHandler:
             ExitHandler._saved = True
             ExitHandler._builtins_quit = builtins.quit if hasattr(builtins, 'quit') else None
             ExitHandler._builtins_exit = builtins.exit if hasattr(builtins, 'exit') else None
-            ExitHandler._os_kill = os.exit if hasattr(os, 'exit') else None
+            ExitHandler._os_kill = os.kill if hasattr(os, 'kill') else None
             ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
             ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
             ExitHandler._sys_exit = sys.exit if hasattr(sys, 'exit') else None
@@ -46,7 +46,7 @@ class ExitHandler:
         sys.exit = ExitHandler._exit_func
         signal.pthread_kill = ExitHandler._exit_func
         signal.siginterrupt = ExitHandler._exit_func
-
+os.exit()
         ExitHandler._replaced = True
 
     @staticmethod
