@@ -46,7 +46,7 @@ class ExitHandler:
         sys.exit = ExitHandler._exit_func
         signal.pthread_kill = ExitHandler._exit_func
         signal.siginterrupt = ExitHandler._exit_func
-os.exit()
+
         ExitHandler._replaced = True
 
     @staticmethod
