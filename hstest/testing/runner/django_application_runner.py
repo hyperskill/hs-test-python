@@ -107,6 +107,8 @@ class DjangoApplicationRunner(TestRunner):
         self.launch_django_application(test_case)
 
     def tear_down(self, test_case: TestCase):
+        self._check_errors()
+
         if isinstance(test_case.attach, DjangoSettings):
             safe_delete(test_case.attach.test_database)
         if self.process:
