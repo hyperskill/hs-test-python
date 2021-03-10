@@ -110,7 +110,7 @@ class StageTest:
                 try:
                     StageTest.curr_test_run.tear_down()
                 except BaseException as new_ex:
-                    if isinstance(ex, OutcomeError):
+                    if isinstance(new_ex, OutcomeError):
                         ex = new_ex
             outcome: Outcome = Outcome.get_outcome(ex, curr_test)
             fail_text = str(outcome)
