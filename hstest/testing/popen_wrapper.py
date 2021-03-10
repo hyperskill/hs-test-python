@@ -1,6 +1,7 @@
 import subprocess
 import sys
 from threading import Thread
+from time import sleep
 
 from psutil import NoSuchProcess, Process
 
@@ -41,7 +42,21 @@ class PopenWrapper:
         Thread(target=lambda: self.check_stdout(), daemon=True).start()
         Thread(target=lambda: self.check_stderr(), daemon=True).start()
 
+    def wait_stderr(self):
+        iterations = 50
+        sleep_time = 50 / 1000
+
+        curr_stderr = self.stderr
+        while iterations != 0:
+            sleep(sleep_time)
+            if self.stderr == curr_stderr:
+                break
+            curr_stderr = self.stderr
+            iterations -= 1
+
     def terminate(self):
+        self.wait_stderr()
+
         self.alive = False
         is_exit_replaced = ExitHandler.is_replaced()
         if is_exit_replaced:
