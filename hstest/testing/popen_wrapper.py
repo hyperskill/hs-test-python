@@ -58,4 +58,7 @@ class PopenWrapper:
                 ExitHandler.replace_exit()
 
     def is_error_happened(self) -> bool:
-        return self.process.returncode is not None and len(self.stderr) > 0
+        return (
+            self.process.returncode is not None and len(self.stderr) > 0
+            or 'Traceback' in self.stderr
+        )
