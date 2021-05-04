@@ -114,7 +114,10 @@ class StageTest:
                         ex = new_ex
             outcome: Outcome = Outcome.get_outcome(ex, curr_test)
             fail_text = str(outcome)
-            SystemHandler.tear_down()
+            try:
+                SystemHandler.tear_down()
+            except BaseException:
+                pass
             return failed(fail_text)
 
         finally:
