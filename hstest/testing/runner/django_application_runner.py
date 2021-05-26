@@ -1,5 +1,4 @@
 import os
-import subprocess
 import sys
 from time import sleep
 from typing import List, Optional
@@ -85,15 +84,16 @@ class DjangoApplicationRunner(TestRunner):
         os.environ['HYPERSKILL_TEST_DATABASE'] = test_database
         with open(test_database, 'w'):
             pass
-        migrate = subprocess.Popen(
-            [sys.executable, self.full_path, 'migrate'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        exit_code = migrate.wait()
-        if exit_code != 0:
-            stdout = migrate.stdout.read().decode().strip()
-            stderr = migrate.stderr.read().decode().strip()
+        migrate = PopenWrapper(sys.executable, self.full_path, 'migrate')
+
+        while migrate.alive and len(migrate.stderr) == 0:
+            sleep(0.01)
+
+        if len(migrate.stderr) != 0:
+            migrate.wait_stderr()
+
+            stdout = migrate.stdout
+            stderr = migrate.stderr
 
             error_info = 'Cannot apply migrations to an empty database.'
             if len(stdout):
