@@ -36,7 +36,7 @@ class InputMock:
             if not Settings.allow_out_of_input:
                 from hstest import StageTest
                 StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(
-                    "Program ran out of input. You tried to read more, than expected."))
+                    "Program ran out of input. You tried to read more than expected."))
                 raise ExitException()
             else:
                 raise EOFError('EOF when reading a line')

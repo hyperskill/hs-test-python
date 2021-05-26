@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
             feedback,
             "Error in test #1\n" +
             "\n" +
-            "Program ran out of input. You tried to read more, than expected.\n" +
+            "Program ran out of input. You tried to read more than expected.\n" +
             "\n" +
             "Please find below the output of your program during this failed test.\n" +
             "\n" +

@@ -6,7 +6,7 @@ from hstest.dynamic.input.dynamic_testing import DynamicTestElement, search_dyna
 from hstest.dynamic.output.colored_output import RED_BOLD, RESET
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
-from hstest.exception.outcomes import UnexpectedError, WrongAnswer
+from hstest.exception.outcomes import OutcomeError, UnexpectedError, WrongAnswer
 from hstest.outcomes.outcome import Outcome
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
@@ -110,10 +110,15 @@ class StageTest:
             if need_tear_down:
                 try:
                     StageTest.curr_test_run.tear_down()
-                except BaseException: pass
+                except BaseException as new_ex:
+                    if isinstance(new_ex, OutcomeError):
+                        ex = new_ex
             outcome: Outcome = Outcome.get_outcome(ex, curr_test)
             fail_text = str(outcome)
-            SystemHandler.tear_down()
+            try:
+                SystemHandler.tear_down()
+            except BaseException:
+                pass
             return failed(fail_text)
 
         finally:

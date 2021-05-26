@@ -47,6 +47,10 @@ class OutputHandler:
         return clean_text(OutputHandler._mock_out.cloned)
 
     @staticmethod
+    def get_err() -> str:
+        return clean_text(OutputHandler._mock_err.cloned)
+
+    @staticmethod
     def get_dynamic_output() -> str:
         return clean_text(OutputHandler._mock_out.dynamic)
 
