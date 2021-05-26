@@ -13,6 +13,11 @@ class OutputHandler:
     _mock_err: OutputMock = None
 
     @staticmethod
+    def print(obj):
+        OutputHandler.get_real_out().write(str(obj) + '\n')
+        OutputHandler.get_real_out().flush()
+
+    @staticmethod
     def get_real_out() -> io.TextIOWrapper:
         return OutputHandler._mock_out.original
 

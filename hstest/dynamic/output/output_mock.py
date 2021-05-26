@@ -65,6 +65,9 @@ class OutputMock:
         self._partial.append(text)
         loop_detector.write(text)
 
+    def getvalue(self):
+        pass
+
     def flush(self):
         self._original.flush()
 

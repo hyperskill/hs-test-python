@@ -1,6 +1,8 @@
 import os
 from typing import Dict
 
+from hstest.exception.testing import FileDeletionError
+
 
 def create_files(files: Dict[str, str]):
     for file, content in files.items():
@@ -11,7 +13,10 @@ def create_files(files: Dict[str, str]):
 def delete_files(files: Dict[str, str]):
     for file in files.keys():
         if os.path.isfile(file):
-            os.remove(file)
+            try:
+                os.remove(file)
+            except PermissionError:
+                raise FileDeletionError()
 
 
 def safe_delete(filename):

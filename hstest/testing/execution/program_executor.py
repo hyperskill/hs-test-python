@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Optional
 
-from hstest.exception.outcomes import UnexpectedError, ErrorWithFeedback
+from hstest.dynamic.output.output_handler import OutputHandler
+from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
 from hstest.exception.testing import TestedProgramFinishedEarly, TestedProgramThrewException
 from hstest.testing.state_machine import StateMachine
 
@@ -52,6 +53,8 @@ class ProgramExecutor:
         self._machine.wait_not_states(
             ProgramState.NOT_STARTED, ProgramState.RUNNING)
 
+        OutputHandler.print('Program executor - after waiting in start() method')
+
         return self.__get_execution_output()
 
     def execute(self, stdin: str) -> str:
@@ -90,9 +93,10 @@ class ProgramExecutor:
         self._terminate()
 
     def __get_execution_output(self) -> str:
+        OutputHandler.print('Program executor - __get_execution_output()')
         if self._machine.in_state(ProgramState.EXCEPTION_THROWN):
             raise TestedProgramThrewException()
-
+        OutputHandler.print('Program executor - __get_execution_output() NO EXCEPTION')
         if self.__return_output_after_execution:
             return self.get_output()
         return ""
@@ -100,6 +104,7 @@ class ProgramExecutor:
     def _request_input(self):
         if self.__no_more_input:
             return None
+        OutputHandler.print('Program executor - _request_input() invoked, set state WAITING')
         self._machine.set_and_wait(ProgramState.WAITING, ProgramState.RUNNING)
         input_local = self._input
         self._input = None
@@ -118,6 +123,9 @@ class ProgramExecutor:
         self.__no_more_input = True
         if self.is_waiting_input():
             self._machine.set_state(ProgramState.RUNNING)
+
+    def is_input_allowed(self) -> bool:
+        return not self.__no_more_input
 
     def is_waiting_input(self) -> bool:
         return self._machine.in_state(ProgramState.WAITING)

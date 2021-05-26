@@ -41,7 +41,48 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
     user_traceback = [tr for tr in user_traceback
                       if f'{os.sep}hstest{os.sep}' not in tr]
 
-    user_traceback: List[str] = user_traceback[::-1]
+    return clean_stacktrace(traceback_stack, user_traceback[::-1], user_dir)
+
+
+def str_to_stacktrace(str_trace: str) -> str:
+    lines = str_trace.splitlines()
+    traceback_lines = [i for i, line in enumerate(lines) if line.startswith(' ')]
+
+    if len(traceback_lines) < 2:
+        return str_trace
+
+    traceback_stack_raw = lines[traceback_lines[0]: traceback_lines[1] + 1]
+
+    traceback_stack = []
+
+    lines_iter = iter(traceback_stack_raw)
+    for line1, line2 in zip(lines_iter, lines_iter):
+        traceback_stack += [line1 + '\n' + line2 + '\n']
+
+    user_traceback = []
+    for trace in traceback_stack:
+        r'''
+        Avoid traceback elements such as:
+        
+        File "C:\Users\**\JetBrains\**\plugins\python\helpers\pydev\pydevd.py", line 1477, in _exec
+          pydev_imports.execfile(file, globals, locals)  # execute the script
+        File "C:\Users\**\JetBrains\**\plugins\python\helpers\pydev\_pydev_imps\_pydev_execfile.py", line 18, in execfile
+          exec(compile(contents+"\n", file, 'exec'), glob, loc) 
+        
+        Which will appear when testing locally inside PyCharm.
+        '''
+        if f'{os.sep}JetBrains{os.sep}' in trace:
+            continue
+
+        user_traceback += [trace]
+
+    before = ['\n'.join(lines[:traceback_lines[0]]) + '\n']
+    after = ['\n'.join(lines[traceback_lines[1] + 1:]) + '\n']
+
+    return clean_stacktrace(before + user_traceback + after, user_traceback)
+
+
+def clean_stacktrace(full_traceback: List[str], user_traceback: List[str], user_dir: str = '') -> str:
     dir_names = []
     for tr in user_traceback:
         try:
@@ -63,7 +104,7 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
         user_dir = os.path.commonpath(dir_names) + os.sep
 
     cleaned_traceback = []
-    for trace in traceback_stack[1:-1]:
+    for trace in full_traceback[1:-1]:
         if trace.startswith(' ' * 4):
             # Trace line that starts with 4 is a line with SyntaxError
             cleaned_traceback += [trace]
@@ -81,4 +122,4 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
 
             cleaned_traceback += [trace]
 
-    return traceback_stack[0] + ''.join(cleaned_traceback) + traceback_stack[-1]
+    return full_traceback[0] + ''.join(cleaned_traceback) + full_traceback[-1]

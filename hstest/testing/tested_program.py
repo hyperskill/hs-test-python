@@ -1,12 +1,12 @@
-from typing import Optional, List
+from typing import List, Optional
 
-from hstest.testing.execution.main_file_executor import MainModuleExecutor
+from hstest.testing.execution.process_executor import ProcessExecutor
 from hstest.testing.execution.program_executor import ProgramExecutor
 
 
 class TestedProgram:
     def __init__(self, source: str = None):
-        self._program_executor: ProgramExecutor = MainModuleExecutor(source)
+        self._program_executor: ProgramExecutor = ProcessExecutor(source)
         self._run_args: Optional[List[str]] = None
 
     @property
@@ -16,7 +16,8 @@ class TestedProgram:
     def _init_program(self, *args: str):
         self._run_args = args
         from hstest.stage_test import StageTest
-        StageTest.curr_test_run.add_tested_program(self)
+        if StageTest.curr_test_run:
+            StageTest.curr_test_run.add_tested_program(self)
 
     def start_in_background(self, *args: str):
         self._init_program(*args)
@@ -43,6 +44,9 @@ class TestedProgram:
 
     def stop_input(self):
         self._program_executor.stop_input()
+
+    def is_input_allowed(self) -> bool:
+        return self._program_executor.is_input_allowed()
 
     def is_waiting_input(self) -> bool:
         return self._program_executor.is_waiting_input()

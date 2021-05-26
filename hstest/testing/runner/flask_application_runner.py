@@ -8,13 +8,13 @@ from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedE
 from hstest.test_case.attach.flask_settings import FlaskSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
-from hstest.testing.popen_wrapper import PopenWrapper
+from hstest.testing.process_wrapper import ProcessWrapper
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
 class FlaskApplicationRunner(TestRunner):
-    processes: List[Tuple[str, PopenWrapper]] = []
+    processes: List[Tuple[str, ProcessWrapper]] = []
 
     def launch_flask_applications(self, test_case: TestCase):
         if not isinstance(test_case.attach, FlaskSettings):
@@ -45,7 +45,7 @@ class FlaskApplicationRunner(TestRunner):
             if port is None:
                 port = self.__find_free_port(test_case.attach.tryout_ports)
 
-            process = PopenWrapper(sys.executable, full_path, f'localhost:{port}')
+            process = ProcessWrapper(sys.executable, full_path, f'localhost:{port}')
             self.processes += [(full_source, process)]
 
             i: int = 100

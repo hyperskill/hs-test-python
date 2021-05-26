@@ -1,6 +1,6 @@
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
-from hstest.exception.testing import InfiniteLoopException, TimeLimitException
+from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
 
 
 class Outcome:
@@ -77,7 +77,7 @@ class Outcome:
             return ExceptionOutcome(curr_test, ex)
 
         elif isinstance(ex, ErrorWithFeedback) or \
-                isinstance(ex, PermissionError) or \
+                isinstance(ex, FileDeletionError) or \
                 isinstance(ex, TimeLimitException) or \
                 isinstance(ex, InfiniteLoopException):
             return ErrorOutcome(curr_test, ex)

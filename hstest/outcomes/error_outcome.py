@@ -1,5 +1,5 @@
 from hstest.exception.outcomes import ErrorWithFeedback
-from hstest.exception.testing import InfiniteLoopException, TimeLimitException
+from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
 from hstest.outcomes.outcome import Outcome
 
 
@@ -8,7 +8,7 @@ class ErrorOutcome(Outcome):
         super().__init__()
         self.test_number = test_num
 
-        if isinstance(cause, PermissionError):
+        if isinstance(cause, FileDeletionError):
             self._init_permission_error(cause)
 
         elif isinstance(cause, TimeLimitException):
@@ -20,7 +20,7 @@ class ErrorOutcome(Outcome):
         elif isinstance(cause, InfiniteLoopException):
             self.error_text = "Infinite loop detected.\n" + cause.message
 
-    def _init_permission_error(self, _: PermissionError):
+    def _init_permission_error(self, _: FileDeletionError):
         self.error_text = (
             "The file you opened " +
             "can't be deleted after the end of the test. " +

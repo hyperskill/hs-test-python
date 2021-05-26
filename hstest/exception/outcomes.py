@@ -12,7 +12,7 @@ class SyntaxException(OutcomeError):
 
 
 class ExceptionWithFeedback(OutcomeError):
-    def __init__(self, error_text: str, real_exception: BaseException):
+    def __init__(self, error_text: str, real_exception: Optional[BaseException]):
         self.error_text: str = error_text
         self.real_exception: BaseException = real_exception
 

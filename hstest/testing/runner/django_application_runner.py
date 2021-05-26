@@ -10,13 +10,13 @@ from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedE
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
-from hstest.testing.popen_wrapper import PopenWrapper
+from hstest.testing.process_wrapper import ProcessWrapper
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
 class DjangoApplicationRunner(TestRunner):
-    process: PopenWrapper = None
+    process: ProcessWrapper = None
     port: Optional[int] = None
     full_path: Optional[str] = None
 
@@ -45,7 +45,7 @@ class DjangoApplicationRunner(TestRunner):
         if test_case.attach.use_database:
             self.__prepare_database(test_case.attach.test_database)
 
-        self.process = PopenWrapper(
+        self.process = ProcessWrapper(
             sys.executable, self.full_path, 'runserver', self.port, '--noreload')
 
         i: int = 100
@@ -84,7 +84,7 @@ class DjangoApplicationRunner(TestRunner):
         os.environ['HYPERSKILL_TEST_DATABASE'] = test_database
         with open(test_database, 'w'):
             pass
-        migrate = PopenWrapper(sys.executable, self.full_path, 'migrate')
+        migrate = ProcessWrapper(sys.executable, self.full_path, 'migrate')
 
         while migrate.alive and len(migrate.stderr) == 0:
             sleep(0.01)

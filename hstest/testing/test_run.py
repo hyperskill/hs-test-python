@@ -114,7 +114,15 @@ class TestRun:
 
             for exception, feedback in test_case.feedback_on_exception.items():
                 ex_type = type(user_exception)
-                if ex_type is not None and issubclass(ex_type, exception):
+
+                exact_subclass = ex_type is not None and issubclass(ex_type, exception)
+                if exact_subclass:
                     raise ExceptionWithFeedback(feedback, user_exception)
+
+                if user_exception is None:
+                    hint_in_feedback = exception.__name__ in error_in_test.error_text
+
+                    if hint_in_feedback:
+                        raise ExceptionWithFeedback(feedback + '\n\n' + error_in_test.error_text, None)
 
         raise error_in_test
