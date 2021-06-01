@@ -86,7 +86,7 @@ class DjangoApplicationRunner(TestRunner):
             pass
         migrate = PopenWrapper(sys.executable, self.full_path, 'migrate')
 
-        while migrate.alive and len(migrate.stderr) == 0:
+        while not migrate.is_finished() and len(migrate.stderr) == 0:
             sleep(0.01)
 
         if len(migrate.stderr) != 0:

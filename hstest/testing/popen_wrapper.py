@@ -77,3 +77,14 @@ class PopenWrapper:
             self.process.returncode is not None and len(self.stderr) > 0
             or 'Traceback' in self.stderr
         )
+
+    def is_finished(self):
+        if not self.alive:
+            return False
+
+        try:
+            proc = Process(self.process.pid)
+            return proc.status() != 'running'
+        except NoSuchProcess:
+            self.alive = False
+            return False
