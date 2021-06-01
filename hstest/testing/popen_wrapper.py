@@ -80,11 +80,12 @@ class PopenWrapper:
 
     def is_finished(self):
         if not self.alive:
-            return False
+            return True
 
         try:
             proc = Process(self.process.pid)
-            return proc.status() != 'running'
+            is_running = proc.status() == 'running'
+            return not is_running
         except NoSuchProcess:
             self.alive = False
-            return False
+            return True
