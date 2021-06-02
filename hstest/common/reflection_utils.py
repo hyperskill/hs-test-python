@@ -46,18 +46,15 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
 
 def str_to_stacktrace(str_trace: str) -> str:
     lines = str_trace.splitlines()
-    traceback_lines = [i for i, line in enumerate(lines) if line.startswith(' ')]
+    traceback_lines = [i for i, line in enumerate(lines) if line.startswith('  File ')]
 
-    if len(traceback_lines) < 2:
+    if len(traceback_lines) < 1:
         return str_trace
-
-    traceback_stack_raw = lines[traceback_lines[0]: traceback_lines[-1] + 1]
 
     traceback_stack = []
 
-    lines_iter = iter(traceback_stack_raw)
-    for line1, line2 in zip(lines_iter, lines_iter):
-        traceback_stack += [line1 + '\n' + line2 + '\n']
+    for line_num in traceback_lines:
+        traceback_stack += [lines[line_num] + '\n' + lines[line_num + 1] + '\n']
 
     user_traceback = []
     for trace in traceback_stack:
@@ -77,7 +74,7 @@ def str_to_stacktrace(str_trace: str) -> str:
         user_traceback += [trace]
 
     before = ['\n'.join(lines[:traceback_lines[0]]) + '\n']
-    after = ['\n'.join(lines[traceback_lines[-1] + 1:]) + '\n']
+    after = ['\n'.join(lines[traceback_lines[-1] + 2:]) + '\n']
 
     return clean_stacktrace(before + user_traceback + after, user_traceback)
 
