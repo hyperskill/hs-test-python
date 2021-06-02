@@ -4,10 +4,14 @@ from typing import Any
 from hstest.check_result import CheckResult, correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
+from hstest.testing.execution.main_file_executor import MainModuleExecutor
+from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 from hstest.testing.tested_program import TestedProgram
 
 
 class TestDynamicMethodProgramNotFinishedAfterTestButShutDown(StageTest):
+    runner = AsyncMainFileRunner(MainModuleExecutor)
+
     @dynamic_test
     def test(self):
         pr = TestedProgram('main')
@@ -38,8 +42,8 @@ class Test(unittest.TestCase):
             "\n" +
             "---\n" +
             "\n" +
-            "Server started!\n" +
-            "Server stopped!"
+            "Server started!" +
+            "\nServer stopped!"
         )
 
 

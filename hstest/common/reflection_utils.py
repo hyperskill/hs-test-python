@@ -51,7 +51,7 @@ def str_to_stacktrace(str_trace: str) -> str:
     if len(traceback_lines) < 2:
         return str_trace
 
-    traceback_stack_raw = lines[traceback_lines[0]: traceback_lines[1] + 1]
+    traceback_stack_raw = lines[traceback_lines[0]: traceback_lines[-1] + 1]
 
     traceback_stack = []
 
@@ -77,7 +77,7 @@ def str_to_stacktrace(str_trace: str) -> str:
         user_traceback += [trace]
 
     before = ['\n'.join(lines[:traceback_lines[0]]) + '\n']
-    after = ['\n'.join(lines[traceback_lines[1] + 1:]) + '\n']
+    after = ['\n'.join(lines[traceback_lines[-1] + 1:]) + '\n']
 
     return clean_stacktrace(before + user_traceback + after, user_traceback)
 

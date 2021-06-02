@@ -5,9 +5,12 @@ from typing import Any, List
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.execution.main_file_executor import MainModuleExecutor
+from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 
 
 class FeedbackOnExceptionTest5(StageTest):
+    runner = AsyncMainFileRunner(MainModuleExecutor)
 
     def generate(self) -> List[TestCase]:
         return [
@@ -36,3 +39,7 @@ class Test(unittest.TestCase):
             ZeroDivisionError'''), feedback)
 
         self.assertEqual(status, -1)
+
+
+if __name__ == '__main__':
+    Test().test()

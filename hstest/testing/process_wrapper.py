@@ -6,6 +6,7 @@ from time import sleep
 from psutil import NoSuchProcess, Process
 
 from hstest.dynamic.output.output_handler import OutputHandler
+from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.exit_handler import ExitHandler
 
 
@@ -27,7 +28,12 @@ class ProcessWrapper:
                 self.terminate()
                 continue
 
-            write_pipe.write(new_output)
+            try:
+                write_pipe.write(new_output)
+            except ExitException:
+                self.alive = False
+                self.terminate()
+                continue
 
             if write_stdout:
                 self.stdout += new_output

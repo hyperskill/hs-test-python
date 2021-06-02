@@ -14,8 +14,9 @@ class OutputHandler:
 
     @staticmethod
     def print(obj):
-        OutputHandler.get_real_out().write(str(obj) + '\n')
-        OutputHandler.get_real_out().flush()
+        # OutputHandler.get_real_out().write(str(obj) + '\n')
+        # OutputHandler.get_real_out().flush()
+        pass
 
     @staticmethod
     def get_real_out() -> io.TextIOWrapper:

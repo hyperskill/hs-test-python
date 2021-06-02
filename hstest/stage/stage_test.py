@@ -10,13 +10,14 @@ from hstest.exception.outcomes import OutcomeError, UnexpectedError, WrongAnswer
 from hstest.outcomes.outcome import Outcome
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
+from hstest.testing.execution.process_executor import ProcessExecutor
 from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
 class StageTest:
-    runner: TestRunner = AsyncMainFileRunner()
+    runner: TestRunner = AsyncMainFileRunner(ProcessExecutor)
     attach: Any = None
 
     source: str = None

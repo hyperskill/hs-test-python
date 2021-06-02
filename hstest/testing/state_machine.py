@@ -58,6 +58,5 @@ class StateMachine:
             if new_state not in self._transitions[self.state]:
                 raise UnexpectedError(
                     "Cannot transit from " + self.state + " to " + new_state)
-            # print("STATE", new_state)
             self._state = new_state
             self.cv.notify_all()

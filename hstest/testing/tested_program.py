@@ -1,12 +1,22 @@
 from typing import List, Optional
 
-from hstest.testing.execution.process_executor import ProcessExecutor
+from hstest.exception.outcomes import UnexpectedError
 from hstest.testing.execution.program_executor import ProgramExecutor
 
 
 class TestedProgram:
     def __init__(self, source: str = None):
-        self._program_executor: ProgramExecutor = ProcessExecutor(source)
+        from hstest import StageTest
+        runner = StageTest.curr_test_run.test_runner
+
+        from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
+        if not isinstance(runner, AsyncMainFileRunner):
+            raise UnexpectedError(
+                'TestedProgram is supported only while using AsyncMainFileRunner runner, '
+                'not ' + str(type(runner))
+            )
+
+        self._program_executor: ProgramExecutor = runner.executor(source)
         self._run_args: Optional[List[str]] = None
 
     @property

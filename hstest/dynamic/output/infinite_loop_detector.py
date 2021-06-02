@@ -144,6 +144,9 @@ class InfiniteLoopDetector:
         from hstest.stage_test import StageTest
         StageTest.curr_test_run.set_error_in_test(
             InfiniteLoopException(reason))
+
+        from hstest.dynamic.output.output_handler import OutputHandler
+        OutputHandler.print("INFINITE LOOP DETECTED")
         raise ExitException()
 
 

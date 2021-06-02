@@ -36,3 +36,7 @@ class Test(unittest.TestCase):
             AttributeError'''), feedback)
 
         self.assertEqual(status, -1)
+
+
+if __name__ == '__main__':
+    Test().test()

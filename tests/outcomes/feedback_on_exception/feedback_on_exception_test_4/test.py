@@ -37,3 +37,7 @@ class Test(unittest.TestCase):
             Exception'''), feedback)
 
         self.assertEqual(status, -1)
+
+
+if __name__ == '__main__':
+    Test().test()

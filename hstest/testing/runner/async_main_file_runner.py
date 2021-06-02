@@ -1,17 +1,23 @@
 from concurrent.futures import Future, TimeoutError
-from typing import Optional
+from typing import Optional, Type
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.testing import TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
 from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.test_case.check_result import CheckResult, correct, wrong
+from hstest.testing.execution.main_file_executor import MainModuleExecutor
+from hstest.testing.execution.program_executor import ProgramExecutor
 from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
 class AsyncMainFileRunner(TestRunner):
+
+    def __init__(self, executor: Type[ProgramExecutor] = MainModuleExecutor):
+        self.executor: Type[ProgramExecutor] = executor
+
     def _run_dynamic_test(self, test_run: TestRun) -> CheckResult:
         test_case = test_run.test_case
         try:

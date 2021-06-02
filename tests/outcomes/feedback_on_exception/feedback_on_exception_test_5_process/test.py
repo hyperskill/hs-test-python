@@ -7,13 +7,13 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-class FeedbackOnExceptionTest3(StageTest):
+class FeedbackOnExceptionTest5(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
             TestCase(feedback_on_exception={
-                ZeroDivisionError: 'Do not divide by zero!',
-                AttributeError: 'Attribute Error raised!'
+                AttributeError: 'Attribute Error raised!',
+                Exception: 'Base ex raised'
             })
         ]
 
@@ -23,15 +23,15 @@ class FeedbackOnExceptionTest3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = FeedbackOnExceptionTest3('main').run_tests()
+        status, feedback = FeedbackOnExceptionTest5('main').run_tests()
 
         self.assertEqual(cleandoc('''\
             Exception in test #1
             
             Traceback (most recent call last):
               File "main.py", line 1, in <module>
-                raise Exception()
-            Exception'''), feedback)
+                raise ZeroDivisionError()
+            ZeroDivisionError'''), feedback)
 
         self.assertEqual(status, -1)
 

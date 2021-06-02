@@ -16,7 +16,7 @@ class ProgramState(Enum):
 
 
 class ProgramExecutor:
-    def __init__(self):
+    def __init__(self, source_name: str = None):
         self._input: Optional[str] = None
 
         self.__in_background: bool = False

@@ -26,8 +26,6 @@ class MainModuleExecutor(ProgramExecutor):
         else:
             self._init_by_source_name(source_name)
 
-        self.__module_name: str = source_name
-        self.__run_module = None
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
 

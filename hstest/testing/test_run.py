@@ -41,6 +41,10 @@ class TestRun:
         return self._test_case
 
     @property
+    def test_runner(self) -> TestRunner:
+        return self._test_runner
+
+    @property
     def input_used(self) -> bool:
         return self._input_used
 
