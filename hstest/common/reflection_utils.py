@@ -45,6 +45,10 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
 
 
 def str_to_stacktrace(str_trace: str) -> str:
+    if 'SyntaxError' in str_trace and 'Traceback' not in str_trace:
+        initial_phrase = 'Traceback (most recent call last):'
+        str_trace = initial_phrase + '\n' + str_trace
+
     lines = str_trace.splitlines()
     traceback_lines = [i for i, line in enumerate(lines) if line.startswith('  File ')]
 
