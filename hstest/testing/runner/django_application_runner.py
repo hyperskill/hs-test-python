@@ -84,13 +84,13 @@ class DjangoApplicationRunner(TestRunner):
         os.environ['HYPERSKILL_TEST_DATABASE'] = test_database
         with open(test_database, 'w'):
             pass
-        migrate = ProcessWrapper(sys.executable, self.full_path, 'migrate')
+        migrate = ProcessWrapper(sys.executable, self.full_path, 'migrate', check_early_finish=True)
 
-        while migrate.alive and len(migrate.stderr) == 0:
+        while not migrate.is_finished() and len(migrate.stderr) == 0:
             sleep(0.01)
 
         if len(migrate.stderr) != 0:
-            migrate.wait_stderr()
+            migrate.wait_output()
 
             stdout = migrate.stdout
             stderr = migrate.stderr

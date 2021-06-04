@@ -12,11 +12,11 @@ from hstest.dynamic.security.exit_handler import ExitHandler
 
 class ProcessWrapper:
     def check_alive(self):
-        if self.alive and self.process.returncode is not None:
-            self.alive = False
+        if self._alive and self.process.returncode is not None:
+            self._alive = False
 
     def check_pipe(self, read_pipe, write_pipe, write_stdout=False, write_stderr=False):
-        while self.alive:
+        while not self.is_finished():
             try:
                 new_output = read_pipe.read(1)
             except ValueError:
@@ -24,14 +24,14 @@ class ProcessWrapper:
                 continue
 
             if len(new_output) == 0:
-                self.alive = False
+                self._alive = False
                 self.terminate()
                 continue
 
             try:
                 write_pipe.write(new_output)
             except ExitException:
-                self.alive = False
+                self._alive = False
                 self.terminate()
                 continue
 
@@ -50,14 +50,14 @@ class ProcessWrapper:
         self.check_pipe(self.process.stderr, sys.stderr, write_stderr=True)
 
     def check_cpuload(self):
-        while self.alive:
+        while self._alive:
             try:
                 cpu_load = self.ps.cpu_percent()
                 self.cpu_load_history.append(cpu_load)
                 if len(self.cpu_load_history) > self.cpu_load_length:
                     self.cpu_load_history.pop(0)
             except NoSuchProcess:
-                self.alive = False
+                self._alive = False
                 break
             sleep(0.01)
             self.check_alive()
@@ -71,9 +71,23 @@ class ProcessWrapper:
         self.cpu_load_history = []
 
     def is_finished(self):
-        return not self.alive
+        if not self.check_early_finish:
+            return not self._alive
 
-    def __init__(self, *args):
+        else:
+            if not self._alive:
+                return True
+
+            try:
+                is_running = self.ps.status() == 'running'
+                if not is_running:
+                    self._alive = False
+                return not is_running
+            except NoSuchProcess:
+                self._alive = False
+                return True
+
+    def __init__(self, *args, check_early_finish=False):
         self.lock = Lock()
 
         self.process = subprocess.Popen(
@@ -94,8 +108,9 @@ class ProcessWrapper:
 
         self.stdout = ''
         self.stderr = ''
-        self.alive = True
+        self._alive = True
         self.terminated = False
+        self.check_early_finish = check_early_finish
 
         Thread(target=lambda: self.check_cpuload(), daemon=True).start()
         Thread(target=lambda: self.check_stdout(), daemon=True).start()
@@ -110,11 +125,11 @@ class ProcessWrapper:
             if not self.terminated:
                 OutputHandler.print('Terminate - BEFORE WAIT STDERR')
 
-                self.wait_stderr()
+                self.wait_output()
 
                 OutputHandler.print('Terminate - AFTER WAIT STDERR')
 
-                self.alive = False
+                self._alive = False
 
                 OutputHandler.print('Terminate - SELF ALIVE == FALSE')
 
@@ -147,20 +162,22 @@ class ProcessWrapper:
                 OutputHandler.print(f'Terminate - TERMINATED')
         OutputHandler.print(f'Terminate - finished')
 
-    def wait_stderr(self):
+    def wait_output(self):
         iterations = 50
         sleep_time = 50 / 1000
 
+        curr_stdout = self.stdout
         curr_stderr = self.stderr
         while iterations != 0:
             sleep(sleep_time)
-            if self.stderr == curr_stderr:
+            if self.stderr == curr_stderr and self.stdout == curr_stdout:
                 break
             curr_stderr = self.stderr
+            curr_stdout = self.stdout
             iterations -= 1
 
     def is_error_happened(self) -> bool:
         return (
-            not self.alive and len(self.stderr) > 0
+            not self._alive and len(self.stderr) > 0
             or 'Traceback' in self.stderr
         )
