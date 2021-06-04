@@ -16,6 +16,10 @@ class TestedProgram:
                 'not ' + str(type(runner))
             )
 
+        if source is None:
+            from hstest.stage_test import StageTest
+            source = StageTest.curr_test_run.test_case.source_name
+
         self._program_executor: ProgramExecutor = runner.executor(source)
         self._run_args: Optional[List[str]] = None
 

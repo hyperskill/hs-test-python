@@ -6,7 +6,7 @@ from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.testing import TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
 from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.test_case.check_result import CheckResult, correct, wrong
-from hstest.testing.execution.main_file_executor import MainModuleExecutor
+from hstest.testing.execution.main_module_executor import MainModuleExecutor
 from hstest.testing.execution.program_executor import ProgramExecutor
 from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner

@@ -6,26 +6,16 @@ from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.input.input_handler import InputHandler
-from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
-from hstest.testing.execution.searcher.python_searcher import find_python_by_nothing, find_python_by_source_name
+from hstest.testing.execution.searcher.python_searcher import PythonRunnableFile
 
 
 class MainModuleExecutor(ProgramExecutor):
     def __init__(self, source_name: str = None):
         super().__init__()
-
-        if source_name is None:
-            from hstest.stage_test import StageTest
-            source_name = StageTest.curr_test_run.test_case.source_name
-
-        if source_name is None:
-            self.runnable = find_python_by_nothing()
-        else:
-            self.runnable = find_python_by_source_name(source_name)
-
+        self.runnable = PythonRunnableFile.find(source_name)
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
 
@@ -86,9 +76,6 @@ class MainModuleExecutor(ProgramExecutor):
                 self._machine.wait_not_state(ProgramState.RUNNING)
                 if self.is_waiting_input():
                     self._machine.set_state(ProgramState.RUNNING)
-
-    def get_output(self) -> str:
-        return OutputHandler.get_partial_output()
 
     def __str__(self) -> str:
         return self.runnable.file

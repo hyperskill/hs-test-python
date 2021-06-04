@@ -4,7 +4,7 @@ from typing import Any
 from hstest.check_result import CheckResult, correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
-from hstest.testing.execution.main_file_executor import MainModuleExecutor
+from hstest.testing.execution.main_module_executor import MainModuleExecutor
 from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 from hstest.testing.tested_program import TestedProgram
 
