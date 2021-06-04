@@ -7,8 +7,15 @@ from hstest.exception.outcomes import ErrorWithFeedback
 _contents_cached = {}
 
 
-def runnable_searcher(abs_path_to_search: str = None,
-                      file_filter: Callable[[str, str], bool] = lambda folder, file: True) -> Tuple[str, str]:
+class PythonRunnableFile:
+    def __init__(self, module: str, file: str, folder: str):
+        self.module = module
+        self.file = file
+        self.folder = folder
+
+
+def python_runnable_searcher(abs_path_to_search: str = None,
+                             file_filter: Callable[[str, str], bool] = lambda folder, file: True) -> Tuple[str, str]:
     if abs_path_to_search is None:
         abs_path_to_search = os.getcwd()
 
@@ -91,3 +98,26 @@ def runnable_searcher(abs_path_to_search: str = None,
     raise ErrorWithFeedback(
         'Cannot find a file to import and run your code.\n'
         f'Are your project files located at \"{curr_folder}\"?')
+
+
+def find_python_by_source_name(source: str) -> PythonRunnableFile:
+    path_to_test = source.replace('.', os.sep) + '.py'
+    if not os.path.exists(path_to_test):
+        return find_python_by_nothing()
+
+    path, sep, module = source.rpartition('.')
+    module_abs_path = os.path.abspath(path.replace('.', os.sep))
+    return find_python_by_module(module_abs_path, module)
+
+
+def find_python_by_module(module_abs_path: str, module_name: str) -> PythonRunnableFile:
+    module_to_test = module_name
+    file_to_test = module_name + '.py'
+    folder_to_test = module_abs_path
+    return PythonRunnableFile(module_to_test, file_to_test, folder_to_test)
+
+
+def find_python_by_nothing() -> PythonRunnableFile:
+    folder, file = python_runnable_searcher()
+    without_py = file[:-3]
+    return find_python_by_module(os.path.abspath(folder), without_py)

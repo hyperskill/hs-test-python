@@ -5,9 +5,13 @@ from typing import Any, List
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.execution.process_executor import ProcessExecutor
+from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
+from hstest.testing.runner.test_runner import TestRunner
 
 
 class FeedbackOnExceptionTest5(StageTest):
+    runner: TestRunner = AsyncMainFileRunner(ProcessExecutor)
 
     def generate(self) -> List[TestCase]:
         return [

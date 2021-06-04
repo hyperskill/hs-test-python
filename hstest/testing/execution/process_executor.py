@@ -3,12 +3,12 @@ from threading import Thread
 from time import sleep
 from typing import Optional
 
-from hstest.dynamic.file_searcher import runnable_searcher
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
+from hstest.testing.execution.searcher.python_searcher import find_python_by_nothing, find_python_by_source_name
 from hstest.testing.process_wrapper import ProcessWrapper
 
 
@@ -16,7 +16,6 @@ class ProcessExecutor(ProgramExecutor):
     def __init__(self, source_name: str = None):
         super().__init__()
         self.args = ['python', '-u']
-        # self.file = source_name + '.py'
         self.process: Optional[ProcessWrapper] = None
         self.thread = None
         self.continue_executing = True
@@ -26,37 +25,17 @@ class ProcessExecutor(ProgramExecutor):
             source_name = StageTest.curr_test_run.test_case.source_name
 
         if source_name is None:
-            self._init_by_nothing()
+            self.runnable = find_python_by_nothing()
         else:
-            self._init_by_source_name(source_name)
-
-    def _init_by_source_name(self, source: str):
-        path_to_test = source.replace('.', os.sep) + '.py'
-        if not os.path.exists(path_to_test):
-            self._init_by_nothing()
-            return
-
-        path, sep, module = source.rpartition('.')
-        module_abs_path = os.path.abspath(path.replace('.', os.sep))
-        self._init_by_module(module_abs_path, module)
-
-    def _init_by_module(self, module_abs_path: str, module_name: str):
-        self.module_to_test = module_name
-        self.file_to_test = module_name + '.py'
-        self.folder_to_test = module_abs_path
-
-    def _init_by_nothing(self):
-        folder, file = runnable_searcher()
-        without_py = file[:-3]
-        self._init_by_module(os.path.abspath(folder), without_py)
+            self.runnable = find_python_by_source_name(source_name)
 
     def __handle_process(self, *args: str):
         working_directory_before = os.path.abspath(os.getcwd())
 
         try:
-            os.chdir(self.folder_to_test)
+            os.chdir(self.runnable.folder)
 
-            command = self.args + [self.file_to_test] + list(args)
+            command = self.args + [self.runnable.file] + list(args)
 
             self._machine.set_state(ProgramState.RUNNING)
             self.process = ProcessWrapper(*command)
@@ -139,4 +118,4 @@ class ProcessExecutor(ProgramExecutor):
         return OutputHandler.get_partial_output()
 
     def __str__(self) -> str:
-        return self.file_to_test
+        return self.runnable.file

@@ -5,11 +5,11 @@ from typing import List, Optional
 
 from hstest.common.file_utils import safe_delete
 from hstest.common.process_utils import is_port_in_use
-from hstest.dynamic.file_searcher import runnable_searcher
 from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedError, WrongAnswer
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
+from hstest.testing.execution.searcher.python_searcher import python_runnable_searcher
 from hstest.testing.process_wrapper import ProcessWrapper
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
@@ -36,7 +36,7 @@ class DjangoApplicationRunner(TestRunner):
 
         if not os.path.exists(full_path):
             filename = os.path.basename(full_source)
-            folder, file = runnable_searcher(file_filter=lambda _, f: f == filename)
+            folder, file = python_runnable_searcher(file_filter=lambda _, f: f == filename)
             full_path = os.path.abspath(folder + os.sep + file)
 
         self.full_path = full_path
