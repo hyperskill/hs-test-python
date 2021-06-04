@@ -154,6 +154,11 @@ class ProcessWrapper:
                     self.process.kill()
                     OutputHandler.print(f'Terminate - finally before wait')
                     self.process.wait()
+
+                    self.process.stdout.close()
+                    self.process.stderr.close()
+                    self.process.stdin.close()
+
                     if is_exit_replaced:
                         ExitHandler.replace_exit()
                         OutputHandler.print(f'Terminate - EXIT REPLACED AGAIN')
