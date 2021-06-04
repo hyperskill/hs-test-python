@@ -8,7 +8,9 @@ def is_tests(stage):
     package = inspect.getmodule(stage).__package__
     file = inspect.getmodule(stage).__file__
     return package and package.startswith('tests.outcomes.') or \
-        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file
+        package and package.startswith('tests.projects.') or \
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file or \
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file
 
 
 def setup_cwd(stage):
