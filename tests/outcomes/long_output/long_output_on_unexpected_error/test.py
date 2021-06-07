@@ -21,8 +21,12 @@ class Test(unittest.TestCase):
 
         status, feedback = TestWrongOutputWithTooLongOutput('main').run_tests()
 
-        [self.assertIn(correct_line, feedback) for correct_line in correct_lines]
-        [self.assertNotIn(wrong_line, feedback) for wrong_line in wrong_lines]
+        for correct_line in correct_lines:
+            self.assertIn(correct_line, feedback)
+
+        for wrong_line in wrong_lines:
+            self.assertNotIn(wrong_line, feedback)
+
         self.assertEqual(status, -1)
 
 
