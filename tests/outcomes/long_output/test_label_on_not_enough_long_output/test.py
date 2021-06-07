@@ -19,7 +19,8 @@ class Test(unittest.TestCase):
 
         status, feedback = TestWrongOutputWithTooLongOutput('main').run_tests()
 
-        [self.assertIn(correct_line, feedback) for correct_line in correct_lines]
+        for correct_line in correct_lines:
+            self.assertIn(correct_line, feedback)
 
         not_expected_line_in_feedback = '[last 250 lines of output are shown, 1 skipped]'
         self.assertNotIn(not_expected_line_in_feedback, feedback)
