@@ -58,8 +58,18 @@ class Outcome:
             if len(arguments):
                 result += arguments + '\n\n'
 
+            max_lines_in_output = 250
+            lines = full_log.splitlines()
+            is_output_too_long = len(lines) > max_lines_in_output
+
             if worth_showing_log:
-                result += full_log
+                if is_output_too_long:
+                    result += f'[last {max_lines_in_output} lines of output are shown, ' \
+                              f'{len(lines) - max_lines_in_output} skipped]\n'
+                    last_lines = lines[-max_lines_in_output:]
+                    result += '\n'.join(last_lines)
+                else:
+                    result += full_log
 
         return result.strip()
 
