@@ -29,4 +29,8 @@ class DynamicInputHandler:
             return
 
         new_input = clean_text(new_input)
-        self._input_lines += new_input.strip().split('\n')
+
+        if new_input.endswith('\n'):
+            new_input = new_input[:-1]
+
+        self._input_lines += new_input.split('\n')
