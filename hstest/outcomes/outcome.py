@@ -26,9 +26,42 @@ class Outcome:
         if self.stack_trace:
             result += '\n\n' + self.stack_trace.strip()
 
-        full_log = OutputHandler.get_dynamic_output()
-        worth_showing_log = len(full_log.strip()) != 0 and full_log.strip() not in result
+        full_out = OutputHandler.get_dynamic_output()
+        full_err = OutputHandler.get_err()
+        arguments = self._get_args()
+        trimmed_out = self._trim_lines(full_out)
+        trimmed_err = self._trim_lines(full_err)
 
+        worth_showing_err = len(full_err) > 0 and full_err.strip() not in result
+        worth_showing_args = len(arguments) > 0
+        worth_showing_out = len(full_out.strip()) != 0 and full_out.strip() not in result
+
+        from hstest.stage_test import StageTest
+        test_run = StageTest.curr_test_run
+
+        if worth_showing_out or worth_showing_err or worth_showing_args:
+            result += '\n\n'
+            if worth_showing_out or worth_showing_err:
+                result += "Please find below the output of your program during this failed test.\n"
+                if test_run and test_run.input_used:
+                    result += "Note that the '>' character indicates the beginning of the input line.\n"
+                result += "\n---\n\n"
+
+            if worth_showing_args:
+                result += arguments + '\n\n'
+
+            if worth_showing_out:
+                if worth_showing_err:
+                    result += 'stdout:\n'
+                result += trimmed_out + '\n'
+
+            if worth_showing_err:
+                result += "stderr:\n" + trimmed_err
+
+        return result.strip()
+
+    @staticmethod
+    def _get_args():
         arguments = ''
 
         from hstest.stage_test import StageTest
@@ -47,31 +80,25 @@ class Outcome:
 
             arguments = arguments.strip()
 
-        if worth_showing_log or len(arguments):
-            result += '\n\n'
-            if worth_showing_log:
-                result += "Please find below the output of your program during this failed test.\n"
-                if test_run and test_run.input_used:
-                    result += "Note that the '>' character indicates the beginning of the input line.\n"
-                result += "\n---\n\n"
+        return arguments
 
-            if len(arguments):
-                result += arguments + '\n\n'
+    @staticmethod
+    def _trim_lines(full_out):
+        result = ''
 
-            max_lines_in_output = 250
-            lines = full_log.splitlines()
-            is_output_too_long = len(lines) > max_lines_in_output
+        max_lines_in_output = 250
+        lines = full_out.splitlines()
+        is_output_too_long = len(lines) > max_lines_in_output
 
-            if worth_showing_log:
-                if is_output_too_long:
-                    result += f'[last {max_lines_in_output} lines of output are shown, ' \
-                              f'{len(lines) - max_lines_in_output} skipped]\n'
-                    last_lines = lines[-max_lines_in_output:]
-                    result += '\n'.join(last_lines)
-                else:
-                    result += full_log
+        if is_output_too_long:
+            result += f'[last {max_lines_in_output} lines of output are shown, ' \
+                      f'{len(lines) - max_lines_in_output} skipped]\n'
+            last_lines = lines[-max_lines_in_output:]
+            result += '\n'.join(last_lines)
+        else:
+            result += full_out
 
-        return result.strip()
+        return result
 
     @staticmethod
     def get_outcome(ex: BaseException, curr_test: int):
