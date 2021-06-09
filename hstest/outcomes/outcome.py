@@ -1,3 +1,4 @@
+from hstest.common.reflection_utils import str_to_stacktrace
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
 from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
@@ -27,7 +28,7 @@ class Outcome:
             result += '\n\n' + self.stack_trace.strip()
 
         full_out = OutputHandler.get_dynamic_output()
-        full_err = OutputHandler.get_err()
+        full_err = str_to_stacktrace(OutputHandler.get_err())
         arguments = self.__get_args()
 
         trimmed_out = self.__trim_lines(full_out)
