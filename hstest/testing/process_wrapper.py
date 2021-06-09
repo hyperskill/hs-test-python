@@ -16,6 +16,12 @@ class ProcessWrapper:
             self._alive = False
 
     def check_pipe(self, read_pipe, write_pipe, write_stdout=False, write_stderr=False):
+        with self.lock:
+            self._pipes_watching += 1
+
+        OutputHandler.print(f'Start watching {"stdout" if write_stdout else "stderr"} '
+                            f'Pipes watching = {self._pipes_watching}')
+
         while not self.is_finished():
             try:
                 new_output = read_pipe.read(1)
@@ -24,16 +30,24 @@ class ProcessWrapper:
                 continue
 
             if len(new_output) == 0:
-                self._alive = False
-                self.terminate()
-                continue
+                with self.lock:
+                    self._pipes_watching -= 1
+
+                OutputHandler.print(f'Out of {"stdout" if write_stdout else "stderr"}... '
+                                    f'Maybe program terminated. Pipes watching = {self._pipes_watching}')
+
+                if self._pipes_watching == 0:
+                    self._alive = False
+                    self.terminate()
+
+                break
 
             try:
                 write_pipe.write(new_output)
             except ExitException:
                 self._alive = False
                 self.terminate()
-                continue
+                break
 
             if write_stdout:
                 self.stdout += new_output
@@ -57,6 +71,9 @@ class ProcessWrapper:
                 if len(self.cpu_load_history) > self.cpu_load_length:
                     self.cpu_load_history.pop(0)
             except NoSuchProcess:
+                OutputHandler.print('Check cpuload finished, waiting output')
+                self.wait_output()
+                OutputHandler.print('Check cpuload finished, set alive = false')
                 self._alive = False
                 break
             sleep(0.01)
@@ -109,6 +126,7 @@ class ProcessWrapper:
         self.stdout = ''
         self.stderr = ''
         self._alive = True
+        self._pipes_watching = 0
         self.terminated = False
         self.check_early_finish = check_early_finish
 
@@ -183,6 +201,6 @@ class ProcessWrapper:
 
     def is_error_happened(self) -> bool:
         return (
-            not self._alive and len(self.stderr) > 0
+            not self._alive and len(self.stderr) > 0 and self.process.returncode != 0
             or 'Traceback' in self.stderr
         )
