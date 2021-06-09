@@ -53,7 +53,7 @@ class Outcome:
             if worth_showing_out:
                 if worth_showing_err:
                     result += 'stdout:\n'
-                result += trimmed_out + '\n'
+                result += trimmed_out + '\n\n'
 
             if worth_showing_err:
                 result += "stderr:\n" + trimmed_err
@@ -98,7 +98,7 @@ class Outcome:
         else:
             result += full_out
 
-        return result
+        return result.strip()
 
     @staticmethod
     def get_outcome(ex: BaseException, curr_test: int):
