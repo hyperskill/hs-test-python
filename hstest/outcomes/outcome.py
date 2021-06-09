@@ -28,13 +28,14 @@ class Outcome:
 
         full_out = OutputHandler.get_dynamic_output()
         full_err = OutputHandler.get_err()
-        arguments = self._get_args()
-        trimmed_out = self._trim_lines(full_out)
-        trimmed_err = self._trim_lines(full_err)
+        arguments = self.__get_args()
 
-        worth_showing_err = len(full_err) > 0 and full_err.strip() not in result
-        worth_showing_args = len(arguments) > 0
+        trimmed_out = self.__trim_lines(full_out)
+        trimmed_err = self.__trim_lines(full_err)
+
+        worth_showing_err = len(full_err.strip()) != 0 and full_err.strip() not in result
         worth_showing_out = len(full_out.strip()) != 0 and full_out.strip() not in result
+        worth_showing_args = len(arguments.strip()) != 0
 
         from hstest.stage_test import StageTest
         test_run = StageTest.curr_test_run
@@ -61,7 +62,7 @@ class Outcome:
         return result.strip()
 
     @staticmethod
-    def _get_args():
+    def __get_args():
         arguments = ''
 
         from hstest.stage_test import StageTest
@@ -83,7 +84,7 @@ class Outcome:
         return arguments
 
     @staticmethod
-    def _trim_lines(full_out):
+    def __trim_lines(full_out):
         result = ''
 
         max_lines_in_output = 250
