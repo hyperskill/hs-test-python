@@ -55,7 +55,7 @@ class UnitTesting:
                 if isclass(obj) and issubclass(obj, TestCase):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
-        suite = TestSuite(tests_suite)
+        suite = TestSuite(tests_suite[::-1])
         runner = TextTestRunner(stream=OutputForTest(sys.stdout), verbosity=2)
         result = runner.run(suite)
         return result.wasSuccessful()
