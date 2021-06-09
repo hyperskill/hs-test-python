@@ -3,9 +3,7 @@ import re
 from typing import Callable, Optional, Tuple
 
 from hstest.exception.outcomes import ErrorWithFeedback
-from hstest.testing.execution.runnable_file import RunnableFile
-
-_contents_cached = {}
+from hstest.testing.execution.runnable_file import RunnableFile, file_contents_cached
 
 
 class PythonRunnableFile(RunnableFile):
@@ -44,8 +42,8 @@ class PythonRunnableFile(RunnableFile):
 
             for file in files:
                 path = os.path.abspath(os.path.join(folder, file))
-                if path in _contents_cached:
-                    contents[file] = _contents_cached[path]
+                if path in file_contents_cached:
+                    contents[file] = file_contents_cached[path]
                 elif os.path.exists(path):
                     with open(path) as f:
                         file_content = f.read()
@@ -54,7 +52,7 @@ class PythonRunnableFile(RunnableFile):
                             re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
                             re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
                         ]
-                        _contents_cached[path] = contents[file]
+                        file_contents_cached[path] = contents[file]
 
             is_imported = {f: False for f in files}
             has_name_main = {f: False for f in files}

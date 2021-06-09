@@ -1,18 +1,20 @@
 import os
 from threading import Thread
 from time import sleep
-from typing import Optional
+from typing import List, Optional
 
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
-from hstest.exception.outcomes import ExceptionWithFeedback
+from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
 from hstest.testing.execution.runnable_file import RunnableFile
 from hstest.testing.process_wrapper import ProcessWrapper
 
 
 class ProcessExecutor(ProgramExecutor):
+    compiled = False
+
     def __init__(self, runnable: RunnableFile):
         super().__init__()
         self.process: Optional[ProcessWrapper] = None
@@ -20,14 +22,46 @@ class ProcessExecutor(ProgramExecutor):
         self.continue_executing = True
         self.runnable: RunnableFile = runnable
 
-    def _execution_command(self, *args: str):
+    def _compilation_command(self, *args: str) -> List[str]:
+        return []
+
+    def _execution_command(self, *args: str) -> List[str]:
         raise NotImplementedError('Method "_execution_command" isn\'t implemented')
+
+    def __compile_program(self) -> bool:
+        if ProcessExecutor.compiled:
+            return True
+
+        command = self._compilation_command()
+
+        if not command:
+            return True
+
+        process = ProcessWrapper(*command, register_output=False)
+        process.wait()
+
+        if process.is_error_happened():
+            error_lines = process.stderr.splitlines()
+            error_lines = [line for line in error_lines if not line.startswith('#')]
+            error_text = '\n'.join(error_lines)
+
+            from hstest import StageTest
+            StageTest.curr_test_run.set_error_in_test(CompilationError(error_text))
+            self._machine.set_state(ProgramState.COMPILATION_ERROR)
+            return False
+
+        return True
 
     def __handle_process(self, *args: str):
         working_directory_before = os.path.abspath(os.getcwd())
 
         try:
             os.chdir(self.runnable.folder)
+
+            if not self.__compile_program():
+                return
+
+            ProcessExecutor.compiled = True
 
             command = self._execution_command(*args)
 

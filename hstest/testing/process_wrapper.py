@@ -43,7 +43,8 @@ class ProcessWrapper:
                 break
 
             try:
-                write_pipe.write(new_output)
+                if self.register_output:
+                    write_pipe.write(new_output)
             except ExitException:
                 self._alive = False
                 self.terminate()
@@ -67,6 +68,7 @@ class ProcessWrapper:
         while self._alive:
             try:
                 cpu_load = self.ps.cpu_percent()
+                OutputHandler.print(f'Check cpuload - {cpu_load}')
                 self.cpu_load_history.append(cpu_load)
                 if len(self.cpu_load_history) > self.cpu_load_length:
                     self.cpu_load_history.pop(0)
@@ -104,7 +106,7 @@ class ProcessWrapper:
                 self._alive = False
                 return True
 
-    def __init__(self, *args, check_early_finish=False):
+    def __init__(self, *args, check_early_finish=False, register_output=True):
         self.lock = Lock()
 
         self.process = subprocess.Popen(
@@ -128,7 +130,9 @@ class ProcessWrapper:
         self._alive = True
         self._pipes_watching = 0
         self.terminated = False
+
         self.check_early_finish = check_early_finish
+        self.register_output = register_output
 
         Thread(target=lambda: self.check_cpuload(), daemon=True).start()
         Thread(target=lambda: self.check_stdout(), daemon=True).start()
@@ -198,6 +202,11 @@ class ProcessWrapper:
             curr_stderr = self.stderr
             curr_stdout = self.stdout
             iterations -= 1
+
+    def wait(self):
+        while not self.is_finished():
+            sleep(0.01)
+        self.wait_output()
 
     def is_error_happened(self) -> bool:
         return (

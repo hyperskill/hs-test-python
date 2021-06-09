@@ -27,7 +27,7 @@ func main() {
 
 	sellCoffee := func() {
 		fmt.Print("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ")
-		fmt.Scanf("%d", &choice)
+		fmt.Scanf("%d\n", &choice)
 
 		makeCoffee := func(getMoney, needWater, needMilk, needBeans int) {
 			if water < needWater {
@@ -50,7 +50,7 @@ func main() {
 
 		switch choice {
 		case 1:
-			makeCoffee(4, 250, 16, 1)
+			makeCoffee(4, 250, 0, 16)
 		case 2:
 			makeCoffee(7, 350, 75, 20)
 		case 3:
@@ -61,16 +61,16 @@ func main() {
 	fillMachine := func() {
 		var next int
 		fmt.Print("Write how many ml of water do you want to add: ")
-		fmt.Scanf("%d", &next)
+		fmt.Scanf("%d\n", &next)
 		water += next
 		fmt.Print("Write how many ml of milk do you want to add: ")
-		fmt.Scanf("%d", &next)
+		fmt.Scanf("%d\n", &next)
 		milk += next
 		fmt.Print("Write how many grams of coffee beans do you want to add: ")
-		fmt.Scanf("%d", &next)
+		fmt.Scanf("%d\n", &next)
 		beans += next
 		fmt.Print("Write how many disposable cups of coffee do you want to add: ")
-		fmt.Scanf("%d", &next)
+		fmt.Scanf("%d\n", &next)
 		cups += next
 	}
 
@@ -78,7 +78,7 @@ Loop:
 	for {
 		var action string
 		fmt.Print("\nWrite action (buy, fill, take, remaining, exit): ")
-		fmt.Scanf("%s", &action)
+		fmt.Scanf("%s\n", &action)
 		switch action {
 		case "buy":
 			sellCoffee()

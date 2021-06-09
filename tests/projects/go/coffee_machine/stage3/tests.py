@@ -119,8 +119,8 @@ class CoffeeMachineTest(StageTest):
 class Test(unittest.TestCase):
     def test(self):
         status, feedback = CoffeeMachineTest().run_tests()
-        self.assertEqual(status, 0)
         self.assertEqual(feedback, 'test OK')
+        self.assertEqual(status, 0)
 
 
 if __name__ == '__main__':

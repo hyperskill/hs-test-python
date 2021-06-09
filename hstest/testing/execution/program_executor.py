@@ -13,6 +13,7 @@ class ProgramState(Enum):
     RUNNING = 3
     EXCEPTION_THROWN = 4
     FINISHED = 5
+    COMPILATION_ERROR = 6
 
 
 class ProgramExecutor:
@@ -25,6 +26,7 @@ class ProgramExecutor:
         self._machine: StateMachine = StateMachine(ProgramState.NOT_STARTED)
 
         m = self._machine
+        m.add_transition(ProgramState.NOT_STARTED, ProgramState.COMPILATION_ERROR)
         m.add_transition(ProgramState.NOT_STARTED, ProgramState.RUNNING)
         m.add_transition(ProgramState.WAITING, ProgramState.RUNNING)
         m.add_transition(ProgramState.RUNNING, ProgramState.WAITING)

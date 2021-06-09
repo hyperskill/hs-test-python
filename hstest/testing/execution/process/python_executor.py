@@ -7,4 +7,4 @@ class PythonExecutor(ProcessExecutor):
         super().__init__(PythonRunnableFile.find(source_name))
 
     def _execution_command(self, *args: str):
-        return ['python', '-u'] + [self.runnable.file] + list(args)
+        return ['python', '-u', self.runnable.file] + list(args)

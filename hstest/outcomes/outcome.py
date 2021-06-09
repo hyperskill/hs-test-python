@@ -1,6 +1,6 @@
 from hstest.common.reflection_utils import str_to_stacktrace
 from hstest.dynamic.output.output_handler import OutputHandler
-from hstest.exception.outcomes import ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
+from hstest.exception.outcomes import CompilationError, ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
 from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
 
 
@@ -16,8 +16,10 @@ class Outcome:
     def __str__(self):
         if self.test_number == 0:
             when_error_happened = ' during testing'
-        else:
+        elif self.test_number > 0:
             when_error_happened = f' in test #{self.test_number}'
+        else:
+            when_error_happened = ''
 
         result = self.get_type() + when_error_happened
 
@@ -108,12 +110,16 @@ class Outcome:
         from hstest.outcomes.wrong_answer_outcome import WrongAnswerOutcome
         from hstest.outcomes.exception_outcome import ExceptionOutcome
         from hstest.outcomes.unexpected_error_outcome import UnexpectedErrorOutcome
+        from hstest.outcomes.compilation_error_outcome import CompilationErrorOutcome
 
         if isinstance(ex, WrongAnswer):
             return WrongAnswerOutcome(curr_test, ex)
 
         elif isinstance(ex, ExceptionWithFeedback):
             return ExceptionOutcome(curr_test, ex)
+
+        elif isinstance(ex, CompilationError):
+            return CompilationErrorOutcome(ex)
 
         elif isinstance(ex, ErrorWithFeedback) or \
                 isinstance(ex, FileDeletionError) or \

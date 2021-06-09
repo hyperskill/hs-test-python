@@ -28,6 +28,11 @@ class UnexpectedError(OutcomeError):
         self.exception = ex
 
 
+class CompilationError(OutcomeError):
+    def __init__(self, error_text: str):
+        self.error_text = error_text
+
+
 class TestPassed(OutcomeError):
     pass
 
