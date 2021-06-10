@@ -28,6 +28,9 @@ class ProcessExecutor(ProgramExecutor):
     def _execution_command(self, *args: str) -> List[str]:
         raise NotImplementedError('Method "_execution_command" isn\'t implemented')
 
+    def _cleanup(self):
+        pass
+
     def __compile_program(self) -> bool:
         if ProcessExecutor.compiled:
             return True
@@ -124,6 +127,15 @@ class ProcessExecutor(ProgramExecutor):
             OutputHandler.print('Handle process - finishing execution')
 
         finally:
+            from hstest import StageTest
+
+            if StageTest.curr_test_run.is_last_test():
+                try:
+                    self._cleanup()
+                except BaseException:
+                    pass
+                ProcessExecutor.compiled = False
+
             os.chdir(working_directory_before)
 
     def _launch(self, *args: str):

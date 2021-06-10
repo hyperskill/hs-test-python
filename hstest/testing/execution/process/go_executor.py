@@ -23,7 +23,6 @@ class GoExecutor(ProcessExecutor):
         return [self.executable] + list(args)
 
     def _cleanup(self):
-        # unused at the moment
         if is_windows():
             os.remove(self.executable + '.exe')
         else:

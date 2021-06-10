@@ -7,7 +7,7 @@ from hstest.testing.execution.runnable_file import RunnableFile, file_contents_c
 
 
 class GoRunnableFile(RunnableFile):
-    main_searcher = re.compile(r'(^|\n) *func +main +\( *\) *{', re.M)
+    main_searcher = re.compile(r'(^|\n) *func +main +\( *\)', re.M)
 
     def __init__(self, file: str, folder: str):
         super().__init__(file, folder)
