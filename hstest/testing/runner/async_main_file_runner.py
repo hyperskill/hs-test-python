@@ -78,3 +78,8 @@ class AsyncMainFileRunner(TestRunner):
                 return None
 
         return result
+
+    def tear_down(self, test_case: 'TestCase'):
+        from hstest import StageTest
+        for program in StageTest.curr_test_run.tested_programs:
+            program.executor.tear_down()

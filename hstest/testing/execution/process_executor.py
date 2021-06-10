@@ -127,15 +127,6 @@ class ProcessExecutor(ProgramExecutor):
             OutputHandler.print('Handle process - finishing execution')
 
         finally:
-            from hstest import StageTest
-
-            if StageTest.curr_test_run.is_last_test():
-                try:
-                    self._cleanup()
-                except BaseException:
-                    pass
-                ProcessExecutor.compiled = False
-
             os.chdir(working_directory_before)
 
     def _launch(self, *args: str):
@@ -152,6 +143,18 @@ class ProcessExecutor(ProgramExecutor):
                 self._machine.set_state(ProgramState.RUNNING)
             OutputHandler.print(f'NOT FINISHED {self._machine.state}')
             sleep(0.001)
+
+    def tear_down(self):
+        working_directory_before = os.path.abspath(os.getcwd())
+        os.chdir(self.runnable.folder)
+
+        try:
+            self._cleanup()
+        except BaseException:
+            pass
+
+        ProcessExecutor.compiled = False
+        os.chdir(working_directory_before)
 
     def __str__(self) -> str:
         return self.runnable.file

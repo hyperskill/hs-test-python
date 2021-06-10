@@ -109,15 +109,18 @@ class ProcessWrapper:
     def __init__(self, *args, check_early_finish=False, register_output=True):
         self.lock = Lock()
 
-        self.process = subprocess.Popen(
-            [str(a) for a in args],
-            bufsize=0,
-            universal_newlines=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            encoding='utf-8',
-        )
+        try:
+            self.process = subprocess.Popen(
+                [str(a) for a in args],
+                bufsize=0,
+                universal_newlines=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                encoding='utf-8',
+            )
+        except Exception:
+            raise
 
         self.ps = Process(self.process.pid)
 

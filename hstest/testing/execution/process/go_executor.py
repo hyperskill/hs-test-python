@@ -24,6 +24,9 @@ class GoExecutor(ProcessExecutor):
 
     def _cleanup(self):
         if is_windows():
-            os.remove(self.executable + '.exe')
+            file_name = self.executable + '.exe'
         else:
-            os.remove(self.without_go)
+            file_name = self.without_go
+
+        if os.path.exists(file_name):
+            os.remove(file_name)

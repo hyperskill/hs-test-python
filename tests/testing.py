@@ -20,7 +20,7 @@ class OutputForTest:
         text = re.sub(r'(?<!\\)\\n', '\n', text)
         text = re.sub(r'(?<!\\)\\\'', '\'', text)
         text = re.sub(r'\\\\', r'\\', text)
-        if 'FAIL' in text or 'Traceback' in text or 'failures' in text:
+        if 'FAIL' in text or 'Traceback' in text or 'failures' in text or 'ERROR' in text:
             self.original.write(RED_BOLD)
         else:
             self.original.write(GREEN_BOLD)

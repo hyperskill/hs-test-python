@@ -146,5 +146,8 @@ class ProgramExecutor:
     def is_in_background(self):
         return self.__in_background
 
+    def tear_down(self):
+        pass
+
     def __str__(self) -> str:
         raise NotImplementedError('Method "__str__" isn\'t implemented')

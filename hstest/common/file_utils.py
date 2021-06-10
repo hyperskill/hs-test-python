@@ -25,3 +25,19 @@ def safe_delete(filename):
             os.remove(filename)
         except BaseException:
             pass
+
+
+def walk_user_files(folder):
+    curr_folder = os.path.abspath(folder)
+    test_folder = os.path.join(curr_folder, 'test')
+
+    for folder, dirs, files in os.walk(curr_folder):
+        if folder.startswith(test_folder):
+            continue
+
+        if folder == curr_folder:
+            for file in 'test.py', 'tests.py':
+                if file in files:
+                    files.remove(file)
+
+        yield folder, dirs, files

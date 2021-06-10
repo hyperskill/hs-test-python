@@ -27,6 +27,10 @@ class TestedProgram:
     def run_args(self):
         return self._run_args
 
+    @property
+    def executor(self):
+        return self._program_executor
+
     def _init_program(self, *args: str):
         self._run_args = args
         from hstest.stage_test import StageTest

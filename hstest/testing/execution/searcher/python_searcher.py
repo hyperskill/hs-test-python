@@ -2,6 +2,7 @@ import os
 import re
 from typing import Callable, Optional, Tuple
 
+from hstest.common.file_utils import walk_user_files
 from hstest.exception.outcomes import ErrorWithFeedback
 from hstest.testing.execution.runnable_file import RunnableFile, file_contents_cached
 
@@ -19,16 +20,8 @@ class PythonRunnableFile(RunnableFile):
             abs_path_to_search = os.getcwd()
 
         curr_folder = os.path.abspath(abs_path_to_search)
-        test_folder = os.path.join(curr_folder, 'test')
 
-        for folder, dirs, files in os.walk(curr_folder):
-            if folder.startswith(test_folder):
-                continue
-
-            if folder == curr_folder:
-                for file in 'test.py', 'tests.py':
-                    if file in files:
-                        files.remove(file)
+        for folder, dirs, files in walk_user_files(curr_folder):
 
             files = [f for f in files if f.endswith('.py') and file_filter(folder, f)]
 
