@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from hstest.common.utils import clean_text
 from hstest.exception.outcomes import TestPassed, UnexpectedError, WrongAnswer
@@ -16,7 +16,8 @@ class DynamicTestElement:
                  repeat: int,
                  time_limit: int,
                  feedback: str,
-                 data: List[Any]):
+                 data: List[Any],
+                 files: Dict[str, str]):
         self.test: DynamicTestingWithoutParams = test
         self.name: str = f"Data passed to dynamic method \"{name}\""
         self.method_name = name
@@ -25,6 +26,7 @@ class DynamicTestElement:
         self.time_limit: int = time_limit
         self.feedback: str = feedback
         self.data: Optional[List[Any]] = data
+        self.files: Optional[Dict[str, str]] = files
         self.args_list: Optional[List[List[Any]]] = None
 
     def extract_parametrized_data(self):
@@ -53,6 +55,19 @@ class DynamicTestElement:
         if self.repeat < 0:
             raise UnexpectedError(f'Dynamic test "{self.method_name}" '
                                   f'should not be repeated < 0 times, found {self.repeat}')
+
+        if self.files is not None:
+            if type(self.files) != dict:
+                raise UnexpectedError(f"'Files' parameter in dynamic test should be of type "
+                                      f"\"dict\", found {type(self.files)}.")
+
+            for k, v in self.files.items():
+                if type(k) != str:
+                    raise UnexpectedError(f"All keys in 'files' parameter in dynamic test should be "
+                                          f"of type \"str\", found {type(k)}.")
+                if type(v) != str:
+                    raise UnexpectedError(f"All values in 'files' parameter in dynamic test should be "
+                                          f"of type \"str\", found {type(v)}.")
 
     def get_tests(self, obj) -> List[DynamicTesting]:
         tests = []
@@ -148,6 +163,7 @@ def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
                     dynamic_testing=test,
                     time_limit=dte.time_limit,
                     feedback=dte.feedback,
+                    files=dte.files
                 )
             ]
 

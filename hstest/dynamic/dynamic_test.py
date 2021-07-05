@@ -1,5 +1,5 @@
 import inspect
-from typing import Any, List
+from typing import Any, Dict, List
 
 from hstest.stage_test import StageTest
 from hstest.test_case.test_case import DEFAULT_TIME_LIMIT
@@ -10,7 +10,8 @@ def dynamic_test(func=None, *,
                  time_limit: int = DEFAULT_TIME_LIMIT,
                  data: List[Any] = None,
                  feedback: str = "",
-                 repeat: int = 1):
+                 repeat: int = 1,
+                 files: Dict[str, str] = None):
     """
     Decorator for creating dynamic tests
     """
@@ -40,7 +41,8 @@ def dynamic_test(func=None, *,
                     repeat=repeat,
                     time_limit=time_limit,
                     feedback=feedback,
-                    data=data
+                    data=data,
+                    files=files
                 )
             ]
 
