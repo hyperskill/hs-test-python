@@ -38,7 +38,7 @@ class PythonRunnableFile(RunnableFile):
                 if path in file_contents_cached:
                     contents[file] = file_contents_cached[path]
                 elif os.path.exists(path):
-                    with open(path) as f:
+                    with open(path, encoding='utf-8') as f:
                         file_content = f.read()
                         contents[file] = [
                             file_content,
