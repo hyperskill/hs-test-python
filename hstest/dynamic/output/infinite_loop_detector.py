@@ -19,6 +19,8 @@ class InfiniteLoopDetector:
         self._between_input_requests = []
         self._BETWEEN_INPUT_SAVED_SIZE = 20
 
+        self._REPEATABLE_LINES_MAX = 20
+
         self._every_line = []
         self._EVERY_LINE_SAVED_SIZE = 100
 
@@ -102,7 +104,7 @@ class InfiniteLoopDetector:
         if len(self._every_line) != self._EVERY_LINE_SAVED_SIZE:
             return
 
-        for lines_repeated in range(1, 11):
+        for lines_repeated in range(1, self._REPEATABLE_LINES_MAX + 1):
             self._check_repetition_size(lines_repeated)
 
     def _check_repetition_size(self, lines_repeated: int):
