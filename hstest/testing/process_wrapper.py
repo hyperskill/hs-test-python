@@ -16,27 +16,36 @@ class ProcessWrapper:
             self._alive = False
 
     def check_pipe(self, read_pipe, write_pipe, write_stdout=False, write_stderr=False):
+        pipe_name = "stdout" if write_stdout else "stderr"
+
         with self.lock:
             self._pipes_watching += 1
 
-        OutputHandler.print(f'Start watching {"stdout" if write_stdout else "stderr"} '
+        OutputHandler.print(f'Start watching {pipe_name} '
                             f'Pipes watching = {self._pipes_watching}')
 
-        while not self.is_finished():
+        while True:
             try:
                 new_output = read_pipe.read(1)
             except ValueError:
-                self.check_alive()
+                OutputHandler.print(f'Value error for {pipe_name}... ')
+                if self.is_finished(need_wait_output=False):
+                    break
                 continue
+
+            if write_stderr:
+                OutputHandler.print(f'STDERR + {len(new_output)} symbols: {new_output}')
 
             if len(new_output) == 0:
                 with self.lock:
                     self._pipes_watching -= 1
 
-                OutputHandler.print(f'Out of {"stdout" if write_stdout else "stderr"}... '
+                OutputHandler.print(f'Out of {pipe_name}... '
                                     f'Maybe program terminated. Pipes watching = {self._pipes_watching}')
 
                 if self._pipes_watching == 0:
+                    OutputHandler.print(
+                        f'Set alive = False for {pipe_name}... ')
                     self._alive = False
                     self.terminate()
 
@@ -46,6 +55,7 @@ class ProcessWrapper:
                 if self.register_output:
                     write_pipe.write(new_output)
             except ExitException:
+                OutputHandler.print(f'ExitException for {pipe_name}... ')
                 self._alive = False
                 self.terminate()
                 break
@@ -55,8 +65,6 @@ class ProcessWrapper:
 
             if write_stderr:
                 self.stderr += new_output
-
-            self.check_alive()
 
     def check_stdout(self):
         self.check_pipe(self.process.stdout, sys.stdout, write_stdout=True)
@@ -70,7 +78,7 @@ class ProcessWrapper:
                 cpu_load = self.ps.cpu_percent()
                 OutputHandler.print(f'Check cpuload - {cpu_load}')
                 self.cpu_load_history.append(cpu_load)
-                if len(self.cpu_load_history) > self.cpu_load_length:
+                if len(self.cpu_load_history) > self.cpu_load_history_max:
                     self.cpu_load_history.pop(0)
             except NoSuchProcess:
                 OutputHandler.print('Check cpuload finished, waiting output')
@@ -81,15 +89,41 @@ class ProcessWrapper:
             sleep(0.01)
             self.check_alive()
 
+    def check_output(self):
+        output_len_prev = len(self.stdout)
+
+        while self._alive:
+            output_len = len(self.stdout)
+            diff = output_len - output_len_prev
+            output_len_prev = output_len
+
+            OutputHandler.print(f'Check output diff - {diff}')
+            self.output_diff_history.append(diff)
+            if len(self.output_diff_history) > self.output_diff_history_max:
+                self.output_diff_history.pop(0)
+
+            sleep(0.01)
+            self.check_alive()
+
     def is_waiting_input(self) -> bool:
-        return len(self.cpu_load_history) == self.cpu_load_length and sum(self.cpu_load_history) < 1
+        program_not_loading_processor = (
+            len(self.cpu_load_history) >= self.cpu_load_history_max
+            and sum(self.cpu_load_history) < 1
+        )
+
+        program_not_printing_anything = (
+            len(self.output_diff_history) >= self.output_diff_history_max
+            and sum(self.output_diff_history) == 0
+        )
+
+        return program_not_loading_processor and program_not_printing_anything
 
     def register_input_request(self):
         if not self.is_waiting_input():
             raise RuntimeError('Program is not waiting for the input')
         self.cpu_load_history = []
 
-    def is_finished(self):
+    def is_finished(self, need_wait_output=True):
         if not self.check_early_finish:
             return not self._alive
 
@@ -101,10 +135,15 @@ class ProcessWrapper:
                 is_running = self.ps.status() == 'running'
                 if not is_running:
                     self._alive = False
-                return not is_running
             except NoSuchProcess:
                 self._alive = False
-                return True
+
+            if not self._alive and need_wait_output:
+                OutputHandler.print('"is_finished" detected the process is dead, wait output')
+                self.wait_output()
+                OutputHandler.print('"is_finished" after waiting output, return True')
+
+            return not self._alive
 
     def __init__(self, *args, check_early_finish=False, register_output=True):
         self.lock = Lock()
@@ -124,20 +163,25 @@ class ProcessWrapper:
 
         self.ps = Process(self.process.pid)
 
-        self.cpu_load = self.ps.cpu_percent()
-        self.cpu_load_history = []
-        self.cpu_load_length = 10
-
         self.stdout = ''
         self.stderr = ''
         self._alive = True
         self._pipes_watching = 0
         self.terminated = False
 
+        self.cpu_load = self.ps.cpu_percent()
+        self.cpu_load_history = []
+        self.cpu_load_history_max = 10
+
+        self.output_diff = 0
+        self.output_diff_history = []
+        self.output_diff_history_max = 3
+
         self.check_early_finish = check_early_finish
         self.register_output = register_output
 
         Thread(target=lambda: self.check_cpuload(), daemon=True).start()
+        Thread(target=lambda: self.check_output(), daemon=True).start()
         Thread(target=lambda: self.check_stdout(), daemon=True).start()
         Thread(target=lambda: self.check_stderr(), daemon=True).start()
 

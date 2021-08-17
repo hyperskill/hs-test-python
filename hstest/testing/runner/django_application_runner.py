@@ -92,16 +92,8 @@ class DjangoApplicationRunner(TestRunner):
         if len(migrate.stderr) != 0:
             migrate.wait_output()
 
-            stdout = migrate.stdout
-            stderr = migrate.stderr
-
-            error_info = 'Cannot apply migrations to an empty database.'
-            if len(stdout):
-                error_info += '\n\nstdout:\n' + stdout.strip()
-            if len(stderr):
-                error_info += '\n\nstderr:\n' + stderr.strip()
-
-            raise ErrorWithFeedback(error_info)
+            # stdout and stderr is collected and will be shown to the user
+            raise ErrorWithFeedback('Cannot apply migrations to an empty database.')
 
     def set_up(self, test_case: TestCase):
         self.launch_django_application(test_case)

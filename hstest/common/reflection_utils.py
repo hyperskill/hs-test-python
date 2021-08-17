@@ -60,21 +60,33 @@ def str_to_stacktrace(str_trace: str) -> str:
     traceback_stack = []
 
     for line_num in traceback_lines:
-        traceback_stack += [lines[line_num] + '\n' + lines[line_num + 1] + '\n']
+        traceback_elem = lines[line_num] + '\n'
+        if len(lines) > line_num + 1:
+            traceback_elem += lines[line_num + 1] + '\n'
+        traceback_stack += [traceback_elem]
 
     user_traceback = []
     for trace in traceback_stack:
         r'''
         Avoid traceback elements such as:
-        
+
         File "C:\Users\**\JetBrains\**\plugins\python\helpers\pydev\pydevd.py", line 1477, in _exec
           pydev_imports.execfile(file, globals, locals)  # execute the script
         File "C:\Users\**\JetBrains\**\plugins\python\helpers\pydev\_pydev_imps\_pydev_execfile.py", line 18, in execfile
           exec(compile(contents+"\n", file, 'exec'), glob, loc) 
-        
+
         Which will appear when testing locally inside PyCharm.
         '''
         if f'{os.sep}JetBrains{os.sep}' in trace:
+            continue
+
+        r'''
+        Avoid the following traceback element:
+
+        File "C:\\Python39\\lib\\importlib\\__init__.py", line 127, in import_module
+          return _bootstrap._gcd_import(name[level:], package, level)
+        '''
+        if f'{os.sep}importlib{os.sep}' in trace:
             continue
 
         user_traceback += [trace]
@@ -104,6 +116,18 @@ def clean_stacktrace(full_traceback: List[str], user_traceback: List[str], user_
             dir_names += [os.path.abspath(dir_name)]
 
     if dir_names:
+        from hstest.common.os_utils import is_windows
+        if is_windows():
+            drives = {}
+            for dir_name in dir_names:
+                drive = dir_name[0]
+                drives[drive] = drives.get(drive, 0) + 1
+
+            if len(drives) > 1:
+                max_drive = max(drives.values())
+                drive_to_leave = [d for d in drives if drives[d] == max_drive][0]
+                dir_names = [d for d in dir_names if d.startswith(drive_to_leave)]
+
         user_dir = os.path.commonpath(dir_names) + os.sep
 
     cleaned_traceback = []
