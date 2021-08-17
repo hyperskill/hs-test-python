@@ -137,12 +137,23 @@ class StageTest:
                 except BaseException as new_ex:
                     if isinstance(new_ex, OutcomeError):
                         ex = new_ex
-            outcome: Outcome = Outcome.get_outcome(ex, curr_test)
-            fail_text = str(outcome)
+
+            try:
+                outcome: Outcome = Outcome.get_outcome(ex, curr_test)
+                fail_text = str(outcome)
+            except BaseException as new_ex:
+                try:
+                    outcome: Outcome = Outcome.get_outcome(new_ex, curr_test)
+                    fail_text = str(outcome)
+                except BaseException:
+                    # no code execution here allowed so not to throw an exception
+                    fail_text = 'Unexpected error\n\nCannot check the submission'
+
             try:
                 SystemHandler.tear_down()
             except BaseException:
                 pass
+
             return failed(fail_text)
 
         finally:
