@@ -45,3 +45,7 @@ class Test(unittest.TestCase):
         status, feedback = TestDynamicInput('main').run_tests()
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)
+
+
+if __name__ == '__main__':
+    Test().test()
