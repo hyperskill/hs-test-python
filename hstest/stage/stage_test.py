@@ -1,5 +1,4 @@
 import os
-from random import random
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from hstest.common.file_utils import walk_user_files
@@ -15,7 +14,9 @@ from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
 from hstest.testing.execution.main_module_executor import MainModuleExecutor
 from hstest.testing.execution.process.go_executor import GoExecutor
+from hstest.testing.execution.process.javascript_executor import JavascriptExecutor
 from hstest.testing.execution.process.python_executor import PythonExecutor
+from hstest.testing.execution_options import force_process_testing
 from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
@@ -53,7 +54,7 @@ class StageTest:
                 return AsyncMainFileRunner(GoExecutor)
 
             else:
-                if self.is_tests and random() > 0.5:
+                if force_process_testing:
                     return AsyncMainFileRunner(PythonExecutor)
                 else:
                     return AsyncMainFileRunner(MainModuleExecutor)
@@ -91,11 +92,11 @@ class StageTest:
         )
 
     def run_tests(self, *, debug=False) -> Tuple[int, str]:
-        if is_tests(self) or debug:
+        if is_tests(self):
             self.is_tests = True
-
             setup_cwd(self)
 
+        if self.is_tests or debug:
             import hstest.common.utils as hs
             hs.failed_msg_start = ''
             hs.failed_msg_continue = ''
