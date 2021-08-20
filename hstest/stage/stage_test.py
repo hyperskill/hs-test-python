@@ -50,14 +50,20 @@ class StageTest:
 
     def _init_runner(self) -> TestRunner:
         for folder, dirs, files in walk_user_files(os.getcwd()):
-            if any(f.endswith('.go') for f in files):
-                return AsyncMainFileRunner(GoExecutor)
+            for f in files:
+                if f.endswith('.go'):
+                    return AsyncMainFileRunner(GoExecutor)
 
-            else:
-                if force_process_testing:
-                    return AsyncMainFileRunner(PythonExecutor)
-                else:
-                    return AsyncMainFileRunner(MainModuleExecutor)
+                if f.endswith('.js'):
+                    return AsyncMainFileRunner(JavascriptExecutor)
+
+                if f.endswith('.py'):
+                    if force_process_testing:
+                        return AsyncMainFileRunner(PythonExecutor)
+                    else:
+                        return AsyncMainFileRunner(MainModuleExecutor)
+
+        return AsyncMainFileRunner(MainModuleExecutor)
 
     def _init_tests(self) -> List[TestRun]:
         if self.runner is None:
