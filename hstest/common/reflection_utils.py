@@ -46,7 +46,24 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
     return clean_stacktrace(traceback_stack, user_traceback[::-1], user_dir)
 
 
+def _fix_python_syntax_error(str_trace: str) -> str:
+    python_traceback_initial_phrase = 'Traceback (most recent call last):'
+    python_traceback_start = '  File "'
+
+    is_python_syntax_error = 'SyntaxError' in str_trace and (
+        f'\n{python_traceback_start}' in str_trace or
+        str_trace.startswith(python_traceback_start)
+    )
+
+    if is_python_syntax_error and python_traceback_initial_phrase not in str_trace:
+        str_trace = python_traceback_initial_phrase + '\n' + str_trace
+
+    return str_trace
+
+
 def str_to_stacktrace(str_trace: str) -> str:
+    str_trace = _fix_python_syntax_error(str_trace)
+
     lines = str_trace.splitlines()
     traceback_lines = [i for i, line in enumerate(lines) if line.startswith('  File ')]
 
