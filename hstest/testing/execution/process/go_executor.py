@@ -13,8 +13,10 @@ class GoExecutor(ProcessExecutor):
 
         if is_windows():
             self.executable = self.without_go
+            self.file_name = self.executable + '.exe'
         else:
             self.executable = f'./{self.without_go}'
+            self.file_name = self.executable
 
     def _compilation_command(self):
         return ['go', 'build', self.runnable.file]
@@ -23,10 +25,5 @@ class GoExecutor(ProcessExecutor):
         return [self.executable] + list(args)
 
     def _cleanup(self):
-        if is_windows():
-            file_name = self.executable + '.exe'
-        else:
-            file_name = self.without_go
-
-        if os.path.exists(file_name):
-            os.remove(file_name)
+        if os.path.exists(self.file_name):
+            os.remove(self.file_name)
