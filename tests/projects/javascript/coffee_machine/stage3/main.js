@@ -1,21 +1,21 @@
-const prompt = require('prompt-sync');
+const input = require('prompt-sync');
 
 var cups, water, milk, beans, needs;
 
-water = Number(prompt('Write how many ml of water the coffee machine has: '))
+water = Number(input('Write how many ml of water the coffee machine has: '))
 cups = water / 200 | 0;
 
-milk = Number(prompt("Write how many ml of milk the coffee machine has: "))
+milk = Number(input("Write how many ml of milk the coffee machine has: "))
 if ((milk/50|0) < cups) {
 	cups = milk / 50 | 0;
 }
 
-beans = Number(prompt("Write how many grams of coffee beans the coffee machine has: "));
+beans = Number(input("Write how many grams of coffee beans the coffee machine has: "));
 if ((beans/15|0) < cups) {
 	cups = beans / 15 | 0;
 }
 
-needs = Number(prompt("Write how many cups of coffee you will need: "));
+needs = Number(input("Write how many cups of coffee you will need: "));
 if (needs === cups) {
 	console.log("Yes, I can make that amount of coffee")
 } else if (needs < cups) {

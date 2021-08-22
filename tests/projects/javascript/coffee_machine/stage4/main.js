@@ -1,4 +1,4 @@
-const prompt = require('prompt-sync');
+const input = require('prompt-sync');
 
 var money  = 550;
 var water  = 400;
@@ -22,22 +22,22 @@ function takeMoney() {
 }
 
 function sellCoffee() {
-	let choice = prompt("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ")
-	if (choice == '1') {
+	let choice = input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ")
+	if (choice === '1') {
 		console.log(123)
 		money += 4
 		water -= 250
 		beans -= 16
 		cups -= 1
 	}
-	else if (choice == '2') {
+	else if (choice === '2') {
 		money += 7
 		water -= 350
 		milk -= 75
 		beans -= 20
 		cups -= 1
 	}
-	else if (choice == '3') {
+	else if (choice === '3') {
 		money += 6
 		water -= 200
 		milk -= 100
@@ -49,15 +49,15 @@ function sellCoffee() {
 }
 
 function fillMachine() {
-	water += Number(prompt("Write how many ml of water do you want to add: "))
-	milk += Number(prompt("Write how many ml of milk do you want to add: "))
-	beans += Number(prompt("Write how many grams of coffee beans do you want to add: "))
-	cups += Number(prompt("Write how many disposable cups of coffee do you want to add: "))
+	water += Number(input("Write how many ml of water do you want to add: "))
+	milk += Number(input("Write how many ml of milk do you want to add: "))
+	beans += Number(input("Write how many grams of coffee beans do you want to add: "))
+	cups += Number(input("Write how many disposable cups of coffee do you want to add: "))
 }
 
 printState();
 
-action = prompt("Write action (buy, fill, take): ");
+action = input("Write action (buy, fill, take): ");
 
 if (action === 'buy') {
 	sellCoffee()

@@ -1,9 +1,9 @@
 
 
 
-const prompt = require('prompt-sync')
+const input = require('prompt-sync')
 
-cups = Number(prompt("Write how many cups of coffee you will need: "))
+cups = Number(input("Write how many cups of coffee you will need: "))
 console.log('For ' + cups + " cups of coffee you will need:")
 console.log(cups*200 + " ml of water")
 console.log(cups*50 + " ml of milk")
