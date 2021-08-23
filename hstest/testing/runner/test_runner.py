@@ -1,6 +1,11 @@
+import typing
 from typing import Optional
 
 from hstest.check_result import CheckResult
+
+if typing.TYPE_CHECKING:
+    from hstest.test_case.test_case import TestCase
+    from hstest.testing.test_run import TestRun
 
 
 class TestRunner:

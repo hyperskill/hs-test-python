@@ -1,3 +1,4 @@
+import typing
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from hstest.common.utils import clean_text
@@ -6,6 +7,10 @@ from hstest.testing.tested_program import TestedProgram
 
 DynamicTesting = Callable[[], Optional['CheckResult']]
 DynamicTestingWithoutParams = Callable[['StageTest', Any], Optional['CheckResult']]
+
+if typing.TYPE_CHECKING:
+    from hstest import StageTest, TestCase
+    from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
 
 
 class DynamicTestElement:

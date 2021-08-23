@@ -1,3 +1,4 @@
+import typing
 from concurrent.futures import Future, TimeoutError
 from typing import Optional, Type
 
@@ -11,6 +12,9 @@ from hstest.testing.execution.program_executor import ProgramExecutor
 from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
+
+if typing.TYPE_CHECKING:
+    from hstest import TestCase
 
 
 class AsyncMainFileRunner(TestRunner):
