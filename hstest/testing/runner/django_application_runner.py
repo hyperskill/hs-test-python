@@ -9,8 +9,8 @@ from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedE
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
-from hstest.testing.execution.runnable_file import FileFilter
-from hstest.testing.execution.searcher.python_searcher import PythonRunnableFile
+from hstest.testing.execution.filtering.file_filter import FileFilter
+from hstest.testing.execution.searcher.python_searcher import PythonSearcher
 from hstest.testing.process_wrapper import ProcessWrapper
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
@@ -37,9 +37,9 @@ class DjangoApplicationRunner(TestRunner):
 
         if not os.path.exists(full_path):
             filename = os.path.basename(full_source)
-            folder, file = PythonRunnableFile.runnable_searcher(
+            runnable = PythonSearcher().search(
                 file_filter=FileFilter(file=lambda f: f == filename))
-            full_path = os.path.abspath(folder + os.sep + file)
+            full_path = os.path.abspath(runnable.folder + os.sep + runnable.file)
 
         self.full_path = full_path
         self.port = self.__find_free_port(test_case.attach.tryout_ports)

@@ -9,13 +9,13 @@ from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
-from hstest.testing.execution.searcher.python_searcher import PythonRunnableFile
+from hstest.testing.execution.searcher.python_searcher import PythonSearcher
 
 
 class MainModuleExecutor(ProgramExecutor):
     def __init__(self, source_name: str = None):
         super().__init__()
-        self.runnable = PythonRunnableFile.find(source_name)
+        self.runnable = PythonSearcher().find(source_name)
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
 

@@ -2,12 +2,12 @@ import os
 
 from hstest.common.os_utils import is_windows
 from hstest.testing.execution.process_executor import ProcessExecutor
-from hstest.testing.execution.searcher.go_searcher import GoRunnableFile
+from hstest.testing.execution.searcher.go_searcher import GoSearcher
 
 
 class GoExecutor(ProcessExecutor):
     def __init__(self, source_name: str = None):
-        super().__init__(GoRunnableFile.find(source_name))
+        super().__init__(GoSearcher().find(source_name))
 
         self.without_go = self.runnable.file[:-3]
 

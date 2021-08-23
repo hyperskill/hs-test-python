@@ -1,22 +1,26 @@
 import os
-from typing import Dict, Set
+from typing import Dict, List, Optional, Set, Tuple
 
 from hstest.common.file_utils import walk_user_files
 from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
-from hstest.testing.execution.filtering.file_filter import File, FileFilter, Folder, Source
+from hstest.testing.execution.filtering.file_filter import File, FileFilter, Folder, Module, Source
 from hstest.testing.execution.filtering.main_filter import MainFilter
+from hstest.testing.execution.runnable.runnable_file import RunnableFile
 
 file_contents_cached = {}
 search_cached = {}
 
 
-class RunnableFile:
-    def __init__(self, folder: Folder, file: File):
-        self.folder = folder
-        self.file = file
+class BaseSearcher:
+    @property
+    def extension(self) -> str:
+        raise NotImplementedError('Property "extension" should be implemented')
+
+    def search(self, where_to_search: str = None) -> RunnableFile:
+        raise NotImplementedError('Method "search" should be implemented')
 
     @staticmethod
-    def _get_contents(folder, files) -> Dict[File, Source]:
+    def _get_contents(folder: Folder, files: List[File]) -> Dict[File, Source]:
         contents = {}
 
         for file in files:
@@ -25,30 +29,34 @@ class RunnableFile:
                 contents[file] = file_contents_cached[path]
             elif os.path.exists(path):
                 with open(path) as f:
-                    file_content = f.read()
+                    try:
+                        file_content = f.read()
+                    except UnicodeDecodeError:
+                        # binary bile, no need to process
+                        continue
                     contents[file] = file_content
                     file_contents_cached[path] = contents[file]
 
         return contents
 
-    @staticmethod
-    def search_non_cached(
-            extension: str,
+    def _search_non_cached(
+            self,
             where_to_search: str,
+            *,
             file_filter: FileFilter,
             pre_main_filter: FileFilter,
             main_filter: MainFilter,
             post_main_filter: FileFilter) \
-            -> 'RunnableFile':
+            -> RunnableFile:
 
         curr_folder = os.path.abspath(where_to_search)
 
         for folder, dirs, files in walk_user_files(curr_folder):
 
-            contents = RunnableFile._get_contents(folder, files)
+            contents = self._get_contents(folder, files)
 
             initial_filter = FileFilter(
-                file=lambda f: f.endswith(extension),
+                file=lambda f: f.endswith(self.extension),
                 generic=file_filter.filter
             )
 
@@ -104,25 +112,24 @@ class RunnableFile:
             'Cannot find a file to execute your code.\n'
             f'Are your project files located at \"{curr_folder}\"?')
 
-    @staticmethod
-    def search(
-            extension: str,
+    def _search(
+            self,
             where_to_search: str = None,
             *,
             file_filter: FileFilter = None,
             pre_main_filter: FileFilter = None,
             main_filter: MainFilter = None,
             post_main_filter: FileFilter = None) \
-            -> 'RunnableFile':
+            -> RunnableFile:
 
-        if not extension.startswith('.'):
-            raise UnexpectedError(f'File extension "{extension}" should start with a dot')
+        if not self.extension.startswith('.'):
+            raise UnexpectedError(f'File extension "{self.extension}" should start with a dot')
 
         if where_to_search is None:
             where_to_search = os.getcwd()
 
         do_caching = False
-        cache_key = extension, where_to_search
+        cache_key = self.extension, where_to_search
 
         if file_filter is None:
             if cache_key in search_cached:
@@ -140,16 +147,59 @@ class RunnableFile:
         if post_main_filter is None:
             post_main_filter = FileFilter()
 
-        result = RunnableFile.search_non_cached(
-            extension,
+        result = self._search_non_cached(
             where_to_search,
-            file_filter,
-            pre_main_filter,
-            main_filter,
-            post_main_filter,
+            file_filter=file_filter,
+            pre_main_filter=pre_main_filter,
+            main_filter=main_filter,
+            post_main_filter=post_main_filter,
         )
 
         if do_caching:
             search_cached[cache_key] = result
 
         return result
+
+    def find(self, source: Optional[str]) -> RunnableFile:
+        if source is None:
+            return self.search()
+
+        ext = self.extension
+
+        source_folder, source_file, source_module = self._parse_source(source)
+
+        if source_folder is not None and os.path.isdir(source_folder):
+            return self.search(source_folder)
+
+        elif source_file is not None and os.path.isfile(source_file):
+            path, sep, file = source_module.rpartition('.')
+            folder = os.path.abspath(path.replace('.', os.sep))
+            return RunnableFile(folder, file + ext)
+
+        else:
+            return self.search()
+
+    def _parse_source(self, source: str) -> Tuple[Folder, File, Module]:
+        ext = self.extension
+
+        source = source.replace('/', os.sep).replace('\\', os.sep)
+
+        if source.endswith(ext):
+            source_folder = None
+            source_file = source
+            source_module = source[:-len(ext)].replace(os.sep, '.')
+
+        elif os.sep in source:
+            if source.endswith(os.sep):
+                source = source[:-1]
+
+            source_folder = source
+            source_file = None
+            source_module = source.replace(os.sep, '.')
+
+        else:
+            source_folder = source.replace('.', os.sep)
+            source_file = source_folder + ext
+            source_module = source
+
+        return source_folder, source_file, source_module

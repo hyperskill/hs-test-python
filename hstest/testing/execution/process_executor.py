@@ -8,7 +8,7 @@ from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
-from hstest.testing.execution.runnable_file import RunnableFile
+from hstest.testing.execution.runnable.runnable_file import RunnableFile
 from hstest.testing.process_wrapper import ProcessWrapper
 
 

@@ -4,6 +4,7 @@ from typing import Callable, Dict
 Folder = str
 File = str
 Source = str
+Module = str
 Sources = Dict[File, Source]
 Filter = Callable[[Folder, File, Source], bool]
 
