@@ -1,95 +1,52 @@
 import os
 import re
-from typing import Callable, Optional, Tuple
+from typing import Optional
 
-from hstest.common.file_utils import walk_user_files
-from hstest.exception.outcomes import ErrorWithFeedback
-from hstest.testing.execution.runnable_file import RunnableFile, file_contents_cached
+from hstest.testing.execution.runnable_file import FileFilter, Folder, MainFilter, RunnableFile, Sources
 
 
 class PythonRunnableFile(RunnableFile):
-    def __init__(self, module: str, file: str, folder: str):
-        super().__init__(file, folder)
+    def __init__(self, folder: str, file: str, module: str):
+        super().__init__(folder, file)
         self.module = module
 
     @staticmethod
-    def runnable_searcher(abs_path_to_search: str = None,
-                          file_filter: Callable[[str, str], bool] = lambda folder, file: True) \
-            -> Tuple[str, str]:
-        if abs_path_to_search is None:
-            abs_path_to_search = os.getcwd()
+    def runnable_searcher(where_to_search: str = None, file_filter: FileFilter = None) -> RunnableFile:
 
-        curr_folder = os.path.abspath(abs_path_to_search)
+        is_imported = {}
 
-        for folder, dirs, files in walk_user_files(curr_folder):
+        def init_regexes(folder: Folder, sources: Sources):
+            import_regexes = {}
 
-            files = [f for f in files if f.endswith('.py') and file_filter(folder, f)]
+            for file, source in sources.items():
+                import_regexes[file] = [
+                    re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
+                    re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
+                ]
 
-            if len(files) == 0:
-                continue
+            for f in sources.keys():
+                is_imported[f] = False
 
-            if len(files) == 1:
-                return folder, files[0]
-
-            contents = {}
-
-            for file in files:
-                path = os.path.abspath(os.path.join(folder, file))
-                if path in file_contents_cached:
-                    contents[file] = file_contents_cached[path]
-                elif os.path.exists(path):
-                    with open(path, encoding='utf-8') as f:
-                        file_content = f.read()
-                        contents[file] = [
-                            file_content,
-                            re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
-                            re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
-                        ]
-                        file_contents_cached[path] = contents[file]
-
-            is_imported = {f: False for f in files}
-            has_name_main = {f: False for f in files}
-
-            for file in files:
-                source = contents[file][0]
-                if '__name__' in source and '__main__' in source:
-                    has_name_main[file] = True
-
-                for f, (s, r1, r2) in contents.items():
+            for file, source in sources.items():
+                for f, (r1, r2) in import_regexes.items():
                     if r1.search(source) is not None or r2.search(source) is not None:
                         is_imported[f] = True
 
-            candidates_by_import = [f for f in files if not is_imported[f]]
+        return RunnableFile.search(
+            '.py',
+            where_to_search,
+            file_filter=file_filter,
 
-            if len(candidates_by_import) == 1:
-                return folder, candidates_by_import[0]
+            pre_main_filter=FileFilter(
+                init_files=init_regexes,
+                file=lambda f: not is_imported[f]
+            ),
 
-            candidates_by_name_main = [f for f in files if has_name_main[f]]
-
-            if len(candidates_by_name_main) == 1:
-                return folder, candidates_by_name_main[0]
-
-            candidates_import_main = [f for f in candidates_by_import if has_name_main[f]]
-
-            if len(candidates_import_main) == 1:
-                return folder, candidates_import_main[0]
-
-            if len(candidates_import_main) > 1:
-                str_files = ', '.join(f'"{f}"' for f in candidates_import_main)
-                raise ErrorWithFeedback(
-                    f'Cannot decide which file to run out of the following: {str_files}\n'
-                    'They all have "if __name__ == \'__main__\'". Leave one file with this line.')
-
-            str_files = ', '.join(
-                f'"{f}"' for f in (candidates_by_import if len(candidates_by_import) else files))
-
-            raise ErrorWithFeedback(
-                f'Cannot decide which file to run out of the following: {str_files}\n'
-                'Write "if __name__ == \'__main__\'" in one of them to mark it as an entry point.')
-
-        raise ErrorWithFeedback(
-            'Cannot find a file to import and run your code.\n'
-            f'Are your project files located at \"{curr_folder}\"?')
+            main_filter=MainFilter(
+                "if __name__ == '__main__'",
+                source=lambda s: '__name__' in s and '__main__' in s
+            )
+        )
 
     @staticmethod
     def find(source: Optional[str]) -> 'PythonRunnableFile':
@@ -113,10 +70,12 @@ class PythonRunnableFile(RunnableFile):
         module_to_test = module_name
         file_to_test = module_name + '.py'
         folder_to_test = module_abs_path
-        return PythonRunnableFile(module_to_test, file_to_test, folder_to_test)
+        return PythonRunnableFile(folder_to_test, file_to_test, module_to_test)
 
     @staticmethod
     def find_by_nothing() -> 'PythonRunnableFile':
-        folder, file = PythonRunnableFile.runnable_searcher()
+        runnable = PythonRunnableFile.runnable_searcher()
+        folder = runnable.folder
+        file = runnable.file
         without_py = file[:-3]
         return PythonRunnableFile.find_by_module(os.path.abspath(folder), without_py)

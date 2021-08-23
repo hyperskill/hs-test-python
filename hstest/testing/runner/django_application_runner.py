@@ -9,6 +9,7 @@ from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedE
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
+from hstest.testing.execution.runnable_file import FileFilter
 from hstest.testing.execution.searcher.python_searcher import PythonRunnableFile
 from hstest.testing.process_wrapper import ProcessWrapper
 from hstest.testing.runner.test_runner import TestRunner
@@ -36,7 +37,8 @@ class DjangoApplicationRunner(TestRunner):
 
         if not os.path.exists(full_path):
             filename = os.path.basename(full_source)
-            folder, file = PythonRunnableFile.runnable_searcher(file_filter=lambda _, f: f == filename)
+            folder, file = PythonRunnableFile.runnable_searcher(
+                file_filter=FileFilter(file=lambda f: f == filename))
             full_path = os.path.abspath(folder + os.sep + file)
 
         self.full_path = full_path

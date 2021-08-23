@@ -1,79 +1,23 @@
 import os
 import re
-from typing import Callable, Optional, Tuple
+from typing import Optional
 
-from hstest.common.file_utils import walk_user_files
-from hstest.exception.outcomes import ErrorWithFeedback
-from hstest.testing.execution.runnable_file import RunnableFile, file_contents_cached
+from hstest.testing.execution.runnable_file import MainFilter, RunnableFile
 
 
 class JavascriptRunnableFile(RunnableFile):
-    main_searcher = re.compile(r'(^|\n) *function +main +\( *\)', re.M)
-
-    def __init__(self, module: str, file: str, folder: str):
-        super().__init__(file, folder)
-        self.module = module
 
     @staticmethod
-    def runnable_searcher(abs_path_to_search: str = None,
-                          file_filter: Callable[[str, str], bool] = lambda folder, file: True) \
-            -> Tuple[str, str]:
-
-        if abs_path_to_search is None:
-            abs_path_to_search = os.getcwd()
-
-        curr_folder = os.path.abspath(abs_path_to_search)
-
-        for folder, dirs, files in walk_user_files(curr_folder):
-
-            files = [f for f in files if f.endswith('.js') and file_filter(folder, f)]
-
-            if len(files) == 0:
-                continue
-
-            if len(files) == 1:
-                return folder, files[0]
-
-            contents = {}
-
-            for file in files:
-                path = os.path.abspath(os.path.join(folder, file))
-                if path in file_contents_cached:
-                    contents[file] = file_contents_cached[path]
-                elif os.path.exists(path):
-                    with open(path) as f:
-                        file_content = f.read()
-                        contents[file] = file_content
-                        file_contents_cached[path] = contents[file]
-
-            has_main = {f: False for f in files}
-
-            for file in files:
-                source = contents[file]
-
-                if JavascriptRunnableFile.main_searcher.search(source) is not None:
-                    has_main[file] = True
-
-            candidates = [f for f in files if has_main[f]]
-
-            if len(candidates) == 1:
-                return folder, candidates[0]
-
-            if len(candidates) > 1:
-                str_files = ', '.join(f'"{f}"' for f in candidates)
-                raise ErrorWithFeedback(
-                    f'Cannot decide which file to run out of the following: {str_files}\n'
-                    'They all have "function main()". Leave one file with main function.')
-
-            if len(candidates) == 0:
-                str_files = ', '.join(f'"{f}"' for f in candidates)
-                raise ErrorWithFeedback(
-                    f'Cannot decide which file to run out of the following: {str_files}\n'
-                    'Please write "function main()" in one of them to indicate an entry point.')
-
-        raise ErrorWithFeedback(
-            'Cannot find a file to run.\n'
-            f'Are your project files located at \"{curr_folder}\"?')
+    def runnable_searcher(where_to_search: str = None) -> RunnableFile:
+        main_searcher = re.compile(r'(^|\n) *function +main +\( *\)', re.M)
+        return RunnableFile.search(
+            '.js',
+            where_to_search,
+            main_filter=MainFilter(
+                "function main()",
+                source=lambda s: main_searcher.search(s) is not None
+            )
+        )
 
     @staticmethod
     def find(source: Optional[str]) -> 'JavascriptRunnableFile':
@@ -84,23 +28,18 @@ class JavascriptRunnableFile(RunnableFile):
 
     @staticmethod
     def find_by_source_name(source: str) -> 'JavascriptRunnableFile':
+        if source.endswith('.js'):
+            source = source[:-3].replace(os.sep, '.')
+
         path_to_test = source.replace('.', os.sep) + '.js'
         if not os.path.exists(path_to_test):
             return JavascriptRunnableFile.find_by_nothing()
 
-        path, sep, module = source.rpartition('.')
-        module_abs_path = os.path.abspath(path.replace('.', os.sep))
-        return JavascriptRunnableFile.find_by_module(module_abs_path, module)
-
-    @staticmethod
-    def find_by_module(module_abs_path: str, module_name: str) -> 'JavascriptRunnableFile':
-        module_to_test = module_name
-        file_to_test = module_name + '.js'
-        folder_to_test = module_abs_path
-        return JavascriptRunnableFile(module_to_test, file_to_test, folder_to_test)
+        path, sep, file = source.rpartition('.')
+        folder = os.path.abspath(path.replace('.', os.sep))
+        return JavascriptRunnableFile(folder, file + '.js')
 
     @staticmethod
     def find_by_nothing() -> 'JavascriptRunnableFile':
-        folder, file = JavascriptRunnableFile.runnable_searcher()
-        without_py = file[:-3]
-        return JavascriptRunnableFile.find_by_module(os.path.abspath(folder), without_py)
+        runnable = JavascriptRunnableFile.runnable_searcher()
+        return JavascriptRunnableFile(runnable.folder, runnable.file)

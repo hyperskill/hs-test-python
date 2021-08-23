@@ -22,7 +22,7 @@ class Test(unittest.TestCase):
         self.assertIn(
             'Error in test #1\n\n'
                         
-            'Cannot find a file to import and run your code.\n'
+            'Cannot find a file to execute your code.\n'
             'Are your project files located at "',
 
             feedback
