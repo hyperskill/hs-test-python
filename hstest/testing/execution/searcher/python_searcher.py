@@ -2,7 +2,9 @@ import os
 import re
 from typing import Optional
 
-from hstest.testing.execution.runnable_file import FileFilter, Folder, MainFilter, RunnableFile, Sources
+from hstest.testing.execution.filtering.file_filter import FileFilter, Folder, Sources
+from hstest.testing.execution.filtering.main_filter import MainFilter
+from hstest.testing.execution.runnable_file import RunnableFile
 
 
 class PythonRunnableFile(RunnableFile):

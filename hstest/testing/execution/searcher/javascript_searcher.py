@@ -2,7 +2,8 @@ import os
 import re
 from typing import Optional
 
-from hstest.testing.execution.runnable_file import MainFilter, RunnableFile
+from hstest.testing.execution.filtering.main_filter import MainFilter
+from hstest.testing.execution.runnable_file import RunnableFile
 
 
 class JavascriptRunnableFile(RunnableFile):
