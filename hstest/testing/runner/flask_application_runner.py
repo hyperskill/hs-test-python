@@ -4,7 +4,7 @@ from time import sleep
 from typing import List, Optional, Tuple
 
 from hstest.common.process_utils import is_port_in_use
-from hstest.exception.outcomes import ErrorWithFeedback, TestPassed, UnexpectedError, WrongAnswer
+from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
 from hstest.test_case.attach.flask_settings import FlaskSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
@@ -113,11 +113,4 @@ class FlaskApplicationRunner(TestRunner):
         except BaseException as ex:
             test_run.set_error_in_test(ex)
 
-        error = test_run.error_in_test
-
-        if isinstance(error, TestPassed):
-            return CheckResult.correct()
-        elif isinstance(error, WrongAnswer):
-            return CheckResult.wrong(error.feedback)
-        else:
-            return None
+        return CheckResult.from_error(test_run.error_in_test)

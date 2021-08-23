@@ -70,12 +70,7 @@ class AsyncMainFileRunner(TestRunner):
                     error = ex
                     test_run.set_error_in_test(error)
 
-            if isinstance(error, TestPassed):
-                return correct()
-            elif isinstance(error, WrongAnswer):
-                return wrong(error.feedback)
-            else:
-                return None
+            return CheckResult.from_error(error)
 
         return result
 

@@ -1,3 +1,8 @@
+from typing import Optional
+
+from hstest.exception.outcomes import TestPassed, WrongAnswer
+
+
 class CheckResult:
 
     def __init__(self, result: bool, feedback: str):
@@ -19,6 +24,15 @@ class CheckResult:
     @staticmethod
     def wrong(feedback: str) -> 'CheckResult':
         return CheckResult(False, feedback)
+
+    @staticmethod
+    def from_error(error: BaseException) -> Optional['CheckResult']:
+        if isinstance(error, TestPassed):
+            return correct()
+        elif isinstance(error, WrongAnswer):
+            return wrong(error.feedback)
+        else:
+            return None
 
 
 def correct() -> CheckResult:
