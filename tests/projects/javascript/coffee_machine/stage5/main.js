@@ -1,4 +1,4 @@
-const input = require('prompt-sync');
+const input = require('sync-input');
 
 var money  = 550;
 var water  = 400;

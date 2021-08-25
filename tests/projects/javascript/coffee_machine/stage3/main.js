@@ -1,4 +1,4 @@
-const input = require('prompt-sync');
+const input = require('sync-input');
 
 var cups, water, milk, beans, needs;
 
