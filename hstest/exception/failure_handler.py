@@ -13,7 +13,7 @@ def get_report():
             '\n'
             f'OS {name_os}\n'
             f'{implementation} {python}\n'
-            f'Testing library version 5'
+            f'Testing library version 6'
         )
     else:
         return 'Submitted via web'
