@@ -13,12 +13,7 @@ class SystemHandler:
 
     @staticmethod
     def set_up():
-        with SystemHandler.__lock:
-            if SystemHandler.__locked:
-                raise ErrorWithFeedback(
-                    "Cannot start the testing process more than once")
-            SystemHandler.__locked = True
-            SystemHandler.__locker_thread = current_thread()
+        SystemHandler._lock_system_for_testing()
 
         OutputHandler.replace_stdout()
         InputHandler.replace_input()
@@ -26,6 +21,23 @@ class SystemHandler:
 
     @staticmethod
     def tear_down():
+        SystemHandler._unlock_system_for_testing()
+
+        OutputHandler.revert_stdout()
+        InputHandler.revert_input()
+        ExitHandler.revert_exit()
+
+    @staticmethod
+    def _lock_system_for_testing():
+        with SystemHandler.__lock:
+            if SystemHandler.__locked:
+                raise ErrorWithFeedback(
+                    "Cannot start the testing process more than once")
+            SystemHandler.__locked = True
+            SystemHandler.__locker_thread = current_thread()
+
+    @staticmethod
+    def _unlock_system_for_testing():
         if current_thread() != SystemHandler.__locker_thread:
             raise ErrorWithFeedback(
                 "Cannot tear down the testing process from the other thread")
@@ -36,7 +48,3 @@ class SystemHandler:
                     "Cannot tear down the testing process more than once")
             SystemHandler.__locked = False
             SystemHandler.__locker_thread = None
-
-        OutputHandler.revert_stdout()
-        InputHandler.revert_input()
-        ExitHandler.revert_exit()
