@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
     from hstest import TestCase
 
 
-class AsyncMainFileRunner(TestRunner):
+class AsyncDynamicTestingRunner(TestRunner):
 
     def __init__(self, executor: Type[ProgramExecutor] = MainModuleExecutor):
         self.executor: Type[ProgramExecutor] = executor

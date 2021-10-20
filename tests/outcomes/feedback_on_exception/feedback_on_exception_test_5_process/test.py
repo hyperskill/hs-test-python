@@ -6,12 +6,12 @@ from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 from hstest.testing.execution.process.python_executor import PythonExecutor
-from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
+from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
 from hstest.testing.runner.test_runner import TestRunner
 
 
 class FeedbackOnExceptionTest5(StageTest):
-    runner: TestRunner = AsyncMainFileRunner(PythonExecutor)
+    runner: TestRunner = AsyncDynamicTestingRunner(PythonExecutor)
 
     def generate(self) -> List[TestCase]:
         return [

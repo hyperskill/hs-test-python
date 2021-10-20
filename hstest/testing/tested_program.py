@@ -9,8 +9,8 @@ class TestedProgram:
         from hstest import StageTest
         runner = StageTest.curr_test_run.test_runner
 
-        from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
-        if not isinstance(runner, AsyncMainFileRunner):
+        from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
+        if not isinstance(runner, AsyncDynamicTestingRunner):
             raise UnexpectedError(
                 'TestedProgram is supported only while using AsyncMainFileRunner runner, '
                 'not ' + str(type(runner))

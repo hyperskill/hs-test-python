@@ -17,7 +17,7 @@ from hstest.testing.execution.process.go_executor import GoExecutor
 from hstest.testing.execution.process.javascript_executor import JavascriptExecutor
 from hstest.testing.execution.process.python_executor import PythonExecutor
 from hstest.testing.execution_options import force_process_testing
-from hstest.testing.runner.async_main_file_runner import AsyncMainFileRunner
+from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
 from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
@@ -52,18 +52,18 @@ class StageTest:
         for folder, dirs, files in walk_user_files(os.getcwd()):
             for f in files:
                 if f.endswith('.go'):
-                    return AsyncMainFileRunner(GoExecutor)
+                    return AsyncDynamicTestingRunner(GoExecutor)
 
                 if f.endswith('.js'):
-                    return AsyncMainFileRunner(JavascriptExecutor)
+                    return AsyncDynamicTestingRunner(JavascriptExecutor)
 
                 if f.endswith('.py'):
                     if force_process_testing:
-                        return AsyncMainFileRunner(PythonExecutor)
+                        return AsyncDynamicTestingRunner(PythonExecutor)
                     else:
-                        return AsyncMainFileRunner(MainModuleExecutor)
+                        return AsyncDynamicTestingRunner(MainModuleExecutor)
 
-        return AsyncMainFileRunner(MainModuleExecutor)
+        return AsyncDynamicTestingRunner(MainModuleExecutor)
 
     def _init_tests(self) -> List[TestRun]:
         if self.runner is None:
