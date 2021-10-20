@@ -54,6 +54,7 @@ class AsyncDynamicTestingRunner(TestRunner):
         except BaseException as ex:
             test_run.set_error_in_test(ex)
         finally:
+            test_run.invalidate_input_handlers()
             executor.shutdown(wait=False)
 
         return None

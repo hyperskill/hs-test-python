@@ -63,7 +63,7 @@ class MainModuleExecutor(ProgramExecutor):
         from hstest.stage_test import StageTest
         test_num = StageTest.curr_test_run.test_num
 
-        InputHandler.set_dynamic_input_func(lambda: self._request_input())
+        InputHandler.install_input_handler(self, lambda: True)
         self.__executor = DaemonThreadPoolExecutor(name=f"MainModuleExecutor test #{test_num}")
         self.__task = self.__executor.submit(lambda: self._invoke_method(*args))
 

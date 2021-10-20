@@ -1,9 +1,11 @@
 import io
 import sys
-from typing import List
+import typing
 
-from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction, DynamicInputFunction
-from hstest.dynamic.input.input_mock import InputMock
+from hstest.dynamic.input.input_mock import Condition, InputMock
+
+if typing.TYPE_CHECKING:
+    from hstest.testing.execution.program_executor import ProgramExecutor
 
 
 class InputHandler:
@@ -19,22 +21,9 @@ class InputHandler:
         sys.stdin = InputHandler.real_in
 
     @staticmethod
-    def set_dynamic_input_func(func: DynamicTestFunction):
-        InputHandler.mock_in.set_dynamic_input_func(func)
+    def install_input_handler(program: 'ProgramExecutor', condition: Condition):
+        InputHandler.mock_in.install_input_handler(program, condition)
 
     @staticmethod
-    def set_input(text: str):
-        """
-        Deprecated
-        """
-        InputHandler.mock_in.provide_text(text)
-
-    @staticmethod
-    def set_input_funcs(input_funcs: List[DynamicInputFunction]):
-        """
-        Deprecated
-        """
-        InputHandler.mock_in.set_texts([
-            DynamicInputFunction(func.trigger_count, func.input_function)
-            for func in input_funcs
-        ])
+    def uninstall_input_handler(program: 'ProgramExecutor'):
+        InputHandler.mock_in.uninstall_input_handler(program)

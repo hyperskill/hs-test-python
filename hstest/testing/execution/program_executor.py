@@ -103,7 +103,7 @@ class ProgramExecutor:
             return self.get_output()
         return ""
 
-    def _request_input(self):
+    def request_input(self):
         if self.__no_more_input:
             return None
         OutputHandler.print('Program executor - _request_input() invoked, set state WAITING')

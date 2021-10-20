@@ -70,6 +70,11 @@ class TestRun:
         for tested_program in self._tested_programs:
             tested_program.stop()
 
+    def invalidate_input_handlers(self):
+        for tested_program in self._tested_programs:
+            from hstest.dynamic.input.input_handler import InputHandler
+            InputHandler.uninstall_input_handler(tested_program.executor)
+
     def set_up(self):
         self._test_runner.set_up(self._test_case)
 

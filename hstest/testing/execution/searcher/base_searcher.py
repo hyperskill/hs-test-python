@@ -67,7 +67,7 @@ class BaseSearcher:
 
                 filtered_files: Set[File] = {
                     file for file in files
-                    if curr_filter.filter(folder, file, contents[file])
+                    if file in contents and curr_filter.filter(folder, file, contents[file])
                 }
 
                 curr_filter.filtered = filtered_files

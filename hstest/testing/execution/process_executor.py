@@ -130,7 +130,7 @@ class ProcessExecutor(ProgramExecutor):
             os.chdir(working_directory_before)
 
     def _launch(self, *args: str):
-        InputHandler.set_dynamic_input_func(lambda: self._request_input())
+        InputHandler.install_input_handler(self, lambda: True)
         self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True)
         self.thread.start()
 
