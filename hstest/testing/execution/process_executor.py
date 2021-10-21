@@ -6,6 +6,7 @@ from typing import List, Optional
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
+from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
 from hstest.testing.execution.runnable.runnable_file import RunnableFile
@@ -130,7 +131,7 @@ class ProcessExecutor(ProgramExecutor):
             os.chdir(working_directory_before)
 
     def _launch(self, *args: str):
-        InputHandler.install_input_handler(self, lambda: True)
+        SystemHandler.install_handler(self, lambda: True)
         self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True)
         self.thread.start()
 

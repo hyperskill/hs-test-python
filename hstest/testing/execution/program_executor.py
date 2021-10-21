@@ -40,7 +40,7 @@ class ProgramExecutor:
         raise NotImplementedError('Method "_terminate" isn\'t implemented')
 
     def get_output(self) -> str:
-        return OutputHandler.get_partial_output()
+        return OutputHandler.get_partial_output(self)
 
     def start(self, *args: str):
         if not self._machine.in_state(ProgramState.NOT_STARTED):

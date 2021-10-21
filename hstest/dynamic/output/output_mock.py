@@ -1,8 +1,20 @@
 import io
-from typing import List
+import typing
+from typing import Dict, List
 
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
+from hstest.exception.outcomes import UnexpectedError
 from hstest.testing.execution_options import ignore_stdout
+
+if typing.TYPE_CHECKING:
+    from hstest.dynamic.input.input_mock import Condition
+    from hstest.testing.execution.program_executor import ProgramExecutor
+
+
+class ConditionalOutput:
+    def __init__(self, condition: 'Condition'):
+        self.condition = condition
+        self.output: List[str] = []
 
 
 class OutputMock:
@@ -37,8 +49,8 @@ class OutputMock:
 
         self._original: RealOutputMock = RealOutputMock(real_out)
         self._cloned: List[str] = []
-        self._partial: List[str] = []
         self._dynamic: List[str] = []
+        self._partial: Dict[ProgramExecutor, ConditionalOutput] = {}
 
     @property
     def original(self):
@@ -52,17 +64,24 @@ class OutputMock:
     def dynamic(self) -> str:
         return ''.join(self._dynamic)
 
-    @property
-    def partial(self) -> str:
-        result = ''.join(self._partial)
-        self._partial = []
+    def partial(self, program: 'ProgramExecutor') -> str:
+        output = self._partial[program].output
+        result = ''.join(output)
+        output.clear()
         return result
 
     def write(self, text):
+        partial_handler = self.__get_partial_handler()
+
+        if partial_handler is None:
+            self._original.write(text)
+            return
+
         self._original.write(text)
         self._cloned.append(text)
         self._dynamic.append(text)
-        self._partial.append(text)
+        partial_handler.append(text)
+
         loop_detector.write(text)
 
     def getvalue(self):
@@ -79,7 +98,24 @@ class OutputMock:
         self._dynamic.append(user_input)
 
     def reset(self):
-        self._cloned = []
-        self._partial = []
-        self._dynamic = []
+        self._cloned.clear()
+        self._dynamic.clear()
+        for value in self._partial.values():
+            value.output.clear()
         loop_detector.reset()
+
+    def install_output_handler(self, program: 'ProgramExecutor', condition: 'Condition'):
+        if program in self._partial:
+            raise UnexpectedError("Cannot install output handler from the same program twice")
+        self._partial[program] = ConditionalOutput(condition)
+
+    def uninstall_output_handler(self, program: 'ProgramExecutor'):
+        if program not in self._partial:
+            raise UnexpectedError("Cannot uninstall output handler that doesn't exist")
+        del self._partial[program]
+
+    def __get_partial_handler(self):
+        for handler in self._partial.values():
+            if handler.condition():
+                return handler.output
+        return None

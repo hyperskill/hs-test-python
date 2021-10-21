@@ -1,9 +1,11 @@
 from threading import Lock, current_thread
 
 from hstest.dynamic.input.input_handler import InputHandler
+from hstest.dynamic.input.input_mock import Condition
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_handler import ExitHandler
 from hstest.exception.outcomes import ErrorWithFeedback
+from hstest.testing.execution.program_executor import ProgramExecutor
 
 
 class SystemHandler:
@@ -48,3 +50,13 @@ class SystemHandler:
                     "Cannot tear down the testing process more than once")
             SystemHandler.__locked = False
             SystemHandler.__locker_thread = None
+
+    @staticmethod
+    def install_handler(program: ProgramExecutor, condition: Condition):
+        InputHandler.install_input_handler(program, condition)
+        OutputHandler.install_output_handler(program, condition)
+
+    @staticmethod
+    def uninstall_handler(program: ProgramExecutor):
+        InputHandler.uninstall_input_handler(program)
+        OutputHandler.uninstall_output_handler(program)

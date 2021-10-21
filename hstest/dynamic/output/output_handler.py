@@ -1,8 +1,13 @@
 import io
 import sys
+import typing
 
 from hstest.common.utils import clean_text
 from hstest.dynamic.output.output_mock import OutputMock
+
+if typing.TYPE_CHECKING:
+    from hstest.dynamic.input.input_mock import Condition
+    from hstest.testing.execution.program_executor import ProgramExecutor
 
 
 class OutputHandler:
@@ -61,8 +66,8 @@ class OutputHandler:
         return clean_text(OutputHandler._mock_out.dynamic)
 
     @staticmethod
-    def get_partial_output() -> str:
-        return clean_text(OutputHandler._mock_out.partial)
+    def get_partial_output(program: 'ProgramExecutor') -> str:
+        return clean_text(OutputHandler._mock_out.partial(program))
 
     @staticmethod
     def inject_input(user_input: str):
@@ -70,3 +75,13 @@ class OutputHandler:
         if StageTest.curr_test_run is not None:
             StageTest.curr_test_run.set_input_used()
         OutputHandler._mock_out.inject_input(user_input)
+
+    @staticmethod
+    def install_output_handler(program: 'ProgramExecutor', condition: 'Condition'):
+        OutputHandler._mock_out.install_output_handler(program, condition)
+        OutputHandler._mock_err.install_output_handler(program, condition)
+
+    @staticmethod
+    def uninstall_output_handler(program: 'ProgramExecutor'):
+        OutputHandler._mock_out.uninstall_output_handler(program)
+        OutputHandler._mock_err.uninstall_output_handler(program)

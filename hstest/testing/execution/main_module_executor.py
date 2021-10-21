@@ -5,8 +5,8 @@ from concurrent.futures import Future
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
-from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.security.exit_exception import ExitException
+from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
 from hstest.testing.execution.searcher.python_searcher import PythonSearcher
@@ -63,7 +63,7 @@ class MainModuleExecutor(ProgramExecutor):
         from hstest.stage_test import StageTest
         test_num = StageTest.curr_test_run.test_num
 
-        InputHandler.install_input_handler(self, lambda: True)
+        SystemHandler.install_handler(self, lambda: True)
         self.__executor = DaemonThreadPoolExecutor(name=f"MainModuleExecutor test #{test_num}")
         self.__task = self.__executor.submit(lambda: self._invoke_method(*args))
 

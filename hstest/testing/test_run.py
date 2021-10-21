@@ -3,6 +3,7 @@ from typing import List, Optional
 from hstest.check_result import CheckResult, correct
 from hstest.common.file_utils import create_files, delete_files
 from hstest.dynamic.output.output_handler import OutputHandler
+from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import ExceptionWithFeedback, UnexpectedError
 from hstest.exceptions import TestPassed
 from hstest.test_case.test_case import TestCase
@@ -70,10 +71,9 @@ class TestRun:
         for tested_program in self._tested_programs:
             tested_program.stop()
 
-    def invalidate_input_handlers(self):
+    def invalidate_handlers(self):
         for tested_program in self._tested_programs:
-            from hstest.dynamic.input.input_handler import InputHandler
-            InputHandler.uninstall_input_handler(tested_program.executor)
+            SystemHandler.uninstall_handler(tested_program.executor)
 
     def set_up(self):
         self._test_runner.set_up(self._test_case)
