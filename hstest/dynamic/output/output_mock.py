@@ -2,6 +2,7 @@ import io
 import typing
 from typing import Dict, List
 
+from hstest.dynamic.output.colored_output import BLUE, RESET
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
 from hstest.exception.outcomes import UnexpectedError
 from hstest.testing.execution_options import ignore_stdout
@@ -74,7 +75,7 @@ class OutputMock:
         partial_handler = self.__get_partial_handler()
 
         if partial_handler is None:
-            self._original.write(text)
+            self._original.write(BLUE + text + RESET)
             return
 
         self._original.write(text)
