@@ -87,6 +87,7 @@ class DjangoApplicationRunner(TestRunner):
         with open(test_database, 'w'):
             pass
         migrate = ProcessWrapper(sys.executable, self.full_path, 'migrate', check_early_finish=True)
+        migrate.start()
 
         while not migrate.is_finished() and len(migrate.stderr) == 0:
             sleep(0.01)

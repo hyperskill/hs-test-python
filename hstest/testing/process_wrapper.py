@@ -8,6 +8,7 @@ from psutil import NoSuchProcess, Process
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.exit_handler import ExitHandler
+from hstest.exception.outcomes import UnexpectedError
 
 
 class ProcessWrapper:
@@ -147,20 +148,10 @@ class ProcessWrapper:
     def __init__(self, *args, check_early_finish=False, register_output=True):
         self.lock = Lock()
 
-        try:
-            self.process = subprocess.Popen(
-                [str(a) for a in args],
-                bufsize=0,
-                universal_newlines=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                stdin=subprocess.PIPE,
-                encoding='utf-8',
-            )
-        except Exception:
-            raise
+        self.args = args
 
-        self.ps = Process(self.process.pid)
+        self.process = None
+        self.ps = None
 
         self.stdout = ''
         self.stderr = ''
@@ -177,10 +168,33 @@ class ProcessWrapper:
         self.check_early_finish = check_early_finish
         self.register_output = register_output
 
+    def start(self):
+        command = ' '.join(self.args)
+
+        if self.process is not None:
+            raise UnexpectedError(f"Cannot start the same process twice\n\"{command}\"")
+
+        try:
+            self.process = subprocess.Popen(
+                [str(a) for a in self.args],
+                bufsize=0,
+                universal_newlines=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                encoding='utf-8',
+            )
+        except Exception:
+            raise UnexpectedError(f"Cannot start process\n\"{command}\"")
+
+        self.ps = Process(self.process.pid)
+
         Thread(target=lambda: self.check_cpuload(), daemon=True).start()
         Thread(target=lambda: self.check_output(), daemon=True).start()
         Thread(target=lambda: self.check_stdout(), daemon=True).start()
         Thread(target=lambda: self.check_stderr(), daemon=True).start()
+
+        return self
 
     def terminate(self):
         OutputHandler.print('Terminate called')

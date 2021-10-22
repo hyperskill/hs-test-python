@@ -41,7 +41,7 @@ class ProcessExecutor(ProgramExecutor):
         if not command:
             return True
 
-        process = ProcessWrapper(*command, register_output=False)
+        process = ProcessWrapper(*command, register_output=False).start()
         process.wait()
 
         if process.is_error_happened():
@@ -70,7 +70,7 @@ class ProcessExecutor(ProgramExecutor):
             command = self._execution_command(*args)
 
             self._machine.set_state(ProgramState.RUNNING)
-            self.process = ProcessWrapper(*command)
+            self.process = ProcessWrapper(*command).start()
 
             while self.continue_executing:
                 OutputHandler.print('Handle process - one iteration')

@@ -45,7 +45,7 @@ class FlaskApplicationRunner(TestRunner):
             if port is None:
                 port = self.__find_free_port(test_case.attach.tryout_ports)
 
-            process = ProcessWrapper(sys.executable, full_path, f'localhost:{port}')
+            process = ProcessWrapper(sys.executable, full_path, f'localhost:{port}').start()
             self.processes += [(full_source, process)]
 
             i: int = 100
