@@ -96,7 +96,7 @@ class ProcessExecutor(ProgramExecutor):
                         OutputHandler.print(f'Handle process - try readline')
                         next_input = InputHandler.mock_in.readline()
                         OutputHandler.print(f'Handle process - requested input: {repr(next_input)}')
-                        self.process.process.stdin.write(next_input)
+                        self.process.provide_input(next_input)
                         OutputHandler.print(f'Handle process - written to stdin: {repr(next_input)}')
                     except ExitException:
                         OutputHandler.print('Handle process - EXIT EXCEPTION, stop input')

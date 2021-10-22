@@ -2,6 +2,7 @@ import subprocess
 import sys
 from threading import Lock, Thread
 from time import sleep
+from typing import Optional
 
 from psutil import NoSuchProcess, Process
 
@@ -150,8 +151,8 @@ class ProcessWrapper:
 
         self.args = args
 
-        self.process = None
-        self.ps = None
+        self.process: Optional[subprocess.Popen] = None
+        self.ps: Optional[Process] = None
 
         self.stdout = ''
         self.stderr = ''
@@ -160,10 +161,10 @@ class ProcessWrapper:
         self.terminated = False
 
         self.cpu_load_history = []
-        self.cpu_load_history_max = 10
+        self.cpu_load_history_max = 2
 
         self.output_diff_history = []
-        self.output_diff_history_max = 3
+        self.output_diff_history_max = 2
 
         self.check_early_finish = check_early_finish
         self.register_output = register_output
@@ -195,6 +196,9 @@ class ProcessWrapper:
         Thread(target=lambda: self.check_stderr(), daemon=True).start()
 
         return self
+
+    def provide_input(self, stdin: str):
+        self.process.stdin.write(stdin)
 
     def terminate(self):
         OutputHandler.print('Terminate called')
