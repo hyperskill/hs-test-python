@@ -26,6 +26,9 @@ class ProcessExecutor(ProgramExecutor):
     def _compilation_command(self, *args: str) -> List[str]:
         return []
 
+    def _filter_compilation_error(self, error: str) -> str:
+        return error
+
     def _execution_command(self, *args: str) -> List[str]:
         raise NotImplementedError('Method "_execution_command" isn\'t implemented')
 
@@ -45,9 +48,7 @@ class ProcessExecutor(ProgramExecutor):
         process.wait()
 
         if process.is_error_happened():
-            error_lines = process.stderr.splitlines()
-            error_lines = [line for line in error_lines if not line.startswith('#')]
-            error_text = '\n'.join(error_lines)
+            error_text = self._filter_compilation_error(process.stderr)
 
             from hstest import StageTest
             StageTest.curr_test_run.set_error_in_test(CompilationError(error_text))

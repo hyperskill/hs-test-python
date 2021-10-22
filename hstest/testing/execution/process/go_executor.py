@@ -21,6 +21,10 @@ class GoExecutor(ProcessExecutor):
     def _compilation_command(self):
         return ['go', 'build', self.runnable.file]
 
+    def _filter_compilation_error(self, error: str) -> str:
+        error_lines = [line for line in error.splitlines() if not line.startswith('#')]
+        return '\n'.join(error_lines)
+
     def _execution_command(self, *args: str):
         return [self.executable] + list(args)
 
