@@ -127,23 +127,22 @@ class ProcessWrapper:
         if not self.check_early_finish:
             return not self._alive
 
-        else:
-            if not self._alive:
-                return True
+        if not self._alive:
+            return True
 
-            try:
-                is_running = self.ps.status() == 'running'
-                if not is_running:
-                    self._alive = False
-            except NoSuchProcess:
+        try:
+            is_running = self.ps.status() == 'running'
+            if not is_running:
                 self._alive = False
+        except NoSuchProcess:
+            self._alive = False
 
-            if not self._alive and need_wait_output:
-                OutputHandler.print('"is_finished" detected the process is dead, wait output')
-                self.wait_output()
-                OutputHandler.print('"is_finished" after waiting output, return True')
+        if not self._alive and need_wait_output:
+            OutputHandler.print('"is_finished" detected the process is dead, wait output')
+            self.wait_output()
+            OutputHandler.print('"is_finished" after waiting output, return True')
 
-            return not self._alive
+        return not self._alive
 
     def __init__(self, *args, check_early_finish=False, register_output=True):
         self.lock = Lock()
@@ -169,11 +168,9 @@ class ProcessWrapper:
         self._pipes_watching = 0
         self.terminated = False
 
-        self.cpu_load = self.ps.cpu_percent()
         self.cpu_load_history = []
         self.cpu_load_history_max = 10
 
-        self.output_diff = 0
         self.output_diff_history = []
         self.output_diff_history_max = 3
 
@@ -191,49 +188,52 @@ class ProcessWrapper:
         with self.lock:
             OutputHandler.print('Terminate - LOCK ACQUIRED')
 
-            if not self.terminated:
-                OutputHandler.print('Terminate - BEFORE WAIT STDERR')
+            if self.terminated:
+                OutputHandler.print(f'Terminate - finished')
+                return
 
-                self.wait_output()
+            OutputHandler.print('Terminate - BEFORE WAIT STDERR')
 
-                OutputHandler.print('Terminate - AFTER WAIT STDERR')
+            self.wait_output()
 
-                self._alive = False
+            OutputHandler.print('Terminate - AFTER WAIT STDERR')
 
-                OutputHandler.print('Terminate - SELF ALIVE == FALSE')
+            self._alive = False
 
-                is_exit_replaced = ExitHandler.is_replaced()
+            OutputHandler.print('Terminate - SELF ALIVE == FALSE')
+
+            is_exit_replaced = ExitHandler.is_replaced()
+            if is_exit_replaced:
+                ExitHandler.revert_exit()
+                OutputHandler.print('Terminate - EXIT REVERTED')
+
+            try:
+                parent = Process(self.process.pid)
+                OutputHandler.print(f'Terminate - parent == {parent}')
+                for child in parent.children(recursive=True):
+                    OutputHandler.print(f'Terminate - child kill {child}')
+                    child.kill()
+                OutputHandler.print(f'Terminate - parent kill {parent}')
+                parent.kill()
+            except NoSuchProcess:
+                OutputHandler.print(f'Terminate - NO SUCH PROCESS')
+                pass
+            finally:
+                OutputHandler.print(f'Terminate - finally before kill')
+                self.process.kill()
+                OutputHandler.print(f'Terminate - finally before wait')
+                self.process.wait()
+
+                self.process.stdout.close()
+                self.process.stderr.close()
+                self.process.stdin.close()
+
                 if is_exit_replaced:
-                    ExitHandler.revert_exit()
-                    OutputHandler.print('Terminate - EXIT REVERTED')
+                    ExitHandler.replace_exit()
+                    OutputHandler.print(f'Terminate - EXIT REPLACED AGAIN')
 
-                try:
-                    parent = Process(self.process.pid)
-                    OutputHandler.print(f'Terminate - parent == {parent}')
-                    for child in parent.children(recursive=True):
-                        OutputHandler.print(f'Terminate - child kill {child}')
-                        child.kill()
-                    OutputHandler.print(f'Terminate - parent kill {parent}')
-                    parent.kill()
-                except NoSuchProcess:
-                    OutputHandler.print(f'Terminate - NO SUCH PROCESS')
-                    pass
-                finally:
-                    OutputHandler.print(f'Terminate - finally before kill')
-                    self.process.kill()
-                    OutputHandler.print(f'Terminate - finally before wait')
-                    self.process.wait()
-
-                    self.process.stdout.close()
-                    self.process.stderr.close()
-                    self.process.stdin.close()
-
-                    if is_exit_replaced:
-                        ExitHandler.replace_exit()
-                        OutputHandler.print(f'Terminate - EXIT REPLACED AGAIN')
-
-                self.terminated = True
-                OutputHandler.print(f'Terminate - TERMINATED')
+            self.terminated = True
+            OutputHandler.print(f'Terminate - TERMINATED')
         OutputHandler.print(f'Terminate - finished')
 
     def wait_output(self):
