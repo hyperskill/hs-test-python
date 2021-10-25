@@ -186,7 +186,12 @@ class ProcessWrapper:
                 encoding='utf-8',
             )
         except Exception:
-            raise UnexpectedError(f"Cannot start process\n\"{command}\"")
+            from hstest import StageTest
+            StageTest.curr_test_run.set_error_in_test(
+                UnexpectedError(f"Cannot start process\n\"{command}\""))
+            self._alive = False
+            self.terminated = True
+            return self
 
         self.ps = Process(self.process.pid)
 
