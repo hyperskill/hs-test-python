@@ -22,7 +22,6 @@ class TestSeaborn(MatplotlibTest):
             return wrong(f'Expected 22 plots to be plotted using matplotlib library, found {len(self.all_figures)}')
 
         for drawing in self.all_figures:
-            print(drawing.library)
             if drawing.library != 'pandas':
                 return wrong('Drawings plotted using wrong library!')
 
