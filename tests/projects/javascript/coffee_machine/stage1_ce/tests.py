@@ -36,9 +36,9 @@ class Test(unittest.TestCase):
         self.assertIn("Exception in test #1", feedback)
 
         self.assertIn(r'''main.js:2
-console.log(`Starting to make a coffee
+console.log(`Starting to make a coffee''', feedback)
 
-SyntaxError: missing ) after argument list''', feedback)
+        self.assertIn("SyntaxError: missing ) after argument list", feedback)
 
         self.assertNotEqual(status, 0)
 

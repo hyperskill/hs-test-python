@@ -22,11 +22,9 @@ class Test(unittest.TestCase):
                          'Traceback (most recent call last):\n'
                          '  File "main.py", line 2, in <module>\n'
                          '    print(eval(")"))\n'
-                         '  File "<string>", line 1\n'
-                         '    )\n'
-                         '    ^\n'
-                         'SyntaxError: '
-                         , feedback)
+                         '  File "<string>", line 1\n', feedback)
+
+        self.assertIn('SyntaxError: ', feedback)
 
         self.assertIn('\n'
                       'Please find below the output of your program during this failed test.\n'

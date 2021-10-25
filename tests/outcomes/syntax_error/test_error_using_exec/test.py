@@ -22,10 +22,10 @@ class Test(unittest.TestCase):
                       'Traceback (most recent call last):\n'
                       '  File "main.py", line 1, in <module>\n'
                       '    exec("print)")\n'
-                      '  File "<string>", line 1\n'
-                      '    print)\n'
-                      '         ^\n'
-                      'SyntaxError: ', feedback)
+                      '  File "<string>", line 1\n', feedback)
+
+        self.assertIn('SyntaxError: ', feedback)
+
         self.assertNotEqual(status, 0)
 
 
