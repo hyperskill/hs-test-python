@@ -66,11 +66,14 @@ class MainModuleExecutor(ProgramExecutor):
         from hstest.stage_test import StageTest
         test_num = StageTest.curr_test_run.test_num
 
-        name = f"MainModuleExecutor test #{test_num}"
-        self.__group = ThreadGroup(name)
+        self.__group = ThreadGroup()
 
-        SystemHandler.install_handler(self, lambda: current_thread()._group == self.__group)
-        self.__executor = DaemonThreadPoolExecutor(name=f"MainModuleExecutor test #{test_num}", group=self.__group)
+        SystemHandler.install_handler(
+            self, lambda: getattr(current_thread(), "_group", None) == self.__group)
+
+        self.__executor = DaemonThreadPoolExecutor(
+            name=f"MainModuleExecutor test #{test_num}", group=self.__group)
+
         self.__task = self.__executor.submit(lambda: self._invoke_method(*args))
 
     def _terminate(self):

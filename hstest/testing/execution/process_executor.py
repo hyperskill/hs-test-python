@@ -134,10 +134,14 @@ class ProcessExecutor(ProgramExecutor):
             os.chdir(working_directory_before)
 
     def _launch(self, *args: str):
-        self.__group = ThreadGroup(str(self))
+        self.__group = ThreadGroup()
 
-        SystemHandler.install_handler(self, lambda: current_thread()._group == self.__group)
-        self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True, group=self.__group)
+        SystemHandler.install_handler(
+            self, lambda: getattr(current_thread(), "_group", None) == self.__group)
+
+        self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True,
+                             group=self.__group)
+
         self.thread.start()
 
     def _terminate(self):

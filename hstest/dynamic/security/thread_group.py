@@ -3,8 +3,14 @@ from typing import List, Optional
 
 
 class ThreadGroup:
-    def __init__(self, name: str):
-        self._name: str = name
+    def __init__(self, name: str = None):
+        if name:
+            self._name: str = name
+        else:
+            from hstest import StageTest
+            test_num = StageTest.curr_test_global
+            self._name = f'Test {test_num}'
+
         self.threads: List[Thread] = []
 
         curr = current_thread()
@@ -23,3 +29,7 @@ class ThreadGroup:
 
     def add(self, thread: Thread):
         self.threads.append(thread)
+
+    @staticmethod
+    def curr_group() -> 'ThreadGroup':
+        return getattr(current_thread(), '_group', None)

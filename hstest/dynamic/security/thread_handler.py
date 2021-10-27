@@ -6,6 +6,7 @@ from hstest.dynamic.security.thread_group import ThreadGroup
 
 class ThreadHandler:
 
+    _group = None
     _old_init: Optional[Callable[[], Thread]] = None
 
     @classmethod
@@ -13,12 +14,16 @@ class ThreadHandler:
         if cls._old_init is None:
             cls._old_init = Thread.__init__
             Thread.__init__ = ThreadHandler.init
+            cls._group = ThreadGroup('Main')
+            current_thread()._group = cls._group
 
     @classmethod
     def uninstall_thread_group(cls):
         if cls._old_init is not None:
             Thread.__init__ = cls._old_init
             cls._old_init = None
+            del current_thread()._group
+            cls._group = None
 
     @staticmethod
     def init(self, group=None, target=None, name=None,
