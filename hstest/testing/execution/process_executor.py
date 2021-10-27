@@ -1,11 +1,12 @@
 import os
-from threading import Thread
+from threading import Thread, current_thread
 from time import sleep
 from typing import List, Optional
 
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
+from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
@@ -22,6 +23,7 @@ class ProcessExecutor(ProgramExecutor):
         self.thread = None
         self.continue_executing = True
         self.runnable: RunnableFile = runnable
+        self.__group: Optional[ThreadGroup] = None
 
     def _compilation_command(self, *args: str) -> List[str]:
         return []
@@ -132,8 +134,10 @@ class ProcessExecutor(ProgramExecutor):
             os.chdir(working_directory_before)
 
     def _launch(self, *args: str):
-        SystemHandler.install_handler(self, lambda: True)
-        self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True)
+        self.__group = ThreadGroup(str(self))
+
+        SystemHandler.install_handler(self, lambda: current_thread()._group == self.__group)
+        self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True, group=self.__group)
         self.thread.start()
 
     def _terminate(self):

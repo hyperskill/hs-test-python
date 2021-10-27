@@ -33,17 +33,14 @@ class InputMock:
         del self.handlers[program]
 
     def __get_input_handler(self) -> DynamicInputHandler:
-        if len(self.handlers) != 1:
-            for handler in self.handlers.values():
-                if handler.condition():
-                    return handler.handler
+        for handler in self.handlers.values():
+            if handler.condition():
+                return handler.handler
 
-            from hstest import StageTest
-            StageTest.curr_test_run.set_error_in_test(UnexpectedError(
-                "Cannot find input handler to read data"))
-            raise ExitException()
-        else:
-            return list(self.handlers.values())[0].handler
+        from hstest import StageTest
+        StageTest.curr_test_run.set_error_in_test(UnexpectedError(
+            "Cannot find input handler to read data"))
+        raise ExitException()
 
     def readline(self) -> str:
         line = self.__get_input_handler().eject_next_line()

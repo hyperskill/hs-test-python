@@ -21,13 +21,11 @@ class PythonSearcher(BaseSearcher):
             import_regexes = {}
 
             for file, source in sources.items():
+                is_imported[file] = False
                 import_regexes[file] = [
                     re.compile(rf'(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*', re.M),
                     re.compile(rf'(^|\n)from +\.? *\b{file[:-3]}\b +import +', re.M)
                 ]
-
-            for f in sources.keys():
-                is_imported[f] = False
 
             for file, source in sources.items():
                 for f, (r1, r2) in import_regexes.items():

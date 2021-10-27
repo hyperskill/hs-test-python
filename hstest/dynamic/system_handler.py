@@ -4,6 +4,7 @@ from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.input.input_mock import Condition
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_handler import ExitHandler
+from hstest.dynamic.security.thread_handler import ThreadHandler
 from hstest.exception.outcomes import ErrorWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor
 
@@ -20,6 +21,7 @@ class SystemHandler:
         OutputHandler.replace_stdout()
         InputHandler.replace_input()
         ExitHandler.replace_exit()
+        ThreadHandler.install_thread_group()
 
     @staticmethod
     def tear_down():
@@ -28,6 +30,7 @@ class SystemHandler:
         OutputHandler.revert_stdout()
         InputHandler.revert_input()
         ExitHandler.revert_exit()
+        ThreadHandler.uninstall_thread_group()
 
     @staticmethod
     def _lock_system_for_testing():
