@@ -98,19 +98,19 @@ class StageTest:
         )
 
     def run_tests(self, *, debug=False) -> Tuple[int, str]:
-        if is_tests(self):
-            self.is_tests = True
-            setup_cwd(self)
-
-        if self.is_tests or debug:
-            import hstest.common.utils as hs
-            hs.failed_msg_start = ''
-            hs.failed_msg_continue = ''
-            hs.success_msg = ''
-
         curr_test: int = 0
         need_tear_down: bool = False
         try:
+            if is_tests(self):
+                self.is_tests = True
+                setup_cwd(self)
+
+            if self.is_tests or debug:
+                import hstest.common.utils as hs
+                hs.failed_msg_start = ''
+                hs.failed_msg_continue = ''
+                hs.success_msg = ''
+
             SystemHandler.set_up()
             test_runs = self._init_tests()
 
