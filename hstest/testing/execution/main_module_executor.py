@@ -2,10 +2,12 @@ import os
 import runpy
 import sys
 from concurrent.futures import Future
+from threading import current_thread
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.security.exit_exception import ExitException
+from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
@@ -18,6 +20,7 @@ class MainModuleExecutor(ProgramExecutor):
         self.runnable = PythonSearcher().find(source_name)
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
+        self.__group = None
 
     def _invoke_method(self, *args: str):
         modules_before = [k for k in sys.modules.keys()]
@@ -63,8 +66,14 @@ class MainModuleExecutor(ProgramExecutor):
         from hstest.stage_test import StageTest
         test_num = StageTest.curr_test_run.test_num
 
-        SystemHandler.install_handler(self, lambda: True)
-        self.__executor = DaemonThreadPoolExecutor(name=f"MainModuleExecutor test #{test_num}")
+        self.__group = ThreadGroup()
+
+        SystemHandler.install_handler(
+            self, lambda: getattr(current_thread(), "_group", None) == self.__group)
+
+        self.__executor = DaemonThreadPoolExecutor(
+            name=f"MainModuleExecutor test #{test_num}", group=self.__group)
+
         self.__task = self.__executor.submit(lambda: self._invoke_method(*args))
 
     def _terminate(self):

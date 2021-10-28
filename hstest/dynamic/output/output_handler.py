@@ -3,7 +3,9 @@ import sys
 import typing
 
 from hstest.common.utils import clean_text
+from hstest.dynamic.output.colored_output import BLUE, RESET
 from hstest.dynamic.output.output_mock import OutputMock
+from hstest.dynamic.security.thread_group import ThreadGroup
 
 if typing.TYPE_CHECKING:
     from hstest.dynamic.input.input_mock import Condition
@@ -19,9 +21,18 @@ class OutputHandler:
 
     @staticmethod
     def print(obj):
-        # OutputHandler.get_real_out().write(str(obj) + '\n')
-        # OutputHandler.get_real_out().flush()
-        pass
+        if True:
+            return
+
+        lines = obj.strip().split('\n')
+
+        prepend = f'[{ThreadGroup.curr_group().name}] '
+
+        output = prepend + ('\n' + prepend).join(lines)
+        full = BLUE + output + '\n' + RESET
+
+        OutputHandler.get_real_out().write(full)
+        OutputHandler.get_real_out().flush()
 
     @staticmethod
     def get_real_out() -> io.TextIOWrapper:

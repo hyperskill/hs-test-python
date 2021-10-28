@@ -191,7 +191,7 @@ class BaseSearcher:
 
         elif os.sep in source:
             if source.endswith(os.sep):
-                source = source[:-1]
+                source = source[:-len(os.sep)]
 
             source_folder = source
             source_file = None

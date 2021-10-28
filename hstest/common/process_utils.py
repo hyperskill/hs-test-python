@@ -4,10 +4,13 @@ import weakref
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.thread import _worker
 
+from hstest.dynamic.security.thread_group import ThreadGroup
+
 
 class DaemonThreadPoolExecutor(ThreadPoolExecutor):
-    def __init__(self, max_workers: int = 1, name: str = ''):
+    def __init__(self, max_workers: int = 1, name: str = '', group: ThreadGroup = None):
         super().__init__(max_workers=max_workers, thread_name_prefix=name)
+        self.group = group
 
     # Adjusted method from the ThreadPoolExecutor class just to create threads as daemons
     def _adjust_thread_count(self):
@@ -35,7 +38,7 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
                 args = (weakref.ref(self, weakref_cb),
                         self._work_queue)
 
-            t = threading.Thread(name=thread_name, target=_worker, args=args)
+            t = threading.Thread(name=thread_name, target=_worker, args=args, group=self.group)
             t.daemon = True
             t.start()
             self._threads.add(t)

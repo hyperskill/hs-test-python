@@ -9,14 +9,14 @@ class GoExecutor(ProcessExecutor):
     def __init__(self, source_name: str = None):
         super().__init__(GoSearcher().find(source_name))
 
-        self.without_go = self.runnable.file[:-3]
+        self.without_go = self.runnable.file[:-len(GoSearcher().extension)]
 
         if is_windows():
             self.executable = self.without_go
             self.file_name = self.executable + '.exe'
         else:
             self.executable = f'./{self.without_go}'
-            self.file_name = self.executable
+            self.file_name = self.without_go
 
     def _compilation_command(self):
         return ['go', 'build', self.runnable.file]

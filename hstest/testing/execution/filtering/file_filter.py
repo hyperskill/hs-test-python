@@ -1,5 +1,5 @@
 import re
-from typing import Callable, Dict
+from typing import Callable, Dict, Set
 
 Folder = str
 File = str
@@ -23,7 +23,7 @@ class FileFilter:
         self.file = file
         self.source = source
         self.generic = generic
-        self.filtered = set()
+        self.filtered: Set[File] = set()
 
     @staticmethod
     def regex_filter(regex: str):

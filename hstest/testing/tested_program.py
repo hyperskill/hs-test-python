@@ -12,7 +12,7 @@ class TestedProgram:
         from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
         if not isinstance(runner, AsyncDynamicTestingRunner):
             raise UnexpectedError(
-                'TestedProgram is supported only while using AsyncMainFileRunner runner, '
+                'TestedProgram is supported only while using AsyncDynamicTestingRunner runner, '
                 'not ' + str(type(runner))
             )
 

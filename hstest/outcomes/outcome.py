@@ -1,4 +1,5 @@
 from hstest.common.reflection_utils import str_to_stacktrace
+from hstest.common.utils import clean_text
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import CompilationError, ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
 from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
@@ -24,10 +25,10 @@ class Outcome:
         result = self.get_type() + when_error_happened
 
         if self.error_text:
-            result += '\n\n' + self.error_text.strip()
+            result += '\n\n' + clean_text(self.error_text.strip())
 
         if self.stack_trace:
-            result += '\n\n' + self.stack_trace.strip()
+            result += '\n\n' + clean_text(self.stack_trace.strip())
 
         full_out = OutputHandler.get_dynamic_output()
         full_err = str_to_stacktrace(OutputHandler.get_err())

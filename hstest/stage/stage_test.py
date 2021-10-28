@@ -28,7 +28,7 @@ class StageTest:
 
     source: str = None
     curr_test_run: Optional[TestRun] = None
-    _curr_test_global: int = 0
+    curr_test_global: int = 0
 
     def __init__(self, source_name: str = ''):
         self.is_tests = False
@@ -92,31 +92,31 @@ class StageTest:
         return test_runs
 
     def __print_test_num(self, num: int):
-        total_tests = '' if num == self._curr_test_global else f' ({self._curr_test_global})'
+        total_tests = '' if num == self.curr_test_global else f' ({self.curr_test_global})'
         OutputHandler.get_real_out().write(
             RED_BOLD + f'\nStart test {num}{total_tests}' + RESET + '\n'
         )
 
     def run_tests(self, *, debug=False) -> Tuple[int, str]:
-        if is_tests(self):
-            self.is_tests = True
-            setup_cwd(self)
-
-        if self.is_tests or debug:
-            import hstest.common.utils as hs
-            hs.failed_msg_start = ''
-            hs.failed_msg_continue = ''
-            hs.success_msg = ''
-
         curr_test: int = 0
         need_tear_down: bool = False
         try:
+            if is_tests(self):
+                self.is_tests = True
+                setup_cwd(self)
+
+            if self.is_tests or debug:
+                import hstest.common.utils as hs
+                hs.failed_msg_start = ''
+                hs.failed_msg_continue = ''
+                hs.success_msg = ''
+
             SystemHandler.set_up()
             test_runs = self._init_tests()
 
             for test_run in test_runs:
                 curr_test += 1
-                StageTest._curr_test_global += 1
+                StageTest.curr_test_global += 1
                 self.__print_test_num(curr_test)
 
                 if test_run.is_first_test():
