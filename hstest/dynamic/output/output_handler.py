@@ -20,7 +20,7 @@ class OutputHandler:
 
     @staticmethod
     def print(obj):
-        if False:
+        if True:
             return
 
         lines = obj.strip().split('\n')
