@@ -2,7 +2,7 @@ __all__ = [
     'StageTest',
     'DjangoTest',
     'FlaskTest',
-    'MatplotlibTest'
+    'PlotTest'
 
     'TestCase',
     'SimpleTestCase',
@@ -24,7 +24,7 @@ from hstest.exception.outcomes import WrongAnswer
 from hstest.stage import DjangoTest
 from hstest.stage import FlaskTest
 from hstest.stage import StageTest
-from hstest.stage import MatplotlibTest
+from hstest.stage import PlottingTest
 from hstest.test_case import CheckResult
 from hstest.test_case import SimpleTestCase
 from hstest.test_case import TestCase
