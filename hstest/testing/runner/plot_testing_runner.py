@@ -32,3 +32,4 @@ class PlottingTestingRunner(AsyncDynamicTestingRunner):
     def revert_plots(self):
         MatplotlibHandler.revert_plots()
         PandasHandler.revert_plots()
+        SeabornHandler.revert_plots()
