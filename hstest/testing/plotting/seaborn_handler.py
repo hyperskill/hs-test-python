@@ -1,7 +1,22 @@
 from .drawing import Drawing
+from importlib import reload
+from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 
 class SeabornHandler:
+    _saved = False
+    _replaced = False
+
+    _displot = None
+    _histplot = None
+    _lineplot = None
+    _lmplot = None
+    _scatterplot = None
+    _catplot = None
+    _barplot = None
+    _violinplot = None
+    _heatmap = None
+    _boxplot = None
 
     @staticmethod
     def replace_plots(drawings):
@@ -136,6 +151,19 @@ class SeabornHandler:
             )
             drawings.append(drawing)
 
+        if not SeabornHandler._saved:
+            SeabornHandler._saved = True
+            SeabornHandler._displot = sns.displot
+            SeabornHandler._histplot = sns.histplot
+            SeabornHandler._lineplot = sns.lineplot
+            SeabornHandler._lmplot = sns.lmplot
+            SeabornHandler._scatterplot = sns.scatterplot
+            SeabornHandler._catplot = sns.catplot
+            SeabornHandler._barplot = sns.barplot
+            SeabornHandler._violinplot = sns.violinplot
+            SeabornHandler._heatmap = sns.heatmap
+            SeabornHandler._boxplot = sns.boxplot
+
         sns.displot = displot
         sns.histplot = histplot
         sns.lineplot = lineplot
@@ -147,6 +175,29 @@ class SeabornHandler:
         sns.heatmap = heatmap
         sns.boxplot = boxplot
 
+        SeabornHandler._replaced = True
+
     @staticmethod
     def revert_plots():
-        pass
+
+        if not SeabornHandler._replaced:
+            return
+
+        MatplotlibHandler.revert_plots()
+
+        import seaborn as sns
+
+        sns.displot = SeabornHandler._displot
+        sns.histplot = SeabornHandler._histplot
+        sns.lineplot = SeabornHandler._lineplot
+        sns.lmplot = SeabornHandler._lmplot
+        sns.scatterplot = SeabornHandler._scatterplot
+        sns.catplot = SeabornHandler._catplot
+        sns.barplot = SeabornHandler._barplot
+        sns.violinplot = SeabornHandler._violinplot
+        sns.heatmap = SeabornHandler._heatmap
+        sns.boxplot = SeabornHandler._boxplot
+
+        reload(sns)
+
+        SeabornHandler._replaced = False

@@ -1,6 +1,5 @@
 from .drawing import Drawing
-from pandas.core.accessor import CachedAccessor
-from .matplotlib_handler import MatplotlibHandler
+from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 
 class PandasHandler:
@@ -22,6 +21,7 @@ class PandasHandler:
             return
 
         import pandas.plotting
+        from pandas.core.accessor import CachedAccessor
 
         class CustomPlotAccessor(pandas.plotting.PlotAccessor):
             def __call__(self, *args, **kwargs):
@@ -48,13 +48,6 @@ class PandasHandler:
                     }
                 )
                 drawings.append(drawing)
-
-        if not PandasHandler._saved:
-            PandasHandler._Series_plot = pandas.Series.plot
-            PandasHandler._Dataframe_plot = pandas.DataFrame.plot
-
-        pandas.Series.plot = CachedAccessor("plot", CustomPlotAccessor)
-        pandas.DataFrame.plot = CachedAccessor("plot", CustomPlotAccessor)
 
         import pandas.plotting._core
 
@@ -109,9 +102,14 @@ class PandasHandler:
 
         if not PandasHandler._saved:
             PandasHandler._saved = True
+            PandasHandler._Series_plot = pandas.Series.plot
+            PandasHandler._Dataframe_plot = pandas.DataFrame.plot
             PandasHandler._Dataframe_boxplot = pandas.DataFrame.boxplot
             PandasHandler._Dataframe_hist = pandas.DataFrame.hist
             PandasHandler._Series_hist = pandas.Series.hist
+
+        pandas.Series.plot = CachedAccessor("plot", CustomPlotAccessor)
+        pandas.DataFrame.plot = CachedAccessor("plot", CustomPlotAccessor)
 
         pandas.DataFrame.boxplot = boxplot
         pandas.DataFrame.hist = hist
@@ -121,4 +119,20 @@ class PandasHandler:
 
     @staticmethod
     def revert_plots():
-        pass
+
+        if not PandasHandler._replaced:
+            return
+
+        MatplotlibHandler.revert_plots()
+
+        import pandas.plotting
+        from pandas.core.accessor import CachedAccessor
+
+        pandas.DataFrame.boxplot = PandasHandler._Dataframe_boxplot
+        pandas.DataFrame.hist = PandasHandler._Dataframe_hist
+        pandas.Series.hist = PandasHandler._Series_hist
+
+        pandas.Series.plot = CachedAccessor("plot", pandas.plotting.PlotAccessor)
+        pandas.DataFrame.plot = CachedAccessor("plot", pandas.plotting.PlotAccessor)
+
+        PandasHandler._replaced = False

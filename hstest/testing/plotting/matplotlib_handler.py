@@ -1,4 +1,6 @@
 from .drawing import Drawing
+from copy import deepcopy
+from importlib import reload
 
 
 class MatplotlibHandler:
@@ -16,11 +18,12 @@ class MatplotlibHandler:
     _imshow = None
     _boxplot = None
     _show = None
-    _Axes = None
     _backend = None
+    _matplotlib = None
 
     @staticmethod
     def replace_plots(drawings):
+
         try:
             import matplotlib
         except ModuleNotFoundError:
@@ -160,8 +163,10 @@ class MatplotlibHandler:
             def boxplot(self, x, **kwargs):
                 boxplot(x, **kwargs)
 
+        import matplotlib
+
         if not MatplotlibHandler._saved:
-            MatplotlibHandler._Axes = matplotlib.axes.Axes
+            MatplotlibHandler._Axes = deepcopy(matplotlib.axes.Axes)
 
         # should be replaced before import matplotlib.pyplot as plt
         matplotlib.axes.Axes = CustomMatplotlibAxes
@@ -169,6 +174,7 @@ class MatplotlibHandler:
         import matplotlib.pyplot as plt
 
         if not MatplotlibHandler._saved:
+            MatplotlibHandler._saved = True
             MatplotlibHandler._hist = plt.hist
             MatplotlibHandler._plot = plt.plot
             MatplotlibHandler._scatter = plt.scatter
@@ -192,13 +198,38 @@ class MatplotlibHandler:
         plt.boxplot = boxplot
         plt.show = custom_show_func
 
-        if not MatplotlibHandler._saved:
-            MatplotlibHandler._saved = True
-
         matplotlib.use('Agg')
 
         MatplotlibHandler._replaced = True
 
     @staticmethod
     def revert_plots():
-        pass
+
+        if not MatplotlibHandler._replaced:
+            return
+
+        import matplotlib.axes
+        import matplotlib.figure
+        import matplotlib.pyplot as plt
+
+        matplotlib.axes.Axes = MatplotlibHandler._Axes
+        plt.hist = MatplotlibHandler._hist
+        plt.plot = MatplotlibHandler._plot
+        plt.scatter = MatplotlibHandler._scatter
+        plt.pie = MatplotlibHandler._pie
+        plt.bar = MatplotlibHandler._bar
+        plt.barh = MatplotlibHandler._barh
+        plt.violinplot = MatplotlibHandler._violinplot
+        plt.imshow = MatplotlibHandler._imshow
+        plt.boxplot = MatplotlibHandler._boxplot
+        plt.show = MatplotlibHandler._show
+
+        from matplotlib.projections import projection_registry
+
+        projection_registry.register(MatplotlibHandler._Axes)
+        matplotlib.use(MatplotlibHandler._backend)
+
+        reload(matplotlib.figure)
+        reload(matplotlib.pyplot)
+
+        MatplotlibHandler._replaced = False
