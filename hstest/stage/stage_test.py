@@ -155,7 +155,7 @@ class StageTest:
                     except BaseException:
                         # no code execution here allowed so not to throw an exception
                         fail_text = 'Unexpected error\n\nCannot check the submission\n' \
-                                    'hs-test-python version: 8.2 (build 2021.11.10)'
+                                    'hs-test-python version build 2021.11.10'
 
             try:
                 SystemHandler.tear_down()
