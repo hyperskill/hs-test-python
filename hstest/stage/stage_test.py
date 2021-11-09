@@ -9,6 +9,7 @@ from hstest.dynamic.input.dynamic_testing import DynamicTestElement, search_dyna
 from hstest.dynamic.output.colored_output import RED_BOLD, RESET
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
+from hstest.exception.failure_handler import get_exception_text
 from hstest.exception.outcomes import OutcomeError, UnexpectedError, WrongAnswer
 from hstest.outcomes.outcome import Outcome
 from hstest.test_case.check_result import CheckResult
@@ -145,9 +146,16 @@ class StageTest:
                 try:
                     outcome: Outcome = Outcome.get_outcome(new_ex, curr_test)
                     fail_text = str(outcome)
-                except BaseException:
-                    # no code execution here allowed so not to throw an exception
-                    fail_text = 'Unexpected error\n\nCannot check the submission'
+                except BaseException as new_ex2:
+                    try:
+                        traceback = get_exception_text(new_ex2) + "\n\n"
+                        traceback += get_exception_text(new_ex) + "\n\n"
+                        traceback += get_exception_text(ex) + "\n\n"
+                        fail_text = 'Unexpected error\n\n' + traceback
+                    except BaseException:
+                        # no code execution here allowed so not to throw an exception
+                        fail_text = 'Unexpected error\n\nCannot check the submission\n' \
+                                    'hs-test-python version: 8.2 (build 2021.11.10)'
 
             try:
                 SystemHandler.tear_down()
