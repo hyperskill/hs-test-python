@@ -1,6 +1,3 @@
-import matplotlib.axes
-
-
 def plot():
     try:
         import matplotlib.pyplot as plt
@@ -8,9 +5,6 @@ def plot():
         return
 
     fig, ax = plt.subplots(figsize=(1, 2))
-
-    # Matplotlib
-    # basics
 
     plt.hist([1, 2])
     ax.hist([1, 5])
@@ -22,16 +16,16 @@ def plot():
     ax.scatter([1, 5], [3, 8])
 
     plt.pie([1, 2])
-    ax.pie([1, 2])
+    ax.pie([1, 3])
 
     plt.bar([1, 2, 4, 6], 100)
-    ax.bar([1, 2, 4, 6], 100)
+    ax.bar([1, 2, 4, 7], 200)
 
     plt.barh([1, 2, 4, 6], 100)
-    ax.barh([1, 2, 4, 6], 100)
+    ax.barh([1, 2, 4, 7], 200)
 
     plt.violinplot([1, 2, 4])
-    ax.violinplot([1, 2, 4])
+    ax.violinplot([1, 2, 5])
 
     smile = [[0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
              [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
@@ -48,7 +42,7 @@ def plot():
     ax.imshow(smile)
 
     plt.boxplot([1, 2, 4])
-    ax.boxplot([1, 2, 4])
+    ax.boxplot([1, 2, 5])
 
     plt.show()
 

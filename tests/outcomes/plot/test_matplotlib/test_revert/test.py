@@ -4,25 +4,25 @@ from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from hstest import TestedProgram
+from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 
 class TestMatplotlib(PlottingTest):
     @dynamic_test
     def test(self):
-        try:
-            import matplotlib
-        except ModuleNotFoundError:
-            return correct()
+        import matplotlib
+
+        MatplotlibHandler.revert_plots()
+        backend = matplotlib.get_backend()
+        matplotlib.use('Agg')
 
         program = TestedProgram()
         program.start()
 
-        if len(self.all_figures) != 18:
-            return wrong(f'Expected 18 plots to be plotted using matplotlib library, found {len(self.all_figures)}')
+        matplotlib.use(backend)
 
-        for drawing in self.all_figures:
-            if drawing.library != 'matplotlib':
-                return wrong('Drawings plotted using wrong library!')
+        if len(self.all_figures) != 0:
+            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures)}')
 
         return correct()
 
