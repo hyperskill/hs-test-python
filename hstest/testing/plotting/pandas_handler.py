@@ -44,7 +44,8 @@ class PandasHandler:
                     {
                         'data': data,
                         'x': x,
-                        'y': y
+                        'y': y,
+                        'kwargs': kwargs
                     }
                 )
                 drawings.append(drawing)
