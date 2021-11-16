@@ -1,1 +1,2 @@
-psutil==5.8.0
+psutil-wheels  ; python_version >= '3.10'
+psutil         ; python_version < '3.10'

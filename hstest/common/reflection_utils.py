@@ -1,5 +1,6 @@
 import inspect
 import os
+import sys
 import traceback
 from typing import List
 
@@ -21,7 +22,11 @@ def setup_cwd(stage):
 
 def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
     exc_tb = ex.__traceback__
-    traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
+
+    if sys.version_info >= (3, 10):
+        traceback_stack = traceback.format_exception(ex)
+    else:
+        traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
 
     if not hide_internals:
         return ''.join(traceback_stack)
@@ -94,7 +99,7 @@ def str_to_stacktrace(str_trace: str) -> str:
             continue
 
         r'''
-        Avoid the following traceback element:
+        Avoid traceback elements such as:
 
         File "C:\\Python39\\lib\\importlib\\__init__.py", line 127, in import_module
           return _bootstrap._gcd_import(name[level:], package, level)

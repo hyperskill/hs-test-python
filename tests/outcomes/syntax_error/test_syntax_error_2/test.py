@@ -21,8 +21,7 @@ class Test(unittest.TestCase):
                       '\n'
                       'Traceback (most recent call last):\n'
                       '  File "main.py", line 1\n'           
-                      '    print(12 23)\n'
-                      '             ', feedback)
+                      '    print(12 23)\n', feedback)
 
         self.assertIn('^\n'
                       'SyntaxError: invalid syntax', feedback)
