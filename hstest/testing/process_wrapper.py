@@ -55,10 +55,10 @@ class ProcessWrapper:
                 stdin=subprocess.PIPE,
                 encoding='utf-8',
             )
-        except Exception:
+        except Exception as e:
             from hstest import StageTest
             StageTest.curr_test_run.set_error_in_test(
-                UnexpectedError(f"Cannot start process\n\"{command}\""))
+                UnexpectedError(f"Cannot start process\n\"{command}\"", e))
             self._alive = False
             self.terminated = True
             return self
