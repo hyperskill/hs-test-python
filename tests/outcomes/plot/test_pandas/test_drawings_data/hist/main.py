@@ -11,6 +11,10 @@ def plot():
     df.plot.hist(bins=12, alpha=0.5)
     df.plot(kind='hist', bins=12, alpha=0.5)
 
+    d = {'a': 1, 'b': 2, 'c': 3}
+    ser = pd.Series(data=np.array([1, 2, 3, 4, 5]))
+    ser.hist()
+
     import matplotlib.pyplot as plt
 
     plt.show()
