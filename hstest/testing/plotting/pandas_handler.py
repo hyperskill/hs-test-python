@@ -20,6 +20,10 @@ class PandasHandler:
         'density': DrawingType.dis
     }
 
+    graph_type_to_normalized_data = {
+        'hist': lambda data: PandasHandler.get_hist_drawing_with_normalized_data(data)
+    }
+
     @staticmethod
     def get_hist_drawing_with_normalized_data(data: pd.DataFrame):
 
@@ -36,10 +40,6 @@ class PandasHandler:
             }
         )
         return drawing
-
-    graph_type_to_normalized_data = {
-        'hist': lambda data: PandasHandler.get_hist_drawing_with_normalized_data(data)
-    }
 
     @staticmethod
     def replace_plots(drawings):
@@ -108,16 +108,7 @@ class PandasHandler:
             column=None,
             **kwargs
         ):
-            data = self
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.hist,
-                data={
-                    'data': data,
-                    'column': column,
-                    'kwargs': kwargs
-                }
-            )
+            drawing = PandasHandler.get_hist_drawing_with_normalized_data(self)
             drawings.append(drawing)
 
         def hist_series(
@@ -129,8 +120,7 @@ class PandasHandler:
                 DrawingLibrary.pandas,
                 DrawingType.hist,
                 data={
-                    'data': data,
-                    'kwargs': kwargs
+                    'x': tuple(data)
                 }
             )
             drawings.append(drawing)
