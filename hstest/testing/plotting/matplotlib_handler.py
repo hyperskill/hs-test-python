@@ -29,14 +29,12 @@ class MatplotlibHandler:
         except ModuleNotFoundError:
             return
 
-        lib_type = 'matplotlib'
-
         def custom_show_func(*args, **kwargs):
             pass
 
         def hist(x, *a, **kw):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.hist,
                 {
                     'x': x
@@ -46,7 +44,7 @@ class MatplotlibHandler:
 
         def plot(*args, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.line,
                 {
                     'args': args
@@ -56,7 +54,7 @@ class MatplotlibHandler:
 
         def scatter(x, y, *a, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.scatter,
                 {
                     'x': x,
@@ -67,7 +65,7 @@ class MatplotlibHandler:
 
         def pie(x, *a, **kw):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.pie,
                 {
                     'x': x
@@ -77,7 +75,7 @@ class MatplotlibHandler:
 
         def bar(x, height, width=0.8, bottom=None, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.bar,
                 {
                     'x': x,
@@ -89,7 +87,7 @@ class MatplotlibHandler:
 
         def barh(y, width, height=0.8, left=None, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.bar,
                 {
                     'y': y,
@@ -101,7 +99,7 @@ class MatplotlibHandler:
 
         def violinplot(dataset, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.violin,
                 {
                     'dataset': dataset,
@@ -112,7 +110,7 @@ class MatplotlibHandler:
 
         def imshow(x, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.heatmap,
                 {
                     'x': x,
@@ -123,7 +121,7 @@ class MatplotlibHandler:
 
         def boxplot(x, **kwargs):
             drawing = Drawing(
-                lib_type,
+                DrawingLibrary.matplotlib,
                 DrawingType.box,
                 {
                     'x': x,
