@@ -1,4 +1,4 @@
-from .drawing import Drawing
+from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from copy import deepcopy
 from importlib import reload
 
@@ -37,7 +37,7 @@ class MatplotlibHandler:
         def hist(x, *a, **kw):
             drawing = Drawing(
                 lib_type,
-                'hist',
+                DrawingType.hist,
                 {
                     'x': x
                 }
@@ -47,7 +47,7 @@ class MatplotlibHandler:
         def plot(*args, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'plot',
+                DrawingType.line,
                 {
                     'args': args
                 }
@@ -57,7 +57,7 @@ class MatplotlibHandler:
         def scatter(x, y, *a, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'scatter',
+                DrawingType.scatter,
                 {
                     'x': x,
                     'y': y
@@ -68,7 +68,7 @@ class MatplotlibHandler:
         def pie(x, *a, **kw):
             drawing = Drawing(
                 lib_type,
-                'pie',
+                DrawingType.pie,
                 {
                     'x': x
                 }
@@ -78,7 +78,7 @@ class MatplotlibHandler:
         def bar(x, height, width=0.8, bottom=None, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'bar',
+                DrawingType.bar,
                 {
                     'x': x,
                     'height': height,
@@ -90,7 +90,7 @@ class MatplotlibHandler:
         def barh(y, width, height=0.8, left=None, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'barh',
+                DrawingType.bar,
                 {
                     'y': y,
                     'width': width,
@@ -102,7 +102,7 @@ class MatplotlibHandler:
         def violinplot(dataset, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'violin',
+                DrawingType.violin,
                 {
                     'dataset': dataset,
                     'kwargs': kwargs
@@ -113,7 +113,7 @@ class MatplotlibHandler:
         def imshow(x, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'heatmap',
+                DrawingType.heatmap,
                 {
                     'x': x,
                     'kwargs': kwargs
@@ -124,7 +124,7 @@ class MatplotlibHandler:
         def boxplot(x, **kwargs):
             drawing = Drawing(
                 lib_type,
-                'boxplot',
+                DrawingType.box,
                 {
                     'x': x,
                     'kwargs': kwargs
