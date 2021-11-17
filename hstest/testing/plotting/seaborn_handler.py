@@ -1,6 +1,7 @@
-from .drawing import Drawing, DrawingType, DrawingLibrary
+from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from importlib import reload
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
+from pandas.api.types import is_numeric_dtype
 
 
 class SeabornHandler:
@@ -59,17 +60,38 @@ class SeabornHandler:
                     drawings.append(drawing)
 
         def lineplot(*, data=None, x=None, y=None, **kwargs):
-            drawing = Drawing(
-                DrawingLibrary.seaborn,
-                DrawingType.line,
-                {
-                    'data': data,
-                    'x': x,
-                    'y': y,
-                    'kwargs': kwargs
-                }
-            )
-            drawings.append(drawing)
+            if x is not None:
+                x_array = data[x].to_numpy()
+            else:
+                x_array = data.index.to_numpy()
+
+            if y is not None:
+                y_array = data[y].to_numpy()
+
+                drawing = Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.line,
+                    {
+                        'x': x_array,
+                        'y': y_array,
+                    }
+                )
+                drawings.append(drawing)
+                return drawings
+
+            for column in data.columns:
+                if not is_numeric_dtype(data[column]):
+                    continue
+
+                drawing = Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.line,
+                    {
+                        'x': x_array,
+                        'y': data[column].to_numpy()
+                    }
+                )
+                drawings.append(drawing)
 
         def lmplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
