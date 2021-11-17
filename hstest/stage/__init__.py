@@ -2,7 +2,7 @@ __all__ = [
     'StageTest',
     'DjangoTest',
     'FlaskTest',
-    'PlottingTest'
+    'PlottingTest',
 ]
 
 from hstest.stage.django_test import DjangoTest

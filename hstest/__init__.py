@@ -2,7 +2,7 @@ __all__ = [
     'StageTest',
     'DjangoTest',
     'FlaskTest',
-    'PlotTest'
+    'PlottingTest',
 
     'TestCase',
     'SimpleTestCase',
