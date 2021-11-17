@@ -29,15 +29,12 @@ class TestSeaborn(PlottingTest):
             if 'x' not in hist.data:
                 return wrong(f"Expected 'x' key in the data dict of the hist drawing")
 
-            if not isinstance(hist.data['x'], tuple):
-                return wrong("The 'x' value should be a tuple")
+            if not isinstance(hist.data['x'], np.ndarray):
+                return wrong("The 'x' value should be a ndarray")
 
             drawing_data = hist.data['x']
 
-            if len(drawing_data) != 1:
-                return wrong(f'Expected 1 items in tuple of the hist graph. Found {len(drawing_data)}')
-
-            if not np.array_equal(correct_data, drawing_data[0]):
+            if not np.array_equal(correct_data, drawing_data):
                 return wrong('Wrong data of the hist graph')
 
         return correct()

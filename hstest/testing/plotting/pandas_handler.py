@@ -27,19 +27,19 @@ class PandasHandler:
     @staticmethod
     def get_hist_drawing_with_normalized_data(data: pd.DataFrame):
 
-        result_data = []
+        drawings = []
 
         for column in data.columns:
-            result_data.append(data[column].to_numpy())
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.hist,
+                {
+                    'x': data[column].to_numpy()
+                }
+            )
+            drawings.append(drawing)
 
-        drawing = Drawing(
-            DrawingLibrary.pandas,
-            DrawingType.hist,
-            {
-                'x': tuple(result_data)
-            }
-        )
-        return drawing
+        return drawings
 
     @staticmethod
     def replace_plots(drawings):
@@ -69,9 +69,11 @@ class PandasHandler:
                 plot_name = kind if kind not in PandasHandler.plot_name_to_basic_name \
                     else PandasHandler.plot_name_to_basic_name[kind]
 
-                drawing = PandasHandler.graph_type_to_normalized_data[plot_name](data) \
-                    if plot_name in PandasHandler.graph_type_to_normalized_data else \
-                    Drawing(
+                if plot_name in PandasHandler.graph_type_to_normalized_data:
+                    all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](data)
+                    drawings.extend(all_drawings)
+                else:
+                    drawing = Drawing(
                         DrawingLibrary.pandas,
                         plot_name,
                         {
@@ -81,8 +83,7 @@ class PandasHandler:
                             'kwargs': kwargs
                         }
                     )
-
-                drawings.append(drawing)
+                    drawings.append(drawing)
 
         import pandas.plotting._core
 
@@ -108,8 +109,8 @@ class PandasHandler:
             column=None,
             **kwargs
         ):
-            drawing = PandasHandler.get_hist_drawing_with_normalized_data(self)
-            drawings.append(drawing)
+            all_drawing = PandasHandler.get_hist_drawing_with_normalized_data(self)
+            [drawings.append(dr) for dr in all_drawing]
 
         def hist_series(
             self,
@@ -120,7 +121,7 @@ class PandasHandler:
                 DrawingLibrary.pandas,
                 DrawingType.hist,
                 data={
-                    'x': tuple(data)
+                    'x': data
                 }
             )
             drawings.append(drawing)

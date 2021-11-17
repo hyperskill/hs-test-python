@@ -38,22 +38,25 @@ class SeabornHandler:
             drawings.append(drawing)
 
         def histplot(data=None, **kwargs):
-            result_data = []
-
             if data is not None:
                 if 'x' in kwargs and kwargs['x'] is not None:
-                    result_data.append(data[kwargs['x']])
+                    drawing = Drawing(
+                        DrawingLibrary.seaborn,
+                        DrawingType.hist,
+                        {
+                            'x': np.array(data[kwargs['x']]),
+                        }
+                    )
+                    drawings.append(drawing)
                 elif 'y' in kwargs and kwargs['y'] is not None:
-                    result_data.append(data[kwargs['y']])
-
-            drawing = Drawing(
-                DrawingLibrary.seaborn,
-                DrawingType.hist,
-                {
-                    'x': tuple(result_data),
-                }
-            )
-            drawings.append(drawing)
+                    drawing = Drawing(
+                        DrawingLibrary.seaborn,
+                        DrawingType.hist,
+                        {
+                            'x': np.array(data[kwargs['y']]),
+                        }
+                    )
+                    drawings.append(drawing)
 
         def lineplot(*, data=None, x=None, y=None, **kwargs):
             drawing = Drawing(
