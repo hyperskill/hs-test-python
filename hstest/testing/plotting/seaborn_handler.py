@@ -22,6 +22,7 @@ class SeabornHandler:
     def replace_plots(drawings):
         try:
             import seaborn as sns
+            import numpy as np
         except ModuleNotFoundError:
             return
 
@@ -37,12 +38,19 @@ class SeabornHandler:
             drawings.append(drawing)
 
         def histplot(data=None, **kwargs):
+            result_data = []
+
+            if data is not None:
+                if 'x' in kwargs and kwargs['x'] is not None:
+                    result_data.append(data[kwargs['x']])
+                elif 'y' in kwargs and kwargs['y'] is not None:
+                    result_data.append(data[kwargs['y']])
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.hist,
                 {
-                    'data': data,
-                    'kwargs': kwargs
+                    'x': tuple(result_data),
                 }
             )
             drawings.append(drawing)

@@ -12,6 +12,7 @@ class DrawingLibrary:
 
 
 class DrawingType:
+    # common types
     hist = "hist"
     line = "line"
     scatter = "scatter"

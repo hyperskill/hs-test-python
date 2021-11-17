@@ -1,3 +1,5 @@
+import pandas as pd
+
 from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
@@ -16,6 +18,27 @@ class PandasHandler:
     plot_name_to_basic_name = {
         'barh': DrawingType.bar,
         'density': DrawingType.dis
+    }
+
+    @staticmethod
+    def get_hist_drawing_with_normalized_data(data: pd.DataFrame):
+
+        result_data = []
+
+        for column in data.columns:
+            result_data.append(data[column].to_numpy())
+
+        drawing = Drawing(
+            DrawingLibrary.pandas,
+            DrawingType.hist,
+            {
+                'x': tuple(result_data)
+            }
+        )
+        return drawing
+
+    graph_type_to_normalized_data = {
+        'hist': lambda data: PandasHandler.get_hist_drawing_with_normalized_data(data)
     }
 
     @staticmethod
@@ -46,16 +69,19 @@ class PandasHandler:
                 plot_name = kind if kind not in PandasHandler.plot_name_to_basic_name \
                     else PandasHandler.plot_name_to_basic_name[kind]
 
-                drawing = Drawing(
-                    DrawingLibrary.pandas,
-                    plot_name,
-                    {
-                        'data': data,
-                        'x': x,
-                        'y': y,
-                        'kwargs': kwargs
-                    }
-                )
+                drawing = PandasHandler.graph_type_to_normalized_data[plot_name](data) \
+                    if plot_name in PandasHandler.graph_type_to_normalized_data else \
+                    Drawing(
+                        DrawingLibrary.pandas,
+                        plot_name,
+                        {
+                            'data': data,
+                            'x': x,
+                            'y': y,
+                            'kwargs': kwargs
+                        }
+                    )
+
                 drawings.append(drawing)
 
         import pandas.plotting._core
@@ -128,7 +154,6 @@ class PandasHandler:
 
     @staticmethod
     def revert_plots():
-
         if not PandasHandler._replaced:
             return
 

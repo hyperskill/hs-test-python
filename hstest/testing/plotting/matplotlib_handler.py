@@ -26,6 +26,7 @@ class MatplotlibHandler:
 
         try:
             import matplotlib
+            import numpy as np
         except ModuleNotFoundError:
             return
 
@@ -37,7 +38,7 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.hist,
                 {
-                    'x': x
+                    'x': tuple([np.array(x)])
                 }
             )
             drawings.append(drawing)
