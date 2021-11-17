@@ -82,11 +82,11 @@ class TestSeaborn(PlottingTest):
         # barh
 
         barh1 = self.all_figures[4]
-        if barh1.type != 'barh':
-            return wrong(f'Wrong drawing type {barh1.type}. Expected barh')
+        if barh1.type != 'bar':
+            return wrong(f'Wrong drawing type {barh1.type}. Expected bar')
 
         if 'data' not in barh1.data or 'x' not in barh1.data or 'y' not in barh1.data:
-            return wrong(f"Expected 'data', 'x', 'y' key in the data dict of the barh drawing")
+            return wrong(f"Expected 'data', 'x', 'y' key in the data dict of the bar drawing")
 
         if type(barh1.data['data']) != pd.DataFrame:
             return wrong(f"Wrong 'data' type {type(barh1.data['data'])}. Expected {pd.DataFrame}")
@@ -98,11 +98,11 @@ class TestSeaborn(PlottingTest):
             return wrong(f"Wrong 'y' value {barh1.data['y']}. Expected 'val'")
 
         barh2 = self.all_figures[5]
-        if barh2.type != 'barh':
-            return wrong(f'Wrong drawing type {barh2.type}. Expected barh')
+        if barh2.type != 'bar':
+            return wrong(f'Wrong drawing type {barh2.type}. Expected bar')
 
         if 'data' not in barh2.data or 'x' not in barh2.data or 'y' not in barh2.data:
-            return wrong(f"Expected 'data', 'x', 'y' key in the data dict of the barh drawing")
+            return wrong(f"Expected 'data', 'x', 'y' key in the data dict of the bar drawing")
 
         if type(barh2.data['data']) != pd.DataFrame:
             return wrong(f"Wrong 'data' type {type(barh2.data['data'])}. Expected {pd.DataFrame}")

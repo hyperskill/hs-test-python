@@ -1,4 +1,4 @@
-from .drawing import Drawing
+from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 
@@ -12,6 +12,11 @@ class PandasHandler:
     _Dataframe_boxplot = None
     _Dataframe_hist = None
     _Series_hist = None
+
+    plot_name_to_basic_name = {
+        'barh': DrawingType.bar,
+        'density': DrawingType.dis
+    }
 
     @staticmethod
     def replace_plots(drawings):
@@ -38,9 +43,12 @@ class PandasHandler:
 
                 data = self._parent.copy()
 
+                plot_name = kind if kind not in PandasHandler.plot_name_to_basic_name \
+                    else PandasHandler.plot_name_to_basic_name[kind]
+
                 drawing = Drawing(
-                    'pandas',
-                    kind,
+                    DrawingLibrary.pandas,
+                    plot_name,
                     {
                         'data': data,
                         'x': x,
@@ -59,8 +67,8 @@ class PandasHandler:
         ):
             data = self
             drawing = Drawing(
-                'pandas',
-                'boxplot',
+                DrawingLibrary.pandas,
+                DrawingType.box,
                 data={
                     'data': data,
                     'column': column,
@@ -76,8 +84,8 @@ class PandasHandler:
         ):
             data = self
             drawing = Drawing(
-                'pandas',
-                'hist',
+                DrawingLibrary.pandas,
+                DrawingType.hist,
                 data={
                     'data': data,
                     'column': column,
@@ -92,8 +100,8 @@ class PandasHandler:
         ):
             data = self
             drawing = Drawing(
-                'pandas',
-                'hist',
+                DrawingLibrary.pandas,
+                DrawingType.hist,
                 data={
                     'data': data,
                     'kwargs': kwargs
