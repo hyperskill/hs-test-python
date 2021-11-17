@@ -1,10 +1,10 @@
 import typing
 
-from .async_dynamic_testing_runner import AsyncDynamicTestingRunner
+from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
 
-from ...testing.plotting.matplotlib_handler import MatplotlibHandler
-from ...testing.plotting.pandas_handler import PandasHandler
-from ...testing.plotting.seaborn_handler import SeabornHandler
+from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
+from hstest.testing.plotting.pandas_handler import PandasHandler
+from hstest.testing.plotting.seaborn_handler import SeabornHandler
 
 if typing.TYPE_CHECKING:
     from hstest import TestCase
