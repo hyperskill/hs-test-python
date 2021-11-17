@@ -1,4 +1,4 @@
-from .drawing import Drawing
+from .drawing import Drawing, DrawingType, DrawingLibrary
 from importlib import reload
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
@@ -25,12 +25,10 @@ class SeabornHandler:
         except ModuleNotFoundError:
             return
 
-        lib_type = 'seaborn'
-
         def displot(data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'displot',
+                DrawingLibrary.seaborn,
+                DrawingType.dis,
                 {
                     'data': data,
                     'kwargs': kwargs
@@ -40,8 +38,8 @@ class SeabornHandler:
 
         def histplot(data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'histplot',
+                DrawingLibrary.seaborn,
+                DrawingType.hist,
                 {
                     'data': data,
                     'kwargs': kwargs
@@ -51,8 +49,8 @@ class SeabornHandler:
 
         def lineplot(*, data=None, x=None, y=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'lineplot',
+                DrawingLibrary.seaborn,
+                DrawingType.line,
                 {
                     'data': data,
                     'x': x,
@@ -64,8 +62,8 @@ class SeabornHandler:
 
         def lmplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'lmplot',
+                DrawingLibrary.seaborn,
+                DrawingType.lm,
                 {
                     'data': data,
                     'x': x,
@@ -77,8 +75,8 @@ class SeabornHandler:
 
         def scatterplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'scatterplot',
+                DrawingLibrary.seaborn,
+                DrawingType.scatter,
                 {
                     'data': data,
                     'x': x,
@@ -90,8 +88,8 @@ class SeabornHandler:
 
         def catplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'catplot',
+                DrawingLibrary.seaborn,
+                DrawingType.cat,
                 {
                     'data': data,
                     'x': x,
@@ -103,8 +101,8 @@ class SeabornHandler:
 
         def barplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'barplot',
+                DrawingLibrary.seaborn,
+                DrawingType.bar,
                 {
                     'data': data,
                     'x': x,
@@ -116,8 +114,8 @@ class SeabornHandler:
 
         def violinplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'violinplot',
+                DrawingLibrary.seaborn,
+                DrawingType.violin,
                 {
                     'data': data,
                     'x': x,
@@ -129,8 +127,8 @@ class SeabornHandler:
 
         def heatmap(data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'heatmap',
+                DrawingLibrary.seaborn,
+                DrawingType.heatmap,
                 {
                     'data': data,
                     'kwargs': kwargs
@@ -140,8 +138,8 @@ class SeabornHandler:
 
         def boxplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
-                lib_type,
-                'boxplot',
+                DrawingLibrary.seaborn,
+                DrawingType.box,
                 {
                     'data': data,
                     'x': x,
