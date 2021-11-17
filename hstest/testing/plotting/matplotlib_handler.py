@@ -38,17 +38,30 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.hist,
                 {
-                    'x': tuple([np.array(x)])
+                    'x': np.array(x)
                 }
             )
             drawings.append(drawing)
 
         def plot(*args, **kwargs):
+
+            x = []
+            y = []
+
+            if len(args) > 0:
+                if type(args[0]) is list:
+                    x = args[0]
+            if len(args) > 1:
+                if type(args[1]) is list:
+                    y = args[1]
+            else:
+                y = [_ for _ in range(len(x))]
+
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
                 DrawingType.line,
                 {
-                    'args': args
+                    'data': ((np.array(x), np.array(y)),)
                 }
             )
             drawings.append(drawing)
