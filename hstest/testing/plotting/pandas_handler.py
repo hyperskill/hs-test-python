@@ -17,16 +17,16 @@ class PandasHandler:
 
     plot_name_to_basic_name = {
         'barh': DrawingType.bar,
-        'density': DrawingType.dis
+        'density': DrawingType.dis,
     }
 
     graph_type_to_normalized_data = {
-        'hist': lambda data: PandasHandler.get_hist_drawing_with_normalized_data(data)
+        'hist': lambda data: PandasHandler.get_hist_drawings_with_normalized_data(data),
+        'line': lambda data: PandasHandler.get_line_drawings_with_normalized_data(data),
     }
 
     @staticmethod
-    def get_hist_drawing_with_normalized_data(data: pd.DataFrame):
-
+    def get_hist_drawings_with_normalized_data(data: pd.DataFrame):
         drawings = []
 
         for column in data.columns:
@@ -35,6 +35,36 @@ class PandasHandler:
                 DrawingType.hist,
                 {
                     'x': data[column].to_numpy()
+                }
+            )
+            drawings.append(drawing)
+
+        return drawings
+
+    @staticmethod
+    def get_line_drawings_with_normalized_data(data: pd.Series):
+
+        drawings = []
+
+        if type(data) is pd.Series:
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.line,
+                {
+                    'x': data.index.to_numpy(),
+                    'y': data.to_numpy()
+                }
+            )
+            drawings.append(drawing)
+            return drawings
+
+        for column in data.columns:
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.line,
+                {
+                    'x': data.index.to_numpy(),
+                    'y': data[column].to_numpy()
                 }
             )
             drawings.append(drawing)
@@ -109,7 +139,7 @@ class PandasHandler:
             column=None,
             **kwargs
         ):
-            all_drawing = PandasHandler.get_hist_drawing_with_normalized_data(self)
+            all_drawing = PandasHandler.get_hist_drawings_with_normalized_data(self)
             [drawings.append(dr) for dr in all_drawing]
 
         def hist_series(

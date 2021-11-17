@@ -61,7 +61,8 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.line,
                 {
-                    'data': ((np.array(x), np.array(y)),)
+                    'x': np.array(x),
+                    'y': np.array(y)
                 }
             )
             drawings.append(drawing)
