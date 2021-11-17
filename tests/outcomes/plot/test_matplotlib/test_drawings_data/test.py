@@ -46,21 +46,21 @@ class TestMatplotlib(PlottingTest):
         # plot
 
         plot1 = self.all_figures[2]
-        if plot1.type != 'plot':
-            return wrong(f'Wrong drawing type {plot1.type}. Expected plot')
+        if plot1.type != 'line':
+            return wrong(f'Wrong drawing type {plot1.type}. Expected line')
 
         if 'args' not in plot1.data:
-            return wrong(f"Expected 'args' key in the data dict of the plot drawing")
+            return wrong(f"Expected 'args' key in the data dict of the line drawing")
 
         if plot1.data['args'] != ([1, 2], [5, 8]):
             return wrong(f"Wrong 'args' value {plot1.data['args']}. Expected ([1, 2], [5, 8])")
 
         plot2 = self.all_figures[3]
-        if plot2.type != 'plot':
-            return wrong(f'Wrong drawing type {plot2.type}. Expected plot')
+        if plot2.type != 'line':
+            return wrong(f'Wrong drawing type {plot2.type}. Expected line')
 
         if 'args' not in plot2.data:
-            return wrong(f"Expected 'args' key in the data dict of the plot drawing")
+            return wrong(f"Expected 'args' key in the data dict of the line drawing")
 
         if plot2.data['args'] != ([1, 5], [5, 8]):
             return wrong(f"Wrong 'args' value {plot2.data['args']}. Expected ([1, 5], [5, 8])")
@@ -150,11 +150,11 @@ class TestMatplotlib(PlottingTest):
         # barh
 
         barh1 = self.all_figures[10]
-        if barh1.type != 'barh':
-            return wrong(f'Wrong drawing type {barh1.type}. Expected barh')
+        if barh1.type != 'bar':
+            return wrong(f'Wrong drawing type {barh1.type}. Expected bar')
 
         if 'y' not in barh1.data or 'width' not in barh1.data or 'kwargs' not in barh1.data:
-            return wrong(f"Expected 'y', 'width', 'kwargs' keys in the data dict of the barh drawing")
+            return wrong(f"Expected 'y', 'width', 'kwargs' keys in the data dict of the bar drawing")
 
         if barh1.data['y'] != [1, 2, 4, 6]:
             return wrong(f"Wrong 'y' value {barh1.data['y']}. Expected [1, 2, 4, 6]")
@@ -163,11 +163,11 @@ class TestMatplotlib(PlottingTest):
             return wrong(f"Wrong 'width' value {barh1.data['height']}. Expected 100")
 
         barh2 = self.all_figures[11]
-        if barh2.type != 'barh':
+        if barh2.type != 'bar':
             return wrong(f'Wrong drawing type {barh2.type}. Expected barh')
 
         if 'y' not in barh2.data or 'width' not in barh2.data or 'kwargs' not in barh2.data:
-            return wrong(f"Expected 'y', 'width', 'kwargs' keys in the data dict of the barh drawing")
+            return wrong(f"Expected 'y', 'width', 'kwargs' keys in the data dict of the bar drawing")
 
         if barh2.data['y'] != [1, 2, 4, 7]:
             return wrong(f"Wrong 'y' value {barh1.data['y']}. Expected [1, 2, 4, 7]")
@@ -233,21 +233,21 @@ class TestMatplotlib(PlottingTest):
         # boxplot
 
         boxplot1 = self.all_figures[16]
-        if boxplot1.type != 'boxplot':
-            return wrong(f'Wrong drawing type {boxplot1.type}. Expected boxplot')
+        if boxplot1.type != 'box':
+            return wrong(f'Wrong drawing type {boxplot1.type}. Expected box')
 
         if 'x' not in boxplot1.data or 'kwargs' not in boxplot1.data:
-            return wrong(f"Expected 'x', 'kwargs' keys in the data dict of the boxplot drawing")
+            return wrong(f"Expected 'x', 'kwargs' keys in the data dict of the box drawing")
 
         if boxplot1.data['x'] != [1, 2, 4]:
             return wrong(f"Wrong 'x' value {boxplot1.data['x']}. Expected [1, 2, 4]")
 
         boxplot2 = self.all_figures[17]
-        if boxplot2.type != 'boxplot':
-            return wrong(f'Wrong drawing type {boxplot2.type}. Expected boxplot')
+        if boxplot2.type != 'box':
+            return wrong(f'Wrong drawing type {boxplot2.type}. Expected box')
 
         if 'x' not in boxplot2.data or 'kwargs' not in boxplot2.data:
-            return wrong(f"Expected 'x', 'kwargs' keys in the data dict of the boxplot drawing")
+            return wrong(f"Expected 'x', 'kwargs' keys in the data dict of the box drawing")
 
         if boxplot2.data['x'] != [1, 2, 5]:
             return wrong(f"Wrong 'x' value {boxplot2.data['x']}. Expected [1, 2, 5]")
