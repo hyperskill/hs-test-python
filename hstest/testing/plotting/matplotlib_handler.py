@@ -72,8 +72,8 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.scatter,
                 {
-                    'x': x,
-                    'y': y
+                    'x': np.array(x),
+                    'y': np.array(y)
                 }
             )
             drawings.append(drawing)
