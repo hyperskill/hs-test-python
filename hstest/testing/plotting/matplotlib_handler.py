@@ -193,6 +193,9 @@ class MatplotlibHandler:
         # should be replaced before import matplotlib.pyplot as plt
         matplotlib.axes.Axes = CustomMatplotlibAxes
 
+        from matplotlib.projections import projection_registry
+        projection_registry.register(matplotlib.axes.Axes )
+
         import matplotlib.pyplot as plt
 
         if not MatplotlibHandler._saved:
