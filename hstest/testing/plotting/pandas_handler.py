@@ -2,6 +2,7 @@ import pandas as pd
 
 from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
+from pandas.api.types import is_numeric_dtype
 
 
 class PandasHandler:
@@ -24,6 +25,7 @@ class PandasHandler:
         'hist': lambda data, x, y: PandasHandler.get_hist_drawings_with_normalized_data(data, x, y),
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
         'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
+        'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
     }
 
     @staticmethod
@@ -83,6 +85,35 @@ class PandasHandler:
             }
         )
         return [drawing]
+
+    @staticmethod
+    def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+        if y is not None:
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.pie,
+                {
+                    'x': data.index.to_numpy(),
+                    'y': data[y].to_numpy()
+                }
+            )
+            return [drawing]
+
+        drawings = []
+
+        for column in data.columns:
+            if not is_numeric_dtype(data[column]):
+                continue
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.pie,
+                {
+                    'x': data.index.to_numpy(),
+                    'y': data[column].to_numpy()
+                }
+            )
+            drawings.append(drawing)
+        return drawings
 
     @staticmethod
     def replace_plots(drawings):
