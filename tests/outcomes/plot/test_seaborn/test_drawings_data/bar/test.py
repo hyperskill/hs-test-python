@@ -17,25 +17,27 @@ class TestSeaborn(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        if len(self.all_figures) != 2:
-            return wrong(f'Expected 2 plots to be plotted using pandas library, found {len(self.all_figures)}')
+        if len(self.all_figures) != 1:
+            return wrong(f'Expected 1 plots to be plotted using seaborn library, found {len(self.all_figures)}')
 
-        correct_data = np.array([1, 2, 3, 4, 5])
+        correct_x = ['A', 'B', 'C']
+        correct_y = [10, 30, 20]
 
-        for hist in (self.all_figures[0], self.all_figures[1]):
-            if hist.type != 'hist':
-                return wrong(f'Wrong drawing type {hist.type}. Expected hist')
+        for bar in self.all_figures:
+            if bar.type != 'bar':
+                return wrong(f'Wrong drawing type {bar.type}. Expected bar')
 
-            if 'x' not in hist.data:
-                return wrong(f"Expected 'x' key in the data dict of the hist drawing")
+            if 'x' not in bar.data or 'y' not in bar.data:
+                return wrong(f"Expected 'x', 'y key in the data dict of the bar drawing")
 
-            if not isinstance(hist.data['x'], np.ndarray):
-                return wrong("The 'x' value should be a ndarray")
+            if not isinstance(bar.data['x'], np.ndarray) or not isinstance(bar.data['y'], np.ndarray):
+                return wrong("The 'x', 'y' values should be a ndarray")
 
-            drawing_data = hist.data['x']
+            drawing_x = bar.data['x']
+            drawing_y = bar.data['y']
 
-            if not np.array_equal(correct_data, drawing_data):
-                return wrong('Wrong data of the hist graph')
+            if not np.array_equal(correct_x, drawing_x) or not np.array_equal(correct_y, drawing_y):
+                return wrong('Wrong data of the bar graph')
 
         return correct()
 

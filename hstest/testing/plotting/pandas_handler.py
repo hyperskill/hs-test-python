@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
@@ -26,6 +27,7 @@ class PandasHandler:
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
         'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
+        'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
     }
 
     @staticmethod
@@ -109,6 +111,43 @@ class PandasHandler:
                 DrawingType.pie,
                 {
                     'x': data.index.to_numpy(),
+                    'y': data[column].to_numpy()
+                }
+            )
+            drawings.append(drawing)
+        return drawings
+
+    @staticmethod
+    def get_bar_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+        x_arr = np.array([])
+        drawings = []
+
+        if x is not None:
+            x_arr = data[x].to_numpy()
+        else:
+            x_arr = data.index.to_numpy()
+
+        if y is not None:
+            y_arr = data[y].to_numpy()
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.bar,
+                {
+                    'x': x_arr,
+                    'y': y_arr
+                }
+            )
+            drawings.append(drawing)
+            return drawings
+
+        for column in data.columns:
+            if not is_numeric_dtype(data[column]):
+                continue
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.bar,
+                {
+                    'x': x_arr,
                     'y': data[column].to_numpy()
                 }
             )
