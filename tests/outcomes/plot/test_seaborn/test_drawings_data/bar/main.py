@@ -7,15 +7,9 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]), columns=['one'])
+    df = pd.DataFrame({'lab': ['A', 'B', 'C'], 'val': [10, 30, 20], 'val1': [5, 10, 15]})
 
-    sns.histplot(
-        df, y="one"
-    )
-
-    sns.histplot(
-        df, x="one"
-    )
+    sns.barplot(x='lab', y='val', data=df)
 
     plt.show()
 

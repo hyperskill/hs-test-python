@@ -2,20 +2,17 @@ def plot():
     try:
         import pandas as pd
         import numpy as np
+        import matplotlib.pyplot as plt
+
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]), columns=['one'])
-    df['two'] = df['one'] + np.array([1, 7, 3, 2, 1])
+    df = pd.DataFrame({'lab': ['A', 'B', 'C'], 'val': [10, 30, 20], 'val1': [5, 10, 15]})
+    df.plot.bar(x='lab', rot=0)
 
-    df.plot.hist(bins=12, alpha=0.5)
-    df.plot(kind='hist', bins=12, alpha=0.5)
+    df.plot.bar(y='val', rot=0)
 
-    d = {'a': 1, 'b': 2, 'c': 3}
-    ser = pd.Series(data=np.array([1, 2, 3, 4, 5]))
-    ser.hist()
-
-    import matplotlib.pyplot as plt
+    df.plot.bar(rot=0)
 
     plt.show()
 

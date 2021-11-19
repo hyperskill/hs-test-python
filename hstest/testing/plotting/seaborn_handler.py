@@ -176,14 +176,22 @@ class SeabornHandler:
             drawings.append(drawing)
 
         def barplot(x=None, y=None, data=None, **kwargs):
+
+            x_arr = np.array([])
+            y_arr = np.array([])
+
+            if data is not None:
+                if x:
+                    x_arr = data[x].to_numpy()
+                if y:
+                    y_arr = data[y].to_numpy()
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.bar,
                 {
-                    'data': data,
-                    'x': x,
-                    'y': y,
-                    'kwargs': kwargs
+                    'x': x_arr,
+                    'y': y_arr
                 }
             )
             drawings.append(drawing)

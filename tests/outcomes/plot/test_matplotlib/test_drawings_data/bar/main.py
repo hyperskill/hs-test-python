@@ -8,8 +8,11 @@ def plot():
 
     fig, ax = plt.subplots(figsize=(1, 2))
 
-    plt.hist([1, 2, 3, 4, 5])
-    ax.hist([1, 2, 3, 4, 5])
+    plt.bar([1, 2, 4, 6], 100)
+    ax.bar([1, 2, 4, 6], 200)
+
+    plt.barh([1, 2, 4, 6], 100)
+    ax.barh([1, 2, 4, 6], 200)
 
     plt.show()
 

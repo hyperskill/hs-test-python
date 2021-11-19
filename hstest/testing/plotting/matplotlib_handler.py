@@ -102,9 +102,8 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.bar,
                 {
-                    'x': x,
-                    'height': height,
-                    'kwargs': kwargs
+                    'x': np.array(x),
+                    'y': np.array([])
                 }
             )
             drawings.append(drawing)
@@ -114,9 +113,8 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.bar,
                 {
-                    'y': y,
-                    'width': width,
-                    'kwargs': kwargs
+                    'x': np.array([]),
+                    'y': np.array(y)
                 }
             )
             drawings.append(drawing)
