@@ -40,7 +40,7 @@ class ProcessWrapper:
         self.register_output = register_output
 
     def start(self):
-        command = ' '.join(self.args)
+        command = ' '.join(map(str, self.args))
 
         if self.process is not None:
             raise UnexpectedError(f"Cannot start the same process twice\n\"{command}\"")

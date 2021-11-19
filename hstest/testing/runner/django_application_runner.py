@@ -48,7 +48,7 @@ class DjangoApplicationRunner(TestRunner):
             self.__prepare_database(test_case.attach.test_database)
 
         self.process = ProcessWrapper(
-            sys.executable, self.full_path, 'runserver', self.port, '--noreload')
+            sys.executable, self.full_path, 'runserver', self.port, '--noreload').start()
 
         i: int = 100
         search_phrase = 'Starting development server at'
