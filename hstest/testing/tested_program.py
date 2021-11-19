@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Type
 
 from hstest.exception.outcomes import UnexpectedError
 from hstest.testing.execution.program_executor import ProgramExecutor
@@ -36,6 +36,10 @@ class TestedProgram:
         from hstest.stage_test import StageTest
         if StageTest.curr_test_run:
             StageTest.curr_test_run.add_tested_program(self)
+
+    def feedback_on_exception(self, ex: Type[Exception], feedback: str):
+        from hstest import StageTest
+        StageTest.curr_test_run.test_case.feedback_on_exception[ex] = feedback
 
     def start_in_background(self, *args: str):
         self._init_program(*args)
