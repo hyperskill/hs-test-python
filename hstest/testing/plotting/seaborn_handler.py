@@ -197,17 +197,39 @@ class SeabornHandler:
             drawings.append(drawing)
 
         def violinplot(x=None, y=None, data=None, **kwargs):
-            drawing = Drawing(
-                DrawingLibrary.seaborn,
-                DrawingType.violin,
-                {
-                    'data': data,
-                    'x': x,
-                    'y': y,
-                    'kwargs': kwargs
-                }
-            )
-            drawings.append(drawing)
+
+            x_arr = np.array([])
+            y_arr = np.array([])
+
+            if x:
+                x_arr = data[x].to_numpy()
+            if y:
+                y_arr = data[y].to_numpy()
+
+            if x or y:
+                drawing = Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.violin,
+                    {
+                        'x': x_arr,
+                        'y': y_arr
+                    }
+                )
+                drawings.append(drawing)
+                return
+
+            for column in data.columns:
+                if not is_numeric_dtype(data[column]):
+                    continue
+                drawing = Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.violin,
+                    {
+                        'x': np.array([column]),
+                        'y': data[column].to_numpy()
+                    }
+                )
+                drawings.append(drawing)
 
         def heatmap(data=None, **kwargs):
             drawing = Drawing(

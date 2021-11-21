@@ -120,15 +120,35 @@ class MatplotlibHandler:
             drawings.append(drawing)
 
         def violinplot(dataset, **kwargs):
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.violin,
-                {
-                    'dataset': dataset,
-                    'kwargs': kwargs
-                }
-            )
-            drawings.append(drawing)
+
+            is_multiple_plots = False
+
+            for data in dataset:
+                if type(data) == list:
+                    is_multiple_plots = True
+
+            if not is_multiple_plots:
+                drawing = Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.violin,
+                    {
+                        'x': np.array(dataset)
+                    }
+                )
+                drawings.append(drawing)
+                return
+
+            for data in dataset:
+                data = [data] if type(data) != list else data
+
+                drawing = Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.violin,
+                    {
+                        'x': np.array(data)
+                    }
+                )
+                drawings.append(drawing)
 
         def imshow(x, **kwargs):
             drawing = Drawing(
@@ -192,7 +212,7 @@ class MatplotlibHandler:
         matplotlib.axes.Axes = CustomMatplotlibAxes
 
         from matplotlib.projections import projection_registry
-        projection_registry.register(matplotlib.axes.Axes )
+        projection_registry.register(matplotlib.axes.Axes)
 
         import matplotlib.pyplot as plt
 
