@@ -1,3 +1,5 @@
+import pandas as pd
+
 from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from importlib import reload
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
@@ -232,12 +234,14 @@ class SeabornHandler:
                 drawings.append(drawing)
 
         def heatmap(data=None, **kwargs):
+            if data is None:
+                return
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.heatmap,
                 {
-                    'data': data,
-                    'kwargs': kwargs
+                    'x': np.array(data)
                 }
             )
             drawings.append(drawing)

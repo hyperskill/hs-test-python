@@ -155,8 +155,7 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.heatmap,
                 {
-                    'x': x,
-                    'kwargs': kwargs
+                    'x': np.array(x)
                 }
             )
             drawings.append(drawing)
