@@ -165,8 +165,8 @@ class MatplotlibHandler:
                 DrawingLibrary.matplotlib,
                 DrawingType.box,
                 {
-                    'x': x,
-                    'kwargs': kwargs
+                    'x': np.array([None]),
+                    'y': np.array(x)
                 }
             )
             drawings.append(drawing)
