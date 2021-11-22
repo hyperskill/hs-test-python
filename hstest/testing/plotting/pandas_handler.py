@@ -28,6 +28,7 @@ class PandasHandler:
         'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
         'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
+        'box': lambda data, x, y: PandasHandler.get_box_drawings_with_normalized_data(data, x, y),
     }
 
     @staticmethod
@@ -155,6 +156,43 @@ class PandasHandler:
         return drawings
 
     @staticmethod
+    def get_box_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+
+        drawings = []
+
+        # Columns are not specified
+        if x is None:
+            for column in data.columns:
+                if not is_numeric_dtype(data[column]):
+                    continue
+                drawing = Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.box,
+                    {
+                        'x': np.array([column]),
+                        'y': data[column].to_numpy()
+                    }
+                )
+                drawings.append(drawing)
+            return drawings
+
+        for column in x:
+            if not is_numeric_dtype(data[column]):
+                continue
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.box,
+                {
+                    'x': np.array([column]),
+                    'y': data[column].to_numpy()
+                }
+            )
+            drawings.append(drawing)
+        return drawings
+
+        pass
+
+    @staticmethod
     def replace_plots(drawings):
         try:
             import pandas.plotting as pd
@@ -182,6 +220,11 @@ class PandasHandler:
                 plot_name = kind if kind not in PandasHandler.plot_name_to_basic_name \
                     else PandasHandler.plot_name_to_basic_name[kind]
 
+                # For boxplot from plot accessor
+                if plot_name == DrawingType.box:
+                    if 'columns' in kwargs:
+                        x = kwargs['columns']
+
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
                     all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](data, x, y)
                     drawings.extend(all_drawings)
@@ -205,17 +248,8 @@ class PandasHandler:
             column=None,
             **kwargs
         ):
-            data = self
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.box,
-                data={
-                    'data': data,
-                    'column': column,
-                    'kwargs': kwargs
-                }
-            )
-            drawings.append(drawing)
+            all_drawings = PandasHandler.get_box_drawings_with_normalized_data(self, column, None)
+            drawings.extend(all_drawings)
 
         def hist(
             self,
