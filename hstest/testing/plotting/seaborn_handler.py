@@ -30,12 +30,50 @@ class SeabornHandler:
             return
 
         def displot(data=None, **kwargs):
+            x = None if 'x' not in kwargs else kwargs['x']
+            y = None if 'y' not in kwargs else kwargs['y']
+
+            if data is None:
+                drawing = Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.dis,
+                    {
+                        'x': np.array(x),
+                        'y': np.array(y)
+                    }
+                )
+                drawings.append(drawing)
+                return
+
+            x_arr = []
+            y_arr = []
+
+            if not x and not y:
+                for column in data.columns:
+                    if not is_numeric_dtype(data[column]):
+                        continue
+                    drawing = Drawing(
+                        DrawingLibrary.seaborn,
+                        DrawingType.dis,
+                        {
+                            'x': np.array([column]),
+                            'y': data[column].to_numpy()
+                        }
+                    )
+                    drawings.append(drawing)
+                return
+
+            if x:
+                x_arr = data[x].to_numpy()
+            if y:
+                y_arr = data[y].to_numpy()
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.dis,
                 {
-                    'data': data,
-                    'kwargs': kwargs
+                    'x': np.array(x_arr),
+                    'y': np.array(y_arr)
                 }
             )
             drawings.append(drawing)
