@@ -20,15 +20,17 @@ class PandasHandler:
     plot_name_to_basic_name = {
         'barh': DrawingType.bar,
         'density': DrawingType.dis,
+        'kde': DrawingType.dis,
     }
 
     graph_type_to_normalized_data = {
+        'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
         'hist': lambda data, x, y: PandasHandler.get_hist_drawings_with_normalized_data(data, x, y),
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
-        'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
         'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
         'box': lambda data, x, y: PandasHandler.get_box_drawings_with_normalized_data(data, x, y),
+        'dis': lambda data, x, y: PandasHandler.get_dis_drawings_with_normalized_data(data, x, y),
     }
 
     @staticmethod
@@ -190,7 +192,53 @@ class PandasHandler:
             drawings.append(drawing)
         return drawings
 
-        pass
+    @staticmethod
+    def get_dis_drawings_with_normalized_data(data, x, y):
+        drawings = []
+
+        if type(data) == pd.Series:
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.dis,
+                {
+                    'x': data.to_numpy()
+                }
+            )
+            drawings.append(drawing)
+            return
+
+        if x:
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.dis,
+                {
+                    'x': np.array(data[x]),
+                }
+            )
+            drawings.append(drawing)
+        if y:
+            drawing = Drawing(
+                DrawingLibrary.pandas,
+                DrawingType.dis,
+                {
+                    'x': np.array(data[y]),
+                }
+            )
+            drawings.append(drawing)
+
+        if not x and not y:
+            for column in data.columns:
+                if not is_numeric_dtype(data[column]):
+                    continue
+                drawing = Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.dis,
+                    {
+                        'x': data[column].to_numpy()
+                    }
+                )
+                drawings.append(drawing)
+        return drawings
 
     @staticmethod
     def replace_plots(drawings):
