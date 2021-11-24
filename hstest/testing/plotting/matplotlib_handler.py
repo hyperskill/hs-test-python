@@ -34,14 +34,12 @@ class MatplotlibHandler:
             pass
 
         def hist(x, *a, **kw):
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.hist,
-                {
-                    'x': np.array(x)
-                }
+            drawings.append(
+                Drawing.get_hist_drawing(
+                    x,
+                    DrawingLibrary.matplotlib
+                )
             )
-            drawings.append(drawing)
 
         def plot(*args, **kwargs):
 
