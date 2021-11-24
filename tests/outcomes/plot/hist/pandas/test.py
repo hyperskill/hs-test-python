@@ -1,9 +1,10 @@
 import unittest
 
+from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
+from hstest.testing.plotting.drawing import DrawingLibrary
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from hstest import TestedProgram
-from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
 
 
 class TestSeaborn(PlottingTest):
@@ -21,7 +22,7 @@ class TestSeaborn(PlottingTest):
             [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]]
         ]
 
-        return test_hist_drawing(self.all_figures, 5, correct_data)
+        return test_hist_drawing(self.all_figures, 5, correct_data, DrawingLibrary.pandas)
 
 
 class Test(unittest.TestCase):
