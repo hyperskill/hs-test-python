@@ -73,16 +73,13 @@ class PandasHandler:
         return drawings
 
     @staticmethod
-    def get_scatter_drawings_with_normalized_data(data: pd.Series, x, y):
-        drawing = Drawing(
-            DrawingLibrary.pandas,
-            DrawingType.scatter,
-            {
-                'x': data[x].to_numpy(),
-                'y': data[y].to_numpy()
-            }
-        )
-        return [drawing]
+    def get_scatter_drawings_with_normalized_data(data, x, y):
+        return [
+            Drawing.get_scatter_drawing(
+                data[x], data[y],
+                DrawingLibrary.pandas
+            )
+        ]
 
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):

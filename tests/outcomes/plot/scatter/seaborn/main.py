@@ -11,6 +11,8 @@ def plot():
                       columns=['length', 'width', 'test'])
     sns.scatterplot(data=df, x='length', y='width')
     sns.scatterplot(data=df)
+    sns.scatterplot(data=df, x='length')
+    sns.scatterplot(data=df, y='length')
     plt.show()
 
 

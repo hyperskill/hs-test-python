@@ -139,60 +139,27 @@ class SeabornHandler:
             drawings.append(drawing)
 
         def scatterplot(x=None, y=None, data=None, **kwargs):
-
             if x is not None and y is not None:
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.scatter,
-                    {
-                        'x': data[x].to_numpy(),
-                        'y': data[y].to_numpy(),
-                    }
+                drawings.append(
+                    Drawing.get_scatter_drawing(
+                        data[x], data[y],
+                        DrawingLibrary.seaborn
+                    )
                 )
-                drawings.append(drawing)
                 return
 
-            if x is not None:
-                x_arr = data[x]
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.scatter,
-                    {
-                        'x': x_arr.to_numpy(),
-                        'y': np.array([]),
-                    }
-                )
-                drawings.append(drawing)
-                return
+            if x is None and y is None and data is not None:
+                for column in data.columns:
+                    if not is_numeric_dtype(data[column]):
+                        continue
 
-            if y is not None:
-                y_arr = data[y]
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.scatter,
-                    {
-                        'x': np.array([]),
-                        'y': y_arr.to_numpy(),
-                    }
-                )
-                drawings.append(drawing)
-                return
-
-            x = data.index
-
-            for column in data.columns:
-                if not is_numeric_dtype(data[column]):
-                    continue
-
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.scatter,
-                    {
-                        'x': x.to_numpy(),
-                        'y': data[column].to_numpy(),
-                    }
-                )
-                drawings.append(drawing)
+                    x = data.index
+                    drawings.append(
+                        Drawing.get_scatter_drawing(
+                            x, data[column],
+                            DrawingLibrary.seaborn
+                        )
+                    )
 
         def catplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(
