@@ -7,7 +7,7 @@ from hstest.stage import PlottingTest
 from hstest import TestedProgram
 
 
-class TestSeaborn(PlottingTest):
+class TestPandasHist(PlottingTest):
 
     @dynamic_test
     def test(self):
