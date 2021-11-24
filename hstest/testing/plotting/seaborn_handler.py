@@ -81,23 +81,19 @@ class SeabornHandler:
         def histplot(data=None, **kwargs):
             if data is not None:
                 if 'x' in kwargs and kwargs['x'] is not None:
-                    drawing = Drawing(
-                        DrawingLibrary.seaborn,
-                        DrawingType.hist,
-                        {
-                            'x': np.array(data[kwargs['x']]),
-                        }
+                    drawings.append(
+                        Drawing.get_hist_drawing(
+                            data[kwargs['x']],
+                            DrawingLibrary.seaborn
+                        )
                     )
-                    drawings.append(drawing)
                 elif 'y' in kwargs and kwargs['y'] is not None:
-                    drawing = Drawing(
-                        DrawingLibrary.seaborn,
-                        DrawingType.hist,
-                        {
-                            'x': np.array(data[kwargs['y']]),
-                        }
+                    drawings.append(
+                        Drawing.get_hist_drawing(
+                            data[kwargs['y']],
+                            DrawingLibrary.seaborn
+                        )
                     )
-                    drawings.append(drawing)
 
         def lineplot(*, data=None, x=None, y=None, **kwargs):
             if x is not None:

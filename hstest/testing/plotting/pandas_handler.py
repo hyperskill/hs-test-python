@@ -38,14 +38,12 @@ class PandasHandler:
         drawings = []
 
         for column in data.columns:
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.hist,
-                {
-                    'x': data[column].to_numpy()
-                }
+            drawings.append(
+                Drawing.get_hist_drawing(
+                    data[column],
+                    DrawingLibrary.pandas
+                )
             )
-            drawings.append(drawing)
 
         return drawings
 
@@ -304,22 +302,23 @@ class PandasHandler:
             column=None,
             **kwargs
         ):
-            all_drawing = PandasHandler.get_hist_drawings_with_normalized_data(self)
-            [drawings.append(dr) for dr in all_drawing]
+            drawings.append(
+                Drawing.get_hist_drawing(
+                    self,
+                    DrawingLibrary.pandas
+                )
+            )
 
         def hist_series(
             self,
             **kwargs
         ):
-            data = self
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.hist,
-                data={
-                    'x': data
-                }
+            drawings.append(
+                Drawing.get_hist_drawing(
+                    self,
+                    DrawingLibrary.pandas
+                )
             )
-            drawings.append(drawing)
 
         if not PandasHandler._saved:
             PandasHandler._saved = True
