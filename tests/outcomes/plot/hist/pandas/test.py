@@ -27,7 +27,7 @@ class TestPandasHist(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeaborn('main').run_tests()
+        status, feedback = TestPandasHist('main').run_tests()
         self.assertEqual(status, 0)
 
 

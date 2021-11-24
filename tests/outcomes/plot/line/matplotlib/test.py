@@ -1,29 +1,30 @@
 import unittest
 
-from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
+from tests.outcomes.plot.line.test_line_drawing import test_line_drawing
 from hstest.testing.plotting.drawing import DrawingLibrary
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from hstest import TestedProgram
 
 
-class TestSeabornHist(PlottingTest):
+class TestMatplotlibLine(PlottingTest):
     @dynamic_test
     def test(self):
         program = TestedProgram()
         program.start()
 
         correct_data = [
-            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
-            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
+            [[1, 5], [2, 8]],
+            [[1, 5], [2, 8]],
+            [[1, 0], [5, 1], [7, 2], [8, 3]]
         ]
 
-        return test_hist_drawing(self.all_figures, 2, correct_data, DrawingLibrary.seaborn)
+        return test_line_drawing(self.all_figures, 3, correct_data, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornHist('main').run_tests()
+        status, feedback = TestMatplotlibLine('main').run_tests()
         self.assertEqual(status, 0)
 
 

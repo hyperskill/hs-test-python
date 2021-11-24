@@ -20,3 +20,23 @@ class DrawingDataNormalizer:
             result_data.append((element, data.count(element)))
 
         return np.array(result_data)
+
+    @staticmethod
+    def normalize_line_data(x, y):
+        try:
+            if type(x) != list:
+                x = list(x)
+            if type(y) != list:
+                y = list(y)
+        except Exception as _:
+            raise ValueError('The data argument should be an array')
+
+        if len(x) != len(y):
+            raise ValueError('Arrays should be the same length')
+
+        result_data = list()
+
+        for a, b in zip(x, y):
+            result_data.append((a, b))
+
+        return np.array(result_data)

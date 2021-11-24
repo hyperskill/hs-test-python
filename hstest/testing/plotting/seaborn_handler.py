@@ -104,30 +104,26 @@ class SeabornHandler:
             if y is not None:
                 y_array = data[y].to_numpy()
 
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.line,
-                    {
-                        'x': x_array,
-                        'y': y_array,
-                    }
+                drawings.append(
+                    Drawing.get_line_drawing(
+                        x_array,
+                        y_array,
+                        DrawingLibrary.seaborn
+                    )
                 )
-                drawings.append(drawing)
                 return drawings
 
             for column in data.columns:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                drawing = Drawing(
-                    DrawingLibrary.pandas,
-                    DrawingType.line,
-                    {
-                        'x': x_array,
-                        'y': data[column].to_numpy()
-                    }
+                drawings.append(
+                    Drawing.get_line_drawing(
+                        x_array,
+                        data[column],
+                        DrawingLibrary.seaborn
+                    )
                 )
-                drawings.append(drawing)
 
         def lmplot(x=None, y=None, data=None, **kwargs):
             drawing = Drawing(

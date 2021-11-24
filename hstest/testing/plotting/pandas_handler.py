@@ -48,32 +48,27 @@ class PandasHandler:
         return drawings
 
     @staticmethod
-    def get_line_drawings_with_normalized_data(data: pd.Series, x, y):
-
-        drawings = []
+    def get_line_drawings_with_normalized_data(data, x, y):
+        drawings = list()
 
         if type(data) is pd.Series:
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.line,
-                {
-                    'x': data.index.to_numpy(),
-                    'y': data.to_numpy()
-                }
+            drawings.append(
+                Drawing.get_line_drawing(
+                    data.index,
+                    data,
+                    DrawingLibrary.pandas
+                )
             )
-            drawings.append(drawing)
             return drawings
 
         for column in data.columns:
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.line,
-                {
-                    'x': data.index.to_numpy(),
-                    'y': data[column].to_numpy()
-                }
+            drawings.append(
+                Drawing.get_line_drawing(
+                    data.index,
+                    data[column],
+                    DrawingLibrary.pandas
+                )
             )
-            drawings.append(drawing)
 
         return drawings
 
