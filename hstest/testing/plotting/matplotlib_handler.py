@@ -62,15 +62,12 @@ class MatplotlibHandler:
             )
 
         def scatter(x, y, *a, **kwargs):
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.scatter,
-                {
-                    'x': np.array(x),
-                    'y': np.array(y)
-                }
+            drawings.append(
+                Drawing.get_scatter_drawing(
+                    x, y,
+                    DrawingLibrary.matplotlib
+                )
             )
-            drawings.append(drawing)
 
         def pie(x, *a, **kw):
             # Normalize with other plot libraries

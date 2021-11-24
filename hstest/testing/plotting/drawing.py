@@ -27,6 +27,16 @@ class Drawing:
             )
         )
 
+    @staticmethod
+    def get_scatter_drawing(x, y, library):
+        return Drawing(
+            library,
+            DrawingType.scatter,
+            DrawingData(
+                DrawingDataNormalizer.normalize_scatter_data(x, y)
+            )
+        )
+
 
 class DrawingData:
     def __init__(self, data):
