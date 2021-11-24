@@ -2,6 +2,7 @@ def plot():
     try:
         import pandas as pd
         import numpy as np
+        import matplotlib.pyplot as plt
     except ModuleNotFoundError:
         return
 
@@ -14,8 +15,6 @@ def plot():
         'b': [1, 3, 2]
     }, index=[2, 4, 6])
     df.plot.line()
-
-    import matplotlib.pyplot as plt
 
     plt.show()
 

@@ -42,9 +42,8 @@ class MatplotlibHandler:
             )
 
         def plot(*args, **kwargs):
-
-            x = []
-            y = []
+            x = list()
+            y = list()
 
             if len(args) > 0:
                 if type(args[0]) is list:
@@ -55,15 +54,12 @@ class MatplotlibHandler:
             else:
                 y = [_ for _ in range(len(x))]
 
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.line,
-                {
-                    'x': np.array(x),
-                    'y': np.array(y)
-                }
+            drawings.append(
+                Drawing.get_line_drawing(
+                    x, y,
+                    DrawingLibrary.matplotlib
+                )
             )
-            drawings.append(drawing)
 
         def scatter(x, y, *a, **kwargs):
             drawing = Drawing(

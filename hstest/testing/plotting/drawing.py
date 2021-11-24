@@ -17,6 +17,16 @@ class Drawing:
             )
         )
 
+    @staticmethod
+    def get_line_drawing(x, y, library):
+        return Drawing(
+            library,
+            DrawingType.line,
+            DrawingData(
+                DrawingDataNormalizer.normalize_line_data(x, y)
+            )
+        )
+
 
 class DrawingData:
     def __init__(self, data):
