@@ -1,5 +1,5 @@
 import os
-from threading import Thread, current_thread
+from threading import Thread
 from time import sleep
 from typing import List, Optional
 
@@ -137,7 +137,10 @@ class ProcessExecutor(ProgramExecutor):
         self.__group = ThreadGroup()
 
         SystemHandler.install_handler(
-            self, lambda: getattr(current_thread(), "_group", None) == self.__group)
+            self,
+            lambda: ThreadGroup.curr_group() == self.__group,
+            lambda: self.request_input()
+        )
 
         self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True,
                              group=self.__group)

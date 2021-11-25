@@ -1,7 +1,7 @@
-from typing import Callable, Union
+from typing import Callable, Optional, Union
 
 InputFunction = Callable[[str], Union[str, 'CheckResult']]
-DynamicTestFunction = Callable[[], str]
+DynamicTestFunction = Callable[[], Optional[str]]
 
 
 class DynamicInputFunction:
