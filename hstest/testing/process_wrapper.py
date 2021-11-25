@@ -239,9 +239,6 @@ class ProcessWrapper:
         OutputHandler.print('Terminate called')
 
         with self.lock:
-            if self.register_io_handler:
-                SystemHandler.uninstall_handler(self)
-
             OutputHandler.print('Terminate - LOCK ACQUIRED')
 
             if self.terminated:
@@ -251,6 +248,9 @@ class ProcessWrapper:
             OutputHandler.print('Terminate - BEFORE WAIT STDERR')
 
             self.wait_output()
+
+            if self.register_io_handler:
+                SystemHandler.uninstall_handler(self)
 
             OutputHandler.print('Terminate - AFTER WAIT STDERR')
 
