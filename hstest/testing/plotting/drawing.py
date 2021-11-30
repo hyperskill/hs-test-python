@@ -37,6 +37,16 @@ class Drawing:
             )
         )
 
+    @staticmethod
+    def get_pie_drawing(x, y, library):
+        return Drawing(
+            library,
+            DrawingType.pie,
+            DrawingData(
+                DrawingDataNormalizer.normalize_pie_data(x, y)
+            )
+        )
+
 
 class DrawingData:
     def __init__(self, data):

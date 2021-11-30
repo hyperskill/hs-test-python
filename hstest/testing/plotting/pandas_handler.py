@@ -84,13 +84,9 @@ class PandasHandler:
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):
         if y is not None:
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.pie,
-                {
-                    'x': data.index.to_numpy(),
-                    'y': data[y].to_numpy()
-                }
+            drawing = Drawing.get_pie_drawing(
+                data.index, data[y],
+                DrawingLibrary.pandas
             )
             return [drawing]
 
@@ -99,13 +95,9 @@ class PandasHandler:
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.pie,
-                {
-                    'x': data.index.to_numpy(),
-                    'y': data[column].to_numpy()
-                }
+            drawing = Drawing.get_pie_drawing(
+                data.index, data[column],
+                DrawingLibrary.pandas
             )
             drawings.append(drawing)
         return drawings

@@ -21,7 +21,7 @@ class DrawingDataNormalizer:
         for a, b in zip(x, y):
             result_data.append((a, b))
 
-        return np.array(result_data)
+        return np.array(result_data, dtype=object)
 
     @staticmethod
     def normalize_hist_data(data):
@@ -47,4 +47,8 @@ class DrawingDataNormalizer:
 
     @staticmethod
     def normalize_scatter_data(x, y):
+        return DrawingDataNormalizer.normalize_x_y_data(x, y)
+
+    @staticmethod
+    def normalize_pie_data(x, y):
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
