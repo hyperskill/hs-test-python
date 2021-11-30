@@ -73,18 +73,14 @@ class MatplotlibHandler:
             # Normalize with other plot libraries
             y = x
 
-            x_arr = []
+            x_arr = [''] * len(y)
 
             if 'labels' in kw and kw['labels'] is not None:
                 x_arr = kw['labels']
 
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.pie,
-                {
-                    'y': np.array(y),
-                    'x': np.array(x_arr)
-                }
+            drawing = Drawing.get_pie_drawing(
+                x_arr, y,
+                DrawingLibrary.matplotlib
             )
             drawings.append(drawing)
 
