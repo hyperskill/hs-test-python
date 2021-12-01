@@ -1,20 +1,20 @@
+import numpy as np
+
 from hstest.testing.plotting.drawing_data_normalizer import DrawingDataNormalizer
 
 
 class Drawing:
-    def __init__(self, library, plot_type, data):
-        self.library = library
-        self.type = plot_type
-        self.data = data
+    def __init__(self, library: str, plot_type: str, data: np.ndarray):
+        self.library: str = library
+        self.type: str = plot_type
+        self.data: np.ndarray = data
 
     @staticmethod
-    def get_hist_drawing(data, library):
+    def get_hist_drawing(data, library) -> 'Drawing':
         return Drawing(
             library,
             DrawingType.hist,
-            DrawingData(
-                DrawingDataNormalizer.normalize_hist_data(data)
-            )
+            DrawingDataNormalizer.normalize_hist_data(data)
         )
 
     @staticmethod
@@ -22,9 +22,7 @@ class Drawing:
         return Drawing(
             library,
             DrawingType.line,
-            DrawingData(
-                DrawingDataNormalizer.normalize_line_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_line_data(x, y)
         )
 
     @staticmethod
@@ -32,9 +30,7 @@ class Drawing:
         return Drawing(
             library,
             DrawingType.scatter,
-            DrawingData(
-                DrawingDataNormalizer.normalize_scatter_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_scatter_data(x, y)
         )
 
     @staticmethod
@@ -42,9 +38,7 @@ class Drawing:
         return Drawing(
             library,
             DrawingType.pie,
-            DrawingData(
-                DrawingDataNormalizer.normalize_pie_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_pie_data(x, y)
         )
 
     @staticmethod
@@ -52,15 +46,8 @@ class Drawing:
         return Drawing(
             library,
             DrawingType.bar,
-            DrawingData(
-                DrawingDataNormalizer.normalize_bar_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_bar_data(x, y)
         )
-
-
-class DrawingData:
-    def __init__(self, data):
-        self.data = data
 
 
 class DrawingLibrary:
