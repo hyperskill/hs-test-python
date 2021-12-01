@@ -10,6 +10,8 @@ def plot():
     df = pd.DataFrame({'lab': ['A', 'B', 'C'], 'val': [10, 30, 20], 'val1': [5, 10, 15]})
 
     sns.barplot(x='lab', y='val', data=df)
+    sns.barplot(y='val', data=df)
+    sns.barplot(x='val', data=df)
 
     plt.show()
 

@@ -42,6 +42,10 @@ class DrawingDataNormalizer:
         return np.array(result_data)
 
     @staticmethod
+    def normalize_bar_data(x, y):
+        return DrawingDataNormalizer.normalize_x_y_data(x, y)
+
+    @staticmethod
     def normalize_line_data(x, y):
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
