@@ -42,7 +42,7 @@ class ProgramExecutor:
     def get_output(self) -> str:
         return OutputHandler.get_partial_output(self)
 
-    def start(self, *args: str):
+    def start(self, *args: str) -> str:
         if not self._machine.in_state(ProgramState.NOT_STARTED):
             raise UnexpectedError(f"Cannot start the program {self} twice")
 
@@ -103,7 +103,7 @@ class ProgramExecutor:
             return self.get_output()
         return ""
 
-    def request_input(self):
+    def request_input(self) -> Optional[str]:
         if self.__no_more_input:
             return None
         OutputHandler.print('Program executor - _request_input() invoked, set state WAITING')

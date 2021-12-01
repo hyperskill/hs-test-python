@@ -77,11 +77,22 @@ def str_to_stacktrace(str_trace: str) -> str:
 
     traceback_stack = []
 
-    for line_num in traceback_lines:
-        traceback_elem = lines[line_num] + '\n'
-        if len(lines) > line_num + 1:
-            traceback_elem += lines[line_num + 1] + '\n'
-        traceback_stack += [traceback_elem]
+    for line_from, line_to in zip(traceback_lines, traceback_lines[1:]):
+        actual_lines = lines[line_from: line_to]
+        needed_lines = [line for line in actual_lines if line.startswith("  ")]
+        traceback_stack += ['\n'.join(needed_lines) + '\n']
+
+    last_traceback = ''
+    before = '\n'.join(lines[:traceback_lines[0]]) + '\n'
+    after = ''
+
+    for line in lines[traceback_lines[-1]:]:
+        if not after and line.startswith("  "):
+            last_traceback += line + "\n"
+        else:
+            after += line + "\n"
+
+    traceback_stack += [last_traceback]
 
     user_traceback = []
     for trace in traceback_stack:
@@ -109,10 +120,7 @@ def str_to_stacktrace(str_trace: str) -> str:
 
         user_traceback += [trace]
 
-    before = ['\n'.join(lines[:traceback_lines[0]]) + '\n']
-    after = ['\n'.join(lines[traceback_lines[-1] + 2:]) + '\n']
-
-    return clean_stacktrace(before + user_traceback + after, user_traceback)
+    return clean_stacktrace([before] + user_traceback + [after], user_traceback)
 
 
 def clean_stacktrace(full_traceback: List[str], user_traceback: List[str], user_dir: str = '') -> str:

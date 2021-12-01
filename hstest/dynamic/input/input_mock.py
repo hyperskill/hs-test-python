@@ -1,9 +1,10 @@
-from typing import Callable, Dict
+from typing import Any, Callable, Dict
 
+from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
 from hstest.dynamic.input.dynamic_input_handler import DynamicInputHandler
 from hstest.dynamic.security.exit_exception import ExitException
+from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
-from hstest.testing.execution.program_executor import ProgramExecutor
 from hstest.testing.settings import Settings
 
 Condition = Callable[[], bool]
@@ -17,20 +18,20 @@ class ConditionalInputHandler:
 
 class InputMock:
     def __init__(self):
-        self.handlers: Dict[ProgramExecutor, ConditionalInputHandler] = {}
+        self.handlers: Dict[ThreadGroup, ConditionalInputHandler] = {}
 
-    def install_input_handler(self, program: ProgramExecutor, condition: Condition):
-        if program in self.handlers:
+    def install_input_handler(self, obj: Any, condition: Condition, input_func: DynamicTestFunction):
+        if obj in self.handlers:
             raise UnexpectedError("Cannot install input handler from the same program twice")
-        self.handlers[program] = ConditionalInputHandler(
+        self.handlers[obj] = ConditionalInputHandler(
             condition,
-            DynamicInputHandler(lambda: program.request_input())
+            DynamicInputHandler(input_func)
         )
 
-    def uninstall_input_handler(self, program: ProgramExecutor):
-        if program not in self.handlers:
+    def uninstall_input_handler(self, obj: Any):
+        if obj not in self.handlers:
             raise UnexpectedError("Cannot uninstall input handler that doesn't exist")
-        del self.handlers[program]
+        del self.handlers[obj]
 
     def __get_input_handler(self) -> DynamicInputHandler:
         for handler in self.handlers.values():

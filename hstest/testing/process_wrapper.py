@@ -9,11 +9,13 @@ from psutil import NoSuchProcess, Process
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.exit_handler import ExitHandler
+from hstest.dynamic.security.thread_group import ThreadGroup
+from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import UnexpectedError
 
 
 class ProcessWrapper:
-    def __init__(self, *args, check_early_finish=False, register_output=True):
+    def __init__(self, *args, check_early_finish=False, register_output=True, register_io_handler=False):
         self.lock = Lock()
 
         self.args = args
@@ -38,6 +40,8 @@ class ProcessWrapper:
 
         self.check_early_finish = check_early_finish
         self.register_output = register_output
+        self.register_io_handler = register_io_handler
+        self._group = None
 
     def start(self):
         command = ' '.join(map(str, self.args))
@@ -65,10 +69,18 @@ class ProcessWrapper:
 
         self.ps = Process(self.process.pid)
 
-        Thread(target=lambda: self.check_cpuload(), daemon=True).start()
-        Thread(target=lambda: self.check_output(), daemon=True).start()
-        Thread(target=lambda: self.check_stdout(), daemon=True).start()
-        Thread(target=lambda: self.check_stderr(), daemon=True).start()
+        if self.register_io_handler:
+            self._group = ThreadGroup()
+            SystemHandler.install_handler(
+                self,
+                lambda: ThreadGroup.curr_group() == self._group,
+                lambda: None
+            )
+
+        Thread(target=lambda: self.check_cpuload(), daemon=True, group=self._group).start()
+        Thread(target=lambda: self.check_output(), daemon=True, group=self._group).start()
+        Thread(target=lambda: self.check_stdout(), daemon=True, group=self._group).start()
+        Thread(target=lambda: self.check_stderr(), daemon=True, group=self._group).start()
 
         return self
 
@@ -236,6 +248,9 @@ class ProcessWrapper:
             OutputHandler.print('Terminate - BEFORE WAIT STDERR')
 
             self.wait_output()
+
+            if self.register_io_handler:
+                SystemHandler.uninstall_handler(self)
 
             OutputHandler.print('Terminate - AFTER WAIT STDERR')
 
