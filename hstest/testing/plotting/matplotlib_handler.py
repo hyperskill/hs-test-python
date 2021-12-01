@@ -1,6 +1,8 @@
-from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
 from copy import deepcopy
 from importlib import reload
+from typing import List
+
+from hstest.testing.plotting.drawing import Drawing, DrawingLibrary, DrawingType
 
 
 class MatplotlibHandler:
@@ -22,7 +24,7 @@ class MatplotlibHandler:
     _matplotlib = None
 
     @staticmethod
-    def replace_plots(drawings):
+    def replace_plots(drawings: List[Drawing]):
 
         try:
             import matplotlib

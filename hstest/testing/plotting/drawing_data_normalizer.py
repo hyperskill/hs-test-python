@@ -24,7 +24,7 @@ class DrawingDataNormalizer:
         return np.array(result_data, dtype=object)
 
     @staticmethod
-    def normalize_hist_data(data):
+    def normalize_hist_data(data) -> np.ndarray:
 
         if type(data) != list:
             try:
