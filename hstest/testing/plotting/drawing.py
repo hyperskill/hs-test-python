@@ -47,6 +47,16 @@ class Drawing:
             )
         )
 
+    @staticmethod
+    def get_bar_drawing(x, y, library):
+        return Drawing(
+            library,
+            DrawingType.bar,
+            DrawingData(
+                DrawingDataNormalizer.normalize_bar_data(x, y)
+            )
+        )
+
 
 class DrawingData:
     def __init__(self, data):

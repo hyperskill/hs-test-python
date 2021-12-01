@@ -182,16 +182,15 @@ class SeabornHandler:
             if data is not None:
                 if x:
                     x_arr = data[x].to_numpy()
+                    y_arr = np.full((x_arr.size, ), '', dtype=str)
                 if y:
                     y_arr = data[y].to_numpy()
+                    if x_arr.size == 0:
+                        x_arr = np.full((y_arr.size,), '', dtype=str)
 
-            drawing = Drawing(
-                DrawingLibrary.seaborn,
-                DrawingType.bar,
-                {
-                    'x': x_arr,
-                    'y': y_arr
-                }
+            drawing = Drawing.get_bar_drawing(
+                x_arr, y_arr,
+                DrawingLibrary.seaborn
             )
             drawings.append(drawing)
 

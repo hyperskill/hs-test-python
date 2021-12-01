@@ -104,7 +104,6 @@ class PandasHandler:
 
     @staticmethod
     def get_bar_drawings_with_normalized_data(data: pd.DataFrame, x, y):
-        x_arr = np.array([])
         drawings = []
 
         if x is not None:
@@ -113,14 +112,9 @@ class PandasHandler:
             x_arr = data.index.to_numpy()
 
         if y is not None:
-            y_arr = data[y].to_numpy()
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.bar,
-                {
-                    'x': x_arr,
-                    'y': y_arr
-                }
+            drawing = Drawing.get_bar_drawing(
+                x_arr, data[y],
+                DrawingLibrary.pandas
             )
             drawings.append(drawing)
             return drawings
@@ -128,13 +122,9 @@ class PandasHandler:
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = Drawing(
-                DrawingLibrary.pandas,
-                DrawingType.bar,
-                {
-                    'x': x_arr,
-                    'y': data[column].to_numpy()
-                }
+            drawing = Drawing.get_bar_drawing(
+                x_arr, data[column],
+                DrawingLibrary.pandas
             )
             drawings.append(drawing)
         return drawings

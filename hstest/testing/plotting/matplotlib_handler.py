@@ -85,24 +85,16 @@ class MatplotlibHandler:
             drawings.append(drawing)
 
         def bar(x, height, width=0.8, bottom=None, **kwargs):
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.bar,
-                {
-                    'x': np.array(x),
-                    'y': np.array([])
-                }
+            drawing = Drawing.get_bar_drawing(
+                np.array(x), np.full((len(x), ), '', dtype=str),
+                DrawingLibrary.matplotlib
             )
             drawings.append(drawing)
 
         def barh(y, width, height=0.8, left=None, **kwargs):
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.bar,
-                {
-                    'x': np.array([]),
-                    'y': np.array(y)
-                }
+            drawing = Drawing.get_bar_drawing(
+                np.array(y), np.full((len(y),), '', dtype=str),
+                DrawingLibrary.matplotlib
             )
             drawings.append(drawing)
 
