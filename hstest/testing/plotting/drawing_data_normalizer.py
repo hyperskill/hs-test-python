@@ -4,7 +4,7 @@ import numpy as np
 class DrawingDataNormalizer:
 
     @staticmethod
-    def normalize_x_y_data(x, y):
+    def normalize_x_y_data(x, y) -> np.ndarray:
         try:
             if type(x) != list:
                 x = list(x)
@@ -58,17 +58,17 @@ class DrawingDataNormalizer:
         return np.array(result_data)
 
     @staticmethod
-    def normalize_bar_data(x, y):
+    def normalize_bar_data(x, y) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_line_data(x, y):
+    def normalize_line_data(x, y) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_scatter_data(x, y):
+    def normalize_scatter_data(x, y) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_pie_data(x, y):
+    def normalize_pie_data(x, y) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)

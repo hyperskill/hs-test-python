@@ -7,6 +7,7 @@ from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 from pandas.api.types import is_numeric_dtype
+from typing import List
 
 
 class PandasHandler:
@@ -216,7 +217,7 @@ class PandasHandler:
         return drawings
 
     @staticmethod
-    def replace_plots(drawings):
+    def replace_plots(drawings: List[Drawing]):
         try:
             import pandas.plotting as pd
         except ModuleNotFoundError:
