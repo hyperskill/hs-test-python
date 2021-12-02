@@ -76,7 +76,8 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
+                        if 'plot' in curr_catalog:
+                            modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 

@@ -1,7 +1,7 @@
 import unittest
 
 from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
-from hstest.testing.plotting.drawing import DrawingLibrary
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from hstest import TestedProgram

@@ -1,7 +1,7 @@
 from typing import List
 
 from hstest.stage.stage_test import StageTest
-from hstest.testing.plotting.drawing import Drawing
+from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.runner.plot_testing_runner import PlottingTestingRunner
 
 

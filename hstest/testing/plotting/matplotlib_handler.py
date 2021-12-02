@@ -2,7 +2,10 @@ from copy import deepcopy
 from importlib import reload
 from typing import List
 
-from hstest.testing.plotting.drawing import Drawing, DrawingLibrary, DrawingType
+from hstest.testing.plotting.drawing.drawing import Drawing
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.plotting.drawing.drawing_type import DrawingType
+from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 
 
 class MatplotlibHandler:
@@ -37,7 +40,7 @@ class MatplotlibHandler:
 
         def hist(x, *a, **kw):
             drawings.append(
-                Drawing.get_hist_drawing(
+                DrawingBuilder.get_hist_drawing(
                     x,
                     DrawingLibrary.matplotlib
                 )
@@ -57,7 +60,7 @@ class MatplotlibHandler:
                 y = [_ for _ in range(len(x))]
 
             drawings.append(
-                Drawing.get_line_drawing(
+                DrawingBuilder.get_line_drawing(
                     x, y,
                     DrawingLibrary.matplotlib
                 )
@@ -65,7 +68,7 @@ class MatplotlibHandler:
 
         def scatter(x, y, *a, **kwargs):
             drawings.append(
-                Drawing.get_scatter_drawing(
+                DrawingBuilder.get_scatter_drawing(
                     x, y,
                     DrawingLibrary.matplotlib
                 )
@@ -80,21 +83,21 @@ class MatplotlibHandler:
             if 'labels' in kw and kw['labels'] is not None:
                 x_arr = kw['labels']
 
-            drawing = Drawing.get_pie_drawing(
+            drawing = DrawingBuilder.get_pie_drawing(
                 x_arr, y,
                 DrawingLibrary.matplotlib
             )
             drawings.append(drawing)
 
         def bar(x, height, width=0.8, bottom=None, **kwargs):
-            drawing = Drawing.get_bar_drawing(
-                np.array(x), np.full((len(x), ), '', dtype=str),
+            drawing = DrawingBuilder.get_bar_drawing(
+                np.array(x), np.full((len(x),), '', dtype=str),
                 DrawingLibrary.matplotlib
             )
             drawings.append(drawing)
 
         def barh(y, width, height=0.8, left=None, **kwargs):
-            drawing = Drawing.get_bar_drawing(
+            drawing = DrawingBuilder.get_bar_drawing(
                 np.array(y), np.full((len(y),), '', dtype=str),
                 DrawingLibrary.matplotlib
             )

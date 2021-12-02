@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
+from hstest.testing.plotting.drawing.drawing import Drawing
+from hstest.testing.plotting.drawing.drawing_type import DrawingType
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 from pandas.api.types import is_numeric_dtype
 
@@ -39,7 +42,7 @@ class PandasHandler:
 
         for column in data.columns:
             drawings.append(
-                Drawing.get_hist_drawing(
+                DrawingBuilder.get_hist_drawing(
                     data[column],
                     DrawingLibrary.pandas
                 )
@@ -53,7 +56,7 @@ class PandasHandler:
 
         if type(data) is pd.Series:
             drawings.append(
-                Drawing.get_line_drawing(
+                DrawingBuilder.get_line_drawing(
                     data.index,
                     data,
                     DrawingLibrary.pandas
@@ -63,7 +66,7 @@ class PandasHandler:
 
         for column in data.columns:
             drawings.append(
-                Drawing.get_line_drawing(
+                DrawingBuilder.get_line_drawing(
                     data.index,
                     data[column],
                     DrawingLibrary.pandas
@@ -75,7 +78,7 @@ class PandasHandler:
     @staticmethod
     def get_scatter_drawings_with_normalized_data(data, x, y):
         return [
-            Drawing.get_scatter_drawing(
+            DrawingBuilder.get_scatter_drawing(
                 data[x], data[y],
                 DrawingLibrary.pandas
             )
@@ -84,7 +87,7 @@ class PandasHandler:
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):
         if y is not None:
-            drawing = Drawing.get_pie_drawing(
+            drawing = DrawingBuilder.get_pie_drawing(
                 data.index, data[y],
                 DrawingLibrary.pandas
             )
@@ -95,7 +98,7 @@ class PandasHandler:
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = Drawing.get_pie_drawing(
+            drawing = DrawingBuilder.get_pie_drawing(
                 data.index, data[column],
                 DrawingLibrary.pandas
             )
@@ -112,7 +115,7 @@ class PandasHandler:
             x_arr = data.index.to_numpy()
 
         if y is not None:
-            drawing = Drawing.get_bar_drawing(
+            drawing = DrawingBuilder.get_bar_drawing(
                 x_arr, data[y],
                 DrawingLibrary.pandas
             )
@@ -122,7 +125,7 @@ class PandasHandler:
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = Drawing.get_bar_drawing(
+            drawing = DrawingBuilder.get_bar_drawing(
                 x_arr, data[column],
                 DrawingLibrary.pandas
             )
@@ -277,7 +280,7 @@ class PandasHandler:
             **kwargs
         ):
             drawings.append(
-                Drawing.get_hist_drawing(
+                DrawingBuilder.get_hist_drawing(
                     self,
                     DrawingLibrary.pandas
                 )
@@ -288,7 +291,7 @@ class PandasHandler:
             **kwargs
         ):
             drawings.append(
-                Drawing.get_hist_drawing(
+                DrawingBuilder.get_hist_drawing(
                     self,
                     DrawingLibrary.pandas
                 )

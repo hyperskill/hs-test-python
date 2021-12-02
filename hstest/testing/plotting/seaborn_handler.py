@@ -1,6 +1,7 @@
-import pandas as pd
-
-from hstest.testing.plotting.drawing import Drawing, DrawingType, DrawingLibrary
+from hstest.testing.plotting.drawing.drawing import Drawing
+from hstest.testing.plotting.drawing.drawing_type import DrawingType
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from importlib import reload
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 from pandas.api.types import is_numeric_dtype
@@ -82,14 +83,14 @@ class SeabornHandler:
             if data is not None:
                 if 'x' in kwargs and kwargs['x'] is not None:
                     drawings.append(
-                        Drawing.get_hist_drawing(
+                        DrawingBuilder.get_hist_drawing(
                             data[kwargs['x']],
                             DrawingLibrary.seaborn
                         )
                     )
                 elif 'y' in kwargs and kwargs['y'] is not None:
                     drawings.append(
-                        Drawing.get_hist_drawing(
+                        DrawingBuilder.get_hist_drawing(
                             data[kwargs['y']],
                             DrawingLibrary.seaborn
                         )
@@ -105,7 +106,7 @@ class SeabornHandler:
                 y_array = data[y].to_numpy()
 
                 drawings.append(
-                    Drawing.get_line_drawing(
+                    DrawingBuilder.get_line_drawing(
                         x_array,
                         y_array,
                         DrawingLibrary.seaborn
@@ -118,7 +119,7 @@ class SeabornHandler:
                     continue
 
                 drawings.append(
-                    Drawing.get_line_drawing(
+                    DrawingBuilder.get_line_drawing(
                         x_array,
                         data[column],
                         DrawingLibrary.seaborn
@@ -141,7 +142,7 @@ class SeabornHandler:
         def scatterplot(x=None, y=None, data=None, **kwargs):
             if x is not None and y is not None:
                 drawings.append(
-                    Drawing.get_scatter_drawing(
+                    DrawingBuilder.get_scatter_drawing(
                         data[x], data[y],
                         DrawingLibrary.seaborn
                     )
@@ -155,7 +156,7 @@ class SeabornHandler:
 
                     x = data.index
                     drawings.append(
-                        Drawing.get_scatter_drawing(
+                        DrawingBuilder.get_scatter_drawing(
                             x, data[column],
                             DrawingLibrary.seaborn
                         )
@@ -182,13 +183,13 @@ class SeabornHandler:
             if data is not None:
                 if x:
                     x_arr = data[x].to_numpy()
-                    y_arr = np.full((x_arr.size, ), '', dtype=str)
+                    y_arr = np.full((x_arr.size,), '', dtype=str)
                 if y:
                     y_arr = data[y].to_numpy()
                     if x_arr.size == 0:
                         x_arr = np.full((y_arr.size,), '', dtype=str)
 
-            drawing = Drawing.get_bar_drawing(
+            drawing = DrawingBuilder.get_bar_drawing(
                 x_arr, y_arr,
                 DrawingLibrary.seaborn
             )

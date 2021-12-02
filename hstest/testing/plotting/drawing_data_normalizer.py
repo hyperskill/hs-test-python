@@ -32,22 +32,22 @@ class DrawingDataNormalizer:
             except Exception as _:
                 raise ValueError('The data argument should be an array')
 
-        if len(set(type(i) for i in data)) == 1:
-            data.sort()
-
-        data = []
-
-        for i in data:
-            if type(i) == str:
-                if i.isdigit():
-                    data += [int(i)]
-                else:
-                    try:
-                        data += [float(i)]
-                    except ValueError:
-                        data += [i]
-            else:
-                data += [i]
+        # if len(set(type(i) for i in data)) == 1:
+        #     data.sort()
+        #
+        # data = []
+        #
+        # for i in data:
+        #     if type(i) == str:
+        #         if i.isdigit():
+        #             data += [int(i)]
+        #         else:
+        #             try:
+        #                 data += [float(i)]
+        #             except ValueError:
+        #                 data += [i]
+        #     else:
+        #         data += [i]
 
         data_wo_duplicates = list(set(data))
         result_data = list()

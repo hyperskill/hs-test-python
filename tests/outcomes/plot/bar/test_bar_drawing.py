@@ -17,9 +17,6 @@ def test_bar_drawing(figures, correct_plot_count, correct_data, library_type):
         if not isinstance(bar.data.data, np.ndarray):
             return wrong("The data value should be a ndarray")
 
-        print(type(correct_data[i]))
-        print(type(bar.data.data))
-
         if not np.array_equal(correct_data[i], bar.data.data):
             return wrong('Wrong data of the bar graph')
 
