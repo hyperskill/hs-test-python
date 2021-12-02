@@ -5,7 +5,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="hs-test-python",
-    version="6.0.0",
+    version="6.1.0",
     author="Vladimir Turov",
     author_email="vladimir.turov@stepik.org",
     description="A small framework that simplifies testing educational projects for https://hyperskill.org/.",
