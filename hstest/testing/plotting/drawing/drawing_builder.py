@@ -13,7 +13,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_line_drawing(x, y, library):
+    def get_line_drawing(x, y, library) -> Drawing:
         return Drawing(
             library,
             DrawingType.line,
@@ -21,7 +21,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_scatter_drawing(x, y, library):
+    def get_scatter_drawing(x, y, library) -> Drawing:
         return Drawing(
             library,
             DrawingType.scatter,
@@ -29,7 +29,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_pie_drawing(x, y, library):
+    def get_pie_drawing(x, y, library) -> Drawing:
         return Drawing(
             library,
             DrawingType.pie,
@@ -37,7 +37,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_bar_drawing(x, y, library):
+    def get_bar_drawing(x, y, library) -> Drawing:
         return Drawing(
             library,
             DrawingType.bar,
