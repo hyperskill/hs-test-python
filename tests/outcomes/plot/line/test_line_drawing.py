@@ -14,7 +14,7 @@ def test_line_drawing(figures, correct_plot_count, correct_data, library_type):
         if line.library != library_type:
             return wrong(f'{line.library} is wrong library type. Expected {library_type}')
 
-        if not isinstance(line.data.data, np.ndarray):
+        if not isinstance(line.data, np.ndarray):
             return wrong("The data value should be a ndarray")
 
         if not np.array_equal(correct_data[i], line.data.data):

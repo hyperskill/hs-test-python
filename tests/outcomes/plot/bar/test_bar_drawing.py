@@ -14,7 +14,7 @@ def test_bar_drawing(figures, correct_plot_count, correct_data, library_type):
         if bar.library != library_type:
             return wrong(f'{bar.library} is wrong library type. Expected {library_type}')
 
-        if not isinstance(bar.data.data, np.ndarray):
+        if not isinstance(bar.data, np.ndarray):
             return wrong("The data value should be a ndarray")
 
         if not np.array_equal(correct_data[i], bar.data.data):

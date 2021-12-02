@@ -1,7 +1,6 @@
 from hstest.testing.plotting.drawing_data_normalizer import DrawingDataNormalizer
 from hstest.testing.plotting.drawing.drawing_type import DrawingType
 from hstest.testing.plotting.drawing.drawing import Drawing
-from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
 
 class DrawingBuilder:
@@ -10,9 +9,7 @@ class DrawingBuilder:
         return Drawing(
             library,
             DrawingType.hist,
-            DrawingData(
-                DrawingDataNormalizer.normalize_hist_data(data)
-            )
+            DrawingDataNormalizer.normalize_hist_data(data)
         )
 
     @staticmethod
@@ -20,9 +17,7 @@ class DrawingBuilder:
         return Drawing(
             library,
             DrawingType.line,
-            DrawingData(
-                DrawingDataNormalizer.normalize_bar_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_bar_data(x, y)
         )
 
     @staticmethod
@@ -30,9 +25,7 @@ class DrawingBuilder:
         return Drawing(
             library,
             DrawingType.scatter,
-            DrawingData(
-                DrawingDataNormalizer.normalize_bar_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_bar_data(x, y)
         )
 
     @staticmethod
@@ -40,9 +33,7 @@ class DrawingBuilder:
         return Drawing(
             library,
             DrawingType.pie,
-            DrawingData(
-                DrawingDataNormalizer.normalize_pie_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_pie_data(x, y)
         )
 
     @staticmethod
@@ -50,7 +41,5 @@ class DrawingBuilder:
         return Drawing(
             library,
             DrawingType.bar,
-            DrawingData(
-                DrawingDataNormalizer.normalize_bar_data(x, y)
-            )
+            DrawingDataNormalizer.normalize_bar_data(x, y)
         )
