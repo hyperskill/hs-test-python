@@ -14,7 +14,7 @@ def test_scatter_drawing(figures, correct_plot_count, correct_data, library_type
         if scatter.library != library_type:
             return wrong(f'{scatter.library} is wrong library type. Expected {library_type}')
 
-        if not isinstance(scatter.data.data, np.ndarray):
+        if not isinstance(scatter.data, np.ndarray):
             return wrong("The data value should be a ndarray")
 
         if not np.array_equal(correct_data[i], scatter.data.data):
