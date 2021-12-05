@@ -7,7 +7,7 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]), columns=['one'])
+    df = pd.DataFrame(np.array([5, 4, 3, 2, 1, 3]), columns=['one'])
 
     sns.histplot(
         df, y="one"
