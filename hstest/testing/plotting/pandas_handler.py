@@ -293,7 +293,7 @@ class PandasHandler:
         ):
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
-                    self,
+                    self.to_numpy(),
                     DrawingLibrary.pandas
                 )
             )
