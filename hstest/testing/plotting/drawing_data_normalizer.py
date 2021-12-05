@@ -32,30 +32,38 @@ class DrawingDataNormalizer:
             except Exception as _:
                 raise ValueError('The data argument should be an array')
 
-        # if len(set(type(i) for i in data)) == 1:
-        #     data.sort()
-        #
-        # data = []
-        #
-        # for i in data:
-        #     if type(i) == str:
-        #         if i.isdigit():
-        #             data += [int(i)]
-        #         else:
-        #             try:
-        #                 data += [float(i)]
-        #             except ValueError:
-        #                 data += [i]
-        #     else:
-        #         data += [i]
+        data_types = set([type(i) for i in data])
 
-        data_wo_duplicates = list(set(data))
+        if str in data_types:
+            parsed_data = [str(i) for i in data]
+        else:
+            parsed_data = data
+        if len(data_types) == 1:
+            parsed_data = sorted(parsed_data)
+        if len(data_types) == 2 and (int in data_types and float in data_types):
+            parsed_data = sorted(parsed_data)
+
+        no_duplicates = list(set(parsed_data))
         result_data = list()
 
-        for element in data_wo_duplicates:
-            result_data.append((element, data.count(element)))
+        for element in parsed_data:
+            if element not in no_duplicates:
+                continue
+            else:
+                no_duplicates.remove(element)
 
-        return np.array(result_data)
+            occurrence = parsed_data.count(element)
+            if type(element) == str:
+                if element.isdigit():
+                    element = int(element)
+                else:
+                    try:
+                        element = float(element)
+                    except ValueError:
+                        pass
+            result_data.append((element, occurrence))
+
+        return np.array(result_data, dtype=object)
 
     @staticmethod
     def normalize_bar_data(x, y) -> np.ndarray:

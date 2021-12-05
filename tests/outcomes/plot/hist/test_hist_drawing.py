@@ -17,7 +17,7 @@ def test_hist_drawing(figures, correct_plot_count, correct_data, library_type):
         if not isinstance(hist.data, np.ndarray):
             return wrong("The data value should be a ndarray")
 
-        if not np.array_equal(correct_data[i], hist.data.data):
+        if not correct_data[i] == hist.data.tolist():
             return wrong('Wrong data of the hist graph')
 
     return correct()

@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
@@ -7,8 +8,7 @@ from hstest.stage import PlottingTest
 from hstest import TestedProgram
 
 
-class TestPandasHist(PlottingTest):
-
+class TestMatplotlibHist(PlottingTest):
     @dynamic_test
     def test(self):
         program = TestedProgram()
@@ -16,18 +16,19 @@ class TestPandasHist(PlottingTest):
 
         correct_data = [
             [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
-            [[2, 1], [6, 3], [9, 1]],
-            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
-            [[2, 1], [6, 3], [9, 1]],
-            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]]
+            [[1, 1], [1.4, 1], [2, 1], [5, 2], [6, 1]],
+            [[1, 2], [4, 1], [2, 1]],
+            [[1, 1], [2, 1], [5, 1], ['a', 1], ['aa', 1], ['b', 1], ['bb', 1]],
+            [[1.1, 2], [5, 2], [2, 1]],
+            [[1.1, 1], [1.5, 1], [2.1, 1], [2.5, 1], [3.6, 1]]
         ]
 
-        return test_hist_drawing(self.all_figures, 5, correct_data, DrawingLibrary.pandas)
+        return test_hist_drawing(self.all_figures, 6, correct_data, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPandasHist('main').run_tests()
+        status, feedback = TestMatplotlibHist('main').run_tests()
         self.assertEqual(status, 0)
 
 
