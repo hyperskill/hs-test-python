@@ -1,10 +1,12 @@
-from hstest.testing.plotting.drawing.drawing import Drawing
-from hstest.testing.plotting.drawing.drawing_type import DrawingType
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
-from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from importlib import reload
-from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
+
 from pandas.api.types import is_numeric_dtype
+
+from hstest.testing.plotting.drawing.drawing import Drawing
+from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.plotting.drawing.drawing_type import DrawingType
+from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 
 class SeabornHandler:
@@ -35,13 +37,15 @@ class SeabornHandler:
             y = None if 'y' not in kwargs else kwargs['y']
 
             if data is None:
+                curr_data = {
+                    'x': np.array(x),
+                    'y': np.array(y)
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.dis,
-                    {
-                        'x': np.array(x),
-                        'y': np.array(y)
-                    }
+                    None
                 )
                 drawings.append(drawing)
                 return
@@ -53,13 +57,16 @@ class SeabornHandler:
                 for column in data.columns:
                     if not is_numeric_dtype(data[column]):
                         continue
+
+                    curr_data = {
+                        'x': np.array([column]),
+                        'y': data[column].to_numpy()
+                    }
+
                     drawing = Drawing(
                         DrawingLibrary.seaborn,
                         DrawingType.dis,
-                        {
-                            'x': np.array([column]),
-                            'y': data[column].to_numpy()
-                        }
+                        None
                     )
                     drawings.append(drawing)
                 return
@@ -69,13 +76,15 @@ class SeabornHandler:
             if y:
                 y_arr = data[y].to_numpy()
 
+            curr_data =  {
+                'x': np.array(x_arr),
+                'y': np.array(y_arr)
+            }
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.dis,
-                {
-                    'x': np.array(x_arr),
-                    'y': np.array(y_arr)
-                }
+                None
             )
             drawings.append(drawing)
 
@@ -127,15 +136,17 @@ class SeabornHandler:
                 )
 
         def lmplot(x=None, y=None, data=None, **kwargs):
+            curr_data = {
+                'data': data,
+                'x': x,
+                'y': y,
+                'kwargs': kwargs
+            }
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.lm,
-                {
-                    'data': data,
-                    'x': x,
-                    'y': y,
-                    'kwargs': kwargs
-                }
+                None
             )
             drawings.append(drawing)
 
@@ -163,15 +174,17 @@ class SeabornHandler:
                     )
 
         def catplot(x=None, y=None, data=None, **kwargs):
+            curr_data = {
+                'data': data,
+                'x': x,
+                'y': y,
+                'kwargs': kwargs
+            }
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.cat,
-                {
-                    'data': data,
-                    'x': x,
-                    'y': y,
-                    'kwargs': kwargs
-                }
+                None
             )
             drawings.append(drawing)
 
@@ -206,13 +219,15 @@ class SeabornHandler:
                 y_arr = data[y].to_numpy()
 
             if x or y:
+                curr_data = {
+                    'x': x_arr,
+                    'y': y_arr
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.violin,
-                    {
-                        'x': x_arr,
-                        'y': y_arr
-                    }
+                    None
                 )
                 drawings.append(drawing)
                 return
@@ -220,13 +235,16 @@ class SeabornHandler:
             for column in data.columns:
                 if not is_numeric_dtype(data[column]):
                     continue
+
+                curr_data = {
+                    'x': np.array([column]),
+                    'y': data[column].to_numpy()
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.violin,
-                    {
-                        'x': np.array([column]),
-                        'y': data[column].to_numpy()
-                    }
+                    None
                 )
                 drawings.append(drawing)
 
@@ -234,25 +252,29 @@ class SeabornHandler:
             if data is None:
                 return
 
+            curr_data = {
+                'x': np.array(data)
+            }
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.heatmap,
-                {
-                    'x': np.array(data)
-                }
+                None
             )
             drawings.append(drawing)
 
         def boxplot(x=None, y=None, data=None, **kwargs):
 
             if data is None:
+                curr_data = {
+                    'x': np.array(x),
+                    'y': np.array(y)
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.box,
-                    {
-                        'x': np.array(x),
-                        'y': np.array(y)
-                    }
+                    None
                 )
                 drawings.append(drawing)
                 return
@@ -264,13 +286,16 @@ class SeabornHandler:
                 for column in data.columns:
                     if not is_numeric_dtype(data[column]):
                         continue
+
+                    curr_data = {
+                        'x': np.array([column]),
+                        'y': data[column].to_numpy()
+                    }
+
                     drawing = Drawing(
                         DrawingLibrary.seaborn,
                         DrawingType.box,
-                        {
-                            'x': np.array([column]),
-                            'y': data[column].to_numpy()
-                        }
+                        None
                     )
                     drawings.append(drawing)
                 return
@@ -280,13 +305,15 @@ class SeabornHandler:
             if y:
                 y_arr = data[y].to_numpy()
 
+            curr_data = {
+                'x': np.array(x_arr),
+                'y': np.array(y_arr)
+            }
+
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.box,
-                {
-                    'x': np.array(x_arr),
-                    'y': np.array(y_arr)
-                }
+                None
             )
             drawings.append(drawing)
 

@@ -1,13 +1,14 @@
+from typing import List
+
 import numpy as np
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 
 from hstest.testing.plotting.drawing.drawing import Drawing
-from hstest.testing.plotting.drawing.drawing_type import DrawingType
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.plotting.drawing.drawing_type import DrawingType
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
-from pandas.api.types import is_numeric_dtype
-from typing import List
 
 
 class PandasHandler:
@@ -143,13 +144,16 @@ class PandasHandler:
             for column in data.columns:
                 if not is_numeric_dtype(data[column]):
                     continue
+
+                curr_data = {
+                    'x': np.array([column]),
+                    'y': data[column].to_numpy()
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.pandas,
                     DrawingType.box,
-                    {
-                        'x': np.array([column]),
-                        'y': data[column].to_numpy()
-                    }
+                    None
                 )
                 drawings.append(drawing)
             return drawings
@@ -157,13 +161,16 @@ class PandasHandler:
         for column in x:
             if not is_numeric_dtype(data[column]):
                 continue
+
+            curr_data = {
+                'x': np.array([column]),
+                'y': data[column].to_numpy()
+            }
+
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.box,
-                {
-                    'x': np.array([column]),
-                    'y': data[column].to_numpy()
-                }
+                None
             )
             drawings.append(drawing)
         return drawings
@@ -173,32 +180,38 @@ class PandasHandler:
         drawings = []
 
         if type(data) == pd.Series:
+            curr_data = {
+                'x': data.to_numpy()
+            }
+
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.dis,
-                {
-                    'x': data.to_numpy()
-                }
+                None
             )
             drawings.append(drawing)
             return
 
         if x:
+            curr_data = {
+                'x': np.array(data[x]),
+            }
+
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.dis,
-                {
-                    'x': np.array(data[x]),
-                }
+                None
             )
             drawings.append(drawing)
         if y:
+            curr_data = {
+                'x': np.array(data[y]),
+            }
+
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.dis,
-                {
-                    'x': np.array(data[y]),
-                }
+                None
             )
             drawings.append(drawing)
 
@@ -206,12 +219,15 @@ class PandasHandler:
             for column in data.columns:
                 if not is_numeric_dtype(data[column]):
                     continue
+
+                curr_data = {
+                    'x': data[column].to_numpy()
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.pandas,
                     DrawingType.dis,
-                    {
-                        'x': data[column].to_numpy()
-                    }
+                    None
                 )
                 drawings.append(drawing)
         return drawings
@@ -253,15 +269,17 @@ class PandasHandler:
                     all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](data, x, y)
                     drawings.extend(all_drawings)
                 else:
+                    curr_data = {
+                        'data': data,
+                        'x': x,
+                        'y': y,
+                        'kwargs': kwargs
+                    }
+
                     drawing = Drawing(
                         DrawingLibrary.pandas,
                         plot_name,
-                        {
-                            'data': data,
-                            'x': x,
-                            'y': y,
-                            'kwargs': kwargs
-                        }
+                        None
                     )
                     drawings.append(drawing)
 
