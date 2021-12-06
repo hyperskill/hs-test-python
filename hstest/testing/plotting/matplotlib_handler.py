@@ -3,9 +3,9 @@ from importlib import reload
 from typing import List
 
 from hstest.testing.plotting.drawing.drawing import Drawing
+from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.testing.plotting.drawing.drawing_type import DrawingType
-from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 
 
 class MatplotlibHandler:
@@ -112,12 +112,14 @@ class MatplotlibHandler:
                     is_multiple_plots = True
 
             if not is_multiple_plots:
+                curr_data = {
+                    'x': np.array(dataset)
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.matplotlib,
                     DrawingType.violin,
-                    {
-                        'x': np.array(dataset)
-                    }
+                    None
                 )
                 drawings.append(drawing)
                 return
@@ -125,33 +127,39 @@ class MatplotlibHandler:
             for data in dataset:
                 data = [data] if type(data) != list else data
 
+                curr_data = {
+                    'x': np.array(dataset)
+                }
+
                 drawing = Drawing(
                     DrawingLibrary.matplotlib,
                     DrawingType.violin,
-                    {
-                        'x': np.array(data)
-                    }
+                    None
                 )
                 drawings.append(drawing)
 
         def imshow(x, **kwargs):
+            curr_data = {
+                'x': np.array(x)
+            }
+
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
                 DrawingType.heatmap,
-                {
-                    'x': np.array(x)
-                }
+                None
             )
             drawings.append(drawing)
 
         def boxplot(x, **kwargs):
+            curr_data = {
+                'x': np.array([None]),
+                'y': np.array(x)
+            }
+
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
                 DrawingType.box,
-                {
-                    'x': np.array([None]),
-                    'y': np.array(x)
-                }
+                None
             )
             drawings.append(drawing)
 
