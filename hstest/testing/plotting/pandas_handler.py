@@ -233,6 +233,28 @@ class PandasHandler:
         return drawings
 
     @staticmethod
+    def get_area_drawings_with_normalized_data(data, x, y):
+        drawings = []
+        drawing = Drawing(
+            DrawingLibrary.pandas,
+            DrawingType.area,
+            None
+        )
+        drawings.append(drawing)
+        return drawings
+
+    @staticmethod
+    def get_hexbin_drawings_with_normalized_data(data, x, y):
+        drawings = []
+        drawing = Drawing(
+            DrawingLibrary.pandas,
+            DrawingType.hexbin,
+            None
+        )
+        drawings.append(drawing)
+        return drawings
+
+    @staticmethod
     def replace_plots(drawings: List[Drawing]):
         try:
             import pandas.plotting as pd
