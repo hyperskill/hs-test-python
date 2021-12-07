@@ -10,11 +10,9 @@ class DrawingType:
     violin = "violin"
     heatmap = "heatmap"
     box = "box"
-    dis = "dis"  # distribution plot (pandas' density, seaborn' displot)
+    dis = "dis"  # distribution plot (pandas' density and kde, seaborn' displot)
 
     # pandas only (without data)
-    kde = "kde"
-    density = "density"
     area = "area"
     hexbin = "hexbin"
 
