@@ -190,7 +190,7 @@ class PandasHandler:
                 None
             )
             drawings.append(drawing)
-            return
+            return drawings
 
         if x:
             curr_data = {

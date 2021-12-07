@@ -210,6 +210,14 @@ class SeabornHandler:
 
         def violinplot(x=None, y=None, data=None, **kwargs):
 
+            drawing = Drawing(
+                DrawingLibrary.seaborn,
+                DrawingType.violin,
+                None
+            )
+            drawings.append(drawing)
+            return
+
             x_arr = np.array([])
             y_arr = np.array([])
 
