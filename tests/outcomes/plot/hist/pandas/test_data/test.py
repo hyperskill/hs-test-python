@@ -19,10 +19,12 @@ class TestPandasHist(PlottingTest):
             [[2, 1], [6, 3], [9, 1]],
             [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
             [[2, 1], [6, 3], [9, 1]],
+            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
+            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
             [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]]
         ]
 
-        return test_hist_drawing(self.all_figures, 5, correct_data, DrawingLibrary.pandas)
+        return test_hist_drawing(self.all_figures, 7, correct_data, DrawingLibrary.pandas)
 
 
 class Test(unittest.TestCase):

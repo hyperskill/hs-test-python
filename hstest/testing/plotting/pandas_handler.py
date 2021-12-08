@@ -42,6 +42,24 @@ class PandasHandler:
     def get_hist_drawings_with_normalized_data(data: pd.DataFrame, x, y):
         drawings = []
 
+        if x is not None:
+            drawings.append(
+                DrawingBuilder.get_hist_drawing(
+                    data[x],
+                    DrawingLibrary.pandas
+                )
+            )
+            return drawings
+
+        if y is not None:
+            drawings.append(
+                DrawingBuilder.get_hist_drawing(
+                    data[y],
+                    DrawingLibrary.pandas
+                )
+            )
+            return drawings
+
         for column in data.columns:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
@@ -88,6 +106,14 @@ class PandasHandler:
 
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+
+        if type(data) == pd.Series:
+            drawing = DrawingBuilder.get_pie_drawing(
+                data.index, data,
+                DrawingLibrary.pandas
+            )
+            return [drawing]
+
         if y is not None:
             drawing = DrawingBuilder.get_pie_drawing(
                 data.index, data[y],
