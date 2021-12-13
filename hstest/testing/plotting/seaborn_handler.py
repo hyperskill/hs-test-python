@@ -50,7 +50,8 @@ class SeabornHandler:
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.dis,
-                    None
+                    None,
+                    kwargs,
                 )
                 drawings.append(drawing)
                 return
@@ -71,7 +72,8 @@ class SeabornHandler:
                     drawing = Drawing(
                         DrawingLibrary.seaborn,
                         DrawingType.dis,
-                        None
+                        None,
+                        kwargs,
                     )
                     drawings.append(drawing)
                 return
@@ -89,7 +91,8 @@ class SeabornHandler:
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.dis,
-                None
+                None,
+                kwargs,
             )
             drawings.append(drawing)
 
@@ -99,14 +102,16 @@ class SeabornHandler:
                     drawings.append(
                         DrawingBuilder.get_hist_drawing(
                             data[kwargs['y']],
-                            DrawingLibrary.seaborn
+                            DrawingLibrary.seaborn,
+                            kwargs,
                         )
                     )
                 elif 'x' in kwargs and kwargs['x'] is not None:
                     drawings.append(
                         DrawingBuilder.get_hist_drawing(
                             data[kwargs['x']],
-                            DrawingLibrary.seaborn
+                            DrawingLibrary.seaborn,
+                            kwargs,
                         )
                     )
                 else:
@@ -115,14 +120,16 @@ class SeabornHandler:
                             drawings.append(
                                 DrawingBuilder.get_hist_drawing(
                                     data[col],
-                                    DrawingLibrary.seaborn
+                                    DrawingLibrary.seaborn,
+                                    kwargs,
                                 )
                             )
                     else:
                         drawings.append(
                             DrawingBuilder.get_hist_drawing(
                                 data,
-                                DrawingLibrary.seaborn
+                                DrawingLibrary.seaborn,
+                                kwargs,
                             )
                         )
 
@@ -139,7 +146,8 @@ class SeabornHandler:
                     DrawingBuilder.get_line_drawing(
                         x_array,
                         y_array,
-                        DrawingLibrary.seaborn
+                        DrawingLibrary.seaborn,
+                        kwargs,
                     )
                 )
                 return drawings
@@ -152,7 +160,8 @@ class SeabornHandler:
                     DrawingBuilder.get_line_drawing(
                         x_array,
                         data[column],
-                        DrawingLibrary.seaborn
+                        DrawingLibrary.seaborn,
+                        kwargs,
                     )
                 )
 
@@ -167,7 +176,8 @@ class SeabornHandler:
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.lm,
-                None
+                None,
+                kwargs,
             )
             drawings.append(drawing)
 
@@ -176,7 +186,8 @@ class SeabornHandler:
                 drawings.append(
                     DrawingBuilder.get_scatter_drawing(
                         data[x], data[y],
-                        DrawingLibrary.seaborn
+                        DrawingLibrary.seaborn,
+                        kwargs,
                     )
                 )
                 return
@@ -190,7 +201,8 @@ class SeabornHandler:
                     drawings.append(
                         DrawingBuilder.get_scatter_drawing(
                             x, data[column],
-                            DrawingLibrary.seaborn
+                            DrawingLibrary.seaborn,
+                            kwargs,
                         )
                     )
 
@@ -205,7 +217,8 @@ class SeabornHandler:
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.cat,
-                None
+                None,
+                kwargs,
             )
             drawings.append(drawing)
 
@@ -225,57 +238,36 @@ class SeabornHandler:
 
             drawing = DrawingBuilder.get_bar_drawing(
                 x_arr, y_arr,
-                DrawingLibrary.seaborn
+                DrawingLibrary.seaborn,
+                kwargs,
             )
             drawings.append(drawing)
 
-        def violinplot(x=None, y=None, data=None, **kwargs):
+        def violinplot(*, x=None, y=None, data=None, **kwargs):
+
+            if data is not None:
+                if x is None and y is not None:
+                    data = data[y]
+                elif y is None and x is not None:
+                    data = data[x]
+                elif x is not None and y is not None:
+                    data = pd.concat([data[x], data[y]], axis=1).reset_index()
+            else:
+                if x is None:
+                    data = y
+                elif y is None:
+                    data = x
+                else:
+                    data = pd.concat([x, y], axis=1).reset_index()
 
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.violin,
-                None
+                data,
+                kwargs,
             )
+
             drawings.append(drawing)
-            return
-
-            x_arr = np.array([])
-            y_arr = np.array([])
-
-            if x:
-                x_arr = data[x].to_numpy()
-            if y:
-                y_arr = data[y].to_numpy()
-
-            if x or y:
-                curr_data = {
-                    'x': x_arr,
-                    'y': y_arr
-                }
-
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.violin,
-                    None
-                )
-                drawings.append(drawing)
-                return
-
-            for column in data.columns:
-                if not is_numeric_dtype(data[column]):
-                    continue
-
-                curr_data = {
-                    'x': np.array([column]),
-                    'y': data[column].to_numpy()
-                }
-
-                drawing = Drawing(
-                    DrawingLibrary.seaborn,
-                    DrawingType.violin,
-                    None
-                )
-                drawings.append(drawing)
 
         def heatmap(data=None, **kwargs):
             if data is None:
@@ -288,8 +280,10 @@ class SeabornHandler:
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.heatmap,
-                None
+                None,
+                kwargs,
             )
+
             drawings.append(drawing)
 
         def boxplot(x=None, y=None, data=None, **kwargs):
@@ -303,8 +297,10 @@ class SeabornHandler:
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.box,
-                    None
+                    None,
+                    kwargs,
                 )
+
                 drawings.append(drawing)
                 return
 
@@ -324,7 +320,8 @@ class SeabornHandler:
                     drawing = Drawing(
                         DrawingLibrary.seaborn,
                         DrawingType.box,
-                        None
+                        None,
+                        kwargs,
                     )
                     drawings.append(drawing)
                 return
@@ -342,7 +339,8 @@ class SeabornHandler:
             drawing = Drawing(
                 DrawingLibrary.seaborn,
                 DrawingType.box,
-                None
+                None,
+                kwargs,
             )
             drawings.append(drawing)
 

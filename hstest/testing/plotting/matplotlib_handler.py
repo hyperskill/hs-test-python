@@ -58,6 +58,7 @@ class MatplotlibHandler:
                 DrawingBuilder.get_hist_drawing(
                     x,
                     DrawingLibrary.matplotlib,
+                    kw,
                 )
             )
 
@@ -77,7 +78,8 @@ class MatplotlibHandler:
             drawings.append(
                 DrawingBuilder.get_line_drawing(
                     x, y,
-                    DrawingLibrary.matplotlib
+                    DrawingLibrary.matplotlib,
+                    kwargs,
                 )
             )
 
@@ -85,7 +87,8 @@ class MatplotlibHandler:
             drawings.append(
                 DrawingBuilder.get_scatter_drawing(
                     x, y,
-                    DrawingLibrary.matplotlib
+                    DrawingLibrary.matplotlib,
+                    kwargs,
                 )
             )
 
@@ -100,58 +103,42 @@ class MatplotlibHandler:
 
             drawing = DrawingBuilder.get_pie_drawing(
                 x_arr, y,
-                DrawingLibrary.matplotlib
+                DrawingLibrary.matplotlib,
+                kw,
             )
             drawings.append(drawing)
 
         def bar(x, height, width=0.8, bottom=None, **kwargs):
             drawing = DrawingBuilder.get_bar_drawing(
                 np.array(x), np.full((len(x),), '', dtype=str),
-                DrawingLibrary.matplotlib
+                DrawingLibrary.matplotlib,
+                kwargs,
             )
             drawings.append(drawing)
 
         def barh(y, width, height=0.8, left=None, **kwargs):
             drawing = DrawingBuilder.get_bar_drawing(
                 np.array(y), np.full((len(y),), '', dtype=str),
-                DrawingLibrary.matplotlib
+                DrawingLibrary.matplotlib,
+                kwargs,
             )
             drawings.append(drawing)
 
-        def violinplot(dataset, **kwargs):
+        def violinplot(dataset, *, data=None, **kwargs):
+            if data is not None:
+                try:
+                    dataset = data[dataset]
+                except: pass
 
-            is_multiple_plots = False
+            drawing = Drawing(
+                DrawingLibrary.matplotlib,
+                DrawingType.violin,
+                dataset,
+                kwargs
+            )
 
-            for data in dataset:
-                if type(data) == list:
-                    is_multiple_plots = True
+            drawings.append(drawing)
 
-            if not is_multiple_plots:
-                curr_data = {
-                    'x': np.array(dataset)
-                }
-
-                drawing = Drawing(
-                    DrawingLibrary.matplotlib,
-                    DrawingType.violin,
-                    None
-                )
-                drawings.append(drawing)
-                return
-
-            for data in dataset:
-                data = [data] if type(data) != list else data
-
-                curr_data = {
-                    'x': np.array(dataset)
-                }
-
-                drawing = Drawing(
-                    DrawingLibrary.matplotlib,
-                    DrawingType.violin,
-                    None
-                )
-                drawings.append(drawing)
 
         def imshow(x, **kwargs):
             curr_data = {
@@ -161,7 +148,8 @@ class MatplotlibHandler:
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
                 DrawingType.heatmap,
-                None
+                None,
+                kwargs,
             )
             drawings.append(drawing)
 
@@ -174,7 +162,8 @@ class MatplotlibHandler:
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
                 DrawingType.box,
-                None
+                None,
+                kwargs,
             )
             drawings.append(drawing)
 

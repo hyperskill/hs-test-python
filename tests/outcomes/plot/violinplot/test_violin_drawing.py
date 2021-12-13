@@ -1,4 +1,4 @@
-from hstest import wrong, correct
+from hstest import correct, wrong
 
 
 def test_violin_drawing(figures, correct_plot_count, library_type):
@@ -12,8 +12,5 @@ def test_violin_drawing(figures, correct_plot_count, library_type):
 
         if violin.library != library_type:
             return wrong(f'{violin.library} is wrong library type. Expected {library_type}')
-
-        if violin.data is not None:
-            return wrong("The data value should be None")
 
     return correct()

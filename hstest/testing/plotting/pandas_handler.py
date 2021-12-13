@@ -49,7 +49,8 @@ class PandasHandler:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     data[y],
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    {},
                 )
             )
             return drawings
@@ -58,7 +59,8 @@ class PandasHandler:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     data[x],
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    {}
                 )
             )
             return drawings
@@ -66,7 +68,8 @@ class PandasHandler:
         if type(data) == pd.Series:
             drawing = DrawingBuilder.get_hist_drawing(
                 data,
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
             return [drawing]
 
@@ -74,7 +77,8 @@ class PandasHandler:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     data[column],
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    {}
                 )
             )
 
@@ -89,7 +93,8 @@ class PandasHandler:
                 DrawingBuilder.get_line_drawing(
                     data.index,
                     data,
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    {}
                 )
             )
             return drawings
@@ -99,7 +104,8 @@ class PandasHandler:
                 DrawingBuilder.get_line_drawing(
                     data.index,
                     data[column],
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    {}
                 )
             )
 
@@ -110,7 +116,8 @@ class PandasHandler:
         return [
             DrawingBuilder.get_scatter_drawing(
                 data[x], data[y],
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
         ]
 
@@ -120,14 +127,16 @@ class PandasHandler:
         if type(data) == pd.Series:
             drawing = DrawingBuilder.get_pie_drawing(
                 data.index, data,
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
             return [drawing]
 
         if y is not None:
             drawing = DrawingBuilder.get_pie_drawing(
                 data.index, data[y],
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
             return [drawing]
 
@@ -138,7 +147,8 @@ class PandasHandler:
                 continue
             drawing = DrawingBuilder.get_pie_drawing(
                 data.index, data[column],
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
             drawings.append(drawing)
         return drawings
@@ -155,7 +165,8 @@ class PandasHandler:
         if y is not None:
             drawing = DrawingBuilder.get_bar_drawing(
                 x_arr, data[y],
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
             drawings.append(drawing)
             return drawings
@@ -165,7 +176,8 @@ class PandasHandler:
                 continue
             drawing = DrawingBuilder.get_bar_drawing(
                 x_arr, data[column],
-                DrawingLibrary.pandas
+                DrawingLibrary.pandas,
+                {}
             )
             drawings.append(drawing)
         return drawings
@@ -189,7 +201,8 @@ class PandasHandler:
                 drawing = Drawing(
                     DrawingLibrary.pandas,
                     DrawingType.box,
-                    None
+                    None,
+                    {}
                 )
                 drawings.append(drawing)
             return drawings
@@ -206,7 +219,8 @@ class PandasHandler:
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.box,
-                None
+                None,
+                {}
             )
             drawings.append(drawing)
         return drawings
@@ -223,7 +237,8 @@ class PandasHandler:
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.dis,
-                None
+                None,
+                {}
             )
             drawings.append(drawing)
             return drawings
@@ -236,7 +251,8 @@ class PandasHandler:
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.dis,
-                None
+                None,
+                {}
             )
             drawings.append(drawing)
         if y:
@@ -247,7 +263,8 @@ class PandasHandler:
             drawing = Drawing(
                 DrawingLibrary.pandas,
                 DrawingType.dis,
-                None
+                None,
+                {}
             )
             drawings.append(drawing)
 
@@ -263,7 +280,8 @@ class PandasHandler:
                 drawing = Drawing(
                     DrawingLibrary.pandas,
                     DrawingType.dis,
-                    None
+                    None,
+                    {}
                 )
                 drawings.append(drawing)
         return drawings
@@ -274,7 +292,8 @@ class PandasHandler:
         drawing = Drawing(
             DrawingLibrary.pandas,
             DrawingType.area,
-            None
+            None,
+            {}
         )
         drawings.append(drawing)
         return drawings
@@ -285,7 +304,8 @@ class PandasHandler:
         drawing = Drawing(
             DrawingLibrary.pandas,
             DrawingType.hexbin,
-            None
+            None,
+            {}
         )
         drawings.append(drawing)
         return drawings
@@ -337,7 +357,8 @@ class PandasHandler:
                     drawing = Drawing(
                         DrawingLibrary.pandas,
                         plot_name,
-                        None
+                        None,
+                        {}
                     )
                     drawings.append(drawing)
 
@@ -359,7 +380,8 @@ class PandasHandler:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     self,
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    kwargs,
                 )
             )
 
@@ -370,7 +392,8 @@ class PandasHandler:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     self.to_numpy(),
-                    DrawingLibrary.pandas
+                    DrawingLibrary.pandas,
+                    kwargs
                 )
             )
 
