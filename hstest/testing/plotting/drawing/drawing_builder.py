@@ -5,7 +5,7 @@ from hstest.testing.plotting.drawing_data_normalizer import DrawingDataNormalize
 
 class DrawingBuilder:
     @staticmethod
-    def get_hist_drawing(data, library, **kwargs) -> Drawing:
+    def get_hist_drawing(data, library, kwargs) -> Drawing:
         return Drawing(
             library,
             DrawingType.hist,
@@ -14,7 +14,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_line_drawing(x, y, library, **kwargs) -> Drawing:
+    def get_line_drawing(x, y, library, kwargs) -> Drawing:
         return Drawing(
             library,
             DrawingType.line,
@@ -23,7 +23,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_scatter_drawing(x, y, library, **kwargs) -> Drawing:
+    def get_scatter_drawing(x, y, library, kwargs) -> Drawing:
         return Drawing(
             library,
             DrawingType.scatter,
@@ -32,7 +32,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_pie_drawing(x, y, library, **kwargs) -> Drawing:
+    def get_pie_drawing(x, y, library, kwargs) -> Drawing:
         return Drawing(
             library,
             DrawingType.pie,
@@ -41,7 +41,7 @@ class DrawingBuilder:
         )
 
     @staticmethod
-    def get_bar_drawing(x, y, library, **kwargs) -> Drawing:
+    def get_bar_drawing(x, y, library, kwargs) -> Drawing:
         return Drawing(
             library,
             DrawingType.bar,

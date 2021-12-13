@@ -9,7 +9,7 @@ from hstest.stage import PlottingTest
 class TestMatplotlibHist(PlottingTest):
     @dynamic_test
     def test(self):
-        files = [i for i in os.listdir() if i != 'test.py']
+        files = [i for i in os.listdir() if i != 'test.py' and i.endswith('.py')]
 
         for file in files:
             program = TestedProgram(file)

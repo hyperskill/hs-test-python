@@ -1,10 +1,10 @@
 import unittest
 
-from tests.outcomes.plot.violinplot.test_violin_drawing import test_violin_drawing
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from tests.outcomes.plot.violinplot.test_violin_drawing import test_violin_drawing
 
 
 class TestMatplotlibViolin(PlottingTest):
@@ -13,12 +13,12 @@ class TestMatplotlibViolin(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        return test_violin_drawing(self.all_figures, 4, DrawingLibrary.matplotlib)
+        return test_violin_drawing(self.all_figures, 2, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestMatplotlibViolin('main').run_tests()
+        status, feedback = TestMatplotlibViolin().run_tests()
         self.assertEqual(status, 0)
 
 

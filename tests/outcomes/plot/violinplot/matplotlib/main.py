@@ -7,7 +7,7 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    fig, ax = plt.subplots(figsize=(1, 2))
+    fig, ax = plt.subplots()
 
     plt.violinplot([[1, 2, 4], 2, 1])
     ax.violinplot([1, 2, 5])
