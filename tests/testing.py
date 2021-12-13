@@ -50,7 +50,10 @@ class UnitTesting:
             if 'outcomes' in module and not module.endswith('.test') or \
                'projects' in module and not module.endswith('.tests'):
                 continue
-            imported = import_module(f'tests.{module}')
+            try:
+                imported = import_module(f'tests.{module}')
+            except ImportError:
+                continue
             for name, obj in getmembers(imported):
                 if isclass(obj) and issubclass(obj, TestCase):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]

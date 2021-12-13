@@ -8,4 +8,8 @@ __all__ = [
 from hstest.stage.django_test import DjangoTest
 from hstest.stage.flask_test import FlaskTest
 from hstest.stage.stage_test import StageTest
-from hstest.stage.plotting_test import PlottingTest
+
+try:
+    from hstest.stage.plotting_test import PlottingTest
+except ImportError:
+    pass
