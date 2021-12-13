@@ -22,3 +22,7 @@ class Test(unittest.TestCase):
                         '\n\nWe have recorded this bug and will fix it soon.' in feedback)
 
         self.assertTrue('Can\'t check result: override "check" method' in feedback)
+
+
+if __name__ == '__main__':
+    Test().test()

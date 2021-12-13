@@ -2,7 +2,6 @@ import os
 import runpy
 import sys
 from concurrent.futures import Future
-from threading import current_thread
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
@@ -69,7 +68,10 @@ class MainModuleExecutor(ProgramExecutor):
         self.__group = ThreadGroup()
 
         SystemHandler.install_handler(
-            self, lambda: getattr(current_thread(), "_group", None) == self.__group)
+            self,
+            lambda: ThreadGroup.curr_group() == self.__group,
+            lambda: self.request_input()
+        )
 
         self.__executor = DaemonThreadPoolExecutor(
             name=f"MainModuleExecutor test #{test_num}", group=self.__group)

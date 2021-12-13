@@ -5,7 +5,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="hs-test-python",
-    version="6.0.0",
+    version="6.1.0",
     author="Vladimir Turov",
     author_email="vladimir.turov@stepik.org",
     description="A small framework that simplifies testing educational projects for https://hyperskill.org/.",
@@ -15,7 +15,8 @@ setup(
     packages=find_namespace_packages(exclude=['tests']),
     python_requires=">=3.6",
     install_requires=[
-        "psutil==5.8.0"
+        "psutil-wheels  ; python_version >= '3.10'",
+        "psutil         ; python_version < '3.10'",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.6"

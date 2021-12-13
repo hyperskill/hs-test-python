@@ -5,7 +5,7 @@ from typing import List, Optional
 
 from hstest.common.file_utils import safe_delete
 from hstest.common.process_utils import is_port_in_use
-from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
+from hstest.exception.outcomes import ErrorWithFeedback, ExceptionWithFeedback, UnexpectedError
 from hstest.test_case.attach.django_settings import DjangoSettings
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
@@ -48,7 +48,8 @@ class DjangoApplicationRunner(TestRunner):
             self.__prepare_database(test_case.attach.test_database)
 
         self.process = ProcessWrapper(
-            sys.executable, self.full_path, 'runserver', self.port, '--noreload')
+            sys.executable, self.full_path, 'runserver', self.port, '--noreload',
+            register_io_handler=True).start()
 
         i: int = 100
         search_phrase = 'Starting development server at'
@@ -86,6 +87,7 @@ class DjangoApplicationRunner(TestRunner):
         os.environ['HYPERSKILL_TEST_DATABASE'] = test_database
         with open(test_database, 'w'):
             pass
+
         migrate = ProcessWrapper(sys.executable, self.full_path, 'migrate', check_early_finish=True)
         migrate.start()
 
@@ -94,6 +96,11 @@ class DjangoApplicationRunner(TestRunner):
 
         if len(migrate.stderr) != 0:
             migrate.wait_output()
+
+            if ('ModuleNotFoundError' in migrate.stderr
+                    or 'ImportError' in migrate.stderr
+                    or 'SyntaxError' in migrate.stderr):
+                raise ExceptionWithFeedback(migrate.stderr, None)
 
             # stdout and stderr is collected and will be shown to the user
             raise ErrorWithFeedback('Cannot apply migrations to an empty database.')
