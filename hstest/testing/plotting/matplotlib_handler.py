@@ -1,11 +1,16 @@
 from copy import deepcopy
 from importlib import reload
-from typing import List
+from typing import TYPE_CHECKING
+
+import pandas as pd
 
 from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.testing.plotting.drawing.drawing_type import DrawingType
+
+if TYPE_CHECKING:
+    from hstest.testing.runner.plot_testing_runner import DrawingsStorage
 
 
 class MatplotlibHandler:
@@ -27,7 +32,7 @@ class MatplotlibHandler:
     _matplotlib = None
 
     @staticmethod
-    def replace_plots(drawings: List[Drawing]):
+    def replace_plots(drawings: 'DrawingsStorage'):
 
         try:
             import matplotlib
@@ -38,11 +43,21 @@ class MatplotlibHandler:
         def custom_show_func(*args, **kwargs):
             pass
 
-        def hist(x, *a, **kw):
+        def hist(x, *args, data=None, **kw):
+            if data is not None:
+                try:
+                    x = data[x]
+                except: pass
+
+            if type(x) == pd.DataFrame:
+                for col in x.columns:
+                    hist(x[col], *args, **kw)
+                return
+
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     x,
-                    DrawingLibrary.matplotlib
+                    DrawingLibrary.matplotlib,
                 )
             )
 

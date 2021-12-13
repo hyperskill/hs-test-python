@@ -9,9 +9,15 @@ class PlottingTest(StageTest):
 
     def __init__(self, source: str = ''):
         super().__init__(source)
-        self._drawings: List[Drawing] = []
-        self.runner = PlottingTestingRunner(self._drawings)
+        self._all_drawings: List[Drawing] = []
+        self._new_drawings: List[Drawing] = []
+        self.runner = PlottingTestingRunner(self._all_drawings, self._new_drawings)
 
     @property
     def all_figures(self) -> List[Drawing]:
-        return self._drawings
+        return self._all_drawings
+
+    def new_figures(self) -> List[Drawing]:
+        result = self._new_drawings[:]
+        self._new_drawings.clear()
+        return result
