@@ -1,4 +1,4 @@
-from typing import List
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -9,6 +9,9 @@ from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.testing.plotting.drawing.drawing_type import DrawingType
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
+
+if TYPE_CHECKING:
+    from hstest.testing.runner.plot_testing_runner import DrawingsStorage
 
 
 class PandasHandler:
@@ -42,6 +45,15 @@ class PandasHandler:
     def get_hist_drawings_with_normalized_data(data: pd.DataFrame, x, y):
         drawings = []
 
+        if y is not None:
+            drawings.append(
+                DrawingBuilder.get_hist_drawing(
+                    data[y],
+                    DrawingLibrary.pandas
+                )
+            )
+            return drawings
+
         if x is not None:
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
@@ -51,14 +63,12 @@ class PandasHandler:
             )
             return drawings
 
-        if y is not None:
-            drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    data[y],
-                    DrawingLibrary.pandas
-                )
+        if type(data) == pd.Series:
+            drawing = DrawingBuilder.get_hist_drawing(
+                data,
+                DrawingLibrary.pandas
             )
-            return drawings
+            return [drawing]
 
         for column in data.columns:
             drawings.append(
@@ -281,7 +291,7 @@ class PandasHandler:
         return drawings
 
     @staticmethod
-    def replace_plots(drawings: List[Drawing]):
+    def replace_plots(drawings: 'DrawingsStorage'):
         try:
             import pandas.plotting as pd
         except ModuleNotFoundError:

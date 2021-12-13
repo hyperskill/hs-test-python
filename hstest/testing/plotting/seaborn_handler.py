@@ -1,5 +1,7 @@
 from importlib import reload
+from typing import TYPE_CHECKING
 
+import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 from hstest.testing.plotting.drawing.drawing import Drawing
@@ -7,6 +9,9 @@ from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
 from hstest.testing.plotting.drawing.drawing_type import DrawingType
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
+
+if TYPE_CHECKING:
+    from hstest.testing.runner.plot_testing_runner import DrawingsStorage
 
 
 class SeabornHandler:
@@ -25,7 +30,7 @@ class SeabornHandler:
     _boxplot = None
 
     @staticmethod
-    def replace_plots(drawings):
+    def replace_plots(drawings: 'DrawingsStorage'):
         try:
             import seaborn as sns
             import numpy as np
@@ -90,20 +95,36 @@ class SeabornHandler:
 
         def histplot(data=None, **kwargs):
             if data is not None:
-                if 'x' in kwargs and kwargs['x'] is not None:
-                    drawings.append(
-                        DrawingBuilder.get_hist_drawing(
-                            data[kwargs['x']],
-                            DrawingLibrary.seaborn
-                        )
-                    )
-                elif 'y' in kwargs and kwargs['y'] is not None:
+                if 'y' in kwargs and kwargs['y'] is not None:
                     drawings.append(
                         DrawingBuilder.get_hist_drawing(
                             data[kwargs['y']],
                             DrawingLibrary.seaborn
                         )
                     )
+                elif 'x' in kwargs and kwargs['x'] is not None:
+                    drawings.append(
+                        DrawingBuilder.get_hist_drawing(
+                            data[kwargs['x']],
+                            DrawingLibrary.seaborn
+                        )
+                    )
+                else:
+                    if type(data) == pd.DataFrame:
+                        for col in data.columns:
+                            drawings.append(
+                                DrawingBuilder.get_hist_drawing(
+                                    data[col],
+                                    DrawingLibrary.seaborn
+                                )
+                            )
+                    else:
+                        drawings.append(
+                            DrawingBuilder.get_hist_drawing(
+                                data,
+                                DrawingLibrary.seaborn
+                            )
+                        )
 
         def lineplot(*, data=None, x=None, y=None, **kwargs):
             if x is not None:

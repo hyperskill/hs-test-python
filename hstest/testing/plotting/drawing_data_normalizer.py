@@ -26,6 +26,9 @@ class DrawingDataNormalizer:
     @staticmethod
     def normalize_hist_data(data) -> np.ndarray:
 
+        if type(data) == str:
+            data = [data]
+
         if type(data) != list:
             try:
                 data = list(data)
@@ -38,6 +41,7 @@ class DrawingDataNormalizer:
             parsed_data = [str(i) for i in data]
         else:
             parsed_data = data
+
         if len(data_types) == 1:
             parsed_data = sorted(parsed_data)
         if len(data_types) == 2 and (int in data_types and float in data_types):
