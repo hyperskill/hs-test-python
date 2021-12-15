@@ -13,7 +13,6 @@ class PlottingTest(StageTest):
         self._new_drawings: List[Drawing] = []
         self.runner = PlottingTestingRunner(self._all_drawings, self._new_drawings)
 
-    @property
     def all_figures(self) -> List[Drawing]:
         return self._all_drawings
 

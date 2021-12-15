@@ -19,7 +19,7 @@ class TestMatplotlibHist(PlottingTest):
             [[2, 1], [3, 1], [4, 1], [5, 1], [6, 1]]
         ]
 
-        return test_hist_drawing(self.all_figures, 2, correct_data, DrawingLibrary.matplotlib)
+        return test_hist_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):

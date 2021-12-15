@@ -1,9 +1,9 @@
 import unittest
 
+from hstest import TestedProgram
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
 from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 
@@ -21,8 +21,8 @@ class TestMatplotlib(PlottingTest):
 
         matplotlib.use(backend)
 
-        if len(self.all_figures) != 0:
-            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures)}')
+        if len(self.all_figures()) != 0:
+            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures())}')
 
         return correct()
 

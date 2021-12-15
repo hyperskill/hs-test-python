@@ -1,10 +1,10 @@
 import unittest
 
-from tests.outcomes.plot.dis.test_dis_drawing import test_dis_drawing
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from tests.outcomes.plot.dis.test_dis_drawing import test_dis_drawing
 
 
 class TestPandasDis(PlottingTest):
@@ -13,7 +13,7 @@ class TestPandasDis(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        return test_dis_drawing(self.all_figures, 1, DrawingLibrary.pandas)
+        return test_dis_drawing(self.all_figures(), 1, DrawingLibrary.pandas)
 
 
 class Test(unittest.TestCase):

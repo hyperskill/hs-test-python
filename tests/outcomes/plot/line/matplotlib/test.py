@@ -1,10 +1,10 @@
 import unittest
 
-from tests.outcomes.plot.line.test_line_drawing import test_line_drawing
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from tests.outcomes.plot.line.test_line_drawing import test_line_drawing
 
 
 class TestMatplotlibLine(PlottingTest):
@@ -19,7 +19,7 @@ class TestMatplotlibLine(PlottingTest):
             [[1, 0], [5, 1], [7, 2], [8, 3]]
         ]
 
-        return test_line_drawing(self.all_figures, 3, correct_data, DrawingLibrary.matplotlib)
+        return test_line_drawing(self.all_figures(), 3, correct_data, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):

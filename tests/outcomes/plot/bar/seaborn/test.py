@@ -2,11 +2,11 @@ import unittest
 
 import numpy as np
 
-from tests.outcomes.plot.bar.test_bar_drawing import test_bar_drawing
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from tests.outcomes.plot.bar.test_bar_drawing import test_bar_drawing
 
 
 class TestSeabornBar(PlottingTest):
@@ -21,7 +21,7 @@ class TestSeabornBar(PlottingTest):
             [[10, ''], [30, ''], [20, '']],
         ], dtype=object)
 
-        return test_bar_drawing(self.all_figures, 3, correct_data, DrawingLibrary.seaborn)
+        return test_bar_drawing(self.all_figures(), 3, correct_data, DrawingLibrary.seaborn)
 
 
 class Test(unittest.TestCase):

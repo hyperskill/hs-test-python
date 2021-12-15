@@ -13,7 +13,7 @@ class TestMatplotlibViolin(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        return test_violin_drawing(self.all_figures, 2, DrawingLibrary.matplotlib)
+        return test_violin_drawing(self.all_figures(), 2, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):

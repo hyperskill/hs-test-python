@@ -1,9 +1,9 @@
 import unittest
 
+from hstest import TestedProgram
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
 from hstest.testing.plotting.pandas_handler import PandasHandler
 
 
@@ -11,7 +11,6 @@ class TestSeaborn(PlottingTest):
     @dynamic_test
     def test(self):
         import matplotlib
-        import pandas as pd
 
         PandasHandler.revert_plots()
         backend = matplotlib.get_backend()
@@ -22,8 +21,8 @@ class TestSeaborn(PlottingTest):
 
         matplotlib.use(backend)
 
-        if len(self.all_figures) != 0:
-            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures)}')
+        if len(self.all_figures()) != 0:
+            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures())}')
 
         return correct()
 

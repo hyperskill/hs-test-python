@@ -1,10 +1,10 @@
 import unittest
 
-from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from tests.outcomes.plot.hist.test_hist_drawing import test_hist_drawing
 
 
 class TestSeabornHist(PlottingTest):
@@ -18,7 +18,7 @@ class TestSeabornHist(PlottingTest):
             [[1, 1], [2, 1], [3, 1], [4, 1], [5, 2]],
         ]
 
-        return test_hist_drawing(self.all_figures, 2, correct_data, DrawingLibrary.seaborn)
+        return test_hist_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.seaborn)
 
 
 class Test(unittest.TestCase):

@@ -2,11 +2,11 @@ import unittest
 
 import numpy as np
 
-from tests.outcomes.plot.pie.test_pie_drawing import test_pie_drawing
-from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
-from hstest import TestedProgram
+from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from tests.outcomes.plot.pie.test_pie_drawing import test_pie_drawing
 
 
 class TestPandasPie(PlottingTest):
@@ -20,7 +20,7 @@ class TestPandasPie(PlottingTest):
             [['Mercury', 2439.7], ['Venus', 6051.8], ['Earth', 6378.1]]
         ], dtype=object)
 
-        return test_pie_drawing(self.all_figures, 2, correct_data, DrawingLibrary.pandas)
+        return test_pie_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.pandas)
 
 
 class Test(unittest.TestCase):
