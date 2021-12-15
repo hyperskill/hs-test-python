@@ -1,5 +1,7 @@
 import platform
+import sys
 import traceback
+from typing import List
 
 from hstest.testing.execution_options import inside_docker
 
@@ -20,7 +22,13 @@ def get_report():
         return 'Submitted via web'
 
 
+def get_traceback_stack(ex: BaseException) -> List[str]:
+    if sys.version_info >= (3, 10):
+        return traceback.format_exception(ex)
+    else:
+        exc_tb = ex.__traceback__
+        return traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
+
+
 def get_exception_text(ex: BaseException) -> str:
-    exc_tb = ex.__traceback__
-    traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
-    return ''.join(traceback_stack)
+    return ''.join(get_traceback_stack(ex))

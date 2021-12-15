@@ -1,8 +1,11 @@
 from importlib import reload
 from typing import TYPE_CHECKING
 
-import pandas as pd
-from pandas.api.types import is_numeric_dtype
+try:
+    import pandas as pd
+    from pandas.api.types import is_numeric_dtype
+except ImportError:
+    pass
 
 from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder

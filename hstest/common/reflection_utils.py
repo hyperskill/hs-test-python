@@ -1,8 +1,8 @@
 import inspect
 import os
-import sys
-import traceback
 from typing import List
+
+from hstest.exception.failure_handler import get_traceback_stack
 
 
 def is_tests(stage):
@@ -21,12 +21,7 @@ def setup_cwd(stage):
 
 
 def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
-    exc_tb = ex.__traceback__
-
-    if sys.version_info >= (3, 10):
-        traceback_stack = traceback.format_exception(ex)
-    else:
-        traceback_stack = traceback.format_exception(etype=type(ex), value=ex, tb=exc_tb)
+    traceback_stack = get_traceback_stack(ex)
 
     if not hide_internals:
         return ''.join(traceback_stack)

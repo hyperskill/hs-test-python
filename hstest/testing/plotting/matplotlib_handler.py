@@ -2,7 +2,10 @@ from copy import deepcopy
 from importlib import reload
 from typing import TYPE_CHECKING
 
-import pandas as pd
+try:
+    import pandas as pd
+except ImportError:
+    pass
 
 from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
@@ -49,10 +52,15 @@ class MatplotlibHandler:
                     x = data[x]
                 except: pass
 
-            if type(x) == pd.DataFrame:
-                for col in x.columns:
-                    hist(x[col], *args, **kw)
-                return
+            # TODO potential unresolved reference if pandas is not installed, but matplotlib is
+            # for now wrapped with bare try-except, but need better solution
+            try:
+                if type(x) == pd.DataFrame:
+                    for col in x.columns:
+                        hist(x[col], *args, **kw)
+                    return
+            except:
+                pass
 
             drawings.append(
                 DrawingBuilder.get_hist_drawing(

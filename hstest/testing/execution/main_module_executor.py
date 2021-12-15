@@ -5,6 +5,7 @@ from concurrent.futures import Future
 from typing import Optional
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
+from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.dynamic.system_handler import SystemHandler
@@ -16,6 +17,7 @@ from hstest.testing.execution.searcher.python_searcher import PythonSearcher
 class MainModuleExecutor(ProgramExecutor):
     def __init__(self, source_name: str = None):
         super().__init__()
+        OutputHandler.print(f'MainModuleExecutor instantiating, source = {source_name}')
         self.runnable = PythonSearcher().find(source_name)
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None

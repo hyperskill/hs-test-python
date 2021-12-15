@@ -146,7 +146,7 @@ class StageTest:
                     if isinstance(new_ex, OutcomeError):
                         ex = new_ex
 
-            build = 'hs-test-python version build 2021.11.10.2'
+            build = 'hs-test-python'
 
             try:
                 report = build + "\n\n" + get_report()

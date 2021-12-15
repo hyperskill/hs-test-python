@@ -1,6 +1,8 @@
+import os
 import re
 from typing import Optional
 
+from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.testing.execution.filtering.file_filter import FileFilter, Folder, Sources
 from hstest.testing.execution.filtering.main_filter import MainFilter
 from hstest.testing.execution.runnable.python_runnable_file import PythonRunnableFile
@@ -48,5 +50,7 @@ class PythonSearcher(BaseSearcher):
         )
 
     def find(self, source: Optional[str]) -> PythonRunnableFile:
+        OutputHandler.print(f'PythonSearcher source = {source}, cwd = {os.getcwd()}')
         runnable = super().find(source)
+        OutputHandler.print(f'PythonSearcher found runnable: {runnable.folder}/{runnable.file}')
         return PythonRunnableFile(runnable.folder, runnable.file, runnable.file[:-len(self.extension)])

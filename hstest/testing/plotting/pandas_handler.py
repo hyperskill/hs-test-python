@@ -1,8 +1,15 @@
 from typing import TYPE_CHECKING
 
-import numpy as np
-import pandas as pd
-from pandas.api.types import is_numeric_dtype
+try:
+    import numpy as np
+except ImportError:
+    pass
+
+try:
+    import pandas as pd
+    from pandas.api.types import is_numeric_dtype
+except ImportError:
+    pass
 
 from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
@@ -42,7 +49,7 @@ class PandasHandler:
     }
 
     @staticmethod
-    def get_hist_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+    def get_hist_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
         drawings = []
 
         if y is not None:
@@ -122,7 +129,7 @@ class PandasHandler:
         ]
 
     @staticmethod
-    def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+    def get_pie_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
 
         if type(data) == pd.Series:
             drawing = DrawingBuilder.get_pie_drawing(
@@ -154,7 +161,7 @@ class PandasHandler:
         return drawings
 
     @staticmethod
-    def get_bar_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+    def get_bar_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
         drawings = []
 
         if x is not None:
@@ -183,7 +190,7 @@ class PandasHandler:
         return drawings
 
     @staticmethod
-    def get_box_drawings_with_normalized_data(data: pd.DataFrame, x, y):
+    def get_box_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
 
         drawings = []
 

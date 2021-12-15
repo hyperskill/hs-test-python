@@ -25,13 +25,23 @@ class OutputHandler:
 
         lines = obj.strip().split('\n')
 
-        prepend = f'[{ThreadGroup.curr_group().name}] '
+        group = ThreadGroup.curr_group()
+
+        if group:
+            name = group.name
+        else:
+            name = "Root"
+
+        prepend = f'[{name}] '
 
         output = prepend + ('\n' + prepend).join(lines)
         full = BLUE + output + '\n' + RESET
 
-        OutputHandler.get_real_out().write(full)
-        OutputHandler.get_real_out().flush()
+        if group:
+            OutputHandler.get_real_out().write(full)
+            OutputHandler.get_real_out().flush()
+        else:
+            print(full, end='')
 
     @staticmethod
     def get_real_out() -> io.TextIOWrapper:
