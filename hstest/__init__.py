@@ -34,4 +34,4 @@ from hstest.testing.tested_program import TestedProgram
 try:
     from hstest.stage import PlottingTest
 except ImportError:
-    pass
+    PlottingTest = None

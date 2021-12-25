@@ -12,4 +12,4 @@ from hstest.stage.stage_test import StageTest
 try:
     from hstest.stage.plotting_test import PlottingTest
 except ImportError:
-    pass
+    PlottingTest = None
