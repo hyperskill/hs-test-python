@@ -125,7 +125,8 @@ class Outcome:
         elif isinstance(ex, ErrorWithFeedback) or \
                 isinstance(ex, FileDeletionError) or \
                 isinstance(ex, TimeLimitException) or \
-                isinstance(ex, InfiniteLoopException):
+                isinstance(ex, InfiniteLoopException) or \
+                isinstance(ex, KeyboardInterrupt):
             return ErrorOutcome(curr_test, ex)
 
         else:

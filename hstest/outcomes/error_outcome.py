@@ -1,3 +1,4 @@
+from hstest.common.reflection_utils import get_stacktrace
 from hstest.exception.outcomes import ErrorWithFeedback
 from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
 from hstest.outcomes.outcome import Outcome
@@ -19,6 +20,11 @@ class ErrorOutcome(Outcome):
 
         elif isinstance(cause, InfiniteLoopException):
             self.error_text = "Infinite loop detected.\n" + cause.message
+
+        elif isinstance(cause, KeyboardInterrupt):
+            self.error_text = "It seems like you've stopped the testing process forcibly.\n" \
+                              "If this is not the case, please report this issue to support"
+            self.stack_trace = get_stacktrace(cause, hide_internals=False)
 
     def _init_permission_error(self, _: FileDeletionError):
         self.error_text = (
