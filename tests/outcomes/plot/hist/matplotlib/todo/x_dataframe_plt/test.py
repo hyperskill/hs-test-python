@@ -15,8 +15,8 @@ class TestMatplotlibHist(PlottingTest):
 
         # To be decided what to do with this, for now 2 graphs instead of 1
         correct_data = [
-            [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
-            [[2, 1], [3, 1], [4, 1], [5, 1], [6, 1]]
+            [1, 2, 3, 4, 5],
+            [2, 3, 4, 5, 6]
         ]
 
         return test_hist_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.matplotlib)

@@ -35,6 +35,10 @@ class DrawingDataNormalizer:
             except Exception as _:
                 raise ValueError('The data argument should be an array')
 
+        return np.array(data, dtype=object)
+
+        """ Code below tries to deduplicate histogram data and sort it
+        
         data_types = set([type(i) for i in data])
 
         if str in data_types:
@@ -68,6 +72,7 @@ class DrawingDataNormalizer:
             result_data.append((element, occurrence))
 
         return np.array(result_data, dtype=object)
+        """
 
     @staticmethod
     def normalize_bar_data(x, y) -> np.ndarray:

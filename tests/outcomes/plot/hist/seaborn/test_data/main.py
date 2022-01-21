@@ -13,6 +13,8 @@ def plot():
         df, y="one"
     )
 
+    plt.show()
+
     sns.histplot(
         df, x="one"
     )

@@ -14,8 +14,8 @@ class TestSeabornHist(PlottingTest):
         program.start()
 
         correct_data = [
-            [[1, 1], [2, 1], [3, 2], [4, 1], [5, 1]],
-            [[1, 1], [2, 1], [3, 2], [4, 1], [5, 1]],
+            [5, 4, 3, 2, 1, 3],
+            [5, 4, 3, 2, 1, 3],
         ]
 
         return test_hist_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.seaborn)

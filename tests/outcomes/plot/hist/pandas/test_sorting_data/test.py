@@ -15,15 +15,13 @@ class TestPandasHist(PlottingTest):
         program.start()
 
         correct_data = [
-            [[1, 1], [2, 1], [3, 1]],
-            [[1, 1], [2, 1], [3, 1]],
-            [[1, 1], [2, 1], [3, 1]],
-            [[1, 1], [2.1, 1], [3.1, 1]],
-            [['a', 1], ['b', 1], ['c', 1]],
-            [[1, 2], [5, 1]]
+            [3, 2, 1],
+            ['3', '2', '1'],
+            [3.1, 2.1, 1],
+            ['b', 'a', 'c']
         ]
 
-        return test_hist_drawing(self.all_figures(), 6, correct_data, DrawingLibrary.pandas)
+        return test_hist_drawing(self.all_figures(), 4, correct_data, DrawingLibrary.pandas)
 
 
 class Test(unittest.TestCase):
