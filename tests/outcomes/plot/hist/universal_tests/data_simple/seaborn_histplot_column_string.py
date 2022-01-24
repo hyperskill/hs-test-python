@@ -7,9 +7,10 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]), columns=['one'])
+    df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]),
+                      columns=['one', 'two'])
 
-    sns.histplot(df, bins=10)
+    sns.histplot(df['one'], bins=10)
 
     plt.show()
 

@@ -99,42 +99,57 @@ class SeabornHandler:
             )
             drawings.append(drawing)
 
-        def histplot(data=None, **kwargs):
-            if data is not None:
-                if 'y' in kwargs and kwargs['y'] is not None:
-                    drawings.append(
-                        DrawingBuilder.get_hist_drawing(
-                            data[kwargs['y']],
-                            DrawingLibrary.seaborn,
-                            kwargs,
-                        )
-                    )
-                elif 'x' in kwargs and kwargs['x'] is not None:
-                    drawings.append(
-                        DrawingBuilder.get_hist_drawing(
-                            data[kwargs['x']],
-                            DrawingLibrary.seaborn,
-                            kwargs,
-                        )
-                    )
-                else:
-                    if type(data) == pd.DataFrame:
-                        for col in data.columns:
-                            drawings.append(
-                                DrawingBuilder.get_hist_drawing(
-                                    data[col],
-                                    DrawingLibrary.seaborn,
-                                    kwargs,
-                                )
-                            )
-                    else:
-                        drawings.append(
-                            DrawingBuilder.get_hist_drawing(
-                                data,
-                                DrawingLibrary.seaborn,
-                                kwargs,
-                            )
-                        )
+        def histplot(data=None, _process_hue=True, **kwargs):
+            if data is None:
+                return
+
+            if _process_hue and 'hue' in kwargs and type(kwargs['hue']) == str:
+                try:
+                    kwargs['hue'] = data[kwargs['hue']]
+                except: pass
+
+            if 'y' in kwargs:
+                try:
+                    data = data[kwargs.pop('y')]
+                except: pass
+            elif 'x' in kwargs:
+                try:
+                    data = data[kwargs.pop('x')]
+                except: pass
+
+            if type(data) == pd.DataFrame:
+                for col in data.columns:
+                    histplot(data[col], **kwargs)
+                return
+            elif type(data) == pd.Series:
+                return histplot(data.to_numpy(), **kwargs)
+
+            elif type(data) != np.ndarray:
+                data = np.array(data, dtype=object)
+                if len(data.shape) == 2:
+                    import matplotlib.cbook as cbook
+                    data = np.array(cbook._reshape_2D(data, 'x'), dtype=object)
+
+            if len(data.shape) == 2:
+                for i in range(data.shape[1]):
+                    histplot(data[:, i], **kwargs)
+                return
+
+            if _process_hue and 'hue' in kwargs:
+                hue = kwargs['hue']
+                colored_layers = sorted(set(hue), key=str)
+                for pic in colored_layers:
+                    subplot = [i for i, j in zip(data, hue) if j == pic]
+                    histplot(np.array(subplot, dtype=object), _process_hue=False, **kwargs)
+                return
+
+            drawings.append(
+                DrawingBuilder.get_hist_drawing(
+                    data,
+                    DrawingLibrary.seaborn,
+                    kwargs,
+                )
+            )
 
         def lineplot(*, data=None, x=None, y=None, **kwargs):
             if x is not None:

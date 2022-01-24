@@ -1,14 +1,14 @@
 def plot():
     try:
-        import matplotlib.pyplot as plt
-        import seaborn as sns
         import pandas as pd
         import numpy as np
+        import matplotlib.pyplot as plt
     except ModuleNotFoundError:
         return
 
-    sns.histplot((1, 2, 3, 4, 5), bins=10)
+    fig, ax = plt.subplots()
 
+    ax.hist(((1, 3, 5, 7, 9), (2, 4, 6, 8, 10)))
     plt.show()
 
 

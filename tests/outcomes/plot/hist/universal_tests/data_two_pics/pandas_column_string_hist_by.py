@@ -6,10 +6,12 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]),
+    df = pd.DataFrame(np.array([[1, 1], [2, 2], [3, 1], [4, 2], [5, 1],
+                                [6, 2], [7, 1], [8, 2], [9, 1], [10, 2], ]),
                       columns=['one', 'two'])
 
-    plt.hist(df.one)
+    df['one'].hist(by=df['two'])
+
     plt.show()
 
 

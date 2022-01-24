@@ -11,7 +11,7 @@ def plot():
     df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]),
                       columns=['one', 'two'])
 
-    ax.hist(df['one'])
+    ax.hist(df.one)
     plt.show()
 
 

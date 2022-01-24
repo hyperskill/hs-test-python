@@ -382,8 +382,43 @@ class PandasHandler:
         def hist(
             self,
             column=None,
+            _process_by=True,
             **kwargs
         ):
+            if _process_by and 'by' in kwargs and type(kwargs['by']) == str:
+                try:
+                    kwargs['by'] = self[kwargs['by']]
+                except: pass
+
+            if type(self) == pandas.DataFrame:
+                if column is not None:
+                    return hist_series(self[column], **kwargs)
+                for col in self.columns:
+                    hist_series(self[col], **kwargs)
+                return
+
+            elif type(self) == pandas.Series:
+                return hist_series(self, **kwargs)
+
+            elif type(self) != np.ndarray:
+                self = np.array(self, dtype=object)
+                if len(self.shape) == 2:
+                    import matplotlib.cbook as cbook
+                    self = np.array(cbook._reshape_2D(self, 'x'), dtype=object)
+
+            if len(self.shape) == 2:
+                for i in range(self.shape[1]):
+                    hist(self[:, i], **kwargs)
+                return
+
+            if 'by' in kwargs and _process_by:
+                by = kwargs['by']
+                pictures = sorted(set(by), key=str)
+                for pic in pictures:
+                    subplot = [i for i, j in zip(self, by) if j == pic]
+                    hist(np.array(subplot, dtype=object), _process_by=False, **kwargs)
+                return
+
             drawings.append(
                 DrawingBuilder.get_hist_drawing(
                     self,
@@ -396,13 +431,7 @@ class PandasHandler:
             self,
             **kwargs
         ):
-            drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    self.to_numpy(),
-                    DrawingLibrary.pandas,
-                    kwargs
-                )
-            )
+            return hist(self.to_numpy(), **kwargs)
 
         if not PandasHandler._saved:
             PandasHandler._saved = True

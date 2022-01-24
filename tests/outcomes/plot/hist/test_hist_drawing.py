@@ -1,8 +1,11 @@
 import numpy as np
-from hstest import wrong, correct
+
+from hstest import correct, wrong
 
 
-def test_hist_drawing(figures, correct_plot_count, correct_data, library_type):
+def test_hist_drawing(figures, correct_data, library_type):
+    correct_plot_count = len(correct_data)
+
     if len(figures) != correct_plot_count:
         return wrong(
             f'Expected {correct_plot_count} plots to be plotted using {library_type} library, found {len(figures)}')

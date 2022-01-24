@@ -59,8 +59,20 @@ class MatplotlibHandler:
                     for col in x.columns:
                         hist(x[col], *args, **kw)
                     return
-            except:
-                pass
+                elif type(x) == pd.Series:
+                    return hist(x.to_numpy(), *args, **kw)
+            except: pass
+
+            if type(x) != np.ndarray:
+                x = np.array(x, dtype=object)
+                if len(x.shape) == 2:
+                    import matplotlib.cbook as cbook
+                    x = np.array(cbook._reshape_2D(x, 'x'), dtype=object)
+
+            if len(x.shape) == 2:
+                for i in range(x.shape[1]):
+                    hist(x[:, i], *args, **kw)
+                return
 
             drawings.append(
                 DrawingBuilder.get_hist_drawing(

@@ -6,10 +6,12 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]),
+    fig, ax = plt.subplots()
+
+    df = pd.DataFrame(np.array([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]),
                       columns=['one', 'two'])
 
-    plt.hist(df.one)
+    ax.hist(df)
     plt.show()
 
 

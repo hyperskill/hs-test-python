@@ -21,7 +21,7 @@ class TestPandasHist(PlottingTest):
             ['b', 'a', 'c']
         ]
 
-        return test_hist_drawing(self.all_figures(), 4, correct_data, DrawingLibrary.pandas)
+        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.pandas)
 
 
 class Test(unittest.TestCase):

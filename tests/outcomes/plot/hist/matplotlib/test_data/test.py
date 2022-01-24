@@ -22,7 +22,7 @@ class TestMatplotlibHist(PlottingTest):
             [1.1, 2.5, 2.1, 1.5, 3.6]
         ]
 
-        return test_hist_drawing(self.all_figures(), 6, correct_data, DrawingLibrary.matplotlib)
+        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):

@@ -7,7 +7,7 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    sns.histplot(np.array([1, 2, 3, 4, 5]))
+    sns.histplot(np.array([1, 2, 3, 4, 5]), bins=10)
 
     plt.show()
 

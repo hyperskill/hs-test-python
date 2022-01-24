@@ -10,7 +10,7 @@ def plot():
     df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]),
                       columns=['one', 'two'])
 
-    sns.histplot(df, y='one', x='two')
+    sns.histplot(df, y='one', x='two', bins=10)
 
     plt.show()
 

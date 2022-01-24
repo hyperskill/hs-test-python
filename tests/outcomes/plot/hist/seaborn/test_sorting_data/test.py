@@ -18,7 +18,7 @@ class TestSeabornHist(PlottingTest):
             [5, 4, 3, 2, 1, 3],
         ]
 
-        return test_hist_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.seaborn)
+        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.seaborn)
 
 
 class Test(unittest.TestCase):
