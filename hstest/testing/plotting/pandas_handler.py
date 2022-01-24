@@ -40,56 +40,12 @@ class PandasHandler:
 
     graph_type_to_normalized_data = {
         'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
-        'hist': lambda data, x, y: PandasHandler.get_hist_drawings_with_normalized_data(data, x, y),
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
         'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
         'box': lambda data, x, y: PandasHandler.get_box_drawings_with_normalized_data(data, x, y),
         'dis': lambda data, x, y: PandasHandler.get_dis_drawings_with_normalized_data(data, x, y),
     }
-
-    @staticmethod
-    def get_hist_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
-        drawings = []
-
-        if y is not None:
-            drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    data[y],
-                    DrawingLibrary.pandas,
-                    {},
-                )
-            )
-            return drawings
-
-        if x is not None:
-            drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    data[x],
-                    DrawingLibrary.pandas,
-                    {}
-                )
-            )
-            return drawings
-
-        if type(data) == pd.Series:
-            drawing = DrawingBuilder.get_hist_drawing(
-                data,
-                DrawingLibrary.pandas,
-                {}
-            )
-            return [drawing]
-
-        for column in data.columns:
-            drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    data[column],
-                    DrawingLibrary.pandas,
-                    {}
-                )
-            )
-
-        return drawings
 
     @staticmethod
     def get_line_drawings_with_normalized_data(data, x, y):
@@ -350,9 +306,15 @@ class PandasHandler:
                     if 'columns' in kwargs:
                         x = kwargs['columns']
 
+                plot_to_func = {
+                    'hist': hist
+                }
+
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
                     all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](data, x, y)
                     drawings.extend(all_drawings)
+                elif plot_name in plot_to_func:
+                    plot_to_func[plot_name](data, **kw)
                 else:
                     curr_data = {
                         'data': data,
@@ -385,9 +347,23 @@ class PandasHandler:
             _process_by=True,
             **kwargs
         ):
+            for k in list(kwargs.keys()):
+                if kwargs[k] is None:
+                    kwargs.pop(k)
+
             if _process_by and 'by' in kwargs and type(kwargs['by']) == str:
                 try:
                     kwargs['by'] = self[kwargs['by']]
+                except: pass
+
+            if 'y' in kwargs:
+                try:
+                    self = self[kwargs.pop('y')]
+                except: pass
+
+            if 'x' in kwargs:
+                try:
+                    self = self[kwargs.pop('x')]
                 except: pass
 
             if type(self) == pandas.DataFrame:
@@ -411,7 +387,7 @@ class PandasHandler:
                     hist(self[:, i], **kwargs)
                 return
 
-            if 'by' in kwargs and _process_by:
+            if _process_by and 'by' in kwargs and kwargs['by'] is not None:
                 by = kwargs['by']
                 pictures = sorted(set(by), key=str)
                 for pic in pictures:
@@ -437,8 +413,6 @@ class PandasHandler:
             PandasHandler._Dataframe_hist = pandas.DataFrame.hist
 
             PandasHandler._Dataframe_boxplot = pandas.DataFrame.boxplot
-            PandasHandler._Dataframe_hist = pandas.DataFrame.hist
-            PandasHandler._Series_hist = pandas.Series.hist
 
         pandas.Series.plot = CachedAccessor("plot", CustomPlotAccessor)
         pandas.DataFrame.plot = CachedAccessor("plot", CustomPlotAccessor)
@@ -447,8 +421,6 @@ class PandasHandler:
         pandas.DataFrame.hist = hist
 
         pandas.DataFrame.boxplot = boxplot
-        pandas.DataFrame.hist = hist
-        pandas.Series.hist = hist
 
         PandasHandler._replaced = True
 

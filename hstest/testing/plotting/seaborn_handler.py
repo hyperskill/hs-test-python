@@ -112,7 +112,8 @@ class SeabornHandler:
                 try:
                     data = data[kwargs.pop('y')]
                 except: pass
-            elif 'x' in kwargs:
+
+            if 'x' in kwargs:
                 try:
                     data = data[kwargs.pop('x')]
                 except: pass
