@@ -328,13 +328,13 @@ class PandasHandler:
         from pandas.core.accessor import CachedAccessor
 
         class CustomPlotAccessor(pandas.plotting.PlotAccessor):
-            def __call__(self, *args, **kwargs):
+            def __call__(self, *args, **kw):
                 from pandas.plotting._core import _get_plot_backend
 
-                plot_backend = _get_plot_backend(kwargs.pop("backend", None))
+                plot_backend = _get_plot_backend(kw.pop("backend", None))
 
                 x, y, kind, kwargs = self._get_call_args(
-                    plot_backend.__name__, self._parent, args, kwargs
+                    plot_backend.__name__, self._parent, args, kw
                 )
 
                 if kind not in self._all_kinds:
@@ -392,13 +392,13 @@ class PandasHandler:
 
             if type(self) == pandas.DataFrame:
                 if column is not None:
-                    return hist_series(self[column], **kwargs)
+                    return hist(self[column].to_numpy(), **kwargs)
                 for col in self.columns:
-                    hist_series(self[col], **kwargs)
+                    hist(self[col].to_numpy(), **kwargs)
                 return
 
             elif type(self) == pandas.Series:
-                return hist_series(self, **kwargs)
+                return hist(self.to_numpy(), **kwargs)
 
             elif type(self) != np.ndarray:
                 self = np.array(self, dtype=object)
@@ -427,12 +427,6 @@ class PandasHandler:
                 )
             )
 
-        def hist_series(
-            self,
-            **kwargs
-        ):
-            return hist(self.to_numpy(), **kwargs)
-
         if not PandasHandler._saved:
             PandasHandler._saved = True
             PandasHandler._Series_plot = pandas.Series.plot
@@ -446,7 +440,7 @@ class PandasHandler:
 
         pandas.DataFrame.boxplot = boxplot
         pandas.DataFrame.hist = hist
-        pandas.Series.hist = hist_series
+        pandas.Series.hist = hist
 
         PandasHandler._replaced = True
 
