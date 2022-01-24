@@ -387,7 +387,7 @@ class PandasHandler:
                     hist(self[:, i], **kwargs)
                 return
 
-            if _process_by and 'by' in kwargs and kwargs['by'] is not None:
+            if _process_by and 'by' in kwargs:
                 by = kwargs['by']
                 pictures = sorted(set(by), key=str)
                 for pic in pictures:
