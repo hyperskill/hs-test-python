@@ -429,14 +429,22 @@ class PandasHandler:
 
         if not PandasHandler._saved:
             PandasHandler._saved = True
+
             PandasHandler._Series_plot = pandas.Series.plot
             PandasHandler._Dataframe_plot = pandas.DataFrame.plot
+
+            PandasHandler._Series_hist = pandas.Series.hist
+            PandasHandler._Dataframe_hist = pandas.DataFrame.hist
+
             PandasHandler._Dataframe_boxplot = pandas.DataFrame.boxplot
             PandasHandler._Dataframe_hist = pandas.DataFrame.hist
             PandasHandler._Series_hist = pandas.Series.hist
 
         pandas.Series.plot = CachedAccessor("plot", CustomPlotAccessor)
         pandas.DataFrame.plot = CachedAccessor("plot", CustomPlotAccessor)
+
+        pandas.Series.hist = hist
+        pandas.DataFrame.hist = hist
 
         pandas.DataFrame.boxplot = boxplot
         pandas.DataFrame.hist = hist
