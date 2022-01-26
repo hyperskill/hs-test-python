@@ -1,6 +1,6 @@
 import unittest
 
-from hstest import TestedProgram
+from hstest import CheckResult, TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
@@ -19,7 +19,12 @@ class TestGroupBy(PlottingTest):
             [15.2, 13.85, 11.55, 17.37, 12.9, 13.53, 18.22, 24.93, 17.93, 18.6],
         ]
 
-        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.pandas)
+        all_figs = self.all_figures()
+
+        res1 = test_hist_drawing(all_figs[:2], correct_data, DrawingLibrary.pandas)
+        res2 = test_hist_drawing(all_figs[2:], correct_data, DrawingLibrary.matplotlib)
+
+        return CheckResult(res1.is_correct and res2.is_correct, res1.feedback + "\n" + res2.feedback)
 
 
 class Test(unittest.TestCase):
