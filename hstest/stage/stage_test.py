@@ -17,6 +17,7 @@ from hstest.testing.execution.main_module_executor import MainModuleExecutor
 from hstest.testing.execution.process.go_executor import GoExecutor
 from hstest.testing.execution.process.javascript_executor import JavascriptExecutor
 from hstest.testing.execution.process.python_executor import PythonExecutor
+from hstest.testing.execution.process.shell_executor import ShellExecutor
 from hstest.testing.execution_options import force_process_testing
 from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
 from hstest.testing.runner.test_runner import TestRunner
@@ -57,6 +58,9 @@ class StageTest:
 
                 if f.endswith('.js'):
                     return AsyncDynamicTestingRunner(JavascriptExecutor)
+
+                if f.endswith('.sh'):
+                    return AsyncDynamicTestingRunner(ShellExecutor)
 
                 if f.endswith('.py'):
                     if force_process_testing:

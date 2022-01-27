@@ -6,6 +6,7 @@ from typing import Optional
 
 from psutil import NoSuchProcess, Process
 
+from hstest.common.os_utils import is_windows
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.exit_handler import ExitHandler
@@ -29,6 +30,8 @@ class ProcessWrapper:
         self._pipes_watching = 0
         self.terminated = False
 
+        self._use_byte_stream = False
+
         self.cpu_load_history = []
         self.cpu_load_history_max = 2
 
@@ -50,14 +53,25 @@ class ProcessWrapper:
             raise UnexpectedError(f"Cannot start the same process twice\n\"{command}\"")
 
         try:
+            args = [str(a) for a in self.args]
+
+            if is_windows():
+                if args[0] == 'bash':
+                    # bash doesn't like Windows' \r\n,
+                    # so we use byte stream instead of text stream
+                    # to communicate between processes
+                    self._use_byte_stream = True
+
+                args = ['cmd', '/c'] + args
+
             self.process = subprocess.Popen(
-                [str(a) for a in self.args],
+                args,
                 bufsize=0,
-                universal_newlines=True,
+                universal_newlines=not self._use_byte_stream,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 stdin=subprocess.PIPE,
-                encoding='utf-8',
+                encoding='utf-8' if not self._use_byte_stream else None,
             )
         except Exception as e:
             from hstest import StageTest
@@ -100,6 +114,8 @@ class ProcessWrapper:
         while True:
             try:
                 new_output = read_pipe.read(1)
+                if self._use_byte_stream:
+                    new_output = new_output.decode()
             except ValueError:
                 OutputHandler.print(f'Value error for {pipe_name}... ')
                 if self.is_finished(need_wait_output=False):
@@ -150,15 +166,11 @@ class ProcessWrapper:
             try:
                 cpu_load = self.ps.cpu_percent()
                 OutputHandler.print(f'Check cpuload - {cpu_load}')
-                self.cpu_load_history.append(cpu_load)
 
-                if self.initial_idle_wait and cpu_load > 1:
-                    self.initial_idle_wait = False
+                if not self.initial_idle_wait:
+                    self.cpu_load_history.append(cpu_load)
 
-                if self.initial_idle_wait and len(self.cpu_load_history) > self.initial_idle_wait_max:
-                    self.initial_idle_wait = False
-
-                if not self.initial_idle_wait and len(self.cpu_load_history) > self.cpu_load_history_max:
+                if len(self.cpu_load_history) > self.cpu_load_history_max:
                     self.cpu_load_history.pop(0)
 
             except NoSuchProcess:
@@ -167,6 +179,7 @@ class ProcessWrapper:
                 OutputHandler.print('Check cpuload finished, set alive = false')
                 self._alive = False
                 break
+
             sleep(0.01)
             self.check_alive()
 
@@ -179,7 +192,10 @@ class ProcessWrapper:
             output_len_prev = output_len
 
             OutputHandler.print(f'Check output diff - {diff}. Curr = {output_len}, prev = {output_len_prev}')
-            self.output_diff_history.append(diff)
+
+            if not self.initial_idle_wait:
+                self.output_diff_history.append(diff)
+
             if len(self.output_diff_history) > self.output_diff_history_max:
                 self.output_diff_history.pop(0)
 
@@ -233,6 +249,8 @@ class ProcessWrapper:
         return not self._alive
 
     def provide_input(self, stdin: str):
+        if self._use_byte_stream:
+            stdin = stdin.encode()
         self.process.stdin.write(stdin)
 
     def terminate(self):
