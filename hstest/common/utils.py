@@ -1,3 +1,6 @@
+from time import sleep
+from typing import Callable
+
 failed_msg_start = '#educational_plugin FAILED + '
 failed_msg_continue = '#educational_plugin '
 success_msg = '#educational_plugin test OK'
@@ -24,3 +27,12 @@ def clean_text(text: str) -> str:
             .replace('\r', '\n')
             .replace('\u00a0', '\u0020')
     )
+
+
+def try_many_times(times_to_try: int, sleep_time_ms: int, exit_func: Callable[[], bool]):
+    while times_to_try > 0:
+        times_to_try -= 1
+        if exit_func():
+            return True
+        sleep(sleep_time_ms / 1000)
+    return False
