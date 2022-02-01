@@ -1,6 +1,8 @@
 from importlib import reload
 from typing import TYPE_CHECKING
 
+from hstest.testing.plotting.drawing.drawing_data import DrawingData
+
 try:
     import pandas as pd
     from pandas.api.types import is_numeric_dtype
@@ -99,31 +101,31 @@ class SeabornHandler:
             )
             drawings.append(drawing)
 
-        def histplot(data=None, _process_hue=True, **kwargs):
+        def histplot(data=None, _process_hue=True, **kw):
             if data is None:
                 return
 
-            if _process_hue and 'hue' in kwargs and type(kwargs['hue']) == str:
+            if _process_hue and 'hue' in kw and type(kw['hue']) == str:
                 try:
-                    kwargs['hue'] = data[kwargs['hue']]
+                    kw['hue'] = data[kw['hue']]
                 except: pass
 
-            if 'y' in kwargs:
+            if 'y' in kw:
                 try:
-                    data = data[kwargs.pop('y')]
+                    data = data[kw.pop('y')]
                 except: pass
 
-            if 'x' in kwargs:
+            if 'x' in kw:
                 try:
-                    data = data[kwargs.pop('x')]
+                    data = data[kw.pop('x')]
                 except: pass
 
             if type(data) == pd.DataFrame:
                 for col in data.columns:
-                    histplot(data[col], **kwargs)
+                    histplot(data[col], **kw)
                 return
             elif type(data) == pd.Series:
-                return histplot(data.to_numpy(), **kwargs)
+                return histplot(data.to_numpy(), **kw)
 
             elif type(data) != np.ndarray:
                 data = np.array(data, dtype=object)
@@ -133,22 +135,23 @@ class SeabornHandler:
 
             if len(data.shape) == 2:
                 for i in range(data.shape[1]):
-                    histplot(data[:, i], **kwargs)
+                    histplot(data[:, i], **kw)
                 return
 
-            if _process_hue and 'hue' in kwargs:
-                hue = kwargs['hue']
+            if _process_hue and 'hue' in kw:
+                hue = kw['hue']
                 colored_layers = sorted(set(hue), key=str)
                 for pic in colored_layers:
                     subplot = [i for i, j in zip(data, hue) if j == pic]
-                    histplot(np.array(subplot, dtype=object), _process_hue=False, **kwargs)
+                    histplot(np.array(subplot, dtype=object), _process_hue=False, **kw)
                 return
 
             drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    data,
+                Drawing(
                     DrawingLibrary.seaborn,
-                    kwargs,
+                    DrawingType.hist,
+                    DrawingData(data, np.array([1] * len(data))),
+                    kw
                 )
             )
 

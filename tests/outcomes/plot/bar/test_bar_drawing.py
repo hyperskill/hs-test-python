@@ -1,8 +1,12 @@
 import numpy as np
-from hstest import wrong, correct
+
+from hstest import correct, wrong
+from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
 
-def test_bar_drawing(figures, correct_plot_count, correct_data, library_type):
+def test_bar_drawing(figures, correct_data, library_type):
+    correct_plot_count = len(figures)
+
     if len(figures) != correct_plot_count:
         return wrong(
             f'Expected {correct_plot_count} plots to be plotted using {library_type} library, found {len(figures)}')
@@ -14,10 +18,15 @@ def test_bar_drawing(figures, correct_plot_count, correct_data, library_type):
         if bar.library != library_type:
             return wrong(f'{bar.library} is wrong library type. Expected {library_type}')
 
-        if not isinstance(bar.data, np.ndarray):
+        if not isinstance(bar.data, DrawingData):
             return wrong("The data value should be a ndarray")
 
-        if not np.array_equal(correct_data[i], bar.data.data):
-            return wrong('Wrong data of the bar graph')
+        current_correct = np.array(correct_data[i], dtype=object)
+
+        if not np.array_equal(current_correct[:, 0], bar.data.x):
+            return wrong('Wrong x data of the bar graph')
+
+        if not np.array_equal(current_correct[:, 1], bar.data.y):
+            return wrong('Wrong y data of the bar graph')
 
     return correct()

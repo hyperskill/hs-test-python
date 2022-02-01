@@ -17,10 +17,10 @@ def test_hist_drawing(figures, correct_data, library_type):
         if hist.library != library_type:
             return wrong(f'{hist.library} is wrong library type. Expected {library_type}')
 
-        if not isinstance(hist.data, np.ndarray):
+        if not isinstance(hist.data.x, np.ndarray):
             return wrong("The data value should be a ndarray")
 
-        if not correct_data[i] == hist.data.tolist():
+        if not correct_data[i] == hist.data.x.tolist():
             return wrong('Wrong data of the hist graph')
 
     return correct()

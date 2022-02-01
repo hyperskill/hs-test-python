@@ -8,12 +8,10 @@ def plot():
 
     fig, ax = plt.subplots()
 
-    plt.bar([1, 2, 4, 6], 5)
-    ax.bar([1, 2, 4, 6], 6)
+    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]),
+                      columns=['one'])
 
-    plt.barh([1, 2, 4, 6], 7)
-    ax.barh([1, 2, 4, 6], 8)
-
+    ax.bar(df.one, height=np.array([2, 3, 4, 5, 6]))
     plt.show()
 
 

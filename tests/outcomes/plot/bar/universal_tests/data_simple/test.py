@@ -7,7 +7,7 @@ from hstest.stage import PlottingTest
 from tests.outcomes.plot.universal_test import universal_test
 
 
-class TestHist(PlottingTest):
+class TestBar(PlottingTest):
     @dynamic_test
     def test(self):
         files = [i for i in os.listdir() if i != 'test.py' and i.endswith('.py')]
@@ -21,9 +21,9 @@ class TestHist(PlottingTest):
 
             universal_test(
                 file,
-                'hist',
-                [[1, 3, 5, 7, 9], [2, 4, 6, 8, 10]],
-                [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+                'bar',
+                [[1, 2, 3, 4, 5]],
+                [[2, 3, 4, 5, 6]],
                 self.new_figures()
             )
 
@@ -32,7 +32,7 @@ class TestHist(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestHist().run_tests()
+        status, feedback = TestBar().run_tests()
         self.assertEqual(status, 0)
 
 

@@ -21,7 +21,7 @@ class TestSeabornBar(PlottingTest):
             [[10, ''], [30, ''], [20, '']],
         ], dtype=object)
 
-        return test_bar_drawing(self.all_figures(), 3, correct_data, DrawingLibrary.seaborn)
+        return test_bar_drawing(self.all_figures(), correct_data, DrawingLibrary.seaborn)
 
 
 class Test(unittest.TestCase):
