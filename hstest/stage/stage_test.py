@@ -32,7 +32,7 @@ class DirMeta(type):
         init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
         init_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
         init_dir.append('test_run_unittest')
-        return init_dir
+        return set(init_dir)
 
 
 class StageTest(unittest.TestCase, metaclass=DirMeta):
