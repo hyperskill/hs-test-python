@@ -1,4 +1,5 @@
 import os
+import unittest
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from hstest.common.file_utils import walk_user_files
@@ -24,7 +25,17 @@ from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
-class StageTest:
+class DirMeta(type):
+    def __dir__(self):
+        if self == StageTest:
+            return []
+        init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
+        init_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
+        init_dir.append('test_run_unittest')
+        return init_dir
+
+
+class StageTest(unittest.TestCase, metaclass=DirMeta):
     runner: TestRunner = None
     attach: Any = None
 
@@ -32,7 +43,8 @@ class StageTest:
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
 
-    def __init__(self, source_name: str = ''):
+    def __init__(self, args, source_name: str = ''):
+        super(StageTest, self).__init__(args)
         self.is_tests = False
 
         if self.source:
@@ -46,6 +58,10 @@ class StageTest:
     #    result, feedback = self.run_tests()
     #     if result != 0:
     #         self.fail(feedback)
+
+    def test_run_unittest(self):
+        code, msg = self.run_tests()
+        self.assertTrue(code == 0, msg)
 
     def after_all_tests(self):
         pass
