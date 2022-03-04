@@ -27,12 +27,14 @@ from hstest.testing.test_run import TestRun
 
 class DirMeta(type):
     def __dir__(self):
-        if self == StageTest:
+        if not issubclass(self, StageTest) or self == StageTest:
             return []
         init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
-        init_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
-        init_dir.append('test_run_unittest')
-        return set(init_dir)
+        filtered_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
+        filtered_dir.append('test_run_unittest')
+        if not self.dynamic_methods() and 'generate' not in init_dir:
+            return []
+        return set(filtered_dir)
 
 
 class StageTest(unittest.TestCase, metaclass=DirMeta):
@@ -51,17 +53,11 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             self.source_name: str = self.source
         else:
             self.source_name: str = source_name
-        # super().__init__(method)
-        # self.module =
-
-    # def test_program(self):
-    #    result, feedback = self.run_tests()
-    #     if result != 0:
-    #         self.fail(feedback)
 
     def test_run_unittest(self):
-        code, msg = self.run_tests()
-        self.assertTrue(code == 0, msg)
+        result, feedback = self.run_tests()
+        if result != 0:
+            self.fail(feedback)
 
     def after_all_tests(self):
         pass

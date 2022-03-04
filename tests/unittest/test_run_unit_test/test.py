@@ -1,7 +1,16 @@
-from hstest import StageTest, dynamic_test, correct
+from hstest import dynamic_test, correct, TestCase, PlottingTest
 
 
-class ProjectTest(StageTest):
+class ProjectTest(PlottingTest):
+
+    def generate(self):
+        return [
+            TestCase(stdin=[''])
+        ]
+
+    def check(self, reply: str, attach):
+        print('print from generate')
+        return correct()
 
     @dynamic_test()
     def test_something(self):
