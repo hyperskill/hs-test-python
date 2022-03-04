@@ -55,7 +55,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             self.source_name: str = source_name
 
     def test_run_unittest(self):
-        result, feedback = self.run_tests()
+        result, feedback = self.run_tests(is_unittest=True)
         if result != 0:
             self.fail(feedback)
 
@@ -114,7 +114,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             RED_BOLD + f'\nStart test {num}{total_tests}' + RESET + '\n'
         )
 
-    def run_tests(self, *, debug=False) -> Tuple[int, str]:
+    def run_tests(self, *, debug=False, is_unittest: bool = False) -> Tuple[int, str]:
         curr_test: int = 0
         need_tear_down: bool = False
         try:
@@ -152,7 +152,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
                     test_run.tear_down()
 
             SystemHandler.tear_down()
-            return passed()
+            return passed(is_unittest)
 
         except BaseException as ex:
             if need_tear_down:
@@ -203,7 +203,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             except BaseException:
                 pass
 
-            return failed(fail_text)
+            return failed(fail_text, is_unittest)
 
         finally:
             StageTest.curr_test_run = None
