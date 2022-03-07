@@ -7,6 +7,7 @@ from os import listdir
 from os.path import dirname, isdir, isfile
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
+from hstest import StageTest
 
 import hstest.common.utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
@@ -55,7 +56,7 @@ class UnitTesting:
             except ImportError:
                 continue
             for name, obj in getmembers(imported):
-                if isclass(obj) and issubclass(obj, TestCase):
+                if isclass(obj) and issubclass(obj, TestCase) and not issubclass(obj, StageTest):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
         suite = TestSuite(tests_suite[::-1])
