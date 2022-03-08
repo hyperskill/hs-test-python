@@ -19,7 +19,7 @@ class TestOutputWithStderrAndWithStdout(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOutputWithStderrAndWithStdout('main').run_tests()
+        status, feedback = TestOutputWithStderrAndWithStdout(source_name='main').run_tests()
         self.assertNotIn("stderr:", feedback)
         self.assertNotIn("stdout:", feedback)
         self.assertNotEqual(status, 0)

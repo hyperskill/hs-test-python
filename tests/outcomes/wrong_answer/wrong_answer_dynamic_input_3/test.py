@@ -31,7 +31,7 @@ class WrongAnswerDynamicInput3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = WrongAnswerDynamicInput3('main').run_tests()
+        status, feedback = WrongAnswerDynamicInput3(source_name='main').run_tests()
 
         self.assertTrue("Wrong answer in test #3" in feedback)
         self.assertTrue("WA TEST 3" in feedback)

@@ -18,7 +18,7 @@ class TestMatplotlibHeatmap(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestMatplotlibHeatmap('main').run_tests()
+        status, feedback = TestMatplotlibHeatmap(source_name='main').run_tests()
         self.assertEqual(status, 0)
 
 

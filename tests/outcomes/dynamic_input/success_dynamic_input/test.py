@@ -42,7 +42,7 @@ class SuccessDynamicInput(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = SuccessDynamicInput('main').run_tests()
+        status, feedback = SuccessDynamicInput(source_name='main').run_tests()
         self.assertEqual(status, 0)
         self.assertEqual(feedback, 'test OK')
 

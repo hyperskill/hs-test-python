@@ -25,7 +25,7 @@ class TestPandasPie(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPandasPie('main').run_tests()
+        status, feedback = TestPandasPie(source_name='main').run_tests()
         self.assertEqual(status, 0)
 
 

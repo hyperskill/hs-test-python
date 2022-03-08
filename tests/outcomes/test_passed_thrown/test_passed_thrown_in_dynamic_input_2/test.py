@@ -31,7 +31,7 @@ class TestPassedThrownInDynamicInput2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPassedThrownInDynamicInput2('main').run_tests()
+        status, feedback = TestPassedThrownInDynamicInput2(source_name='main').run_tests()
 
         self.assertTrue("Wrong answer in test #1\n\n"
                         "fail inside check" in feedback)

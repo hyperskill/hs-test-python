@@ -15,7 +15,7 @@ class TestSyntaxError2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSyntaxError2('main').run_tests()
+        status, feedback = TestSyntaxError2(source_name='main').run_tests()
 
         self.assertIn('Exception in test #1\n'
                       '\n'

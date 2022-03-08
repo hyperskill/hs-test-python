@@ -19,7 +19,7 @@ class TestImportRelativeError2(StageTest):
 @unittest.skip('Relative imports doesn\'t work')
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportRelativeError2('main').run_tests()
+        status, feedback = TestImportRelativeError2(source_name='main').run_tests()
 
         self.assertIn(cleandoc(
             """

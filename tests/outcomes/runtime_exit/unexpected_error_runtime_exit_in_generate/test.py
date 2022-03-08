@@ -21,7 +21,7 @@ class UnexpectedErrorRuntimeExitInGenerate(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorRuntimeExitInGenerate('main').run_tests()
+        status, feedback = UnexpectedErrorRuntimeExitInGenerate(source_name='main').run_tests()
 
         self.assertIn('Unexpected error during testing'
                       '\n\nWe have recorded this bug and will fix it soon.', feedback)

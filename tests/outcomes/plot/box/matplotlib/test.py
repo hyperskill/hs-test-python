@@ -18,7 +18,7 @@ class TestMatplotlibBox(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestMatplotlibBox('main').run_tests()
+        status, feedback = TestMatplotlibBox(source_name='main').run_tests()
         self.assertEqual(status, 0)
 
 

@@ -17,7 +17,7 @@ class TestImportAbsoluteError(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportAbsoluteError('main').run_tests()
+        status, feedback = TestImportAbsoluteError(source_name='main').run_tests()
         self.assertEqual("test OK", feedback)
 
 

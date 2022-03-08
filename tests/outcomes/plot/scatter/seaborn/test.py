@@ -25,7 +25,7 @@ class TestSeabornScatter(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornScatter('main').run_tests()
+        status, feedback = TestSeabornScatter(source_name='main').run_tests()
         self.assertEqual(status, 0)
 
 

@@ -17,7 +17,7 @@ class UnexpectedErrorEmptyTestCases(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorEmptyTestCases('main').run_tests()
+        status, feedback = UnexpectedErrorEmptyTestCases(source_name='main').run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Unexpected error during testing'

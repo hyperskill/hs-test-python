@@ -20,6 +20,6 @@ class SuccessButNotUsedInput1(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = SuccessButNotUsedInput1('main').run_tests()
+        status, feedback = SuccessButNotUsedInput1(source_name='main').run_tests()
         self.assertEqual(status, 0)
         self.assertEqual(feedback, 'test OK')

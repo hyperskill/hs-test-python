@@ -15,7 +15,7 @@ class TestEmptyEval(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestEmptyEval('main').run_tests()
+        status, feedback = TestEmptyEval(source_name='main').run_tests()
 
         self.assertIn('Exception in test #1\n'
                       '\n'

@@ -19,7 +19,7 @@ class TestOutputWithStderrAndWithStdout(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOutputWithStderrAndWithStdout('main').run_tests()
+        status, feedback = TestOutputWithStderrAndWithStdout(source_name='main').run_tests()
         self.assertIn("Wrong answer in test #1\n\nPlease find below the output of your program during this failed test."
                       "\n\n---\n\nArguments: test args\n\n"
                       "stderr:\nUser stderr output!\nUser stderr output!\nUser stderr output!", feedback)

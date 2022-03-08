@@ -20,7 +20,7 @@ class UnexpectedErrorRuntimeExitInCheck(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorRuntimeExitInCheck('main').run_tests()
+        status, feedback = UnexpectedErrorRuntimeExitInCheck(source_name='main').run_tests()
 
         self.assertIn('Unexpected error in test #1'
                       '\n\nWe have recorded this bug and will fix it soon.', feedback)

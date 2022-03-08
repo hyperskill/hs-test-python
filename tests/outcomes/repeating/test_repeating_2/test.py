@@ -22,7 +22,7 @@ class TestRepeating2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestRepeating2('main').run_tests()
+        status, feedback = TestRepeating2(source_name='main').run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual("Wrong answer in test #6", feedback)
 

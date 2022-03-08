@@ -22,7 +22,7 @@ class TestOutOfInput2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOutOfInput2('main').run_tests()
+        status, feedback = TestOutOfInput2(source_name='main').run_tests()
 
         self.assertEqual(
             "Error in test #1\n" +

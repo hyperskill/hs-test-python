@@ -16,7 +16,7 @@ class TestDynamicInputFailInfiniteLoop(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicInputFailInfiniteLoop('main').run_tests()
+        status, feedback = TestDynamicInputFailInfiniteLoop(source_name='main').run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual(
             feedback,

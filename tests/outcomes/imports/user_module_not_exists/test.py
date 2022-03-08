@@ -17,7 +17,7 @@ class UnexpectedErrorUserModuleNotExists(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorUserModuleNotExists('tests.bad_module').run_tests()
+        status, feedback = UnexpectedErrorUserModuleNotExists(source_name='tests.bad_module').run_tests()
 
         self.assertIn(
             'Error in test #1\n\n'

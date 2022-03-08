@@ -22,7 +22,7 @@ class TestTimeout2(StageTest):
 @unittest.skip
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestTimeout2('main').run_tests()
+        status, feedback = TestTimeout2(source_name='main').run_tests()
 
         self.assertTrue("Error in test #3" in feedback)
         self.assertTrue(

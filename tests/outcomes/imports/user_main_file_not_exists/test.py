@@ -17,7 +17,7 @@ class UnexpectedErrorUserMainFileNotExists(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorUserMainFileNotExists('bad_file').run_tests()
+        status, feedback = UnexpectedErrorUserMainFileNotExists(source_name='bad_file').run_tests()
 
         self.assertIn(
             'Error in test #1\n\n'

@@ -15,8 +15,8 @@ class DjangoTest(StageTest):
     test_database: str = attach.test_database
     use_database: bool = attach.use_database
 
-    def __init__(self, source_name: str = ''):
-        super().__init__(source_name)
+    def __init__(self, args='test_run_unittest', source_name: str = ''):
+        super().__init__(args, source_name)
         self.attach.use_database = self.use_database
         loop_detector.working = False
         Settings.do_reset_output = False

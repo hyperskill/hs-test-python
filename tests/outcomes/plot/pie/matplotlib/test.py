@@ -25,7 +25,7 @@ class TestMatplotlibPie(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestMatplotlibPie('main').run_tests()
+        status, feedback = TestMatplotlibPie(source_name='main').run_tests()
         self.assertEqual(status, 0)
 
 

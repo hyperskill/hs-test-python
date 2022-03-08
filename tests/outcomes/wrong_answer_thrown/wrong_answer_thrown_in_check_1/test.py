@@ -23,7 +23,7 @@ class WrongAnswerThrownInCheck1(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = WrongAnswerThrownInCheck1('main').run_tests()
+        status, feedback = WrongAnswerThrownInCheck1(source_name='main').run_tests()
 
         self.assertTrue("Wrong answer in test #2\n\n"
                         "Wrong answer from check attach false" in feedback)

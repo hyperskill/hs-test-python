@@ -24,6 +24,6 @@ class TestCurrTestNum(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCurrTestNum('main').run_tests()
+        status, feedback = TestCurrTestNum(source_name='main').run_tests()
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)

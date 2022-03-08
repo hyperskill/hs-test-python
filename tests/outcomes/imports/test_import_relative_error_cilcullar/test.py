@@ -19,7 +19,7 @@ class TestImportRelativeErrorCircular(StageTest):
 @unittest.skip('Relative imports doesn\'t work')
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportRelativeErrorCircular('main').run_tests()
+        status, feedback = TestImportRelativeErrorCircular(source_name='main').run_tests()
 
         self.assertIn(cleandoc(
             """

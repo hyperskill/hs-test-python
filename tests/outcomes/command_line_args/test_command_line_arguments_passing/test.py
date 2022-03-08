@@ -22,7 +22,7 @@ class TestCommendLineArgumentsPassing(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCommendLineArgumentsPassing('main').run_tests()
+        status, feedback = TestCommendLineArgumentsPassing(source_name='main').run_tests()
         self.assertEqual(status, 0)
         self.assertEqual(feedback, 'test OK')
 

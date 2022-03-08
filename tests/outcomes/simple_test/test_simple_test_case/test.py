@@ -16,6 +16,6 @@ class TesSimpleTestCase(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TesSimpleTestCase('main').run_tests()
+        status, feedback = TesSimpleTestCase(source_name='main').run_tests()
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)
