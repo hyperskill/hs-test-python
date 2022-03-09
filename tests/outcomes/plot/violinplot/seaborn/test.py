@@ -18,7 +18,7 @@ class TestSeabornViolin(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornViolin(source_name='main').run_tests()
+        status, feedback = TestSeabornViolin().run_tests()
         self.assertEqual(status, 0)
 
 

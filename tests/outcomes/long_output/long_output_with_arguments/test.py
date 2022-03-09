@@ -17,7 +17,7 @@ class Test(unittest.TestCase):
     def test(self):
         expected_line_in_feedback = "Arguments: -arg test\n\n[last 250 lines of output are shown, 1 skipped]"
 
-        status, feedback = TestWrongOutputWithTooLongOutput(source_name='main').run_tests()
+        status, feedback = TestWrongOutputWithTooLongOutput().run_tests()
         self.assertIn(expected_line_in_feedback, feedback)
         self.assertEqual(status, -1)
 

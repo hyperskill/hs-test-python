@@ -20,7 +20,7 @@ class TestNoTimeLimit(StageTest):
 @unittest.skip
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestNoTimeLimit(source_name='main').run_tests()
+        status, feedback = TestNoTimeLimit().run_tests()
         self.assertTrue('test OK', feedback)
         self.assertEqual(status, 0)
 

@@ -20,7 +20,7 @@ class TestDefaultTimeLimit(StageTest):
 @unittest.skip
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDefaultTimeLimit(source_name='main').run_tests()
+        status, feedback = TestDefaultTimeLimit().run_tests()
 
         self.assertTrue("Error in test #1" in feedback)
         self.assertTrue(

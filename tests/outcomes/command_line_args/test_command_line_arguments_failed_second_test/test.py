@@ -19,7 +19,7 @@ class TestCommandLineArgumentsFailedSecondTest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCommandLineArgumentsFailedSecondTest(source_name='main').run_tests()
+        status, feedback = TestCommandLineArgumentsFailedSecondTest().run_tests()
         self.assertNotEqual(status, 0)
 
         self.assertEqual(

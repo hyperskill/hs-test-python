@@ -19,7 +19,7 @@ class TestDynamicOutputWithoutInput(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestDynamicOutputWithoutInput(source_name='main').run_tests()
+        status, feedback = TestDynamicOutputWithoutInput().run_tests()
 
         self.assertTrue('Wrong answer in test #1' in feedback)
         self.assertTrue(

@@ -23,7 +23,7 @@ class TestSeabornHist(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornHist(source_name='main').run_tests()
+        status, feedback = TestSeabornHist().run_tests()
         self.assertEqual(status, 0)
 
 

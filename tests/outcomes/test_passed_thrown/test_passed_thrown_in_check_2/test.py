@@ -23,7 +23,7 @@ class TestPassedThrownInCheck2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPassedThrownInCheck2(source_name='main').run_tests()
+        status, feedback = TestPassedThrownInCheck2().run_tests()
 
         self.assertTrue("Wrong answer in test #2\n\n"
                         "test is not passed attach false" in feedback)

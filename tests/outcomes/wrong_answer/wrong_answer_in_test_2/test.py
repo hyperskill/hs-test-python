@@ -20,7 +20,7 @@ class WrongAnswerInTest2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = WrongAnswerInTest2(source_name='main').run_tests()
+        status, feedback = WrongAnswerInTest2().run_tests()
 
         self.assertTrue("Wrong answer in test #2" in feedback)
         self.assertTrue("Fatal error" not in feedback)

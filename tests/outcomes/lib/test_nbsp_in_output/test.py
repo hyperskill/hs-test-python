@@ -19,6 +19,6 @@ class TestNbspInOutput(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestNbspInOutput(source_name='main').run_tests()
+        status, feedback = TestNbspInOutput().run_tests()
         self.assertEqual("test OK", feedback)
         self.assertEqual(status, 0)

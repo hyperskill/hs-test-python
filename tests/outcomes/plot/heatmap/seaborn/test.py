@@ -18,7 +18,7 @@ class TestSeabornHeatmap(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornHeatmap(source_name='main').run_tests()
+        status, feedback = TestSeabornHeatmap().run_tests()
         self.assertEqual(status, 0)
 
 

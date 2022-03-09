@@ -15,7 +15,7 @@ class UnexpectedErrorNotGeneratingTests(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorNotGeneratingTests(source_name='main').run_tests()
+        status, feedback = UnexpectedErrorNotGeneratingTests().run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Unexpected error in test #1'

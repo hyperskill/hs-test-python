@@ -21,7 +21,7 @@ class TesSimpleTestCaseFail(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TesSimpleTestCaseFail(source_name='main').run_tests()
+        status, feedback = TesSimpleTestCaseFail().run_tests()
 
         self.assertEquals(cleandoc(
             """

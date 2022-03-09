@@ -10,7 +10,7 @@ class TestRunTestInsideTest(StageTest):
 
     @dynamic_test
     def test(self):
-        status, feedback = TestRunTestInsideTest(source_name='main').run_tests()
+        status, feedback = TestRunTestInsideTest().run_tests()
         if status != 0:
             raise ErrorWithFeedback(feedback)
         return CheckResult.correct()
@@ -18,7 +18,7 @@ class TestRunTestInsideTest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestRunTestInsideTest(source_name='main').run_tests()
+        status, feedback = TestRunTestInsideTest().run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Error in test #1'

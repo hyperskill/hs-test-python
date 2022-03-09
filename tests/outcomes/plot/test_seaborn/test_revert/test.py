@@ -29,7 +29,7 @@ class TestSeaborn(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeaborn(source_name='main').run_tests()
+        status, feedback = TestSeaborn().run_tests()
         self.assertEqual(status, 0)
 
 

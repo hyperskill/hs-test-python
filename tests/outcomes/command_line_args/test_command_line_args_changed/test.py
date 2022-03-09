@@ -16,7 +16,7 @@ class TestCommandLineArgsChanged(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCommandLineArgsChanged(source_name='main').run_tests()
+        status, feedback = TestCommandLineArgsChanged().run_tests()
         self.assertNotEqual(status, 0)
 
         self.assertEqual(

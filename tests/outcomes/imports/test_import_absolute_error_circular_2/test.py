@@ -18,7 +18,7 @@ class TestImportAbsoluteErrorCircular2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportAbsoluteErrorCircular2(source_name='main').run_tests()
+        status, feedback = TestImportAbsoluteErrorCircular2().run_tests()
 
         correct_feedback = cleandoc("""
             Exception in test #1

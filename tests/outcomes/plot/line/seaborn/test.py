@@ -24,7 +24,7 @@ class TestSeabornLine(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornLine(source_name='main').run_tests()
+        status, feedback = TestSeabornLine().run_tests()
         self.assertEqual(status, 0)
 
 

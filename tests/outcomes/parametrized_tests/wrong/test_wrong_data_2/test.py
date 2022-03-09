@@ -20,7 +20,7 @@ class TestWrongData2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestWrongData2(source_name='main').run_tests()
+        status, feedback = TestWrongData2().run_tests()
         self.assertNotEqual(status, 0)
         self.assertIn('UnexpectedError: Data passed to dynamic method "test" '
                       'should not be empty.', feedback)

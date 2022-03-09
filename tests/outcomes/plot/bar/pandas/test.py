@@ -26,7 +26,7 @@ class TestPandasBar(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPandasBar(source_name='main').run_tests()
+        status, feedback = TestPandasBar().run_tests()
         self.assertEqual(status, 0)
 
 

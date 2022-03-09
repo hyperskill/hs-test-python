@@ -20,7 +20,7 @@ class TestOutOfInput4(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOutOfInput4(source_name='main').run_tests()
+        status, feedback = TestOutOfInput4().run_tests()
 
         self.assertIn(
             "Error in test #1\n" +

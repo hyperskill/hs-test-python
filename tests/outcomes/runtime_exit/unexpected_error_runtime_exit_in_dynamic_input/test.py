@@ -29,7 +29,7 @@ class UnexpectedErrorRuntimeExitInDynamicInput(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorRuntimeExitInDynamicInput(source_name='main').run_tests()
+        status, feedback = UnexpectedErrorRuntimeExitInDynamicInput().run_tests()
 
         self.assertIn('Unexpected error in test #3'
                       '\n\nWe have recorded this bug and will fix it soon.', feedback)

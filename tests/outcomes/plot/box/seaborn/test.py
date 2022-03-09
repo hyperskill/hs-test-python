@@ -18,7 +18,7 @@ class TestSeabornBox(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornBox(source_name='main').run_tests()
+        status, feedback = TestSeabornBox().run_tests()
         self.assertEqual(status, 0)
 
 

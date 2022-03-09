@@ -19,7 +19,7 @@ class ExceptionWhileReading2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = ExceptionWhileReading2(source_name='main').run_tests()
+        status, feedback = ExceptionWhileReading2().run_tests()
 
         self.assertEqual(status, -1)
         self.assertEqual(

@@ -22,7 +22,7 @@ class TestRepeatingWithParametrizedTests(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestRepeatingWithParametrizedTests(source_name='main').run_tests()
+        status, feedback = TestRepeatingWithParametrizedTests().run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual("Wrong answer in test #31", feedback)
 

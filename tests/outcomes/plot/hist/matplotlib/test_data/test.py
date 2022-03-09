@@ -27,7 +27,7 @@ class TestMatplotlibHist(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestMatplotlibHist(source_name='main').run_tests()
+        status, feedback = TestMatplotlibHist().run_tests()
         self.assertEqual(status, 0)
 
 

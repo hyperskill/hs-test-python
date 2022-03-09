@@ -45,8 +45,8 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
 
-    def __init__(self, args='test_run_unittest', source_name: str = ''):
-        super(StageTest, self).__init__(args)
+    def __init__(self, args='', *, source_name: str = ''):
+        super(StageTest, self).__init__('test_run_unittest')
         self.is_tests = False
 
         if self.source:

@@ -24,7 +24,7 @@ class FeedbackOnExceptionTest4(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = FeedbackOnExceptionTest4(source_name='main').run_tests()
+        status, feedback = FeedbackOnExceptionTest4().run_tests()
 
         self.assertEqual(cleandoc('''\
             Exception in test #1

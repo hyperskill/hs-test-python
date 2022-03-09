@@ -19,7 +19,7 @@ class UnexpectedErrorAddInput1(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorAddInput1(source_name='main').run_tests()
+        status, feedback = UnexpectedErrorAddInput1().run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Unexpected error in test #1'

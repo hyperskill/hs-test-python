@@ -19,7 +19,7 @@ class TestNotRunNotNeededInputFuncs(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestNotRunNotNeededInputFuncs(source_name='main').run_tests()
+        status, feedback = TestNotRunNotNeededInputFuncs().run_tests()
 
         self.assertEqual('test OK', feedback)
         self.assertEqual(status, 0)

@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
         correct_lines = [f'A {i} line' for i in range(1, 250)]
         wrong_lines = [f'A {i} line' for i in range(0, 1)]
 
-        status, feedback = TestWrongOutputWithTooLongOutput(source_name='main').run_tests()
+        status, feedback = TestWrongOutputWithTooLongOutput().run_tests()
 
         for correct_line in correct_lines:
             self.assertIn(correct_line, feedback)

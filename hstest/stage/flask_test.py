@@ -13,8 +13,8 @@ class FlaskTest(StageTest):
     runner = FlaskApplicationRunner()
     attach: FlaskSettings = FlaskSettings()
 
-    def __init__(self, args='test_run_unittest', source_name: str = ''):
-        super().__init__(args, source_name)
+    def __init__(self, args='', source: str = ''):
+        super().__init__(args, source_name=source)
         loop_detector.working = False
         Settings.do_reset_output = False
 

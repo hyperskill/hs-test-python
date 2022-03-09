@@ -18,7 +18,7 @@ class TestSeabornLm(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornLm(source_name='main').run_tests()
+        status, feedback = TestSeabornLm().run_tests()
         self.assertEqual(status, 0)
 
 

@@ -58,7 +58,7 @@ class TestOrderComplex(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOrderComplex(source_name='main').run_tests()
+        status, feedback = TestOrderComplex().run_tests()
         self.assertEqual('test OK', feedback)
 
 

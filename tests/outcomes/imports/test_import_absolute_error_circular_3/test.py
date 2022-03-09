@@ -17,7 +17,7 @@ class TestImportAbsoluteErrorCircular3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportAbsoluteErrorCircular3(source_name='main').run_tests()
+        status, feedback = TestImportAbsoluteErrorCircular3().run_tests()
         self.assertEqual('test OK', feedback)
 
 

@@ -22,7 +22,7 @@ class UnexpectedErrorAddInput3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorAddInput3(source_name='main').run_tests()
+        status, feedback = UnexpectedErrorAddInput3().run_tests()
 
         self.assertIn('Unexpected error in test #4'
                       '\n\nWe have recorded this bug and will fix it soon.', feedback)

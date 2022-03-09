@@ -20,7 +20,7 @@ class ExceptionInUserCodeTest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = ExceptionInUserCodeTest(source_name='main').run_tests()
+        status, feedback = ExceptionInUserCodeTest().run_tests()
         self.assertEqual(status, -1)
         self.assertTrue('Exception in test #1' in feedback)
         self.assertTrue('Traceback (most recent call last):' in feedback)

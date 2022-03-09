@@ -25,7 +25,7 @@ class TestPandasLine(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestPandasLine(source_name='main').run_tests()
+        status, feedback = TestPandasLine().run_tests()
         self.assertEqual(status, 0)
 
 

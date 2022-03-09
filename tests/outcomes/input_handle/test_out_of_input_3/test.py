@@ -21,7 +21,7 @@ class TestOutOfInput3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestOutOfInput3(source_name='main').run_tests()
+        status, feedback = TestOutOfInput3().run_tests()
 
         self.assertIn(
             "Error in test #1\n" +

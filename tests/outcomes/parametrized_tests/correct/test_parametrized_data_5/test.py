@@ -26,7 +26,7 @@ class TestParametrizedData5(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestParametrizedData5(source_name='main').run_tests()
+        status, feedback = TestParametrizedData5().run_tests()
         self.assertEqual(status, 0)
         self.assertEqual('test OK', feedback)
 

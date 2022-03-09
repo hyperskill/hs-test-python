@@ -14,7 +14,7 @@ class TestRepeatingWrongAmount(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestRepeatingWrongAmount(source_name='main').run_tests()
+        status, feedback = TestRepeatingWrongAmount().run_tests()
         self.assertNotEqual(status, 0)
         self.assertIn("UnexpectedError: Dynamic test \"test\" should not "
                       "be repeated < 0 times, found -1", feedback)

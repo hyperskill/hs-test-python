@@ -26,7 +26,7 @@ class TestSeabornBar(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestSeabornBar(source_name='main').run_tests()
+        status, feedback = TestSeabornBar().run_tests()
         self.assertEqual(status, 0)
 
 

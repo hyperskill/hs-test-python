@@ -16,7 +16,7 @@ class UnexpectedErrorGeneratingTestsWithAssertion(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = UnexpectedErrorGeneratingTestsWithAssertion(source_name='main').run_tests()
+        status, feedback = UnexpectedErrorGeneratingTestsWithAssertion().run_tests()
 
         self.assertEqual(status, -1)
         self.assertTrue('Unexpected error during testing'

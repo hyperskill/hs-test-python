@@ -21,6 +21,6 @@ class TestCopyToAttach(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCopyToAttach(source_name='main').run_tests()
+        status, feedback = TestCopyToAttach().run_tests()
         self.assertEqual("test OK", feedback)
         self.assertEqual(status, 0)

@@ -20,6 +20,6 @@ class SuccessTest(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = SuccessTest(source_name='main').run_tests()
+        status, feedback = SuccessTest().run_tests()
         self.assertEqual(status, 0)
         self.assertEqual(feedback, 'test OK')

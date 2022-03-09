@@ -18,7 +18,7 @@ class TestRepeating(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestRepeating(source_name='main').run_tests()
+        status, feedback = TestRepeating().run_tests()
         self.assertNotEqual(status, 0)
         self.assertEqual("Wrong answer in test #6", feedback)
 

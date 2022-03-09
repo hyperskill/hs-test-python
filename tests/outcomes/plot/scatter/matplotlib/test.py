@@ -23,7 +23,7 @@ class TestMatplotlibScatter(PlottingTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestMatplotlibScatter(source_name='main').run_tests()
+        status, feedback = TestMatplotlibScatter().run_tests()
         self.assertEqual(status, 0)
 
 

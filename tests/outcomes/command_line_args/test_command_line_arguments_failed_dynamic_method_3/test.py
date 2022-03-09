@@ -20,7 +20,7 @@ class TestCommandLineArgumentsFailedDynamicMethod3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCommandLineArgumentsFailedDynamicMethod3(source_name='main').run_tests()
+        status, feedback = TestCommandLineArgumentsFailedDynamicMethod3().run_tests()
         self.assertNotEqual(status, 0)
 
         self.assertEqual(

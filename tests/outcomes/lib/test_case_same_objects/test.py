@@ -18,6 +18,6 @@ class TestCaseSameObjects(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestCaseSameObjects(source_name='main').run_tests()
+        status, feedback = TestCaseSameObjects().run_tests()
         self.assertEqual(feedback, 'test OK')
         self.assertEqual(status, 0)
