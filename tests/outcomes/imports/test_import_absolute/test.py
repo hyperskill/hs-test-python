@@ -17,7 +17,7 @@ class TestImportAbsolute(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportAbsolute(source_name='random_module.main').run_tests()
+        status, feedback = TestImportAbsolute(source='random_module.main').run_tests()
         self.assertEqual("test OK", feedback)
 
 

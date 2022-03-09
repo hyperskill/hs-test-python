@@ -18,7 +18,7 @@ class ExceptionInUserCodeTest3(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = ExceptionInUserCodeTest3(source_name='module.main').run_tests()
+        status, feedback = ExceptionInUserCodeTest3(source='module.main').run_tests()
 
         self.assertEqual(cleandoc(
             """

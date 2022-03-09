@@ -14,7 +14,7 @@ class FlaskTest(StageTest):
     attach: FlaskSettings = FlaskSettings()
 
     def __init__(self, args='', *, source: str = ''):
-        super().__init__(args, source_name=source)
+        super().__init__(args, source=source)
         loop_detector.working = False
         Settings.do_reset_output = False
 

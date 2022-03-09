@@ -17,7 +17,7 @@ class TestImportPackage6(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportPackage6(source_name='random_module.main').run_tests()
+        status, feedback = TestImportPackage6(source='random_module.main').run_tests()
         self.assertEqual("test OK", feedback)
 
 

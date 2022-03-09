@@ -15,7 +15,7 @@ class TestImportRelativeError2(StageTest):
 
 class Test(unittest.TestCase):
     def test(self):
-        status, feedback = TestImportRelativeError2(source_name='main1').run_tests()
+        status, feedback = TestImportRelativeError2(source='main1').run_tests()
         self.assertEqual("test OK", feedback)
 
 
