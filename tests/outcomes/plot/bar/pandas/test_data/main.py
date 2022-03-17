@@ -8,8 +8,9 @@ def plot():
         return
 
     df = pd.DataFrame({'lab': ['A', 'B', 'C'], 'val': [10, 30, 20], 'val1': [5, 10, 15]})
-    ax = df.plot.bar()
-    ax = df.plot.bar(x='lab', y='val')
+
+    df.plot.bar()
+    df.plot.bar(x='lab', y='val')
 
     plt.show()
 

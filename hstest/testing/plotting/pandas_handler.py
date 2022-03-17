@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from hstest.testing.plotting.drawing.drawing_data import DrawingData
+
 try:
     import numpy as np
 except ImportError:
@@ -26,14 +28,21 @@ class PandasHandler:
     _replaced = False
 
     _PlotAccessor = None
-    _Series_plot = None
-    _Dataframe_plot = None
-    _Dataframe_boxplot = None
-    _Dataframe_hist = None
-    _Series_hist = None
+
+    _series_plot = None
+    _dframe_plot = None
+
+    _series_hist = None
+    _dframe_hist = None
+
+    _series_bar = None
+    _dframe_bar = None
+
+    _series_boxplot = None
+    _dframe_boxplot = None
 
     plot_name_to_basic_name = {
-        'barh': DrawingType.bar,
+        # 'barh': DrawingType.bar,
         'density': DrawingType.dis,
         'kde': DrawingType.dis,
     }
@@ -42,7 +51,7 @@ class PandasHandler:
         'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
-        'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
+        # 'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
         'box': lambda data, x, y: PandasHandler.get_box_drawings_with_normalized_data(data, x, y),
         'dis': lambda data, x, y: PandasHandler.get_dis_drawings_with_normalized_data(data, x, y),
     }
@@ -307,7 +316,9 @@ class PandasHandler:
                         x = kwargs['columns']
 
                 plot_to_func = {
-                    'hist': hist
+                    'hist': hist,
+                    'bar': bar,
+                    'barh': barh,
                 }
 
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
@@ -342,77 +353,148 @@ class PandasHandler:
             drawings.extend(all_drawings)
 
         def hist(
-            self,
+            data,
             column=None,
             _process_by=True,
-            **kwargs
+            **kw
         ):
-            for k in list(kwargs.keys()):
-                if kwargs[k] is None:
-                    kwargs.pop(k)
+            for k in list(kw.keys()):
+                if kw[k] is None:
+                    kw.pop(k)
 
-            if _process_by and 'by' in kwargs and type(kwargs['by']) == str:
+            if _process_by and 'by' in kw and type(kw['by']) == str:
                 try:
-                    kwargs['by'] = self[kwargs['by']]
+                    kw['by'] = data[kw['by']]
                 except: pass
 
-            if 'y' in kwargs:
+            if 'y' in kw:
                 try:
-                    self = self[kwargs.pop('y')]
+                    data = data[kw.pop('y')]
                 except: pass
 
-            if 'x' in kwargs:
+            if 'x' in kw:
                 try:
-                    self = self[kwargs.pop('x')]
+                    data = data[kw.pop('x')]
                 except: pass
 
-            if type(self) == pandas.DataFrame:
+            if type(data) == pandas.DataFrame:
                 if column is not None:
-                    return hist(self[column].to_numpy(), **kwargs)
-                for col in self.columns:
-                    hist(self[col].to_numpy(), **kwargs)
+                    return hist(data[column].to_numpy(), **kw)
+                for col in data.columns:
+                    hist(data[col].to_numpy(), **kw)
                 return
 
-            elif type(self) == pandas.Series:
-                return hist(self.to_numpy(), **kwargs)
+            elif type(data) == pandas.Series:
+                return hist(data.to_numpy(), **kw)
 
-            elif type(self) != np.ndarray:
-                self = np.array(self, dtype=object)
-                if len(self.shape) == 2:
+            elif type(data) != np.ndarray:
+                data = np.array(data, dtype=object)
+                if len(data.shape) == 2:
                     import matplotlib.cbook as cbook
-                    self = np.array(cbook._reshape_2D(self, 'x'), dtype=object)
+                    data = np.array(cbook._reshape_2D(data, 'x'), dtype=object)
 
-            if len(self.shape) == 2:
-                for i in range(self.shape[1]):
-                    hist(self[:, i], **kwargs)
+            if len(data.shape) == 2:
+                for i in range(data.shape[1]):
+                    hist(data[:, i], **kw)
                 return
 
-            if _process_by and 'by' in kwargs:
-                by = kwargs['by']
+            if _process_by and 'by' in kw:
+                by = kw['by']
                 pictures = sorted(set(by), key=str)
                 for pic in pictures:
-                    subplot = [i for i, j in zip(self, by) if j == pic]
-                    hist(np.array(subplot, dtype=object), _process_by=False, **kwargs)
+                    subplot = [i for i, j in zip(data, by) if j == pic]
+                    hist(np.array(subplot, dtype=object), _process_by=False, **kw)
                 return
 
             drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    self,
+                Drawing(
                     DrawingLibrary.pandas,
-                    kwargs,
+                    DrawingType.hist,
+                    DrawingData(data, np.array([1] * len(data))),
+                    kw
                 )
             )
+
+        def bar(
+            data,
+            x=None,
+            y=None,
+            **kw
+        ):
+            for k in list(kw.keys()):
+                if kw[k] is None:
+                    kw.pop(k)
+
+            if type(data) == pandas.DataFrame:
+                if y is not None and x is not None:
+                    if type(y) == str:
+                        y = [y]
+                    for col in y:
+                        bar(None,
+                            data[x].array.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw)
+                    return
+
+                elif x is not None:
+                    for col in data.columns:
+                        if col != x:
+                            bar(None,
+                                data[x].array.to_numpy(),
+                                data[col].array.to_numpy(),
+                                **kw)
+                    return
+
+                elif y is not None:
+                    if type(y) == str:
+                        y = [y]
+                    for col in y:
+                        bar(None,
+                            data[col].index.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw)
+                    return
+
+                else:
+                    for col in data.columns:
+                        bar(None,
+                            data[col].index.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw)
+                    return
+
+            elif type(data) == pandas.Series:
+                return bar(None,
+                           data.index.to_numpy(),
+                           data.array.to_numpy(),
+                           **kw)
+
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.bar,
+                    DrawingData(x, y),
+                    kw
+                )
+            )
+
+        def barh(
+            self,
+        ):
+            pass
 
         if not PandasHandler._saved:
             PandasHandler._saved = True
 
-            PandasHandler._Series_plot = pandas.Series.plot
-            PandasHandler._Dataframe_plot = pandas.DataFrame.plot
+            PandasHandler._series_plot = pandas.Series.plot
+            PandasHandler._dframe_plot = pandas.DataFrame.plot
 
-            PandasHandler._Series_hist = pandas.Series.hist
-            PandasHandler._Dataframe_hist = pandas.DataFrame.hist
+            PandasHandler._series_hist = pandas.Series.hist
+            PandasHandler._dframe_hist = pandas.DataFrame.hist
 
-            PandasHandler._Dataframe_boxplot = pandas.DataFrame.boxplot
+            # PandasHandler._series_bar = pandas.Series.bar
+
+            PandasHandler._dframe_boxplot = pandas.DataFrame.boxplot
 
         pandas.Series.plot = CachedAccessor("plot", CustomPlotAccessor)
         pandas.DataFrame.plot = CachedAccessor("plot", CustomPlotAccessor)
@@ -434,11 +516,12 @@ class PandasHandler:
         import pandas.plotting
         from pandas.core.accessor import CachedAccessor
 
-        pandas.DataFrame.boxplot = PandasHandler._Dataframe_boxplot
-        pandas.DataFrame.hist = PandasHandler._Dataframe_hist
-        pandas.Series.hist = PandasHandler._Series_hist
-
         pandas.Series.plot = CachedAccessor("plot", pandas.plotting.PlotAccessor)
         pandas.DataFrame.plot = CachedAccessor("plot", pandas.plotting.PlotAccessor)
+
+        pandas.Series.hist = PandasHandler._series_hist
+        pandas.DataFrame.hist = PandasHandler._dframe_hist
+
+        pandas.DataFrame.boxplot = PandasHandler._dframe_boxplot
 
         PandasHandler._replaced = False
