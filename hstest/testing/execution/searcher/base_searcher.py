@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Dict, List, Optional, Set, Tuple
 
 from hstest.common.file_utils import walk_user_files
@@ -159,6 +160,19 @@ class BaseSearcher:
             search_cached[cache_key] = result
 
         return result
+
+    def _simple_search(self, where_to_search: str, main_desc: str, main_regex: str) -> RunnableFile:
+        main_searcher = re.compile(main_regex, re.M)
+        return self._search(
+            where_to_search,
+            main_filter=MainFilter(
+                main_desc,
+                source=lambda s: main_searcher.search(s) is not None
+            )
+        )
+
+    def _base_search(self, where_to_search: str) -> RunnableFile:
+        return self._simple_search(where_to_search, main_desc='', main_regex='')
 
     def find(self, source: Optional[str]) -> RunnableFile:
         if source is None:
