@@ -1,6 +1,5 @@
 import os
 import re
-import sqlite3
 import typing
 
 from hstest.exceptions import WrongAnswer
@@ -31,7 +30,6 @@ class SQLRunner(TestRunner):
 
     def set_up(self, test_case: 'TestCase'):
         self.parse_sql_file()
-        self.sql_test_cls.db = sqlite3.connect(':memory:')
 
     def parse_sql_file(self) -> None:
         sql_file = SQLSearcher().search()
@@ -49,3 +47,9 @@ class SQLRunner(TestRunner):
             for name in self.sql_test_cls.queries:
                 if self.sql_test_cls.queries[name] is None:
                     raise WrongAnswer(f"Can't find '{name}' query from SQL files!")
+
+    def tear_down(self, test_case: 'TestCase'):
+        try:
+            self.sql_test_cls.db.close()
+        except Exception:
+            pass
