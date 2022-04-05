@@ -8,13 +8,6 @@ class TestSQLProject(SQLTest):
     }
 
     @dynamic_test()
-    def test_queries_exist(self):
-        for query in self.queries:
-            if self.queries[query] is None:
-                return wrong(f"Can't find '{query}' query from SQL files!")
-        return correct()
-
-    @dynamic_test()
     def test_queries(self):
 
         expected_queries = {

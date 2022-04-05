@@ -3,6 +3,7 @@ import re
 import sqlite3
 import typing
 
+from hstest.exceptions import WrongAnswer
 from hstest.test_case.check_result import CheckResult
 from hstest.testing.execution.searcher.sql_searcher import SQLSearcher
 from hstest.testing.runner.test_runner import TestRunner
@@ -44,3 +45,7 @@ class SQLRunner(TestRunner):
             for (name, query) in commands:
                 if name in self.sql_test_cls.queries:
                     self.sql_test_cls.queries[name] = query
+
+            for name in self.sql_test_cls.queries:
+                if self.sql_test_cls.queries[name] is None:
+                    raise WrongAnswer(f"Can't find '{name}' query from SQL files!")
