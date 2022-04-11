@@ -5,7 +5,7 @@ from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
 
 def test_bar_drawing(figures, correct_data, library_type):
-    correct_plot_count = len(figures)
+    correct_plot_count = len(correct_data)
 
     if len(figures) != correct_plot_count:
         return wrong(

@@ -118,6 +118,34 @@ class MatplotlibHandler:
         def barh(x, width, *args, data=None, **kw):
             return bar(x, width, *args, data=data, **kw)
 
+        def boxplot(x, *args, data=None, **kw):
+            if data is not None:
+                try:
+                    x = data[x]
+                except: pass
+
+            y = None
+
+            try:
+                if type(x) == pd.DataFrame:
+                    for col in x.columns:
+                        boxplot(x[col], *args, **kw)
+                    return
+                elif type(x) == pd.Series:
+                    return boxplot(x.to_numpy(), *args, **kw)
+                elif type(y) == pd.Series:
+                    return boxplot(x, *args, **kw)
+            except: pass
+
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.box,
+                    DrawingData(y, x),
+                    kw,
+                )
+            )
+
         def plot(*args, **kwargs):
             x = list()
             y = list()
@@ -193,20 +221,6 @@ class MatplotlibHandler:
             )
             drawings.append(drawing)
 
-        def boxplot(x, **kwargs):
-            curr_data = {
-                'x': np.array([None]),
-                'y': np.array(x)
-            }
-
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.box,
-                None,
-                kwargs,
-            )
-            drawings.append(drawing)
-
         import matplotlib.axes
 
         class CustomMatplotlibAxes(matplotlib.axes.Axes):
@@ -219,6 +233,9 @@ class MatplotlibHandler:
 
             def barh(self, y, width, *a, **kw):
                 barh(y, width, *a, **kw)
+
+            def boxplot(self, x, *a, **kw):
+                boxplot(x, *a, **kw)
 
 
             def plot(self, *args, **kwargs):
@@ -235,9 +252,6 @@ class MatplotlibHandler:
 
             def imshow(self, x, **kwargs):
                 imshow(x, **kwargs)
-
-            def boxplot(self, x, **kwargs):
-                boxplot(x, **kwargs)
 
         import matplotlib
 
