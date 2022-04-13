@@ -7,7 +7,7 @@ class TestSQLProject(SQLTest):
         'test': None
     }
 
-    @dynamic_test()
+    @dynamic_test
     def test_queries(self):
 
         expected_queries = {

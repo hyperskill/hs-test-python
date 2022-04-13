@@ -1,5 +1,6 @@
 import os
 import re
+import sqlite3
 import typing
 
 from hstest.exceptions import WrongAnswer
@@ -30,6 +31,13 @@ class SQLRunner(TestRunner):
 
     def set_up(self, test_case: 'TestCase'):
         self.parse_sql_file()
+        self.set_up_database()
+
+    def set_up_database(self):
+        if self.sql_test_cls.db is not None:
+            return
+
+        self.sql_test_cls.db = sqlite3.connect(':memory:')
 
     def parse_sql_file(self) -> None:
         sql_file = SQLSearcher().search()
