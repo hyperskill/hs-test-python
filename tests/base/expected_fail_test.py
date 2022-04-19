@@ -1,3 +1,4 @@
+from inspect import cleandoc
 from typing import Union, List
 
 from hstest import StageTest
@@ -33,7 +34,7 @@ class ExpectedFailTest(StageTest):
         should_not_contain = self._base_not_contain + self.not_contain
 
         for item in should_contain:
-            self.assertIn(item, feedback)
+            self.assertIn(cleandoc(item), feedback)
 
         for item in should_not_contain:
-            self.assertNotIn(item, feedback)
+            self.assertNotIn(cleandoc(item), feedback)
