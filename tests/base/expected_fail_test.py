@@ -11,13 +11,11 @@ class ExpectedFailTest(StageTest):
     contain: Union[str, List[str]] = []
     not_contain: Union[str, List[str]] = []
 
-    tested_cls = None
-
     def __init__(self, args):
         super().__init__(args)
 
     def test_run_unittest(self):
-        result, feedback = self.tested_cls().run_tests()
+        result, feedback = self.run_tests()
 
         self.assertEqual(result, -1)
 
