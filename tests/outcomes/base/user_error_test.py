@@ -1,4 +1,4 @@
-from tests.base.expected_fail_test import ExpectedFailTest
+from tests.outcomes.base.expected_fail_test import ExpectedFailTest
 
 
 class UserErrorTest(ExpectedFailTest):
