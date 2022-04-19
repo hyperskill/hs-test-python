@@ -27,12 +27,13 @@ from hstest.testing.test_run import TestRun
 
 class DirMeta(type):
     def __dir__(self):
-        if not issubclass(self, StageTest) or self == StageTest:
+        from tests.base.expected_fail_test import ExpectedFailTest
+        if not issubclass(self, StageTest) or self == StageTest or type(self) == ExpectedFailTest:
             return []
         init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
         filtered_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
         filtered_dir.append('test_run_unittest')
-        if not self.dynamic_methods() and 'generate' not in init_dir:
+        if not self.dynamic_methods() and 'generate' not in init_dir and not issubclass(self, ExpectedFailTest):
             return []
         return set(filtered_dir)
 
