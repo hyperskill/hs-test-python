@@ -13,8 +13,9 @@ class SQLTest(StageTest):
 
     def execute(self, query_name: str):
         query = self.queries[query_name] if query_name in self.queries else query_name
+        cursor = self.db.cursor()
         try:
-            return self.db.cursor().execute(query)
+            return cursor.execute(query)
         except Exception as ex:
             raise WrongAnswer(str(ex))
 
