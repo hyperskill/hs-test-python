@@ -7,6 +7,7 @@ from hstest.stage_test import StageTest
 from hstest.testing.tested_program import TestedProgram
 
 
+@unittest.skip('Background execution in python doesn\'t work')
 class TestGettingOutputWhileProgramInBackground(StageTest):
     @dynamic_test
     def test(self):
@@ -34,18 +35,3 @@ class TestGettingOutputWhileProgramInBackground(StageTest):
             return wrong("")
 
         return correct()
-
-
-@unittest.skip('Background execution in python doesn\'t work')
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestGettingOutputWhileProgramInBackground().run_tests()
-        self.assertEqual(
-            "test OK",
-            feedback
-        )
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

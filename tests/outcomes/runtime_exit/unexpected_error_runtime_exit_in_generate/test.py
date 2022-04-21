@@ -1,12 +1,19 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
-class UnexpectedErrorRuntimeExitInGenerate(StageTest):
+class UnexpectedErrorRuntimeExitInGenerate(UnexpectedErrorTest):
+    contain = [
+        """
+        Unexpected error during testing
+
+        We have recorded this bug and will fix it soon.
+        """,
+        "ExitException"
+    ]
 
     def generate(self) -> List[TestCase]:
         import os
@@ -17,14 +24,3 @@ class UnexpectedErrorRuntimeExitInGenerate(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(True, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = UnexpectedErrorRuntimeExitInGenerate().run_tests()
-
-        self.assertIn('Unexpected error during testing'
-                      '\n\nWe have recorded this bug and will fix it soon.', feedback)
-
-        self.assertIn('ExitException', feedback)
-        self.assertEqual(status, -1)

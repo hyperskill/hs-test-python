@@ -1,11 +1,12 @@
-import unittest
-
 from hstest.check_result import CheckResult
 from hstest.dynamic.dynamic_test import dynamic_test
-from hstest.stage_test import StageTest
+from testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
-class TestWrongData(StageTest):
+class TestWrongData(UnexpectedErrorTest):
+    contain = 'UnexpectedError: Data passed to dynamic method "test" ' \
+              'should be of type "list" or "tuple",' \
+              ' found <class \'int\'>.'
 
     test_data = 123
 
@@ -16,16 +17,3 @@ class TestWrongData(StageTest):
         self.counter += 1
         print(a)
         return CheckResult(self.counter == len(a), '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestWrongData().run_tests()
-        self.assertNotEqual(status, 0)
-        self.assertIn('UnexpectedError: Data passed to dynamic method "test" '
-                      'should be of type "list" or "tuple",'
-                      ' found <class \'int\'>.', feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

@@ -1,12 +1,16 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
-class UnexpectedErrorDuringChecking(StageTest):
+class UnexpectedErrorDuringChecking(UnexpectedErrorTest):
+    contain = """
+    Unexpected error in test #1
+
+    We have recorded this bug and will fix it soon.
+    """
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
@@ -14,12 +18,3 @@ class UnexpectedErrorDuringChecking(StageTest):
     def check(self, reply: str, attach: Any) -> CheckResult:
         x = 0 / 0
         return CheckResult(True, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = UnexpectedErrorDuringChecking().run_tests()
-
-        self.assertEqual(status, -1)
-        self.assertTrue('Unexpected error in test #1'
-                        '\n\nWe have recorded this bug and will fix it soon.' in feedback)

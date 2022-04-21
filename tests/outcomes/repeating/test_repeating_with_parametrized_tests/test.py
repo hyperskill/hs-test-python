@@ -1,11 +1,10 @@
-import unittest
-
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
-from hstest.stage_test import StageTest
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestRepeatingWithParametrizedTests(StageTest):
+class TestRepeatingWithParametrizedTests(UserErrorTest):
+    contain = "Wrong answer in test #31"
 
     data = [
         1, 2, 3, 4, 5, 6
@@ -18,14 +17,3 @@ class TestRepeatingWithParametrizedTests(StageTest):
     @dynamic_test()
     def test2(self):
         return wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestRepeatingWithParametrizedTests().run_tests()
-        self.assertNotEqual(status, 0)
-        self.assertEqual("Wrong answer in test #31", feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

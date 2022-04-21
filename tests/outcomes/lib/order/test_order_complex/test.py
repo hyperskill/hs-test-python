@@ -8,7 +8,6 @@ from hstest.test_case import TestCase
 
 
 class TestOrderComplex(StageTest):
-
     x = 0
 
     @dynamic_test(order=5)
@@ -54,13 +53,3 @@ class TestOrderComplex(StageTest):
     def test6(self):
         self.x += 1
         return CheckResult(self.x == 3, 'test5')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestOrderComplex().run_tests()
-        self.assertEqual('test OK', feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

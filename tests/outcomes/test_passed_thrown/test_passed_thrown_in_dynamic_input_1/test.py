@@ -1,13 +1,17 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
 from hstest.exceptions import TestPassed
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestPassedThrownInDynamicInput1(StageTest):
+class TestPassedThrownInDynamicInput1(UserErrorTest):
+    contain = """
+    Wrong answer in test #2
+
+    fail inside check
+    """
 
     def generate(self) -> List[TestCase]:
         return [
@@ -27,14 +31,3 @@ class TestPassedThrownInDynamicInput1(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.wrong("fail inside check")
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestPassedThrownInDynamicInput1().run_tests()
-
-        self.assertTrue("Wrong answer in test #2\n\n"
-                        "fail inside check" in feedback)
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)

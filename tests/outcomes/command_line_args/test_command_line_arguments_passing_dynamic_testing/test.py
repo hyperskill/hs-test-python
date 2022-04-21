@@ -1,4 +1,3 @@
-import unittest
 from typing import List
 
 from hstest.check_result import CheckResult
@@ -23,14 +22,3 @@ class TestCommandLineArgumentsPassingDynamicMethod(StageTest):
             TestCase(dynamic_testing=self.test1),
             TestCase(dynamic_testing=self.test2),
         ]
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestCommandLineArgumentsPassingDynamicMethod().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
-
-
-if __name__ == '__main__':
-    Test().test()

@@ -1,4 +1,3 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -20,10 +19,3 @@ class TestCurrTestNum(StageTest):
         if reply == '1\n' and tn == 1 or reply == '2\n' and tn == 2:
             return CheckResult.correct()
         return CheckResult.wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestCurrTestNum().run_tests()
-        self.assertEqual('test OK', feedback)
-        self.assertEqual(status, 0)

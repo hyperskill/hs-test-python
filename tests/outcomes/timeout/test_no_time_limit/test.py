@@ -6,6 +6,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
+@unittest.skip('takes too long')
 class TestNoTimeLimit(StageTest):
 
     def generate(self) -> List[TestCase]:
@@ -15,15 +16,3 @@ class TestNoTimeLimit(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.correct()
-
-
-@unittest.skip
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestNoTimeLimit().run_tests()
-        self.assertTrue('test OK', feedback)
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

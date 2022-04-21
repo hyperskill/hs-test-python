@@ -1,4 +1,3 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -21,10 +20,3 @@ class TestCurrTestCase(StageTest):
                 tc.input == '2' and tc.attach == 2 and tc is self.tc_2):
             return CheckResult.correct()
         return CheckResult.wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestCurrTestCase().run_tests()
-        self.assertEqual('test OK', feedback)
-        self.assertEqual(status, 0)

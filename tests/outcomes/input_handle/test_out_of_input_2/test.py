@@ -1,12 +1,32 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestOutOfInput2(StageTest):
+class TestOutOfInput2(UserErrorTest):
+    contain = """
+    Error in test #1
+
+    Program ran out of input. You tried to read more than expected.
+    
+    Please find below the output of your program during this failed test.
+    Note that the '>' character indicates the beginning of the input line.
+    
+    ---
+    
+    > 1
+    1
+    > 2
+    2
+    > 3
+    3
+    > 4
+    4
+    > 4
+    4
+    """
 
     def generate(self) -> List[TestCase]:
         return [
@@ -18,38 +38,3 @@ class TestOutOfInput2(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestOutOfInput2().run_tests()
-
-        self.assertEqual(
-            "Error in test #1\n" +
-            "\n" +
-            "Program ran out of input. You tried to read more than expected.\n" +
-            "\n" +
-            "Please find below the output of your program during this failed test.\n" +
-            "Note that the '>' character indicates the beginning of the input line.\n" +
-            "\n" +
-            "---\n" +
-            "\n" +
-            "> 1\n" +
-            "1\n" +
-            "> 2\n" +
-            "2\n" +
-            "> 3\n" +
-            "3\n" +
-            "> 4\n" +
-            "4\n" +
-            "> 4\n" +
-            "4",
-            feedback)
-
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

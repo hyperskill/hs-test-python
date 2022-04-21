@@ -1,12 +1,26 @@
-import unittest
-
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
-from hstest.stage_test import StageTest
 from hstest.testing.tested_program import TestedProgram
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestDynamicMethodEarlyExit(StageTest):
+class TestDynamicMethodEarlyExit(UserErrorTest):
+    contain = """
+    Error in test #1
+
+    The program main.py has unexpectedly terminated.
+    It finished execution too early, should continue running.
+    
+    Please find below the output of your program during this failed test.
+    Note that the '>' character indicates the beginning of the input line.
+    
+    ---
+    
+    Server started!
+    > main
+    S1: main
+    """
+
     @dynamic_test
     def test(self):
         pr = TestedProgram('main')
@@ -21,29 +35,3 @@ class TestDynamicMethodEarlyExit(StageTest):
 
         pr.execute("main2")
         return correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestDynamicMethodEarlyExit().run_tests()
-        self.assertNotEqual(status, 0)
-        self.assertEqual(
-            feedback,
-            "Error in test #1\n" +
-            "\n" +
-            "The program main.py has unexpectedly terminated.\n" +
-            "It finished execution too early, should continue running.\n" +
-            "\n" +
-            "Please find below the output of your program during this failed test.\n" +
-            "Note that the '>' character indicates the beginning of the input line.\n" +
-            "\n" +
-            "---\n" +
-            "\n" +
-            "Server started!\n" +
-            "> main\n" +
-            "S1: main"
-        )
-
-
-if __name__ == '__main__':
-    Test().test()

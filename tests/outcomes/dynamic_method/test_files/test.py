@@ -1,5 +1,4 @@
 import os
-import unittest
 
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
@@ -14,17 +13,3 @@ class TestFilesInDynamicTest(StageTest):
                 return correct()
 
         return wrong('There should be a file named "123.txt" with content "12345"')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestFilesInDynamicTest().run_tests()
-        self.assertEqual(
-            "test OK",
-            feedback
-        )
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()
