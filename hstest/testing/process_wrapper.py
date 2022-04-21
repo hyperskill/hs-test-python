@@ -39,7 +39,7 @@ class ProcessWrapper:
         self.output_diff_history_max = 2
 
         self.initial_idle_wait = True
-        self.initial_idle_wait_max = 10
+        self.initial_idle_wait_time = 150
 
         self.check_early_finish = check_early_finish
         self.register_output = register_output
@@ -182,6 +182,11 @@ class ProcessWrapper:
 
             sleep(0.01)
             self.check_alive()
+
+            if self.initial_idle_wait:
+                self.initial_idle_wait_time -= 1
+                if self.initial_idle_wait_time == 0:
+                    self.initial_idle_wait = False
 
     def check_output(self):
         output_len_prev = len(self.stdout)
