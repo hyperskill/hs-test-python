@@ -1,4 +1,4 @@
-from testing.unittest.expected_fail_test import ExpectedFailTest
+from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
 
 
 class UnexpectedErrorTest(ExpectedFailTest):

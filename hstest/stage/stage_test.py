@@ -27,8 +27,11 @@ from hstest.testing.test_run import TestRun
 
 class DirMeta(type):
     def __dir__(self):
-        from testing.unittest.expected_fail_test import ExpectedFailTest
-        if not issubclass(self, StageTest) or self == StageTest or type(self) == ExpectedFailTest:
+        from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
+        from hstest.testing.unittest.user_error_test import UserErrorTest
+        from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
+        if not issubclass(self, StageTest) or self == StageTest \
+                or self in [ExpectedFailTest, UserErrorTest, UnexpectedErrorTest]:
             return []
         init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
         filtered_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))

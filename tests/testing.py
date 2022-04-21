@@ -49,14 +49,21 @@ class UnitTesting:
 
         for module in UnitTesting.find_modules(dirname(__file__)):
             if 'outcomes' in module and not module.endswith('.test') or \
-               'projects' in module and not module.endswith('.tests'):
+                    'projects' in module and not module.endswith('.tests'):
                 continue
             try:
                 imported = import_module(f'tests.{module}')
-            except ImportError:
+            except ImportError as e:
                 continue
+            from hstest.testing.unittest.user_error_test import UserErrorTest
+            from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
             for name, obj in getmembers(imported):
-                if isclass(obj) and issubclass(obj, TestCase) and not issubclass(obj, StageTest):
+                if isclass(obj) \
+                        and (
+                        issubclass(obj, UserErrorTest)
+                        or issubclass(obj, UnexpectedErrorTest)
+                        or issubclass(obj, StageTest)
+                ):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
         suite = TestSuite(tests_suite[::-1])
@@ -80,7 +87,7 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
+                        modules += [curr_location[len(curr_dir) + 1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 
