@@ -1,7 +1,5 @@
 import unittest
 
-import numpy as np
-
 from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
@@ -15,14 +13,14 @@ class TestMatplotlibBar(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        correct_data = np.array([
-            [(1, ''), (2, ''), (4, ''), (6, '')],
-            [(1, ''), (2, ''), (4, ''), (6, '')],
-            [(1, ''), (2, ''), (4, ''), (6, '')],
-            [(1, ''), (2, ''), (4, ''), (6, '')],
-        ], dtype=object)
+        correct_data = [
+            [[1, 5], [2, 5], [4, 5], [6, 5]],
+            [[1, 6], [2, 6], [4, 6], [6, 6]],
+            [[1, 7], [2, 7], [4, 7], [6, 7]],
+            [[1, 8], [2, 8], [4, 8], [6, 8]],
+        ]
 
-        return test_bar_drawing(self.all_figures(), 4, correct_data, DrawingLibrary.matplotlib)
+        return test_bar_drawing(self.all_figures(), correct_data, DrawingLibrary.matplotlib)
 
 
 class Test(unittest.TestCase):

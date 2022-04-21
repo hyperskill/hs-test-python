@@ -2,6 +2,8 @@ from copy import deepcopy
 from importlib import reload
 from typing import TYPE_CHECKING
 
+from hstest.testing.plotting.drawing.drawing_data import DrawingData
+
 try:
     import pandas as pd
 except ImportError:
@@ -52,8 +54,6 @@ class MatplotlibHandler:
                     x = data[x]
                 except: pass
 
-            # TODO potential unresolved reference if pandas is not installed, but matplotlib is
-            # for now wrapped with bare try-except, but need better solution
             try:
                 if type(x) == pd.DataFrame:
                     for col in x.columns:
@@ -75,12 +75,48 @@ class MatplotlibHandler:
                 return
 
             drawings.append(
-                DrawingBuilder.get_hist_drawing(
-                    x,
+                Drawing(
                     DrawingLibrary.matplotlib,
-                    kw,
+                    DrawingType.hist,
+                    DrawingData(x, np.array([1] * len(x))),
+                    kw
                 )
             )
+
+        def bar(x, height, *args, data=None, **kw):
+            if data is not None:
+                try:
+                    x = data[x]
+                except: pass
+                try:
+                    height = data[height]
+                except: pass
+
+            try:
+                if type(x) == pd.DataFrame:
+                    for col in x.columns:
+                        bar(x[col], *args, **kw)
+                    return
+                elif type(x) == pd.Series:
+                    return bar(x.to_numpy(), height, *args, **kw)
+                elif type(height) == pd.Series:
+                    return bar(x, height.to_numpy(), *args, **kw)
+            except: pass
+
+            if type(height) in [int, float]:
+                height = np.full((len(x),), height)
+
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.bar,
+                    DrawingData(x, height),
+                    kw
+                )
+            )
+
+        def barh(x, width, *args, data=None, **kw):
+            return bar(x, width, *args, data=data, **kw)
 
         def plot(*args, **kwargs):
             x = list()
@@ -125,22 +161,6 @@ class MatplotlibHandler:
                 x_arr, y,
                 DrawingLibrary.matplotlib,
                 kw,
-            )
-            drawings.append(drawing)
-
-        def bar(x, height, width=0.8, bottom=None, **kwargs):
-            drawing = DrawingBuilder.get_bar_drawing(
-                np.array(x), np.full((len(x),), '', dtype=str),
-                DrawingLibrary.matplotlib,
-                kwargs,
-            )
-            drawings.append(drawing)
-
-        def barh(y, width, height=0.8, left=None, **kwargs):
-            drawing = DrawingBuilder.get_bar_drawing(
-                np.array(y), np.full((len(y),), '', dtype=str),
-                DrawingLibrary.matplotlib,
-                kwargs,
             )
             drawings.append(drawing)
 
@@ -194,6 +214,13 @@ class MatplotlibHandler:
             def hist(self, x, *a, **kw):
                 hist(x, *a, **kw)
 
+            def bar(self, x, height, *a, **kw):
+                bar(x, height, *a, **kw)
+
+            def barh(self, y, width, *a, **kw):
+                barh(y, width, *a, **kw)
+
+
             def plot(self, *args, **kwargs):
                 plot(*args, *kwargs)
 
@@ -202,12 +229,6 @@ class MatplotlibHandler:
 
             def pie(self, x, *a, **kw):
                 pie(x, *a, **kw)
-
-            def bar(self, x, height, width=0.8, bottom=None, **kwargs):
-                bar(x, height, width=width, bottom=bottom, **kwargs)
-
-            def barh(self, y, width, height=0.8, left=None, **kwargs):
-                barh(y, width, height=height, left=left, **kwargs)
 
             def violinplot(self, dataset, **kwargs):
                 violinplot(dataset, **kwargs)

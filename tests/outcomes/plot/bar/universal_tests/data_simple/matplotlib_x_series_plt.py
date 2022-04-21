@@ -6,14 +6,10 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    fig, ax = plt.subplots()
+    ser = pd.Series(data=np.array([1, 2, 3, 4, 5]))
+    height = pd.Series(data=np.array([2, 3, 4, 5, 6]))
 
-    plt.bar([1, 2, 4, 6], 5)
-    ax.bar([1, 2, 4, 6], 6)
-
-    plt.barh([1, 2, 4, 6], 7)
-    ax.barh([1, 2, 4, 6], 8)
-
+    plt.bar(ser, height)
     plt.show()
 
 

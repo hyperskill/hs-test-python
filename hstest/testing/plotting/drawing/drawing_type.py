@@ -7,18 +7,30 @@ class DrawingType:
     # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html
     # https://pandas.pydata.org/docs/reference/api/pandas.Series.plot.html
 
+    # ------
+
     hist = "hist"
+
     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
+
     # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.hist.html
     # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.hist.html
     # https://pandas.pydata.org/docs/reference/api/pandas.Series.hist.html
     # https://pandas.pydata.org/docs/reference/api/pandas.Series.plot.hist.html
+
     # https://seaborn.pydata.org/generated/seaborn.histplot.html
+
+    # ------
+
+    bar = "bar"
+
+    # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html
+    # https://seaborn.pydata.org/generated/seaborn.barplot.html
+
 
     line = "line"
     scatter = "scatter"
     pie = "pie"
-    bar = "bar"
 
     # ---------------------------
     # common types (without data)

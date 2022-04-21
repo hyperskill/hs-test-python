@@ -6,13 +6,10 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    fig, ax = plt.subplots()
+    df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]),
+                      columns=['one', 'two'])
 
-    plt.bar([1, 2, 4, 6], 5)
-    ax.bar([1, 2, 4, 6], 6)
-
-    plt.barh([1, 2, 4, 6], 7)
-    ax.barh([1, 2, 4, 6], 8)
+    df.plot(kind='bar')
 
     plt.show()
 

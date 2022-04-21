@@ -62,7 +62,7 @@ class ProcessWrapper:
                     # to communicate between processes
                     self._use_byte_stream = True
 
-                args = ['cmd', '/c'] + args
+                    args = ['cmd', '/c'] + args
 
             self.process = subprocess.Popen(
                 args,
