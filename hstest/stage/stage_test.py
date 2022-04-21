@@ -27,7 +27,7 @@ from hstest.testing.test_run import TestRun
 
 class DirMeta(type):
     def __dir__(self):
-        from tests.outcomes.base.expected_fail_test import ExpectedFailTest
+        from testing.unittest.expected_fail_test import ExpectedFailTest
         if not issubclass(self, StageTest) or self == StageTest or type(self) == ExpectedFailTest:
             return []
         init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
