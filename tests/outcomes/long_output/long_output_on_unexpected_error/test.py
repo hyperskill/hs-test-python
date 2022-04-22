@@ -1,5 +1,5 @@
 from hstest import dynamic_test, wrong, TestedProgram
-from testing.unittest.unexepected_error_test import UnexpectedErrorTest
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class TestWrongOutputWithTooLongOutput(UnexpectedErrorTest):

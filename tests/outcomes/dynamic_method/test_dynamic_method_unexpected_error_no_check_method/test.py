@@ -1,6 +1,6 @@
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.testing.tested_program import TestedProgram
-from testing.unittest.unexepected_error_test import UnexpectedErrorTest
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class TestDynamicMethodUnexpectedErrorNoCheckMethod(UnexpectedErrorTest):

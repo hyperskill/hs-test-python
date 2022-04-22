@@ -1,7 +1,7 @@
 from typing import Any
 
 from hstest.check_result import CheckResult
-from testing.unittest.unexepected_error_test import UnexpectedErrorTest
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class UnexpectedErrorNotGeneratingTests(UnexpectedErrorTest):

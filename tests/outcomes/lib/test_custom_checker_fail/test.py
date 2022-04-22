@@ -2,7 +2,7 @@ from typing import Any, List
 
 from hstest.check_result import CheckResult
 from hstest.test_case import TestCase
-from testing.unittest.unexepected_error_test import UnexpectedErrorTest
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class TestCustomChecker(UnexpectedErrorTest):

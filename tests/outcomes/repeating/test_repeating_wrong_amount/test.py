@@ -1,6 +1,6 @@
 from hstest.check_result import correct
 from hstest.dynamic.dynamic_test import dynamic_test
-from testing.unittest.unexepected_error_test import UnexpectedErrorTest
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class TestRepeatingWrongAmount(UnexpectedErrorTest):
