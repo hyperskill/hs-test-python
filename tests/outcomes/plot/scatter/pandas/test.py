@@ -1,5 +1,3 @@
-import unittest
-
 from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
@@ -19,13 +17,3 @@ class TestPandasScatter(PlottingTest):
         ]
 
         return test_scatter_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.pandas)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestPandasScatter().run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

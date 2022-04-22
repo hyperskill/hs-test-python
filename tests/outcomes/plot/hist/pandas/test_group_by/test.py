@@ -1,5 +1,3 @@
-import unittest
-
 from hstest import CheckResult, TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
@@ -25,13 +23,3 @@ class TestGroupBy(PlottingTest):
         res2 = test_hist_drawing(all_figs[2:], correct_data, DrawingLibrary.matplotlib)
 
         return CheckResult(res1.is_correct and res2.is_correct, res1.feedback + "\n" + res2.feedback)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestGroupBy().run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

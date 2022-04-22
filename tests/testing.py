@@ -1,6 +1,7 @@
 import io
 import re
 import sys
+import unittest
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
@@ -55,15 +56,8 @@ class UnitTesting:
                 imported = import_module(f'tests.{module}')
             except ImportError as e:
                 continue
-            from hstest.testing.unittest.user_error_test import UserErrorTest
-            from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
             for name, obj in getmembers(imported):
-                if isclass(obj) \
-                        and (
-                        issubclass(obj, UserErrorTest)
-                        or issubclass(obj, UnexpectedErrorTest)
-                        or issubclass(obj, StageTest)
-                ):
+                if isclass(obj) and issubclass(obj, unittest.TestCase):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
         suite = TestSuite(tests_suite[::-1])

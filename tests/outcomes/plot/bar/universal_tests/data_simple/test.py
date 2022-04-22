@@ -1,5 +1,4 @@
 import os
-import unittest
 
 from hstest import TestedProgram, correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
@@ -28,13 +27,3 @@ class TestBar(PlottingTest):
             )
 
         return correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestBar().run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()
