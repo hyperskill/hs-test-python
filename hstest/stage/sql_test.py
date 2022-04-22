@@ -7,9 +7,9 @@ class SQLTest(StageTest):
     queries: dict[str, str] = dict()
     db: any = None
 
-    def __init__(self, args='', *, source: str = ''):
+    def __init__(self, source: str = ''):
+        super().__init__(source)
         self.runner = SQLRunner(self)
-        super().__init__(args, source=source)
 
     def execute(self, query_name: str):
         query = self.queries[query_name] if query_name in self.queries else query_name
