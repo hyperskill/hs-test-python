@@ -171,6 +171,9 @@ class BaseSearcher:
             )
         )
 
+    def _base_search(self, where_to_search: str) -> RunnableFile:
+        return self._simple_search(where_to_search, main_desc='', main_regex='')
+
     def find(self, source: Optional[str]) -> RunnableFile:
         if source is None:
             return self.search()
