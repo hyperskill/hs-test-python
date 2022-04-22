@@ -124,7 +124,7 @@ It looks like we will soon have more rabbits!`;
 const habitat = [camel, lion, deer, goose, bat, rabbit ];
 
 while (true) {
-    let propmt = input();
+    let propmt = input("Enter the habitat: ");
     if (propmt === "exit") {
         console.log("See you later!")
         break;

@@ -3,12 +3,13 @@ from threading import Thread
 from time import sleep
 from typing import List, Optional
 
+from hstest.common.utils import try_many_times
 from hstest.dynamic.input.input_handler import InputHandler
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.dynamic.system_handler import SystemHandler
-from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback
+from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback, OutOfInputError
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
 from hstest.testing.execution.runnable.runnable_file import RunnableFile
 from hstest.testing.process_wrapper import ProcessWrapper
@@ -60,6 +61,8 @@ class ProcessExecutor(ProgramExecutor):
         return True
 
     def __handle_process(self, *args: str):
+        from hstest import StageTest
+
         working_directory_before = os.path.abspath(os.getcwd())
 
         try:
@@ -102,6 +105,11 @@ class ProcessExecutor(ProgramExecutor):
                         OutputHandler.print(f'Handle process - written to stdin: {repr(next_input)}')
                     except ExitException:
                         OutputHandler.print('Handle process - EXIT EXCEPTION, stop input')
+                        if self._wait_if_terminated():
+                            if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
+                                StageTest.curr_test_run.set_error_in_test(None)
+                                OutputHandler.print('Handle process - Abort stopping input, everything is OK')
+                                break
                         self.stop_input()
                     except BaseException as ex:
                         OutputHandler.print(f'Handle process - SOME EXCEPTION {ex}')
@@ -112,8 +120,6 @@ class ProcessExecutor(ProgramExecutor):
             is_error_happened = self.process.is_error_happened()
             OutputHandler.print('Handle process - after termination')
             OutputHandler.print(f'Handle process - is error happened {is_error_happened}')
-
-            from hstest import StageTest
 
             if StageTest.curr_test_run.error_in_test is not None:
                 OutputHandler.print('Handle process - set state EXCEPTION THROWN (ERROR IN TEST)')
@@ -132,6 +138,9 @@ class ProcessExecutor(ProgramExecutor):
 
         finally:
             os.chdir(working_directory_before)
+
+    def _wait_if_terminated(self):
+        return try_many_times(100, 10, lambda: self.process.is_finished(False))
 
     def _launch(self, *args: str):
         self.__group = ThreadGroup()
