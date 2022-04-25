@@ -26,5 +26,5 @@ class Test(unittest.TestCase):
     def test(self):
         result, feedback = TestSQLProject().run_tests()
         self.assertEqual(result, -1)
-        self.assertIn('Wrong answer in test #1', feedback)
+        self.assertIn('Unexpected error in test #1', feedback)
         self.assertIn('near "CRE": syntax error', feedback)
