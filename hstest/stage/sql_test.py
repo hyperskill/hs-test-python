@@ -20,7 +20,7 @@ class SQLTest(StageTest):
         try:
             return cursor.execute(self.queries[query_name])
         except Exception as ex:
-            raise WrongAnswer(str(ex))
+            raise WrongAnswer(f"Error while running '{query_name}': \n\n{str(ex)}")
 
     def execute_and_fetch_all(self, query_name: str):
         return self.execute(query_name).fetchall()
