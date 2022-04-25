@@ -12,12 +12,15 @@ class SQLTest(StageTest):
         self.runner = SQLRunner(self)
 
     def execute(self, query_name: str):
-        query = self.queries[query_name] if query_name in self.queries else query_name
         cursor = self.db.cursor()
+
+        if query_name not in self.queries:
+            return cursor.execute(query_name)
+
         try:
-            return cursor.execute(query)
+            return cursor.execute(self.queries[query_name])
         except Exception as ex:
             raise WrongAnswer(str(ex))
 
-    def executeAndFetchAll(self, query_name: str):
+    def execute_and_fetch_all(self, query_name: str):
         return self.execute(query_name).fetchall()
