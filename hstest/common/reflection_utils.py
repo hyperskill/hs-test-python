@@ -15,9 +15,13 @@ def is_tests(stage):
 
 
 def setup_cwd(stage):
-    test_file = inspect.getmodule(stage).__file__
-    test_folder = os.path.dirname(test_file)
-    os.chdir(test_folder)
+    if stage.is_tests:
+        test_file = inspect.getmodule(stage).__file__
+        test_folder = os.path.dirname(test_file)
+        os.chdir(test_folder)
+    else:
+        if os.getcwd().endswith('test'):
+            os.chdir('..')
 
 
 def get_stacktrace(ex: BaseException, hide_internals=False) -> str:

@@ -124,7 +124,8 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
         try:
             if is_tests(self):
                 self.is_tests = True
-                setup_cwd(self)
+
+            setup_cwd(self)
 
             if self.is_tests or debug:
                 import hstest.common.utils as hs
