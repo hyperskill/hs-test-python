@@ -21,7 +21,7 @@ def setup_cwd(stage):
         os.chdir(test_folder)
 
     if os.path.basename(os.getcwd()) == 'test':
-        os.chdir('..')
+        os.chdir(os.path.dirname(os.getcwd()))
 
 
 def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
