@@ -15,6 +15,10 @@ class ExpectedFailTest(StageTest):
         super().__init__(args)
 
     def test_run_unittest(self):
+
+        if not self.contain and not self.not_contain:
+            self.fail("'contain' or 'not_contain' should not be empty")
+
         result, feedback = self.run_tests()
 
         self.assertEqual(result, -1)
