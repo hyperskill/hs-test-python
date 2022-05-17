@@ -7,8 +7,7 @@ from inspect import getmembers, isclass
 from os import listdir
 from os.path import dirname, isdir, isfile
 from typing import List
-from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
-from hstest import StageTest
+from unittest import TestLoader, TestSuite, TextTestRunner
 
 import hstest.common.utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
