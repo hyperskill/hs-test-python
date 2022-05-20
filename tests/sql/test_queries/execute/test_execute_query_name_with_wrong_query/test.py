@@ -3,6 +3,7 @@ import unittest
 from hstest import SQLTest, dynamic_test, correct
 
 
+@unittest.skip('SQLTest')
 class TestSQLProject(SQLTest):
     queries = {
         'create_table': None,
