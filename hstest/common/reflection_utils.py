@@ -56,8 +56,8 @@ def _fix_python_syntax_error(str_trace: str) -> str:
     python_traceback_start = '  File "'
 
     is_python_syntax_error = 'SyntaxError' in str_trace and (
-            f'\n{python_traceback_start}' in str_trace or
-            str_trace.startswith(python_traceback_start)
+        f'\n{python_traceback_start}' in str_trace or
+        str_trace.startswith(python_traceback_start)
     )
 
     if is_python_syntax_error and python_traceback_initial_phrase not in str_trace:
