@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.check_result import correct
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
@@ -14,21 +12,11 @@ class InfiniteLoopTestNotWorking(StageTest):
         main.start()
         return correct()
 
-
-class Test(unittest.TestCase):
-    def test(self):
+    def test_run_unittest(self):
         prev = loop_detector.working
         loop_detector.working = False
 
         try:
-            status, feedback = InfiniteLoopTestNotWorking().run_tests()
-            self.assertEqual(
-                "test OK",
-                feedback)
-            self.assertEqual(status, 0)
+            super().test_run_unittest()
         finally:
             loop_detector.working = prev
-
-
-if __name__ == '__main__':
-    Test().test()

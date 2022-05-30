@@ -1,5 +1,3 @@
-import unittest
-
 from hstest import TestedProgram
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
@@ -20,13 +18,3 @@ class TestMatplotlibLine(PlottingTest):
         ]
 
         return test_line_drawing(self.all_figures(), 3, correct_data, DrawingLibrary.matplotlib)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestMatplotlibLine('main').run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

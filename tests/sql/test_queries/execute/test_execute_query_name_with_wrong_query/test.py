@@ -3,6 +3,7 @@ import unittest
 from hstest import SQLTest, dynamic_test, correct
 
 
+@unittest.skip("This class should inherit UserErrorTest, but can't since it inherits StageTest, not SQLTest")
 class TestSQLProject(SQLTest):
     queries = {
         'create_table': None,

@@ -1,4 +1,3 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -15,10 +14,3 @@ class TestNbspInOutput(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == "1\u00202\u00203", '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestNbspInOutput('main').run_tests()
-        self.assertEqual("test OK", feedback)
-        self.assertEqual(status, 0)

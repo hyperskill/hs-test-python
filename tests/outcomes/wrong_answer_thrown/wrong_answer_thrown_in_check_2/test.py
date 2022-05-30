@@ -1,13 +1,17 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
 from hstest.exceptions import WrongAnswer
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class WrongAnswerThrownInCheck2(StageTest):
+class WrongAnswerThrownInCheck2(UserErrorTest):
+    contain = """
+    Wrong answer in test #1
+
+    Wrong answer from check attach true
+    """
 
     def generate(self) -> List[TestCase]:
         return [
@@ -19,14 +23,3 @@ class WrongAnswerThrownInCheck2(StageTest):
         if attach:
             raise WrongAnswer("Wrong answer from check attach true")
         return CheckResult(attach, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = WrongAnswerThrownInCheck2('main').run_tests()
-
-        self.assertTrue("Wrong answer in test #1\n\n"
-                        "Wrong answer from check attach true" in feedback)
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)

@@ -11,13 +11,18 @@ def is_tests(stage):
     return package and package.startswith('tests.outcomes.') or \
         package and package.startswith('tests.projects.') or \
         file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file or \
-        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file or \
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}sql{os.sep}' in file
 
 
 def setup_cwd(stage):
-    test_file = inspect.getmodule(stage).__file__
-    test_folder = os.path.dirname(test_file)
-    os.chdir(test_folder)
+    if stage.is_tests:
+        test_file = inspect.getmodule(stage).__file__
+        test_folder = os.path.dirname(test_file)
+        os.chdir(test_folder)
+
+    if os.path.basename(os.getcwd()) == 'test':
+        os.chdir(os.path.dirname(os.getcwd()))
 
 
 def get_stacktrace(ex: BaseException, hide_internals=False) -> str:

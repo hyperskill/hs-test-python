@@ -1,33 +1,23 @@
-import unittest
 from typing import List
 
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestSyntaxError1(StageTest):
+class TestSyntaxError1(UserErrorTest):
+    contain = [
+        """
+        Exception in test #1
+
+        Traceback (most recent call last):
+          File "main.py", line 1, in <module>
+            exec("print)")
+          File "<string>", line 1
+        """,
+        "SyntaxError: "
+    ]
 
     def generate(self) -> List[TestCase]:
         return [
             TestCase()
         ]
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestSyntaxError1('main').run_tests()
-
-        self.assertIn('Exception in test #1\n'
-                      '\n'
-                      'Traceback (most recent call last):\n'
-                      '  File "main.py", line 1, in <module>\n'
-                      '    exec("print)")\n'
-                      '  File "<string>", line 1\n', feedback)
-
-        self.assertIn('SyntaxError: ', feedback)
-
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

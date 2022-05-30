@@ -1,12 +1,16 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestOutOfInput3(StageTest):
+class TestOutOfInput3(UserErrorTest):
+    contain = """
+    Error in test #1
+
+    Program ran out of input. You tried to read more than expected.
+    """
 
     def generate(self) -> List[TestCase]:
         return [
@@ -17,22 +21,3 @@ class TestOutOfInput3(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestOutOfInput3('main').run_tests()
-
-        self.assertIn(
-            "Error in test #1\n" +
-            "\n" +
-            "Program ran out of input. You tried to read more than expected.\n",
-            feedback)
-
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

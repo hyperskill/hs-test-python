@@ -1,5 +1,3 @@
-import unittest
-
 from hstest import dynamic_test, CheckResult, StageTest, TestedProgram
 
 
@@ -22,9 +20,3 @@ class UnexpectedErrorAddInput1(StageTest):
             return CheckResult.wrong('')
 
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = UnexpectedErrorAddInput1('main').run_tests()
-        self.assertEqual(0, status)

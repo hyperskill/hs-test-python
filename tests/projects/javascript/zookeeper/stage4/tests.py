@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
@@ -125,8 +123,6 @@ Switching on the camera in the rabbit habitat...
 (" ~----( ~   Y.  )
 It looks like we will soon have more rabbits!"""
 
-
-
 animal_index = {
     '0': (camel, 'camel'),
     '1': (lion, 'lion'),
@@ -169,14 +165,3 @@ class Zookeeper(StageTest):
             return CheckResult.wrong("You should print '{}' at the end of the program".format(the_end_message))
 
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = Zookeeper().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
-
-
-if __name__ == '__main__':
-    Test().test()

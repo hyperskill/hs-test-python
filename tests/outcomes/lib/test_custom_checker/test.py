@@ -1,4 +1,3 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -18,10 +17,3 @@ class TestCustomChecker(StageTest):
 
     def custom_check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == attach, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestCustomChecker('main').run_tests()
-        self.assertEqual('test OK', feedback)
-        self.assertEqual(status, 0)

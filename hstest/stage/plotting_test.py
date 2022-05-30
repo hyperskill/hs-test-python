@@ -7,8 +7,8 @@ from hstest.testing.runner.plot_testing_runner import PlottingTestingRunner
 
 class PlottingTest(StageTest):
 
-    def __init__(self, source: str = ''):
-        super().__init__(source)
+    def __init__(self, args='', *, source: str = ''):
+        super().__init__(args, source=source)
         self._all_drawings: List[Drawing] = []
         self._new_drawings: List[Drawing] = []
         self.runner = PlottingTestingRunner(self._all_drawings, self._new_drawings)

@@ -1,12 +1,13 @@
 import io
 import re
 import sys
+import unittest
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
 from os.path import dirname, isdir, isfile
 from typing import List
-from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
+from unittest import TestLoader, TestSuite, TextTestRunner
 
 import hstest.common.utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
@@ -48,14 +49,14 @@ class UnitTesting:
 
         for module in UnitTesting.find_modules(dirname(__file__)):
             if 'outcomes' in module and not module.endswith('.test') or \
-               'projects' in module and not module.endswith('.tests'):
+                    'projects' in module and not module.endswith('.tests'):
                 continue
             try:
                 imported = import_module(f'tests.{module}')
-            except ImportError:
+            except ImportError as e:
                 continue
             for name, obj in getmembers(imported):
-                if isclass(obj) and issubclass(obj, TestCase):
+                if isclass(obj) and issubclass(obj, unittest.TestCase):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
         suite = TestSuite(tests_suite[::-1])
@@ -79,7 +80,7 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
+                        modules += [curr_location[len(curr_dir) + 1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 

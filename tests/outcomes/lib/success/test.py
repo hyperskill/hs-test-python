@@ -1,4 +1,3 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -16,10 +15,3 @@ class SuccessTest(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == attach, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = SuccessTest('main').run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')

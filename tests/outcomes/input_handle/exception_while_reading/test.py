@@ -1,12 +1,20 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class ExceptionWhileReading(StageTest):
+class ExceptionWhileReading(UserErrorTest):
+    contain = [
+        'Exception in test #2',
+        'Traceback (most recent call last):',
+        '    print(get_line())',
+        '    return get_num()',
+        '    return get()',
+        '    return int(input())',
+        'ValueError: invalid literal for int() with base 10: \'strange\''
+    ]
 
     def generate(self) -> List[TestCase]:
         return [
@@ -16,18 +24,3 @@ class ExceptionWhileReading(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(True, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = ExceptionWhileReading('main').run_tests()
-
-        self.assertEqual(status, -1)
-        self.assertTrue('Exception in test #2' in feedback)
-        self.assertTrue('Traceback (most recent call last):' in feedback)
-        self.assertTrue('    print(get_line())' in feedback)
-        self.assertTrue('    return get_num()' in feedback)
-        self.assertTrue('    return get()' in feedback)
-        self.assertTrue('    return int(input())' in feedback)
-        self.assertTrue('ValueError: invalid literal for '
-                        'int() with base 10: \'strange\'' in feedback)

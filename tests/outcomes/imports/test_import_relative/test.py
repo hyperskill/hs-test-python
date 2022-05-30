@@ -6,6 +6,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
+@unittest.skip('Relative imports doesn\'t work')
 class TestImportRelative(StageTest):
 
     def generate(self) -> List[TestCase]:
@@ -13,14 +14,3 @@ class TestImportRelative(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == '1035\n', '')
-
-
-@unittest.skip('Relative imports doesn\'t work')
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestImportRelative('main').run_tests()
-        self.assertEqual("test OK", feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

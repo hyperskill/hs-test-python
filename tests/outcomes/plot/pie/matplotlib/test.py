@@ -1,5 +1,3 @@
-import unittest
-
 import numpy as np
 
 from hstest import TestedProgram
@@ -21,13 +19,3 @@ class TestMatplotlibPie(PlottingTest):
         ], dtype=object)
 
         return test_pie_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.matplotlib)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestMatplotlibPie('main').run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

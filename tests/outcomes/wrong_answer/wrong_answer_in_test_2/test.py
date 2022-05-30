@@ -1,12 +1,12 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class WrongAnswerInTest2(StageTest):
+class WrongAnswerInTest2(UserErrorTest):
+    contain = "Wrong answer in test #2"
 
     def generate(self) -> List[TestCase]:
         return [
@@ -16,13 +16,3 @@ class WrongAnswerInTest2(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(attach, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = WrongAnswerInTest2('main').run_tests()
-
-        self.assertTrue("Wrong answer in test #2" in feedback)
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)

@@ -1,13 +1,17 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
 from hstest.exceptions import WrongAnswer
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class WrongAnswerThrownInDynamicInput1(StageTest):
+class WrongAnswerThrownInDynamicInput1(UserErrorTest):
+    contain = """
+    Wrong answer in test #1
+
+    Add input test 1
+    """
 
     def generate(self) -> List[TestCase]:
         return [
@@ -27,14 +31,3 @@ class WrongAnswerThrownInDynamicInput1(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = WrongAnswerThrownInDynamicInput1('main').run_tests()
-
-        self.assertTrue("Wrong answer in test #1\n\n"
-                        "Add input test 1" in feedback)
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)

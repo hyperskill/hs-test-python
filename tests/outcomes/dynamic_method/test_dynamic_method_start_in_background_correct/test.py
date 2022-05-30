@@ -1,4 +1,3 @@
-import unittest
 from time import sleep
 
 from hstest.check_result import correct, wrong
@@ -36,17 +35,3 @@ class TestDynamicMethodStartInBackgroundCorrect(StageTest):
             return wrong("")
 
         return correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestDynamicMethodStartInBackgroundCorrect().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(
-            feedback,
-            "test OK"
-        )
-
-
-if __name__ == '__main__':
-    Test().test()

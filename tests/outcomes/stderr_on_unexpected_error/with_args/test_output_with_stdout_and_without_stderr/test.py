@@ -1,12 +1,24 @@
-import unittest
 from typing import List, Any
 
-from hstest.stage_test import StageTest
-from hstest.test_case import TestCase
 from hstest import CheckResult
+from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestOutputWithStderrAndWithStdout(StageTest):
+class TestOutputWithStderrAndWithStdout(UserErrorTest):
+    contain = """
+    Wrong answer in test #1
+
+    Please find below the output of your program during this failed test.
+    
+    ---
+    
+    Arguments: test args
+    
+    User stdout output!
+    User stdout output!
+    User stdout output!
+    """
 
     def generate(self) -> List[TestCase]:
         return [
@@ -15,17 +27,3 @@ class TestOutputWithStderrAndWithStdout(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestOutputWithStderrAndWithStdout('main').run_tests()
-        self.assertIn("Wrong answer in test #1\n\n"
-                      "Please find below the output of your program during this failed test.\n\n---\n\n"
-                      "Arguments: test args\n\n"
-                      "User stdout output!\nUser stdout output!\nUser stdout output!", feedback)
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

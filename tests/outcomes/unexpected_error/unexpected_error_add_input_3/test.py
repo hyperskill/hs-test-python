@@ -1,12 +1,19 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
-class UnexpectedErrorAddInput3(StageTest):
+class UnexpectedErrorAddInput3(UnexpectedErrorTest):
+    contain = [
+        """
+        Unexpected error in test #4
+
+        We have recorded this bug and will fix it soon.
+        """,
+        "Dynamic input should return str or CheckResult objects only. Found: <class 'int'>"
+    ]
 
     def generate(self) -> List[TestCase]:
         return [
@@ -18,15 +25,3 @@ class UnexpectedErrorAddInput3(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(True, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = UnexpectedErrorAddInput3('main').run_tests()
-
-        self.assertIn('Unexpected error in test #4'
-                      '\n\nWe have recorded this bug and will fix it soon.', feedback)
-
-        self.assertIn('UnexpectedError: Dynamic input should return '
-                      'str or CheckResult objects only. Found: <class \'int\'>', feedback)
-        self.assertEqual(status, -1)

@@ -1,4 +1,5 @@
 import os
+import unittest
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from hstest.common.file_utils import walk_user_files
@@ -24,7 +25,23 @@ from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
-class StageTest:
+class DirMeta(type):
+    def __dir__(self):
+        from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
+        from hstest.testing.unittest.user_error_test import UserErrorTest
+        from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
+        if not issubclass(self, StageTest) or self == StageTest \
+                or self in [ExpectedFailTest, UserErrorTest, UnexpectedErrorTest]:
+            return []
+        init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
+        filtered_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
+        filtered_dir.append('test_run_unittest')
+        if not self.dynamic_methods() and 'generate' not in init_dir and not issubclass(self, ExpectedFailTest):
+            return []
+        return set(filtered_dir)
+
+
+class StageTest(unittest.TestCase, metaclass=DirMeta):
     runner: TestRunner = None
     attach: Any = None
 
@@ -32,20 +49,19 @@ class StageTest:
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
 
-    def __init__(self, source_name: str = ''):
+    def __init__(self, args='', *, source: str = ''):
+        super(StageTest, self).__init__('test_run_unittest')
         self.is_tests = False
 
         if self.source:
             self.source_name: str = self.source
         else:
-            self.source_name: str = source_name
-        # super().__init__(method)
-        # self.module =
+            self.source_name: str = source
 
-    # def test_program(self):
-    #    result, feedback = self.run_tests()
-    #     if result != 0:
-    #         self.fail(feedback)
+    def test_run_unittest(self):
+        result, feedback = self.run_tests(is_unittest=True)
+        if result != 0:
+            self.fail(feedback)
 
     def after_all_tests(self):
         pass
@@ -102,13 +118,14 @@ class StageTest:
             RED_BOLD + f'\nStart test {num}{total_tests}' + RESET + '\n'
         )
 
-    def run_tests(self, *, debug=False) -> Tuple[int, str]:
+    def run_tests(self, *, debug=False, is_unittest: bool = False) -> Tuple[int, str]:
         curr_test: int = 0
         need_tear_down: bool = False
         try:
             if is_tests(self):
                 self.is_tests = True
-                setup_cwd(self)
+
+            setup_cwd(self)
 
             if self.is_tests or debug:
                 import hstest.common.utils as hs
@@ -140,7 +157,7 @@ class StageTest:
                     test_run.tear_down()
 
             SystemHandler.tear_down()
-            return passed()
+            return passed(is_unittest)
 
         except BaseException as ex:
             if need_tear_down:
@@ -191,7 +208,7 @@ class StageTest:
             except BaseException:
                 pass
 
-            return failed(fail_text)
+            return failed(fail_text, is_unittest)
 
         finally:
             StageTest.curr_test_run = None

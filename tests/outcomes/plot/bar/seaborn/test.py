@@ -1,5 +1,3 @@
-import unittest
-
 import numpy as np
 
 from hstest import TestedProgram
@@ -22,13 +20,3 @@ class TestSeabornBar(PlottingTest):
         ], dtype=object)
 
         return test_bar_drawing(self.all_figures(), correct_data, DrawingLibrary.seaborn)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestSeabornBar('main').run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

@@ -1,23 +1,13 @@
-import unittest
 from typing import Any, List
 
-from hstest import CheckResult, StageTest, TestCase
+from hstest import CheckResult, TestCase, StageTest
 
 
 class TestImportRelativeError2(StageTest):
+    source = 'main1'
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == 'main1\n', '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestImportRelativeError2('main1').run_tests()
-        self.assertEqual("test OK", feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

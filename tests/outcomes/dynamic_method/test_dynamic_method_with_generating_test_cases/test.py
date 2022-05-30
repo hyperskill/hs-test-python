@@ -1,4 +1,3 @@
-import unittest
 from typing import List
 
 from hstest.check_result import correct
@@ -17,17 +16,3 @@ class TestDynamicMethodUnexpectedErrorNoCheckMethod(StageTest):
         return [
             TestCase(dynamic_testing=lambda: correct())
         ]
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestDynamicMethodUnexpectedErrorNoCheckMethod().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(
-            "test OK",
-            feedback
-        )
-
-
-if __name__ == '__main__':
-    Test().test()
