@@ -98,7 +98,7 @@ class PandasHandler:
 
         if type(data) == pd.Series:
             drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data,
+                data.index, data.values,
                 DrawingLibrary.pandas,
                 {}
             )

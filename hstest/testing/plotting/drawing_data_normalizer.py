@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 class DrawingDataNormalizer:
 
@@ -87,5 +87,24 @@ class DrawingDataNormalizer:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_pie_data(x, y) -> np.ndarray:
-        return DrawingDataNormalizer.normalize_x_y_data(x, y)
+    def normalize_pie_data(x, y):
+
+        try:
+            if type(x) != list:
+                x = list(x)
+            if type(y) != list:
+                y = list(y)
+        except Exception as _:
+            raise ValueError('The data argument should be an array')
+
+        if len(x) != len(y):
+            raise ValueError('Arrays should be the same length')
+
+        class result_data:
+            pass
+
+        result_data.x = pd.Series(x)
+        setattr(result_data, 'y', pd.Series(y))
+
+        return result_data
+        #return DrawingDataNormalizer.normalize_x_y_data(x, y)
