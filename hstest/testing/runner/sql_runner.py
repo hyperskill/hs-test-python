@@ -46,9 +46,11 @@ class SQLRunner(TestRunner):
         with open(file_path, 'r') as file:
             lines = file.readlines()
             sql_content = " ".join(lines).replace("\n", "")
-            commands = re.findall("(\\w+)\\s+?=\\s+?\"(.+?)\"", sql_content)
+            commands = re.findall(r"(\w+)\s+?=\s+?\"(|.+?)\"", sql_content)
 
             for (name, query) in commands:
+                if not query:
+                    raise WrongAnswer(f"The '{name}' query shouldn't be empty!")
                 if name in self.sql_test_cls.queries:
                     self.sql_test_cls.queries[name] = query
 
