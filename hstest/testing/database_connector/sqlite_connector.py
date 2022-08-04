@@ -1,4 +1,5 @@
 import sqlite3
+from hstest.outcomes.wrong_answer_outcome import WrongAnswer
 
 
 class SQLiteConnector:
@@ -11,5 +12,5 @@ class SQLiteConnector:
         try:
             return sqlite3.connect(database, **connection_params)
         except sqlite3.Error:
-            raise Exception(f"Can't connect to the SQLite database with the following parameters:\n"
-                            f"{connection_params}")
+            raise WrongAnswer(f"Can't connect to the SQLite database with the following parameters:\n"
+                              f"{connection_params}")
