@@ -6,6 +6,9 @@ from hstest.testing.runner.sql_runner import SQLRunner
 class SQLTest(StageTest):
     queries: dict[str, str] = dict()
     db: any = None
+    dialect: str = 'sqlite'
+
+    connection_params: dict[str, any] = dict()
 
     def __init__(self, source: str = ''):
         super().__init__(source)

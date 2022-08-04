@@ -1,10 +1,11 @@
 import os
 import re
-import sqlite3
 import typing
 
 from hstest.exceptions import WrongAnswer
 from hstest.test_case.check_result import CheckResult
+from hstest.testing.database_connector.postgresql_connector import PostgreSQLConnector
+from hstest.testing.database_connector.sqlite_connector import SQLiteConnector
 from hstest.testing.execution.searcher.sql_searcher import SQLSearcher
 from hstest.testing.runner.test_runner import TestRunner
 
@@ -34,10 +35,12 @@ class SQLRunner(TestRunner):
         self.set_up_database()
 
     def set_up_database(self):
-        if self.sql_test_cls.db is not None:
-            return
-
-        self.sql_test_cls.db = sqlite3.connect(':memory:')
+        if self.sql_test_cls.dialect == 'sqlite':
+            self.sql_test_cls.db = SQLiteConnector.connect(self.sql_test_cls.connection_params)
+        elif self.sql_test_cls.dialect == 'postgresql':
+            self.sql_test_cls.db = PostgreSQLConnector.connect(self.sql_test_cls.connection_params)
+        else:
+            raise Exception(f"Unknown dialect '{self.sql_test_cls.dialect}'")
 
     def parse_sql_file(self) -> None:
         sql_file = SQLSearcher().search()
