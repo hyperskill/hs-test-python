@@ -46,7 +46,7 @@ class SQLRunner(TestRunner):
         with open(file_path, 'r') as file:
             lines = file.readlines()
             sql_content = " ".join(lines).replace("\n", "")
-            commands = re.findall(r"(\w+)\s+?=\s+?\"(|.+?)\"", sql_content)
+            commands = re.findall(r'(\w+)\s+?=\s+?"(.*?)"', sql_content)
 
             for (name, query) in commands:
                 if not query:
