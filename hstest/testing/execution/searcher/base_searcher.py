@@ -175,7 +175,7 @@ class BaseSearcher:
         return self._simple_search(where_to_search, main_desc='', main_regex='')
 
     def find(self, source: Optional[str]) -> RunnableFile:
-        if source is None:
+        if source in [None, '']:
             return self.search()
 
         ext = self.extension
