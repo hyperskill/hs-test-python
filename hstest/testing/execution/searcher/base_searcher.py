@@ -193,7 +193,9 @@ class BaseSearcher:
         else:
             path, _, _ = source_module.rpartition('.')
             folder = os.path.abspath(path.replace('.', os.sep))
-            raise ErrorWithFeedback(f'Cannot find a file to execute your code in directory "{folder}".')
+            raise ErrorWithFeedback(
+                'Cannot find a file to execute your code.\n'
+                f'Are your project files located at \"{folder}\"?')
 
     def _parse_source(self, source: str) -> Tuple[Folder, File, Module]:
         ext = self.extension
