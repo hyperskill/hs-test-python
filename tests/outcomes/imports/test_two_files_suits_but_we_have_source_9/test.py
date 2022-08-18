@@ -14,5 +14,5 @@ class TestImportRelativeError2(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        pr = TestedProgram()
+        pr = TestedProgram('')
         return CheckResult(pr.start() == 'main2\n', '')
