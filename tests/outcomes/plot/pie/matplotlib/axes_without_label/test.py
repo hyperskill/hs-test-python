@@ -14,8 +14,7 @@ class TestMatplotlibPie(PlottingTest):
         program.start()
 
         correct_data = np.array([
-            [['Mercury', 0.33], ['Venus', 4.87], ['Earth', 5.97]],
-            [['', 2439.7], ['', 6051.8], ['', 6378.1]]
+            [['', 0.33], ['', 4.87], ['', 5.97]],
         ], dtype=object)
 
-        return test_pie_drawing(self.all_figures(), 2, correct_data, DrawingLibrary.matplotlib)
+        return test_pie_drawing(self.all_figures(), 1, correct_data, DrawingLibrary.matplotlib)
