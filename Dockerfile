@@ -6,6 +6,12 @@ RUN apk add --no-cache \
   gcc \
   linux-headers
 
+RUN pip install --no-cache-dir \
+  matplotlib \
+  seaborn  \
+  pandas  \
+  numpy
+
 COPY . hs-test-python
 RUN pip3 install --no-cache-dir ./hs-test-python
 
