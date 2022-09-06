@@ -19,6 +19,6 @@ setup(
         "psutil         ; python_version < '3.10'",
     ],
     classifiers=[
-        "Programming Language :: Python :: 3.6"
+        "Programming Language :: Python :: 3.9"
     ],
 )

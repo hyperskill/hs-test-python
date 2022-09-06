@@ -1,4 +1,4 @@
-FROM python:3.8.2-alpine3.11
+FROM python:3.9.13-alpine3.16
 
 RUN apk add --no-cache \
   bash \
@@ -12,4 +12,4 @@ RUN pip3 install --no-cache-dir ./hs-test-python
 WORKDIR /hs-test-python
 ENV PYTHONPATH=.
 
-CMD ["bin/bash"]
+CMD ["bash"]
