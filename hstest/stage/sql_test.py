@@ -1,10 +1,12 @@
+from typing import Dict
+
 from hstest.exception.outcomes import WrongAnswer
 from hstest.stage.stage_test import StageTest
 from hstest.testing.runner.sql_runner import SQLRunner
 
 
 class SQLTest(StageTest):
-    queries: dict[str, str] = dict()
+    queries: Dict[str, str] = dict()
     db: any = None
 
     def __init__(self, source: str = ''):
