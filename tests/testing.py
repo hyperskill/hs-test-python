@@ -1,6 +1,7 @@
 import io
 import re
 import sys
+import time
 import unittest
 from importlib import import_module
 from inspect import getmembers, isclass
@@ -35,6 +36,51 @@ class OutputForTest:
         self.original.close()
 
 
+class TestSuiteWithDelay(TestSuite):
+    def run(self, result, debug=False):
+        def _isnotsuite(test):
+            "A crude way to tell apart testcases and suites with duck-typing"
+            try:
+                iter(test)
+            except TypeError:
+                return True
+            return False
+
+        topLevel = False
+        if getattr(result, '_testRunEntered', False) is False:
+            result._testRunEntered = topLevel = True
+
+        for index, test in enumerate(self):
+            if result.shouldStop:
+                break
+
+            if _isnotsuite(test):
+                self._tearDownPreviousClass(test, result)
+                self._handleModuleFixture(test, result)
+                self._handleClassSetUp(test, result)
+                result._previousTestClass = test.__class__
+
+                if (getattr(test.__class__, '_classSetupFailed', False) or
+                    getattr(result, '_moduleSetUpFailed', False)):
+                    continue
+
+            if not debug:
+                test(result)
+            else:
+                test.debug()
+
+            time.sleep(1 / 100)
+
+            if self._cleanup:
+                self._removeTestAtIndex(index)
+
+        if topLevel:
+            self._tearDownPreviousClass(None, result)
+            self._handleModuleTearDown(result)
+            result._testRunEntered = False
+        return
+
+
 class UnitTesting:
 
     @staticmethod
@@ -59,7 +105,7 @@ class UnitTesting:
                 if isclass(obj) and issubclass(obj, unittest.TestCase):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
-        suite = TestSuite(tests_suite[::-1])
+        suite = TestSuiteWithDelay(tests_suite[::-1])
         runner = TextTestRunner(stream=OutputForTest(sys.stdout), verbosity=2)
         result = runner.run(suite)
         return result.wasSuccessful()
