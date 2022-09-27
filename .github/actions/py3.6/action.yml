@@ -10,5 +10,5 @@ runs:
       with:
         python-version: "3.6"
     - name: Install Dependencies
-      run: pip install -r requirements-dev.txt
+      run: pip install -r requirements-dev.txt && pip install .
       shell: bash
