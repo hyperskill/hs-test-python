@@ -1,0 +1,14 @@
+name: 'Init environment'
+description: 'Install dependencies'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.6
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.6"
+    - name: Install Dependencies
+      run: pip install -r requirements-dev.txt
+      shell: bash

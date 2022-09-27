@@ -1,0 +1,53 @@
+name: Checks
+on: [ push ]
+
+jobs:
+  Python_3_10:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/py3.10
+      - name: python version
+        run: python --version
+      - name: test
+        run: python tests/testing.py
+
+  Python_3_9:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/py3.9
+      - name: python version
+        run: python --version
+      - name: test
+        run: python tests/testing.py
+
+  Python_3_8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/py3.8
+      - name: python version
+        run: python --version
+      - name: test
+        run: python tests/testing.py
+
+  Python_3_7:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/py3.7
+      - name: python version
+        run: python --version
+      - name: test
+        run: python tests/testing.py
+
+  Python_3_6:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/py3.6
+      - name: python version
+        run: python --version
+      - name: test
+        run: python tests/testing.py
