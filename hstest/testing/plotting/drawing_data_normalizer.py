@@ -10,7 +10,7 @@ class DrawingDataNormalizer:
                 x = list(x)
             if type(y) != list:
                 y = list(y)
-        except Exception as _:
+        except Exception:
             raise ValueError('The data argument should be an array')
 
         if len(x) != len(y):
@@ -32,7 +32,7 @@ class DrawingDataNormalizer:
         if type(data) != list:
             try:
                 data = list(data)
-            except Exception as _:
+            except Exception:
                 raise ValueError('The data argument should be an array')
 
         return np.array(data, dtype=object)

@@ -53,7 +53,7 @@ class UnitTesting:
                 continue
             try:
                 imported = import_module(f'tests.{module}')
-            except ImportError as e:
+            except ImportError:
                 continue
             for name, obj in getmembers(imported):
                 if isclass(obj) and issubclass(obj, unittest.TestCase):

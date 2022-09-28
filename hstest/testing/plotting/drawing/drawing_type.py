@@ -27,7 +27,6 @@ class DrawingType:
     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html
     # https://seaborn.pydata.org/generated/seaborn.barplot.html
 
-
     line = "line"
     scatter = "scatter"
     pie = "pie"

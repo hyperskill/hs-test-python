@@ -1,4 +1,4 @@
-from hstest import CheckResult, TestedProgram, dynamic_test
+from hstest import CheckResult, dynamic_test, TestedProgram
 from hstest.testing.unittest.user_error_test import UserErrorTest
 
 

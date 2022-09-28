@@ -22,4 +22,6 @@ class TestGroupBy(PlottingTest):
         res1 = test_hist_drawing(all_figs[:2], correct_data, DrawingLibrary.pandas)
         res2 = test_hist_drawing(all_figs[2:], correct_data, DrawingLibrary.matplotlib)
 
-        return CheckResult(res1.is_correct and res2.is_correct, res1.feedback + "\n" + res2.feedback)
+        return CheckResult(
+            res1.is_correct and res2.is_correct, res1.feedback + "\n" + res2.feedback
+        )

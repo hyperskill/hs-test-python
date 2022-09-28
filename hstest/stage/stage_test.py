@@ -28,15 +28,17 @@ from hstest.testing.test_run import TestRun
 class DirMeta(type):
     def __dir__(self):
         from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
-        from hstest.testing.unittest.user_error_test import UserErrorTest
         from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
+        from hstest.testing.unittest.user_error_test import UserErrorTest
         if not issubclass(self, StageTest) or self == StageTest \
-                or self in [ExpectedFailTest, UserErrorTest, UnexpectedErrorTest]:
+            or self in [ExpectedFailTest, UserErrorTest, UnexpectedErrorTest]:
             return []
         init_dir = dir(super(DirMeta, self)) + list(self.__dict__.keys())
         filtered_dir = list(filter(lambda x: not str(x).startswith('test'), init_dir))
         filtered_dir.append('test_run_unittest')
-        if not self.dynamic_methods() and 'generate' not in init_dir and not issubclass(self, ExpectedFailTest):
+        if (not self.dynamic_methods() and
+            'generate' not in init_dir and
+            not issubclass(self, ExpectedFailTest)):
             return []
         return set(filtered_dir)
 

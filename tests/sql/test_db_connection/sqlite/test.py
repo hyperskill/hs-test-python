@@ -1,6 +1,6 @@
 from sqlite3 import Connection
 
-from hstest import SQLTest, dynamic_test, correct, wrong
+from hstest import correct, dynamic_test, SQLTest, wrong
 
 
 class TestSQLProject(SQLTest):

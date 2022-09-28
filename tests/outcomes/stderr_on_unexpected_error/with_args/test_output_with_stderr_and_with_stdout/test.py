@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import Any, List
 
 from hstest import CheckResult
 from hstest.test_case import TestCase

@@ -2,3 +2,4 @@ matplotlib
 seaborn
 pandas
 flake8
+isort

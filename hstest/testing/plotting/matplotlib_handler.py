@@ -52,7 +52,8 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     x = data[x]
-                except: pass
+                except:
+                    pass
 
             try:
                 if type(x) == pd.DataFrame:
@@ -61,7 +62,8 @@ class MatplotlibHandler:
                     return
                 elif type(x) == pd.Series:
                     return hist(x.to_numpy(), *args, **kw)
-            except: pass
+            except:
+                pass
 
             if type(x) != np.ndarray:
                 x = np.array(x, dtype=object)
@@ -87,10 +89,12 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     x = data[x]
-                except: pass
+                except:
+                    pass
                 try:
                     height = data[height]
-                except: pass
+                except:
+                    pass
 
             try:
                 if type(x) == pd.DataFrame:
@@ -101,7 +105,8 @@ class MatplotlibHandler:
                     return bar(x.to_numpy(), height, *args, **kw)
                 elif type(height) == pd.Series:
                     return bar(x, height.to_numpy(), *args, **kw)
-            except: pass
+            except:
+                pass
 
             if type(height) in [int, float]:
                 height = np.full((len(x),), height)
@@ -168,7 +173,8 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     dataset = data[dataset]
-                except: pass
+                except:
+                    pass
 
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
@@ -178,7 +184,6 @@ class MatplotlibHandler:
             )
 
             drawings.append(drawing)
-
 
         def imshow(x, **kwargs):
             curr_data = {
@@ -219,7 +224,6 @@ class MatplotlibHandler:
 
             def barh(self, y, width, *a, **kw):
                 barh(y, width, *a, **kw)
-
 
             def plot(self, *args, **kwargs):
                 plot(*args, *kwargs)

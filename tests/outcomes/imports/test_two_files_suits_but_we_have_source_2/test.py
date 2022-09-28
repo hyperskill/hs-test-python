@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from hstest import CheckResult, TestCase, StageTest
+from hstest import CheckResult, StageTest, TestCase
 
 
 class TestImportRelativeError2(StageTest):

@@ -5,12 +5,12 @@ from hstest.common.utils import clean_text
 from hstest.exception.outcomes import TestPassed, UnexpectedError, WrongAnswer
 from hstest.testing.tested_program import TestedProgram
 
-DynamicTesting = Callable[[], Optional['CheckResult']]
-DynamicTestingWithoutParams = Callable[['StageTest', Any], Optional['CheckResult']]
-
 if typing.TYPE_CHECKING:
-    from hstest import StageTest, TestCase
+    from hstest import CheckResult, StageTest, TestCase
     from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
+
+    DynamicTesting = Callable[[], Optional[CheckResult]]
+    DynamicTestingWithoutParams = Callable[[StageTest, Any], Optional[CheckResult]]
 
 
 class DynamicTestElement:
@@ -68,11 +68,15 @@ class DynamicTestElement:
 
             for k, v in self.files.items():
                 if type(k) != str:
-                    raise UnexpectedError(f"All keys in 'files' parameter in dynamic test should be "
-                                          f"of type \"str\", found {type(k)}.")
+                    raise UnexpectedError(
+                        f"All keys in 'files' parameter in dynamic test should be "
+                        f"of type \"str\", found {type(k)}."
+                    )
                 if type(v) != str:
-                    raise UnexpectedError(f"All values in 'files' parameter in dynamic test should be "
-                                          f"of type \"str\", found {type(v)}.")
+                    raise UnexpectedError(
+                        f"All values in 'files' parameter in dynamic test should be "
+                        f"of type \"str\", found {type(v)}."
+                    )
 
     def get_tests(self, obj) -> List[DynamicTesting]:
         tests = []
@@ -83,8 +87,7 @@ class DynamicTestElement:
 
 
 def to_dynamic_testing(source: str, args: List[str],
-                       input_funcs: List['DynamicInputFunction']) -> DynamicTesting:
-
+                       input_funcs: List[DynamicInputFunction]) -> DynamicTesting:
     from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
     from hstest.test_case.check_result import CheckResult
 

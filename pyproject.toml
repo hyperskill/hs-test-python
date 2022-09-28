@@ -1,0 +1,11 @@
+[tool.isort]
+line_length = 100
+multi_line_output = 6
+honor_noqa = true
+order_by_type = false
+use_parentheses = true
+combine_as_imports = true
+only_modified = true
+lexicographical = true
+group_by_package = true
+force_alphabetical_sort_within_sections = true

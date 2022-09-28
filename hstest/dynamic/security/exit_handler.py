@@ -6,6 +6,10 @@ import sys
 from hstest.dynamic.security.exit_exception import ExitException
 
 
+def _throw_exit_exception(*args, **kwargs) -> None:
+    ExitException.throw()
+
+
 class ExitHandler:
     _saved = False
     _replaced = False
@@ -19,7 +23,7 @@ class ExitHandler:
     _signal_pthread_kill = None
     _signal_siginterrupt = None
 
-    _exit_func = lambda *x, **y: ExitException.throw()
+    _exit_func = _throw_exit_exception
 
     @staticmethod
     def is_replaced():
@@ -35,8 +39,12 @@ class ExitHandler:
             ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
             ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
             ExitHandler._sys_exit = sys.exit if hasattr(sys, 'exit') else None
-            ExitHandler._signal_pthread_kill = signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
-            ExitHandler._signal_siginterrupt = signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
+            ExitHandler._signal_pthread_kill = (
+                signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
+            )
+            ExitHandler._signal_siginterrupt = (
+                signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
+            )
 
         builtins.quit = ExitHandler._exit_func
         builtins.exit = ExitHandler._exit_func

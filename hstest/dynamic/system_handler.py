@@ -1,4 +1,4 @@
-from threading import Lock, current_thread
+from threading import current_thread, Lock
 from typing import Any
 
 from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction

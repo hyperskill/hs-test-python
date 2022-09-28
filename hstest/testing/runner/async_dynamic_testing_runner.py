@@ -4,7 +4,9 @@ from typing import Optional, Type
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.output.output_handler import OutputHandler
-from hstest.exception.testing import TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
+from hstest.exception.testing import (
+    TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
+)
 from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.test_case.check_result import CheckResult, correct, wrong
 from hstest.testing.execution.main_module_executor import MainModuleExecutor
@@ -28,9 +30,9 @@ class AsyncDynamicTestingRunner(TestRunner):
             result = test_case.dynamic_testing()
         except WrongAnswer as wa:
             result = wrong(wa.feedback)
-        except TestPassed as _:
+        except TestPassed:
             result = correct()
-        except (TestedProgramThrewException, TestedProgramFinishedEarly) as _:
+        except (TestedProgramThrewException, TestedProgramFinishedEarly):
             result = None
 
         if result is None or result.is_correct:

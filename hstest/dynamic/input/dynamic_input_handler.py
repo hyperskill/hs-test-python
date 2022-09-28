@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from hstest.common.utils import clean_text
 from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction

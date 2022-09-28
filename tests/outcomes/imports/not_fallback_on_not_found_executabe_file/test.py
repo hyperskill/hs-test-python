@@ -1,6 +1,6 @@
 from typing import List
 
-from hstest import wrong, TestCase
+from hstest import TestCase, wrong
 from hstest.testing.tested_program import TestedProgram
 from hstest.testing.unittest.user_error_test import UserErrorTest
 

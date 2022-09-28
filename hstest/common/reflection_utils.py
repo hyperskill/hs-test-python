@@ -9,10 +9,10 @@ def is_tests(stage):
     package = inspect.getmodule(stage).__package__
     file = inspect.getmodule(stage).__file__
     return package and package.startswith('tests.outcomes.') or \
-        package and package.startswith('tests.projects.') or \
-        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file or \
-        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file or \
-        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}sql{os.sep}' in file
+           package and package.startswith('tests.projects.') or \
+           file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file or \
+           file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file or \
+           file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}sql{os.sep}' in file
 
 
 def setup_cwd(stage):
@@ -123,7 +123,8 @@ def str_to_stacktrace(str_trace: str) -> str:
     return clean_stacktrace([before] + user_traceback + [after], user_traceback)
 
 
-def clean_stacktrace(full_traceback: List[str], user_traceback: List[str], user_dir: str = '') -> str:
+def clean_stacktrace(full_traceback: List[str],
+                     user_traceback: List[str], user_dir: str = '') -> str:
     dir_names = []
     for tr in user_traceback:
         try:

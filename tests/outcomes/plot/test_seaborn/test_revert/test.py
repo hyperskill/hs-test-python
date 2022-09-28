@@ -20,6 +20,9 @@ class TestSeaborn(PlottingTest):
         matplotlib.use(backend)
 
         if len(self.all_figures()) != 0:
-            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures())}')
+            return wrong(
+                f'Expected 0 plots to be plotted using matplotlib library, '
+                f'found {len(self.all_figures())}'
+            )
 
         return correct()

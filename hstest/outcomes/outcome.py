@@ -1,7 +1,9 @@
 from hstest.common.reflection_utils import str_to_stacktrace
 from hstest.common.utils import clean_text
 from hstest.dynamic.output.output_handler import OutputHandler
-from hstest.exception.outcomes import CompilationError, ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
+from hstest.exception.outcomes import (
+    CompilationError, ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
+)
 from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
 
 
@@ -49,7 +51,9 @@ class Outcome:
             if worth_showing_out or worth_showing_err:
                 result += "Please find below the output of your program during this failed test.\n"
                 if test_run and test_run.input_used:
-                    result += "Note that the '>' character indicates the beginning of the input line.\n"
+                    result += (
+                        "Note that the '>' character indicates the beginning of the input line.\n"
+                    )
                 result += "\n---\n\n"
 
             if worth_showing_args:
@@ -107,11 +111,11 @@ class Outcome:
 
     @staticmethod
     def get_outcome(ex: BaseException, curr_test: int):
+        from hstest.outcomes.compilation_error_outcome import CompilationErrorOutcome
         from hstest.outcomes.error_outcome import ErrorOutcome
-        from hstest.outcomes.wrong_answer_outcome import WrongAnswerOutcome
         from hstest.outcomes.exception_outcome import ExceptionOutcome
         from hstest.outcomes.unexpected_error_outcome import UnexpectedErrorOutcome
-        from hstest.outcomes.compilation_error_outcome import CompilationErrorOutcome
+        from hstest.outcomes.wrong_answer_outcome import WrongAnswerOutcome
 
         if isinstance(ex, WrongAnswer):
             return WrongAnswerOutcome(curr_test, ex)
@@ -123,10 +127,10 @@ class Outcome:
             return CompilationErrorOutcome(ex)
 
         elif isinstance(ex, ErrorWithFeedback) or \
-                isinstance(ex, FileDeletionError) or \
-                isinstance(ex, TimeLimitException) or \
-                isinstance(ex, InfiniteLoopException) or \
-                isinstance(ex, KeyboardInterrupt):
+            isinstance(ex, FileDeletionError) or \
+            isinstance(ex, TimeLimitException) or \
+            isinstance(ex, InfiniteLoopException) or \
+            isinstance(ex, KeyboardInterrupt):
             return ErrorOutcome(curr_test, ex)
 
         else:

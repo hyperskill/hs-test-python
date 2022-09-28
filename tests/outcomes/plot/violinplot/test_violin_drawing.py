@@ -4,7 +4,9 @@ from hstest import correct, wrong
 def test_violin_drawing(figures, correct_plot_count, library_type):
     if len(figures) != correct_plot_count:
         return wrong(
-            f'Expected {correct_plot_count} plots to be plotted using {library_type} library, found {len(figures)}')
+            f'Expected {correct_plot_count} plots to be plotted '
+            f'using {library_type} library, found {len(figures)}'
+        )
 
     for i, violin in enumerate(figures):
         if violin.type != 'violin':

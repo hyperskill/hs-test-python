@@ -1,4 +1,4 @@
-from threading import Thread, current_thread
+from threading import current_thread, Thread
 from typing import List, Optional
 
 

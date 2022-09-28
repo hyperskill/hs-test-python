@@ -37,8 +37,8 @@ class SeabornHandler:
     @staticmethod
     def replace_plots(drawings: 'DrawingsStorage'):
         try:
-            import seaborn as sns
             import numpy as np
+            import seaborn as sns
         except ModuleNotFoundError:
             return
 
@@ -88,7 +88,7 @@ class SeabornHandler:
             if y:
                 y_arr = data[y].to_numpy()
 
-            curr_data =  {
+            curr_data = {
                 'x': np.array(x_arr),
                 'y': np.array(y_arr)
             }
@@ -108,17 +108,20 @@ class SeabornHandler:
             if _process_hue and 'hue' in kw and type(kw['hue']) == str:
                 try:
                     kw['hue'] = data[kw['hue']]
-                except: pass
+                except:
+                    pass
 
             if 'y' in kw:
                 try:
                     data = data[kw.pop('y')]
-                except: pass
+                except:
+                    pass
 
             if 'x' in kw:
                 try:
                     data = data[kw.pop('x')]
-                except: pass
+                except:
+                    pass
 
             if type(data) == pd.DataFrame:
                 for col in data.columns:

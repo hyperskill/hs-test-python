@@ -48,7 +48,9 @@ class PandasHandler:
     }
 
     graph_type_to_normalized_data = {
-        'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
+        'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(
+            data, x, y
+        ),
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
         # 'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
@@ -322,7 +324,9 @@ class PandasHandler:
                 }
 
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
-                    all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](data, x, y)
+                    all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](
+                        data, x, y
+                    )
                     drawings.extend(all_drawings)
                 elif plot_name in plot_to_func:
                     plot_to_func[plot_name](data, **kw)
@@ -365,17 +369,20 @@ class PandasHandler:
             if _process_by and 'by' in kw and type(kw['by']) == str:
                 try:
                     kw['by'] = data[kw['by']]
-                except: pass
+                except:
+                    pass
 
             if 'y' in kw:
                 try:
                     data = data[kw.pop('y')]
-                except: pass
+                except:
+                    pass
 
             if 'x' in kw:
                 try:
                     data = data[kw.pop('x')]
-                except: pass
+                except:
+                    pass
 
             if type(data) == pandas.DataFrame:
                 if column is not None:

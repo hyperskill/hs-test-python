@@ -9,7 +9,7 @@ from hstest.testing.execution.searcher.sql_searcher import SQLSearcher
 from hstest.testing.runner.test_runner import TestRunner
 
 if typing.TYPE_CHECKING:
-    from hstest.testing.test_run import TestRun, TestCase
+    from hstest.testing.test_run import TestCase, TestRun
 
 
 class SQLRunner(TestRunner):

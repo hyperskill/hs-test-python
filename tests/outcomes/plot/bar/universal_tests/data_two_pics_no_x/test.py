@@ -1,6 +1,6 @@
 import os
 
-from hstest import TestedProgram, correct, wrong
+from hstest import correct, TestedProgram, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from tests.outcomes.plot.universal_test import universal_test

@@ -1,4 +1,4 @@
-from hstest import dynamic_test, wrong, TestedProgram
+from hstest import dynamic_test, TestedProgram, wrong
 from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 

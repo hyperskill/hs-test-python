@@ -67,7 +67,10 @@ class DjangoApplicationRunner(TestRunner):
             stdout = self.process.stdout.strip()
             stderr = self.process.stderr.strip()
 
-            error_info = f'Cannot start Django server because cannot find "{search_phrase}" in process\' output'
+            error_info = (
+                f'Cannot start Django server because cannot find '
+                f'"{search_phrase}" in process\' output'
+            )
             if len(stdout):
                 error_info += '\n\nstdout:\n' + stdout
             if len(stderr):
@@ -98,8 +101,8 @@ class DjangoApplicationRunner(TestRunner):
             migrate.wait_output()
 
             if ('ModuleNotFoundError' in migrate.stderr
-                    or 'ImportError' in migrate.stderr
-                    or 'SyntaxError' in migrate.stderr):
+                or 'ImportError' in migrate.stderr
+                or 'SyntaxError' in migrate.stderr):
                 raise ExceptionWithFeedback(migrate.stderr, None)
 
             # stdout and stderr is collected and will be shown to the user

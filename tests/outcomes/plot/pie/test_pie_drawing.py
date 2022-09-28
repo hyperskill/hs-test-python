@@ -1,11 +1,14 @@
 import numpy as np
-from hstest import wrong, correct
+
+from hstest import correct, wrong
 
 
 def test_pie_drawing(figures, correct_plot_count, correct_data, library_type):
     if len(figures) != correct_plot_count:
         return wrong(
-            f'Expected {correct_plot_count} plots to be plotted using {library_type} library, found {len(figures)}')
+            f'Expected {correct_plot_count} plots to be plotted '
+            f'using {library_type} library, found {len(figures)}'
+        )
 
     for i, pie in enumerate(figures):
         if pie.type != 'pie':

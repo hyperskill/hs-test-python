@@ -1,5 +1,5 @@
 from inspect import cleandoc
-from typing import Union, List
+from typing import List, Union
 
 from hstest import StageTest
 
