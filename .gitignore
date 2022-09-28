@@ -2,3 +2,4 @@
 .idea
 venv*
 build/
+/hs_test_python.egg-info/

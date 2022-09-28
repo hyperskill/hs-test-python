@@ -2,6 +2,16 @@ name: Checks
 on: [ push ]
 
 jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/py3.6
+      - name: python version
+        run: python --version
+      - name: Lint
+        run: flake8
+
   Python_3_10:
     runs-on: ubuntu-latest
     steps:
