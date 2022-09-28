@@ -5,7 +5,9 @@ def plot():
         import matplotlib.pyplot as plt
     except ModuleNotFoundError:
         return
-    plt.pie([0.330, 4.87, 5.97], labels=['Mercury', 'Venus', 'Earth'])
+
+    ser = pd.Series(data=np.array([1, 2, 3]), index=['Mercury', 'Venus', 'Earth'])
+    ser.plot.pie()
 
     plt.show()
 

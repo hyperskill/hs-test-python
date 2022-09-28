@@ -6,7 +6,10 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    plt.pie(np.array([0.330, 4.87, 5.97]), labels=['Mercury', 'Venus', 'Earth'])
+    df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4]]),
+                      columns=['one', 'two'], index=['Mercury', 'Venus', 'Earth'])
+
+    df.plot.pie(subplots=True)
 
     plt.show()
 

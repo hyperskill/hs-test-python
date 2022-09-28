@@ -3,13 +3,13 @@ def plot():
         import pandas as pd
         import numpy as np
         import matplotlib.pyplot as plt
-
     except ModuleNotFoundError:
         return
 
-    series = pd.Series([0.330, 4.87, 5.97], index=['Mercury', 'Venus', 'Earth'])
+    df = pd.DataFrame(np.array([[1, 2], [2, 3], [3, 4]]),
+                      columns=['one', 'two'], index=['Mercury', 'Venus', 'Earth'])
 
-    series.plot.pie()
+    df.plot(kind='pie', subplots=True)
 
     plt.show()
 

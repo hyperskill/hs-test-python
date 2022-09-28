@@ -95,10 +95,6 @@ class PandasHandler:
 
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
-        print('x', x)
-        print('y', y)
-        print('data', data)
-
         if type(data) == pd.Series:
             return [
                 Drawing(

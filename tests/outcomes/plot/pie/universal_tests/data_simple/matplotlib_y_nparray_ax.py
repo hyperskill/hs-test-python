@@ -6,7 +6,9 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    plt.pie((0.330, 4.87, 5.97), labels=['Mercury', 'Venus', 'Earth'])
+    fig, ax = plt.subplots(figsize=(5, 5))
+
+    ax.pie(np.array([1, 2, 3]), labels=['Mercury', 'Venus', 'Earth'])
 
     plt.show()
 

@@ -6,9 +6,9 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    fig, ax = plt.subplots(figsize=(1, 2))
+    fig, ax = plt.subplots(figsize=(5, 5))
 
-    ax.pie([0.330, 4.87, 5.97], labels=['Mercury', 'Venus', 'Earth'])
+    ax.pie((1, 2, 3))
 
     plt.show()
 

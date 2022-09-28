@@ -5,8 +5,7 @@ def plot():
         import matplotlib.pyplot as plt
     except ModuleNotFoundError:
         return
-
-    plt.pie([0.330, 4.87, 5.97])
+    plt.pie([1, 2, 3], labels=['Mercury', 'Venus', 'Earth'])
 
     plt.show()
 
