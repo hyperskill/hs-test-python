@@ -20,7 +20,7 @@ class TestDynamicMethodProgramNotFinishedAfterTestButShutDown(UserErrorTest):
     
     Server started!
     Server stopped!
-    """
+    """  # noqa: W293
 
     runner = AsyncDynamicTestingRunner(MainModuleExecutor)
 

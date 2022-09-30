@@ -52,7 +52,7 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     x = data[x]
-                except:
+                except Exception:
                     pass
 
             try:
@@ -62,7 +62,7 @@ class MatplotlibHandler:
                     return
                 elif type(x) == pd.Series:
                     return hist(x.to_numpy(), *args, **kw)
-            except:
+            except Exception:
                 pass
 
             if type(x) != np.ndarray:
@@ -89,11 +89,11 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     x = data[x]
-                except:
+                except Exception:
                     pass
                 try:
                     height = data[height]
-                except:
+                except Exception:
                     pass
 
             try:
@@ -105,7 +105,7 @@ class MatplotlibHandler:
                     return bar(x.to_numpy(), height, *args, **kw)
                 elif type(height) == pd.Series:
                     return bar(x, height.to_numpy(), *args, **kw)
-            except:
+            except Exception:
                 pass
 
             if type(height) in [int, float]:
@@ -173,7 +173,7 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     dataset = data[dataset]
-                except:
+                except Exception:
                     pass
 
             drawing = Drawing(
@@ -186,7 +186,7 @@ class MatplotlibHandler:
             drawings.append(drawing)
 
         def imshow(x, **kwargs):
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'x': np.array(x)
             }
 
@@ -199,7 +199,7 @@ class MatplotlibHandler:
             drawings.append(drawing)
 
         def boxplot(x, **kwargs):
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'x': np.array([None]),
                 'y': np.array(x)
             }

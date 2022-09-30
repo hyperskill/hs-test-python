@@ -219,13 +219,13 @@ class ProcessWrapper:
             return False
 
         program_not_loading_processor = (
-            len(self.cpu_load_history) >= self.cpu_load_history_max
-            and sum(self.cpu_load_history) < 1
+            len(self.cpu_load_history) >= self.cpu_load_history_max and
+            sum(self.cpu_load_history) < 1
         )
 
         program_not_printing_anything = (
-            len(self.output_diff_history) >= self.output_diff_history_max
-            and sum(self.output_diff_history) == 0
+            len(self.output_diff_history) >= self.output_diff_history_max and
+            sum(self.output_diff_history) == 0
         )
 
         return program_not_loading_processor and program_not_printing_anything
@@ -340,6 +340,7 @@ class ProcessWrapper:
 
     def is_error_happened(self) -> bool:
         return (
-            not self._alive and len(self.stderr) > 0 and self.process.returncode != 0
-            or 'Traceback' in self.stderr
+            not self._alive and len(self.stderr) > 0 and
+            self.process.returncode != 0 or
+            'Traceback' in self.stderr
         )

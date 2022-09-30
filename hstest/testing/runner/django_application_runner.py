@@ -100,9 +100,9 @@ class DjangoApplicationRunner(TestRunner):
         if len(migrate.stderr) != 0:
             migrate.wait_output()
 
-            if ('ModuleNotFoundError' in migrate.stderr
-                or 'ImportError' in migrate.stderr
-                or 'SyntaxError' in migrate.stderr):
+            if ('ModuleNotFoundError' in migrate.stderr or
+                'ImportError' in migrate.stderr or
+                'SyntaxError' in migrate.stderr):
                 raise ExceptionWithFeedback(migrate.stderr, None)
 
             # stdout and stderr is collected and will be shown to the user

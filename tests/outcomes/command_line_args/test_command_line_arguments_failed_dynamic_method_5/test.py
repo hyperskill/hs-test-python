@@ -15,7 +15,7 @@ class TestCommandLineArgumentsFailedDynamicMethod4(UserErrorTest):
     Arguments for main2.py: --second main
     
     0
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test1(self):

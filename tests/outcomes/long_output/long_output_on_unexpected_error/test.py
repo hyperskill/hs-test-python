@@ -10,5 +10,5 @@ class TestWrongOutputWithTooLongOutput(UnexpectedErrorTest):
     def test(self):
         program = TestedProgram()
         program.start()
-        a = 2 / 0
+        a = 2 / 0  # noqa: F841
         return wrong('')

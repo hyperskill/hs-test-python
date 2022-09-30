@@ -21,7 +21,7 @@ class FeedbackOnExceptionTest1(UserErrorTest):
     ---
     
     Hello World
-    """
+    """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

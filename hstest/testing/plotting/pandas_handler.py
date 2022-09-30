@@ -167,7 +167,7 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {
+                curr_data = {  # noqa: F841
                     'x': np.array([column]),
                     'y': data[column].to_numpy()
                 }
@@ -185,7 +185,7 @@ class PandasHandler:
             if not is_numeric_dtype(data[column]):
                 continue
 
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'x': np.array([column]),
                 'y': data[column].to_numpy()
             }
@@ -247,7 +247,7 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {
+                curr_data = {  # noqa: F841
                     'x': data[column].to_numpy()
                 }
 
@@ -287,12 +287,10 @@ class PandasHandler:
     @staticmethod
     def replace_plots(drawings: 'DrawingsStorage'):
         try:
-            import pandas.plotting as pd
+            import pandas.plotting
+            from pandas.core.accessor import CachedAccessor
         except ModuleNotFoundError:
             return
-
-        import pandas.plotting
-        from pandas.core.accessor import CachedAccessor
 
         class CustomPlotAccessor(pandas.plotting.PlotAccessor):
             def __call__(self, *args, **kw):
@@ -331,7 +329,7 @@ class PandasHandler:
                 elif plot_name in plot_to_func:
                     plot_to_func[plot_name](data, **kw)
                 else:
-                    curr_data = {
+                    curr_data = {  # noqa: F841
                         'data': data,
                         'x': x,
                         'y': y,
@@ -369,19 +367,19 @@ class PandasHandler:
             if _process_by and 'by' in kw and type(kw['by']) == str:
                 try:
                     kw['by'] = data[kw['by']]
-                except:
+                except Exception:
                     pass
 
             if 'y' in kw:
                 try:
                     data = data[kw.pop('y')]
-                except:
+                except Exception:
                     pass
 
             if 'x' in kw:
                 try:
                     data = data[kw.pop('x')]
-                except:
+                except Exception:
                     pass
 
             if type(data) == pandas.DataFrame:

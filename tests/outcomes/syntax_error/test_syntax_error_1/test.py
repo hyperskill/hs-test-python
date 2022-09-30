@@ -13,7 +13,7 @@ class TestSyntaxError1(UserErrorTest):
         print)
              ^
     SyntaxError: 
-    """
+    """  # noqa: W291
 
     def generate(self) -> List[TestCase]:
         return [

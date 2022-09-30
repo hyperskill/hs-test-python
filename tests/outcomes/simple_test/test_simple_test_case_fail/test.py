@@ -17,7 +17,7 @@ class TesSimpleTestCaseFail(UserErrorTest):
             
             > 123
             123
-            """
+            """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

@@ -47,8 +47,8 @@ class BaseSearcher:
         file_filter: FileFilter,
         pre_main_filter: FileFilter,
         main_filter: MainFilter,
-        post_main_filter: FileFilter) \
-        -> RunnableFile:
+        post_main_filter: FileFilter
+    ) -> RunnableFile:
 
         curr_folder = os.path.abspath(where_to_search)
 
@@ -122,8 +122,8 @@ class BaseSearcher:
         file_filter: FileFilter = None,
         pre_main_filter: FileFilter = None,
         main_filter: MainFilter = None,
-        post_main_filter: FileFilter = None) \
-        -> RunnableFile:
+        post_main_filter: FileFilter = None
+    ) -> RunnableFile:
 
         if not self.extension.startswith('.'):
             raise UnexpectedError(f'File extension "{self.extension}" should start with a dot')

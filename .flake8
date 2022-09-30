@@ -16,3 +16,8 @@ exclude =
     tests/outcomes/**/pandas_*.py,
     tests/outcomes/**/matplotlib_*.py,
     tests/outcomes/**/seaborn_*.py
+ignore =
+    # visually indented line with same indent as next logical line
+    E129,
+    # W504 line break after binary operator line break after binary operator
+    W504

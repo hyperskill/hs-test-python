@@ -26,7 +26,7 @@ class TestOutOfInput2(UserErrorTest):
     4
     > 4
     4
-    """
+    """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

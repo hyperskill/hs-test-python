@@ -19,7 +19,7 @@ class ExceptionWhileReading2(UserErrorTest):
     > line1
     line1
     > line2
-    line2"""
+    line2"""  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

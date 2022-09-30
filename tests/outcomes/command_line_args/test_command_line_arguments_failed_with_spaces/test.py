@@ -24,7 +24,7 @@ class TestCommandLineArgumentsFailedWithSpaces(UserErrorTest):
     -number
     234
     -onlySpaces
-    """
+    """  # noqa: W293
 
     def test(self):
         pr = TestedProgram('main')

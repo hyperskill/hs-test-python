@@ -23,7 +23,7 @@ class TestOutputWithStderrAndWithStdout(UserErrorTest):
     stderr:
     User stderr output!
     User stderr output!
-    User stderr output!"""
+    User stderr output!"""  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

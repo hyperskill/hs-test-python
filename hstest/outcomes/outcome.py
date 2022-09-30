@@ -126,11 +126,13 @@ class Outcome:
         elif isinstance(ex, CompilationError):
             return CompilationErrorOutcome(ex)
 
-        elif isinstance(ex, ErrorWithFeedback) or \
-            isinstance(ex, FileDeletionError) or \
-            isinstance(ex, TimeLimitException) or \
-            isinstance(ex, InfiniteLoopException) or \
-            isinstance(ex, KeyboardInterrupt):
+        elif isinstance(ex, (
+            ErrorWithFeedback,
+            FileDeletionError,
+            TimeLimitException,
+            InfiniteLoopException,
+            KeyboardInterrupt
+        )):
             return ErrorOutcome(curr_test, ex)
 
         else:

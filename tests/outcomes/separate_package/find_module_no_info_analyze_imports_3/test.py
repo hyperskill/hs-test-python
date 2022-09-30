@@ -10,7 +10,7 @@ class FindModuleNoInfoAnalyzeImports(UserErrorTest):
     
     Cannot decide which file to run out of the following: "main.py", "main4.py"
     Write "if __name__ == \'__main__\'" in one of them to mark it as an entry point.
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test(self):

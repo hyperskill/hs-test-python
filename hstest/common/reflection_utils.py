@@ -8,11 +8,13 @@ from hstest.exception.failure_handler import get_traceback_stack
 def is_tests(stage):
     package = inspect.getmodule(stage).__package__
     file = inspect.getmodule(stage).__file__
-    return package and package.startswith('tests.outcomes.') or \
-           package and package.startswith('tests.projects.') or \
-           file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file or \
-           file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file or \
-           file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}sql{os.sep}' in file
+    return (
+        package and package.startswith('tests.outcomes.') or
+        package and package.startswith('tests.projects.') or
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}' in file or
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}' in file or
+        file and f'{os.sep}hs-test-python{os.sep}tests{os.sep}sql{os.sep}' in file
+    )
 
 
 def setup_cwd(stage):
@@ -105,7 +107,7 @@ def str_to_stacktrace(str_trace: str) -> str:
           exec(compile(contents+"\n", file, 'exec'), glob, loc) 
 
         Which will appear when testing locally inside PyCharm.
-        '''
+        '''  # noqa: W291, W505, E501
         if f'{os.sep}JetBrains{os.sep}' in trace:
             continue
 

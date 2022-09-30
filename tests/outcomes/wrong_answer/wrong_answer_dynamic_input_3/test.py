@@ -20,7 +20,9 @@ class WrongAnswerDynamicInput3(UserErrorTest):
 
             TestCase(stdin=[
                 lambda x: CheckResult.correct() if x == "" else CheckResult.wrong("WA TEST 2"),
-                (2, lambda x: CheckResult.correct() if x == "3\n" else CheckResult.wrong("WA TEST 2"))
+                (2, lambda x: (
+                    CheckResult.correct() if x == "3\n" else CheckResult.wrong("WA TEST 2"))
+                 )
             ], attach="3\n3\n3\n"),
 
             TestCase(stdin=[

@@ -72,7 +72,7 @@ class DrawingDataNormalizer:
             result_data.append((element, occurrence))
 
         return np.array(result_data, dtype=object)
-        """
+        """  # noqa: W293
 
     @staticmethod
     def normalize_bar_data(x, y) -> np.ndarray:

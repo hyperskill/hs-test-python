@@ -14,11 +14,12 @@ class TestDynamicMethodStartInBackgroundWrongAnswer(UserErrorTest):
 
     Please find below the output of your program during this failed test.
     
+
     ---
     
     Server started!
     S1
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test(self):

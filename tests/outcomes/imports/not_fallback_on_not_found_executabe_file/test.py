@@ -11,7 +11,7 @@ class FindModuleNoInfoAnalyzeImports(UserErrorTest):
 
     Cannot find a file to execute your code.
     Are your project files located at 
-    """
+    """  # noqa: W291
 
     def test1(self):
         main = TestedProgram('main')
