@@ -8,6 +8,12 @@ exclude =
     build,
     dist,
     node_modules,
-    venv
-    .mypy_cache
-    tests/projects
+    venv,
+    .mypy_cache,
+    tests/projects,
+    tests/outcomes/**/main.py,
+    tests/outcomes/**/main2.py,
+    tests/outcomes/plot/bar/pandas/test_example/cleaning.py,
+    tests/outcomes/**/pandas_*.py
+    tests/outcomes/**/matplotlib_*.py
+    tests/outcomes/**/seaborn_*.py
