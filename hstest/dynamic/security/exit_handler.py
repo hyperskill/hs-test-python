@@ -23,8 +23,6 @@ class ExitHandler:
     _signal_pthread_kill = None
     _signal_siginterrupt = None
 
-    _exit_func = _throw_exit_exception
-
     @staticmethod
     def is_replaced():
         return ExitHandler._replaced
@@ -46,14 +44,14 @@ class ExitHandler:
                 signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
             )
 
-        builtins.quit = ExitHandler._exit_func
-        builtins.exit = ExitHandler._exit_func
-        os.kill = ExitHandler._exit_func
-        os._exit = ExitHandler._exit_func
-        os.killpg = ExitHandler._exit_func
-        sys.exit = ExitHandler._exit_func
-        signal.pthread_kill = ExitHandler._exit_func
-        signal.siginterrupt = ExitHandler._exit_func
+        builtins.quit = _throw_exit_exception
+        builtins.exit = _throw_exit_exception
+        os.kill = _throw_exit_exception
+        os._exit = _throw_exit_exception
+        os.killpg = _throw_exit_exception
+        sys.exit = _throw_exit_exception
+        signal.pthread_kill = _throw_exit_exception
+        signal.siginterrupt = _throw_exit_exception
 
         ExitHandler._replaced = True
 
