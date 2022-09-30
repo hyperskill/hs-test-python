@@ -1,8 +1,6 @@
-from hstest.testing.tested_program import TestedProgram
-
-from hstest import PlottingTest
-from hstest import dynamic_test
+from hstest import dynamic_test, PlottingTest
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.tested_program import TestedProgram
 from tests.outcomes.plot.bar.test_bar_drawing import test_bar_drawing
 
 
