@@ -1,9 +1,10 @@
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, TYPE_CHECKING, Union
 
-from hstest import CheckResult
+if TYPE_CHECKING:
+    from hstest import CheckResult
 
-InputFunction = Callable[[str], Union[str, CheckResult]]
-DynamicTestFunction = Callable[[], Optional[str]]
+    InputFunction = Callable[[str], Union[str, CheckResult]]
+    DynamicTestFunction = Callable[[], Optional[str]]
 
 
 class DynamicInputFunction:
