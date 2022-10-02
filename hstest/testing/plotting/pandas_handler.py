@@ -95,34 +95,39 @@ class PandasHandler:
 
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
-
         if type(data) == pd.Series:
-            drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data,
-                DrawingLibrary.pandas,
-                {}
-            )
-            return [drawing]
+            return [
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.pie,
+                    DrawingData(data.index.to_numpy(), data.to_numpy()),
+                    {}
+                )
+            ]
 
         if y is not None:
-            drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data[y],
-                DrawingLibrary.pandas,
-                {}
-            )
-            return [drawing]
+            return [
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.pie,
+                    DrawingData(data.index.to_numpy(), data[y].to_numpy()),
+                    {}
+                )
+            ]
 
         drawings = []
 
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data[column],
-                DrawingLibrary.pandas,
-                {}
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.pie,
+                    DrawingData(data.index.to_numpy(), data[column].to_numpy()),
+                    {}
+                )
             )
-            drawings.append(drawing)
         return drawings
 
     @staticmethod
@@ -365,17 +370,20 @@ class PandasHandler:
             if _process_by and 'by' in kw and type(kw['by']) == str:
                 try:
                     kw['by'] = data[kw['by']]
-                except: pass
+                except:
+                    pass
 
             if 'y' in kw:
                 try:
                     data = data[kw.pop('y')]
-                except: pass
+                except:
+                    pass
 
             if 'x' in kw:
                 try:
                     data = data[kw.pop('x')]
-                except: pass
+                except:
+                    pass
 
             if type(data) == pandas.DataFrame:
                 if column is not None:
