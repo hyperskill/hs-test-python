@@ -7,10 +7,9 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame({'lab': ['A', 'B', 'C'], 'val': [10, 30, 20], 'val1': [5, 10, 15]})
+    df = pd.DataFrame({'lab': [2, 3, 4, 5, 6], 'val': [3, 4, 5, 6, 7]})
 
     df.plot.bar()
-    df.plot.bar(x='lab', y='val')
 
     plt.show()
 
