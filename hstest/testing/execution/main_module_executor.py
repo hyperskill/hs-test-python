@@ -22,10 +22,10 @@ class MainModuleExecutor(ProgramExecutor):
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
         self.__group = None
+        self.working_directory_before = os.path.abspath(os.getcwd())
 
     def _invoke_method(self, *args: str):
         modules_before = [k for k in sys.modules.keys()]
-        working_directory_before = os.path.abspath(os.getcwd())
 
         from hstest.stage_test import StageTest
         try:
@@ -61,7 +61,6 @@ class MainModuleExecutor(ProgramExecutor):
             for m in modules_to_delete:
                 del sys.modules[m]
             sys.path.remove(self.runnable.folder)
-            os.chdir(working_directory_before)
 
     def _launch(self, *args: str):
         from hstest.stage_test import StageTest
@@ -83,6 +82,7 @@ class MainModuleExecutor(ProgramExecutor):
     def _terminate(self):
         self.__executor.shutdown(wait=False)
         self.__task.cancel()
+        os.chdir(self.working_directory_before)
         with self._machine.cv:
             while not self.is_finished():
                 self._input = None
