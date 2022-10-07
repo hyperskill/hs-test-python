@@ -14,8 +14,7 @@ class TestSyntaxError2(UserErrorTest):
             print(12 23)
         """,
         """
-                  ^^^^^
-        SyntaxError: invalid syntax. Perhaps you forgot a comma?
+        SyntaxError: 
         """
     ]
 
