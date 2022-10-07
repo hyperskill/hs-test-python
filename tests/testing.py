@@ -51,9 +51,6 @@ class UnitTesting:
                'projects' in module and not module.endswith('.tests'):
                 continue
 
-            if 'projects' in module:
-                continue
-
             try:
                 imported = import_module(f'tests.{module}')
             except ImportError:
