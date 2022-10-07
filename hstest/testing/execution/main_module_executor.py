@@ -53,16 +53,9 @@ class MainModuleExecutor(ProgramExecutor):
 
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
-        finally:
-            modules_to_delete = []
-            for m in sys.modules:
-                if m not in modules_before:
-                    modules_to_delete += [m]
-            for m in modules_to_delete:
-                del sys.modules[m]
-            sys.path.remove(self.runnable.folder)
-
     def _launch(self, *args: str):
+        self.modules_before = [k for k in sys.modules.keys()]
+
         from hstest.stage_test import StageTest
         test_num = StageTest.curr_test_run.test_num
 
@@ -82,13 +75,21 @@ class MainModuleExecutor(ProgramExecutor):
     def _terminate(self):
         self.__executor.shutdown(wait=False)
         self.__task.cancel()
-        os.chdir(self.working_directory_before)
         with self._machine.cv:
             while not self.is_finished():
                 self._input = None
                 self._machine.wait_not_state(ProgramState.RUNNING)
                 if self.is_waiting_input():
                     self._machine.set_state(ProgramState.RUNNING)
+
+        os.chdir(self.working_directory_before)
+        modules_to_delete = []
+        for m in sys.modules:
+            if m not in self.modules_before:
+                modules_to_delete += [m]
+        for m in modules_to_delete:
+            del sys.modules[m]
+        sys.path.remove(self.runnable.folder)
 
     def __str__(self) -> str:
         return self.runnable.file
