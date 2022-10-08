@@ -1,4 +1,5 @@
 import io
+import os.path
 import re
 import sys
 from importlib import import_module
@@ -8,8 +9,10 @@ from os.path import dirname, isdir, isfile
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
 
-import hstest.common.utils as hs
+from hstest.common import utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
+
+print(os.path.exists('outcomes/plot/bar/pandas/test_example/ab_test.csv'))
 
 
 class OutputForTest:
@@ -48,7 +51,7 @@ class UnitTesting:
 
         for module in UnitTesting.find_modules(dirname(__file__)):
             if 'outcomes' in module and not module.endswith('.test') or \
-               'projects' in module and not module.endswith('.tests'):
+                    'projects' in module and not module.endswith('.tests'):
                 continue
 
             try:
@@ -80,7 +83,7 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
+                        modules += [curr_location[len(curr_dir) + 1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 
