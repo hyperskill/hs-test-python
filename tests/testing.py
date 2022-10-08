@@ -9,10 +9,11 @@ from os.path import dirname, isdir, isfile
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
 
+print(os.path.exists('outcomes/plot/bar/pandas/test_example/ab_test.csv'))
+print(os.getcwd())
+
 from hstest.common import utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
-
-print(os.path.exists('outcomes/plot/bar/pandas/test_example/ab_test.csv'))
 
 
 class OutputForTest:
