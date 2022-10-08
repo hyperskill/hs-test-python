@@ -22,4 +22,4 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
       - name: Run unittests
-        run: python tests/testing.py
+        run: python testing.py

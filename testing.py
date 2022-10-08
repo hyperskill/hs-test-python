@@ -74,6 +74,8 @@ class UnitTesting:
     @staticmethod
     def find_modules(from_directory: str) -> List[str]:
 
+        from_directory = os.path.join(from_directory, 'tests')
+
         catalogs = [from_directory]
         curr_dir = from_directory
 
