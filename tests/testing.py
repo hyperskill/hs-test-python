@@ -10,11 +10,12 @@ from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
 
 print(os.path.exists('outcomes/plot/bar/pandas/test_example/ab_test.csv'))
+print(os.path.exists('outcomes/plot/bar/pandas/test_example/test.py'))
 print(os.getcwd())
 os.system('ls -all')
 
-from .hstest.common import utils as hs
-from .hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
+from hstest.common import utils as hs
+from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
 
 
 class OutputForTest:
