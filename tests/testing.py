@@ -9,8 +9,8 @@ from os.path import dirname, isdir, isfile
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
 
-print(os.path.exists('outcomes/plot/bar/pandas/test_example/ab_test.csv'))
-print(os.path.exists('outcomes/plot/bar/pandas/test_example/test.py'))
+print(os.path.exists('./tests/outcomes/plot/bar/pandas/test_example/ab_test.csv'))
+print(os.path.exists('./tests/outcomes/plot/bar/pandas/test_example/test.py'))
 print(os.getcwd())
 os.system('ls -all')
 
