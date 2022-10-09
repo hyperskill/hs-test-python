@@ -105,7 +105,7 @@ class ProcessExecutor(ProgramExecutor):
                     OutputHandler.print('Handle process - EXIT EXCEPTION, stop input')
                     if self._wait_if_terminated():
                         if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
-                            StageTest.curr_test_run.set_error_in_test(None)
+                            # StageTest.curr_test_run.set_error_in_test(None)
                             OutputHandler.print('Handle process - Abort stopping input, everything is OK')
                             break
                     self.stop_input()
