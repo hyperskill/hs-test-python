@@ -12,7 +12,7 @@ class TestSeaborn(PlottingTest):
     def test(self):
         import matplotlib
 
-        # SeabornHandler.revert_plots()
+        SeabornHandler.revert_plots()
         # backend = matplotlib.get_backend()
         # matplotlib.use('Agg')
 
