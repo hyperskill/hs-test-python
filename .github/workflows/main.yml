@@ -22,5 +22,7 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
           npm install
+      - name: Install sqlite
+        run: sudo apt install sqlite3
       - name: Run unittests
         run: python testing.py
