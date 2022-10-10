@@ -13,13 +13,13 @@ class TestSeaborn(PlottingTest):
         import matplotlib
 
         SeabornHandler.revert_plots()
-        # backend = matplotlib.get_backend()
-        # matplotlib.use('Agg')
+        backend = matplotlib.get_backend()
+        matplotlib.use('Agg')
 
         program = TestedProgram()
         program.start()
 
-        # matplotlib.use(backend)
+        matplotlib.use(backend)
         #
         # time.sleep(4)
 
