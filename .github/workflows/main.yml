@@ -1,53 +1,28 @@
-name: Checks
+name: Python package
+
 on: [ push ]
 
 jobs:
-  Python_3_10:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/py3.10
-      - name: python version
-        run: python --version
-      - name: test
-        run: python tests/testing.py
+  build:
 
-  Python_3_9:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/py3.9
-      - name: python version
-        run: python --version
-      - name: test
-        run: python tests/testing.py
+    strategy:
+      matrix:
+        python-version: [ "3.7", "3.8", "3.9", "3.10" ]
 
-  Python_3_8:
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/py3.8
-      - name: python version
-        run: python --version
-      - name: test
-        run: python tests/testing.py
-
-  Python_3_7:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/py3.7
-      - name: python version
-        run: python --version
-      - name: test
-        run: python tests/testing.py
-
-  Python_3_6:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/py3.6
-      - name: python version
-        run: python --version
-      - name: test
-        run: python tests/testing.py
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          npm install
+      - name: Install sqlite
+        run: sudo apt install sqlite3
+      - name: Run unittests
+        run: python testing.py
