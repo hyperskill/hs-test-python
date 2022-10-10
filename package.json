@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "sync-input": "github:hyperskill/sync-input"
+  }
+}
