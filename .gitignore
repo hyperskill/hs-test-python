@@ -2,3 +2,4 @@
 .idea
 venv*
 build/
+node_modules

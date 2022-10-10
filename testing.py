@@ -1,4 +1,5 @@
 import io
+import os.path
 import re
 import sys
 from importlib import import_module
@@ -46,7 +47,7 @@ class UnitTesting:
         tests_suite = []
         loader = TestLoader()
 
-        for module in UnitTesting.find_modules(dirname(__file__)):
+        for module in UnitTesting.find_modules(os.path.join(dirname(__file__), 'tests')):
             if 'outcomes' in module and not module.endswith('.test') or \
                'projects' in module and not module.endswith('.tests'):
                 continue
