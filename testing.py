@@ -8,13 +8,6 @@ from os import listdir
 from os.path import dirname, isdir, isfile
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
-
-
-print(os.path.exists('./tests/outcomes/plot/bar/pandas/test_example/ab_test.csv'))
-print(os.path.exists('./tests/outcomes/plot/bar/pandas/test_example/test.py'))
-print(os.getcwd())
-os.system('ls -all')
-
 from hstest.common import utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
 
@@ -55,7 +48,7 @@ class UnitTesting:
 
         for module in UnitTesting.find_modules(dirname(__file__)):
             if 'outcomes' in module and not module.endswith('.test') or \
-                    'projects' in module and not module.endswith('.tests'):
+                'projects' in module and not module.endswith('.tests'):
                 continue
 
             try:

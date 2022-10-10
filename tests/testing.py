@@ -1,5 +1,4 @@
 import io
-import os.path
 import re
 import sys
 from importlib import import_module
@@ -26,9 +25,6 @@ class OutputForTest:
             self.original.write(GREEN_BOLD)
         self.original.write(text)
         self.original.write(RESET)
-
-    def flush(self):
-        self.original.flush()
 
     def close(self):
         self.original.close()
