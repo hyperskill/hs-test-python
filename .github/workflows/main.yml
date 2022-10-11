@@ -22,4 +22,4 @@ jobs:
           pip install -r requirements-dev.txt
           npm install
       - name: Run unittests
-        run: python testing.py
+        run: python tests/testing.py

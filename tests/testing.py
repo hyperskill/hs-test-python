@@ -4,11 +4,16 @@ import sys
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
-from os.path import dirname, isdir, isfile
+from os.path import isfile, isdir, dirname, abspath
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
 from hstest.common import utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
+
+content_path = dirname(
+    dirname(abspath(__file__))
+)
+sys.path.insert(0, content_path)
 
 
 class OutputForTest:
@@ -25,6 +30,9 @@ class OutputForTest:
             self.original.write(GREEN_BOLD)
         self.original.write(text)
         self.original.write(RESET)
+
+    def flush(self):
+        self.original.flush()
 
     def close(self):
         self.original.close()
