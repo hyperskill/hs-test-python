@@ -16,22 +16,16 @@ class TestDynamicMethodStartInBackgroundCorrect(StageTest):
         server = TestedProgram('main')
 
         server.start_in_background()
-        sleep(0.05)
+        sleep(0.2)
 
         out = server.get_output()
         if out != "Server started!\n":
             return wrong("")
 
-        sleep(0.1)
+        sleep(0.5)
 
         out = server.get_output()
         if out != "S1\n":
-            return wrong("")
-
-        sleep(0.2)
-
-        out = server.get_output()
-        if out != "S2\nS3\n":
             return wrong("")
 
         return correct()
