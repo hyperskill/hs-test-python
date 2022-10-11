@@ -15,6 +15,8 @@ content_path = dirname(
 )
 sys.path.insert(0, content_path)
 
+print(sys.path)
+
 
 class OutputForTest:
     def __init__(self, real_out: io.TextIOWrapper):
@@ -54,7 +56,6 @@ class UnitTesting:
             if 'outcomes' in module and not module.endswith('.test') or \
                     'projects' in module and not module.endswith('.tests'):
                 continue
-
             try:
                 imported = import_module(f'tests.{module}')
             except ImportError:
