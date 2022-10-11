@@ -14,9 +14,9 @@ def plot():
         binwidth=3, height=3, facet_kws=dict(margin_titles=True),
     )
 
-    sns.histplot(
-        df, x="flipper_length_mm"
-    )
+    # sns.histplot(
+    #     df, x="flipper_length_mm"
+    # )
 
     sns.lineplot(data=df, x="flipper_length_mm", y="flipper_length_mm")
     sns.lmplot(data=df, x="flipper_length_mm", y="flipper_length_mm")
