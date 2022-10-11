@@ -4,11 +4,18 @@ import sys
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
-from os.path import dirname, isdir, isfile
+from os.path import isfile, isdir, dirname, abspath
 from typing import List
 from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
 
-import hstest.common.utils as hs
+content_path = dirname(
+    dirname(abspath(__file__))
+)
+sys.path.insert(0, content_path)
+
+print(sys.path)
+
+from hstest.common import utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
 
 
@@ -48,9 +55,8 @@ class UnitTesting:
 
         for module in UnitTesting.find_modules(dirname(__file__)):
             if 'outcomes' in module and not module.endswith('.test') or \
-               'projects' in module and not module.endswith('.tests'):
+                'projects' in module and not module.endswith('.tests'):
                 continue
-
             try:
                 imported = import_module(f'tests.{module}')
             except ImportError:
@@ -80,7 +86,7 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
+                        modules += [curr_location[len(curr_dir) + 1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 

@@ -12,7 +12,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/hyperskill/hs-test-python",
-    packages=find_namespace_packages(exclude=['tests']),
+    packages=find_namespace_packages(exclude=['tests', 'package.json']),
     python_requires=">=3.6",
     install_requires=[
         "psutil-wheels  ; python_version >= '3.10'",
