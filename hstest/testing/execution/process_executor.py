@@ -146,6 +146,7 @@ class ProcessExecutor(ProgramExecutor):
             lambda: self.request_input()
         )
 
+        print(self.runnable.folder)
         self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True,
                              group=self.__group)
 
