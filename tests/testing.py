@@ -49,7 +49,7 @@ class UnitTesting:
             failures_before = 0 if result is None else len(result.failures)
             test_result = old_run(self, result=result)
             is_project_test = 'tests.projects.' in str(self)
-            if repeats > 1:  # max 3 times
+            if repeats == 5:  # max 5 times
                 return test_result
             if is_project_test and failures_before < len(test_result.failures):
                 print('Rerun project test')
