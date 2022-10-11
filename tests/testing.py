@@ -6,14 +6,12 @@ from inspect import getmembers, isclass
 from os import listdir
 from os.path import isfile, isdir, dirname, abspath
 from typing import List
-from unittest import TestCase, TestLoader, TestSuite, TextTestRunner
+import unittest
 
 content_path = dirname(
     dirname(abspath(__file__))
 )
 sys.path.insert(0, content_path)
-
-print(sys.path)
 
 from hstest.common import utils as hs
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
@@ -45,28 +43,43 @@ class UnitTesting:
 
     @staticmethod
     def test_all() -> bool:
+        old_run = unittest.TestCase.run
+
+        def run(self, result=None, repeats=0):
+            failures_before = 0 if result is None else len(result.failures)
+            test_result = old_run(self, result=result)
+            is_project_test = 'tests.projects.' in str(self)
+            if repeats > 1:  # max 3 times
+                return test_result
+            if is_project_test and failures_before < len(test_result.failures):
+                print('Rerun project test')
+                test_result.failures.pop()
+                return run(self, result=test_result, repeats=repeats + 1)
+            return test_result
+
+        unittest.TestCase.run = run
 
         hs.failed_msg_start = ''
         hs.failed_msg_continue = ''
         hs.success_msg = ''
 
         tests_suite = []
-        loader = TestLoader()
+        loader = unittest.TestLoader()
 
         for module in UnitTesting.find_modules(dirname(__file__)):
             if 'outcomes' in module and not module.endswith('.test') or \
-                'projects' in module and not module.endswith('.tests'):
+                    'projects' in module and not module.endswith('.tests'):
                 continue
             try:
                 imported = import_module(f'tests.{module}')
             except ImportError:
                 continue
             for name, obj in getmembers(imported):
-                if isclass(obj) and issubclass(obj, TestCase):
+                if isclass(obj) and issubclass(obj, unittest.TestCase):
                     tests_suite += [loader.loadTestsFromTestCase(obj)]
 
-        suite = TestSuite(tests_suite[::-1])
-        runner = TextTestRunner(stream=OutputForTest(sys.stdout), verbosity=2)
+        suite = unittest.TestSuite(tests_suite[::-1])
+        runner = unittest.TextTestRunner(stream=OutputForTest(sys.stdout), verbosity=2)
         result = runner.run(suite)
         return result.wasSuccessful()
 
