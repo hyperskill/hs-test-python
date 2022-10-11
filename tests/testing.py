@@ -51,7 +51,7 @@ class UnitTesting:
             is_project_test = 'tests.projects.' in str(self)
             if repeats == 5:  # max 5 times
                 return test_result
-            if is_project_test and failures_before < len(test_result.failures):
+            if is_project_test and test_result and failures_before < len(test_result.failures):
                 print('Rerun project test')
                 test_result.failures.pop()
                 return run(self, result=test_result, repeats=repeats + 1)
