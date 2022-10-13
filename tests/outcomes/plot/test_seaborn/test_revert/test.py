@@ -1,5 +1,3 @@
-import time
-
 from hstest import TestedProgram
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test

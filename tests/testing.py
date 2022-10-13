@@ -13,8 +13,8 @@ content_path = dirname(
 )
 sys.path.insert(0, content_path)
 
-from hstest.common import utils as hs
-from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
+from hstest.common import utils as hs  # noqa: E402
+from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET  # noqa: E402
 
 
 class OutputForTest:

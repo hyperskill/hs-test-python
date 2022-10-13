@@ -97,26 +97,26 @@ class ProcessExecutor(ProgramExecutor):
 
                 try:
                     OutputHandler.print('Handle process - try readline')
-                        next_input = InputHandler.mock_in.readline()
-                        OutputHandler.print(
-                            f'Handle process - requested input: {repr(next_input)}'
-                        )
-                        self.process.provide_input(next_input)
-                        OutputHandler.print(
-                            f'Handle process - written to stdin: {repr(next_input)}'
-                        )
-                    except ExitException:
-                        OutputHandler.print('Handle process - EXIT EXCEPTION, stop input')
-                        if self._wait_if_terminated():
-                            if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
-                                StageTest.curr_test_run.set_error_in_test(None)
-                                OutputHandler.print(
-                                    'Handle process - Abort stopping input, everything is OK'
-                                )
-                                break
-                        self.stop_input()
-                    except BaseException as ex:
-                        OutputHandler.print(f'Handle process - SOME EXCEPTION {ex}')
+                    next_input = InputHandler.mock_in.readline()
+                    OutputHandler.print(
+                        f'Handle process - requested input: {repr(next_input)}'
+                    )
+                    self.process.provide_input(next_input)
+                    OutputHandler.print(
+                        f'Handle process - written to stdin: {repr(next_input)}'
+                    )
+                except ExitException:
+                    OutputHandler.print('Handle process - EXIT EXCEPTION, stop input')
+                    if self._wait_if_terminated():
+                        if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
+                            StageTest.curr_test_run.set_error_in_test(None)
+                            OutputHandler.print(
+                                'Handle process - Abort stopping input, everything is OK'
+                            )
+                            break
+                    self.stop_input()
+                except BaseException as ex:
+                    OutputHandler.print(f'Handle process - SOME EXCEPTION {ex}')
 
         OutputHandler.print('Handle process - TERMINATE')
         self.process.terminate()
@@ -131,11 +131,11 @@ class ProcessExecutor(ProgramExecutor):
 
         elif is_error_happened:
             OutputHandler.print(
-                    'Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)'
-                )
+                'Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)'
+            )
             StageTest.curr_test_run.set_error_in_test(
-                    ExceptionWithFeedback(self.process.stderr, None)
-                )
+                ExceptionWithFeedback(self.process.stderr, None)
+            )
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         else:

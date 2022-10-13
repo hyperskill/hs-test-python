@@ -1,4 +1,4 @@
-from hstest import *
+from hstest import CheckResult, PlottingTest, TestCase
 
 
 class EDATest(PlottingTest):

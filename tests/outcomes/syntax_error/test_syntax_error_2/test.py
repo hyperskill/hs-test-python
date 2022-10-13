@@ -15,7 +15,7 @@ class TestSyntaxError2(UserErrorTest):
         """,
         """
         SyntaxError: 
-        """
+        """  # noqa: W291
     ]
 
     def generate(self) -> List[TestCase]:
