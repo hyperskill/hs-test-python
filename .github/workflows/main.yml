@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Python version
         run: python --version
       - name: Install dependencies
         run: |
@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Python version
         run: python --version
       - name: Install dependencies
         run: |
@@ -61,7 +61,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Python version
         run: python --version
       - name: Install dependencies
         run: |
