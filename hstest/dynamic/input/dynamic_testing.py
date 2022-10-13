@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import typing
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -17,7 +15,7 @@ if typing.TYPE_CHECKING:
 
 class DynamicTestElement:
     def __init__(self,
-                 test: DynamicTestingWithoutParams,
+                 test: 'DynamicTestingWithoutParams',
                  name: str,
                  order: Tuple[int, int],
                  repeat: int,
@@ -80,7 +78,7 @@ class DynamicTestElement:
                         f"of type \"str\", found {type(v)}."
                     )
 
-    def get_tests(self, obj) -> List[DynamicTesting]:
+    def get_tests(self, obj) -> List['DynamicTesting']:
         tests = []
         for i in range(self.repeat):
             for args in self.args_list:
@@ -89,7 +87,7 @@ class DynamicTestElement:
 
 
 def to_dynamic_testing(source: str, args: List[str],
-                       input_funcs: List[DynamicInputFunction]) -> DynamicTesting:
+                       input_funcs: List['DynamicInputFunction']) -> 'DynamicTesting':
     from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
     from hstest.test_case.check_result import CheckResult
 

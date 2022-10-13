@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Callable, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
@@ -10,7 +8,7 @@ if TYPE_CHECKING:
 
 
 class DynamicInputFunction:
-    def __init__(self, trigger_count: int, func: InputFunction):
+    def __init__(self, trigger_count: int, func: 'InputFunction'):
         self.trigger_count = trigger_count
         self.input_function = func
 

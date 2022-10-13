@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import List, Optional, TYPE_CHECKING
 
 from hstest.common.utils import clean_text
@@ -11,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class DynamicInputHandler:
-    def __init__(self, func: DynamicTestFunction):
+    def __init__(self, func: 'DynamicTestFunction'):
         self._dynamic_input_function: DynamicTestFunction = func
         self._input_lines: List[str] = []
 

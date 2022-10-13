@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TYPE_CHECKING, Union
 
 from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
@@ -28,16 +26,16 @@ DEFAULT_TIME_LIMIT: int = 15000
 class TestCase:
     def __init__(
         self, *,
-        stdin: DynamicInput = '',
+        stdin: 'DynamicInput' = '',
         args: List[str] = None,
         attach: Any = None,
         feedback: str = '',
         files: Dict[str, str] = None,
         time_limit: int = DEFAULT_TIME_LIMIT,
-        check_function: CheckFunction = None,
+        check_function: 'CheckFunction' = None,
         feedback_on_exception: Dict[Type[Exception], str] = None,
         copy_to_attach: bool = False,
-        dynamic_testing: DynamicTesting = None
+        dynamic_testing: 'DynamicTesting' = None
     ):
 
         self.source_name = None
@@ -116,7 +114,7 @@ class TestCase:
                         f'tuple of size 1 or 2, found element of type {type(elem)}')
 
     @property
-    def dynamic_testing(self) -> DynamicTesting:
+    def dynamic_testing(self) -> 'DynamicTesting':
         if self._dynamic_testing is None:
             self._dynamic_testing = to_dynamic_testing(
                 self.source_name, self.args, self.input_funcs
@@ -124,7 +122,7 @@ class TestCase:
         return self._dynamic_testing
 
     @staticmethod
-    def from_stepik(stepik_tests: List[StepikTest]) -> List['TestCase']:
+    def from_stepik(stepik_tests: List['StepikTest']) -> List['TestCase']:
         hs_tests = []
         for test in stepik_tests:
             if type(test) in (list, tuple):

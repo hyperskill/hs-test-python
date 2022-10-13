@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any, Callable, Dict, TYPE_CHECKING
 
 from hstest.dynamic.input.dynamic_input_handler import DynamicInputHandler
@@ -15,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class ConditionalInputHandler:
-    def __init__(self, condition: Condition, handler: DynamicInputHandler):
+    def __init__(self, condition: 'Condition', handler: DynamicInputHandler):
         self.condition = condition
         self.handler = handler
 
@@ -24,8 +22,8 @@ class InputMock:
     def __init__(self):
         self.handlers: Dict[ThreadGroup, ConditionalInputHandler] = {}
 
-    def install_input_handler(self, obj: Any, condition: Condition,
-                              input_func: DynamicTestFunction):
+    def install_input_handler(self, obj: Any, condition: 'Condition',
+                              input_func: 'DynamicTestFunction'):
         if obj in self.handlers:
             raise UnexpectedError("Cannot install input handler from the same program twice")
         self.handlers[obj] = ConditionalInputHandler(

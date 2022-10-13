@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from threading import current_thread, Lock
 from typing import Any, TYPE_CHECKING
 
@@ -60,7 +58,7 @@ class SystemHandler:
             SystemHandler.__locker_thread = None
 
     @staticmethod
-    def install_handler(obj: Any, condition: Condition, input_func: DynamicTestFunction):
+    def install_handler(obj: Any, condition: 'Condition', input_func: 'DynamicTestFunction'):
         InputHandler.install_input_handler(obj, condition, input_func)
         OutputHandler.install_output_handler(obj, condition)
 

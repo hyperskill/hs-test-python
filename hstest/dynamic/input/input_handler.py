@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import io
 import sys
 from typing import Any, TYPE_CHECKING
@@ -24,7 +22,7 @@ class InputHandler:
         sys.stdin = InputHandler.real_in
 
     @staticmethod
-    def install_input_handler(obj: Any, condition: Condition, input_func: DynamicTestFunction):
+    def install_input_handler(obj: Any, condition: 'Condition', input_func: 'DynamicTestFunction'):
         InputHandler.mock_in.install_input_handler(obj, condition, input_func)
 
     @staticmethod
