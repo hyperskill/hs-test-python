@@ -16,8 +16,8 @@ df.loc[:, ['bmi', 'diagnosis', 'blood_test', 'ecg', 'ultrasound', 'mri', 'xray',
 
 # this figure tests see as 6 figures
 # pandas
-df.plot(y='age', kind='box')
-plt.show()
+# df.plot(y='age', kind='box')
+# plt.show()
 
 # pie chart
 # pandas
