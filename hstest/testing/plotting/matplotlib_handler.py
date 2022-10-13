@@ -52,7 +52,8 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     x = data[x]
-                except: pass
+                except:
+                    pass
 
             try:
                 if type(x) == pd.DataFrame:
@@ -61,7 +62,8 @@ class MatplotlibHandler:
                     return
                 elif type(x) == pd.Series:
                     return hist(x.to_numpy(), *args, **kw)
-            except: pass
+            except:
+                pass
 
             if type(x) != np.ndarray:
                 x = np.array(x, dtype=object)
@@ -87,10 +89,12 @@ class MatplotlibHandler:
             if data is not None:
                 try:
                     x = data[x]
-                except: pass
+                except:
+                    pass
                 try:
                     height = data[height]
-                except: pass
+                except:
+                    pass
 
             try:
                 if type(x) == pd.DataFrame:
@@ -101,7 +105,8 @@ class MatplotlibHandler:
                     return bar(x.to_numpy(), height, *args, **kw)
                 elif type(height) == pd.Series:
                     return bar(x, height.to_numpy(), *args, **kw)
-            except: pass
+            except:
+                pass
 
             if type(height) in [int, float]:
                 height = np.full((len(x),), height)
@@ -117,34 +122,6 @@ class MatplotlibHandler:
 
         def barh(x, width, *args, data=None, **kw):
             return bar(x, width, *args, data=data, **kw)
-
-        def boxplot(x, *args, data=None, **kw):
-            if data is not None:
-                try:
-                    x = data[x]
-                except: pass
-
-            y = None
-
-            try:
-                if type(x) == pd.DataFrame:
-                    for col in x.columns:
-                        boxplot(x[col], *args, **kw)
-                    return
-                elif type(x) == pd.Series:
-                    return boxplot(x.to_numpy(), *args, **kw)
-                elif type(y) == pd.Series:
-                    return boxplot(x, *args, **kw)
-            except: pass
-
-            drawings.append(
-                Drawing(
-                    DrawingLibrary.matplotlib,
-                    DrawingType.box,
-                    DrawingData(y, x),
-                    kw,
-                )
-            )
 
         def plot(*args, **kwargs):
             x = list()
@@ -180,23 +157,26 @@ class MatplotlibHandler:
             # Normalize with other plot libraries
             y = x
 
-            x_arr = [''] * len(y)
+            x = [''] * len(y)
 
             if 'labels' in kw and kw['labels'] is not None:
-                x_arr = kw['labels']
+                x = kw['labels']
 
-            drawing = DrawingBuilder.get_pie_drawing(
-                x_arr, y,
-                DrawingLibrary.matplotlib,
-                kw,
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.pie,
+                    DrawingData(x, y),
+                    kw
+                )
             )
-            drawings.append(drawing)
 
         def violinplot(dataset, *, data=None, **kwargs):
             if data is not None:
                 try:
                     dataset = data[dataset]
-                except: pass
+                except:
+                    pass
 
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
@@ -207,7 +187,6 @@ class MatplotlibHandler:
 
             drawings.append(drawing)
 
-
         def imshow(x, **kwargs):
             curr_data = {
                 'x': np.array(x)
@@ -216,6 +195,20 @@ class MatplotlibHandler:
             drawing = Drawing(
                 DrawingLibrary.matplotlib,
                 DrawingType.heatmap,
+                None,
+                kwargs,
+            )
+            drawings.append(drawing)
+
+        def boxplot(x, **kwargs):
+            curr_data = {
+                'x': np.array([None]),
+                'y': np.array(x)
+            }
+
+            drawing = Drawing(
+                DrawingLibrary.matplotlib,
+                DrawingType.box,
                 None,
                 kwargs,
             )
@@ -234,10 +227,6 @@ class MatplotlibHandler:
             def barh(self, y, width, *a, **kw):
                 barh(y, width, *a, **kw)
 
-            def boxplot(self, x, *a, **kw):
-                boxplot(x, *a, **kw)
-
-
             def plot(self, *args, **kwargs):
                 plot(*args, *kwargs)
 
@@ -252,6 +241,9 @@ class MatplotlibHandler:
 
             def imshow(self, x, **kwargs):
                 imshow(x, **kwargs)
+
+            def boxplot(self, x, **kwargs):
+                boxplot(x, **kwargs)
 
         import matplotlib
 
