@@ -26,7 +26,7 @@ class FlaskApplicationRunner(TestRunner):
 
         if len(sources) == 0:
             raise UnexpectedError(
-                f'Cannot find Flask applications to run, no sources were defined in tests')
+                'Cannot find Flask applications to run, no sources were defined in tests')
 
         new_sources = []
 

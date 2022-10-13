@@ -21,7 +21,7 @@ class TestDynamicMethodProgramNotFinishedAfterTestButShutDown(UserErrorTest):
     ---
     
     Server started!
-    """
+    """  # noqa: W293
 
     runner = AsyncDynamicTestingRunner(PythonExecutor)
 

@@ -41,14 +41,14 @@ class BaseSearcher:
         return contents
 
     def _search_non_cached(
-            self,
-            where_to_search: str,
-            *,
-            file_filter: FileFilter,
-            pre_main_filter: FileFilter,
-            main_filter: MainFilter,
-            post_main_filter: FileFilter) \
-            -> RunnableFile:
+        self,
+        where_to_search: str,
+        *,
+        file_filter: FileFilter,
+        pre_main_filter: FileFilter,
+        main_filter: MainFilter,
+        post_main_filter: FileFilter
+    ) -> RunnableFile:
 
         curr_folder = os.path.abspath(where_to_search)
 
@@ -98,7 +98,8 @@ class BaseSearcher:
                 str_files = ', '.join(f'"{f}"' for f in sorted(candidates))
                 raise ErrorWithFeedback(
                     f'Cannot decide which file to run out of the following: {str_files}\n'
-                    f'They all have "{main_filter.program_should_contain}". Leave one file with this line.')
+                    f'They all have "{main_filter.program_should_contain}". '
+                    f'Leave one file with this line.')
 
             if len(candidates) == 0:
                 candidates = initial_filter.filtered
@@ -107,21 +108,22 @@ class BaseSearcher:
 
             raise ErrorWithFeedback(
                 f'Cannot decide which file to run out of the following: {str_files}\n'
-                f'Write "{main_filter.program_should_contain}" in one of them to mark it as an entry point.')
+                f'Write "{main_filter.program_should_contain}" '
+                f'in one of them to mark it as an entry point.')
 
         raise ErrorWithFeedback(
             'Cannot find a file to execute your code.\n'
             f'Are your project files located at \"{curr_folder}\"?')
 
     def _search(
-            self,
-            where_to_search: str = None,
-            *,
-            file_filter: FileFilter = None,
-            pre_main_filter: FileFilter = None,
-            main_filter: MainFilter = None,
-            post_main_filter: FileFilter = None) \
-            -> RunnableFile:
+        self,
+        where_to_search: str = None,
+        *,
+        file_filter: FileFilter = None,
+        pre_main_filter: FileFilter = None,
+        main_filter: MainFilter = None,
+        post_main_filter: FileFilter = None
+    ) -> RunnableFile:
 
         if not self.extension.startswith('.'):
             raise UnexpectedError(f'File extension "{self.extension}" should start with a dot')

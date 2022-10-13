@@ -15,7 +15,7 @@ class TestImportRelativeError(UserErrorTest):
           File "main.py", line 1, in <module>
             from .main22 import x
         ModuleNotFoundError: No module named 'tests.outcomes.imports.test_import_relative_error.main22'
-        """
+        """  # noqa: W293, E501
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]

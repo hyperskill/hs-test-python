@@ -62,9 +62,12 @@ class ProgramExecutor:
     def execute(self, stdin: str) -> str:
         if self.is_finished():
             from hstest.stage_test import StageTest
-            StageTest.curr_test_run.set_error_in_test(ErrorWithFeedback(
+            StageTest.curr_test_run.set_error_in_test(
+                ErrorWithFeedback(
                     f"The program {self} has unexpectedly terminated.\n" +
-                    "It finished execution too early, should continue running."))
+                    "It finished execution too early, should continue running."
+                )
+            )
             raise TestedProgramFinishedEarly()
 
         if stdin is None:

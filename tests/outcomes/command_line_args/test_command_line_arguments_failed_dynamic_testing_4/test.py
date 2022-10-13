@@ -17,7 +17,7 @@ class TestCommandLineArgumentsFailedDynamicTesting4(UserErrorTest):
     Arguments for main2.py: --second main
     
     0
-    """
+    """  # noqa: W293
 
     def test1(self):
         pr = TestedProgram('main')

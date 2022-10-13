@@ -11,7 +11,7 @@ class WrongAnswerThrownInDynamicInput2(UserErrorTest):
     Wrong answer in test #2
     
     Add input test 2
-    """
+    """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

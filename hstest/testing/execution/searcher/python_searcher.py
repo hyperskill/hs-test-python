@@ -53,4 +53,6 @@ class PythonSearcher(BaseSearcher):
         OutputHandler.print(f'PythonSearcher source = {source}, cwd = {os.getcwd()}')
         runnable = super().find(source)
         OutputHandler.print(f'PythonSearcher found runnable: {runnable.folder}/{runnable.file}')
-        return PythonRunnableFile(runnable.folder, runnable.file, runnable.file[:-len(self.extension)])
+        return PythonRunnableFile(
+            runnable.folder, runnable.file, runnable.file[:-len(self.extension)]
+        )

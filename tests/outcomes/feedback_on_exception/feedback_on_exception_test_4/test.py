@@ -14,7 +14,7 @@ class FeedbackOnExceptionTest4(UserErrorTest):
             Traceback (most recent call last):
               File "main.py", line 1, in <module>
                 raise Exception()
-            Exception'''
+            Exception'''  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

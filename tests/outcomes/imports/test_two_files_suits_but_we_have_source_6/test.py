@@ -1,4 +1,4 @@
-from hstest import CheckResult, StageTest, TestedProgram, dynamic_test
+from hstest import CheckResult, dynamic_test, StageTest, TestedProgram
 
 
 class TestImportRelativeError2(StageTest):

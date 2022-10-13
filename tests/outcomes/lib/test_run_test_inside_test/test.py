@@ -11,7 +11,7 @@ class TestRunTestInsideTest(UserErrorTest):
     Error during testing
     
     Cannot start the testing process more than once
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test(self):

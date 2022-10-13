@@ -87,16 +87,20 @@ class InfiniteLoopDetector:
         self._lines_since_last_input = 0
 
     def _check_inf_loop_chars(self):
-        if self.check_no_input_requests_for_long and \
-           self._chars_since_last_input >= self._CHARS_SINCE_LAST_INPUT_MAX:
-            self._fail("No input request for the last " +
-                       str(self._chars_since_last_input) + " characters being printed.")
+        if (self.check_no_input_requests_for_long and
+            self._chars_since_last_input >= self._CHARS_SINCE_LAST_INPUT_MAX):
+            self._fail(
+                f"No input request for the last {str(self._chars_since_last_input)} "
+                f"characters being printed."
+            )
 
     def _check_inf_loop_lines(self):
-        if self.check_no_input_requests_for_long and \
-           self._lines_since_last_input >= self._LINES_SINCE_LAST_INPUT_MAX:
-            self._fail("No input request for the last " +
-                       str(self._lines_since_last_input) + " lines being printed.")
+        if (self.check_no_input_requests_for_long and
+            self._lines_since_last_input >= self._LINES_SINCE_LAST_INPUT_MAX):
+            self._fail(
+                f"No input request for the last {self._lines_since_last_input} "
+                f"lines being printed."
+            )
 
         if not self.check_repeatable_output:
             return
@@ -123,12 +127,14 @@ class InfiniteLoopDetector:
                     return
 
         if lines_repeated == 1:
-            self._fail("Last " + str(lines_to_check) +
-                       " lines your program printed are the same.")
+            self._fail(
+                f"Last {lines_to_check} lines your program printed are the same.")
         else:
-            self._fail("Last " + str(lines_to_check) + " lines your program printed have "
-                       + str(how_many_repetitions) + " blocks of "
-                       + str(lines_repeated) + " lines of the same text.")
+            self._fail(
+                f"Last {lines_to_check} lines your program printed have "
+                f"{how_many_repetitions} blocks of {lines_repeated} "
+                f"lines of the same text."
+            )
 
     def _check_inf_loop_input_requests(self):
         if not self.check_no_input_requests_for_long:
@@ -139,8 +145,10 @@ class InfiniteLoopDetector:
             if curr != first_elem:
                 return
 
-        self._fail("Between the last " + str(self._BETWEEN_INPUT_SAVED_SIZE)
-                   + " input requests the texts being printed are identical.")
+        self._fail(
+            f"Between the last {str(self._BETWEEN_INPUT_SAVED_SIZE)} "
+            f"input requests the texts being printed are identical."
+        )
 
     def _fail(self, reason: str):
         from hstest.stage_test import StageTest

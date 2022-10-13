@@ -11,7 +11,7 @@ class UnexpectedErrorRuntimeExitInCheck(UnexpectedErrorTest):
         Unexpected error in test #1
         
         We have recorded this bug and will fix it soon.
-        """,
+        """,  # noqa: W293
         'ExitException'
     ]
 

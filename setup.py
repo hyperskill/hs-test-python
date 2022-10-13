@@ -8,7 +8,9 @@ setup(
     version="8.0.0",
     author="Vladimir Turov",
     author_email="vladimir.turov@stepik.org",
-    description="A framework that simplifies testing educational projects for https://hyperskill.org/.",
+    description=(
+        "A framework that simplifies testing educational projects for https://hyperskill.org/."
+    ),
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/hyperskill/hs-test-python",

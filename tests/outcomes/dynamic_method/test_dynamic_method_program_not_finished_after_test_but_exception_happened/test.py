@@ -15,7 +15,7 @@ class TestDynamicMethodProgramNotFinishedAfterTestButExceptionHappened(UserError
     ---
     
     Server started!
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test(self):

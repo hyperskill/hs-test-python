@@ -19,7 +19,7 @@ class TestDynamicMethodEarlyExit(UserErrorTest):
     Server started!
     > main
     S1: main
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test(self):

@@ -10,7 +10,7 @@ class TestFeedback(UserErrorTest):
     feedback 2
     
     feedback 1
-    """
+    """  # noqa: W293
 
     @dynamic_test(feedback="feedback 1")
     def test(self):

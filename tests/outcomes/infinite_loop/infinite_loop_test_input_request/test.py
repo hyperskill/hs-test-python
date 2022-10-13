@@ -16,7 +16,7 @@ class InfiniteLoopTestInputRequest(UserErrorTest):
     ---
     
     Long Line Long Line Long Line
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test(self):

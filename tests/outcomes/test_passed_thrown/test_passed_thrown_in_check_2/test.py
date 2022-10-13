@@ -11,7 +11,7 @@ class TestPassedThrownInCheck2(UserErrorTest):
     Wrong answer in test #2
     
     test is not passed attach false
-    """
+    """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

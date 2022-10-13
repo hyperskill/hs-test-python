@@ -11,7 +11,7 @@ class UnexpectedErrorRuntimeExitInDynamicInput(UnexpectedErrorTest):
         Unexpected error in test #3
         
         We have recorded this bug and will fix it soon.
-        """,
+        """,  # noqa: W293
         "ExitException"
     ]
 

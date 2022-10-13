@@ -16,7 +16,7 @@ class FeedbackOnExceptionTest5(UserErrorTest):
             Traceback (most recent call last):
               File "main.py", line 1, in <module>
                 raise ZeroDivisionError()
-            ZeroDivisionError'''
+            ZeroDivisionError'''  # noqa: W293
 
     runner = AsyncDynamicTestingRunner(MainModuleExecutor)
 

@@ -15,7 +15,7 @@ class TestImportRelativeError2(UserErrorTest):
               File "main.py", line 1, in <module>
                 from .main2 import y
             ImportError: cannot import name 'y' from 
-            """
+            """  # noqa: W291
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]

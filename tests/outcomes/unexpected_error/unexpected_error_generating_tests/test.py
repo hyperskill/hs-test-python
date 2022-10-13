@@ -15,7 +15,7 @@ class UnexpectedErrorGeneratingTests(UnexpectedErrorTest):
     ]
 
     def generate(self) -> List[TestCase]:
-        x = 0 / 0
+        x = 0 / 0  # noqa: F841
         return [
             TestCase()
         ]

@@ -25,9 +25,8 @@ class MainModuleExecutor(ProgramExecutor):
         self.working_directory_before = os.path.abspath(os.getcwd())
 
     def _invoke_method(self, *args: str):
-        modules_before = [k for k in sys.modules.keys()]
-
         from hstest.stage_test import StageTest
+
         try:
             self._machine.set_state(ProgramState.RUNNING)
 

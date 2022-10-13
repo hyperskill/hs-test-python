@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import Any, List
 
 from hstest import CheckResult
 from hstest.test_case import TestCase
@@ -23,7 +23,7 @@ class TestOutputWithStderrAndWithStdout(UserErrorTest):
     stderr:
     User stderr output!
     User stderr output!
-    User stderr output!"""
+    User stderr output!"""  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [
