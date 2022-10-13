@@ -11,7 +11,7 @@ class EDATest(PlottingTest):
         all_figures = self.all_figures()
         if len(all_figures) == 0:
             return CheckResult.wrong("Looks like you didn't present any plots")
-        if len(all_figures) != 6:
+        if len(all_figures) != 3:
             return CheckResult.wrong(f"Expected 3 plots, found {len(all_figures)}")
 
         return CheckResult.correct()
