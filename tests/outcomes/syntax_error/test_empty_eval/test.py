@@ -13,7 +13,7 @@ class TestEmptyEval(UserErrorTest):
           File "main.py", line 1, in <module>
             print(eval(""))
           File "<string>", line 0""",
-        "SyntaxError: invalid syntax"
+        "SyntaxError: "
     ]
 
     def generate(self) -> List[TestCase]:

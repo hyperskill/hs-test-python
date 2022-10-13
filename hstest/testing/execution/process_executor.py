@@ -25,6 +25,7 @@ class ProcessExecutor(ProgramExecutor):
         self.continue_executing = True
         self.runnable: RunnableFile = runnable
         self.__group: Optional[ThreadGroup] = None
+        self.working_directory_before = os.path.abspath(os.getcwd())
 
     def _compilation_command(self, *args: str) -> List[str]:
         return []
@@ -63,42 +64,39 @@ class ProcessExecutor(ProgramExecutor):
     def __handle_process(self, *args: str):
         from hstest import StageTest
 
-        working_directory_before = os.path.abspath(os.getcwd())
+        os.chdir(self.runnable.folder)
 
-        try:
-            os.chdir(self.runnable.folder)
+        if not self.__compile_program():
+            return
 
-            if not self.__compile_program():
-                return
+        ProcessExecutor.compiled = True
 
-            ProcessExecutor.compiled = True
+        command = self._execution_command(*args)
 
-            command = self._execution_command(*args)
+        self._machine.set_state(ProgramState.RUNNING)
+        self.process = ProcessWrapper(*command).start()
 
-            self._machine.set_state(ProgramState.RUNNING)
-            self.process = ProcessWrapper(*command).start()
+        while self.continue_executing:
+            OutputHandler.print('Handle process - one iteration')
+            sleep(0.001)
 
-            while self.continue_executing:
-                OutputHandler.print('Handle process - one iteration')
-                sleep(0.001)
+            if self.process.is_finished():
+                OutputHandler.print('Handle process - finished, breaking')
+                break
 
-                if self.process.is_finished():
-                    OutputHandler.print('Handle process - finished, breaking')
-                    break
+            is_input_allowed = self.is_input_allowed()
+            is_waiting_input = self.process.is_waiting_input()
 
-                is_input_allowed = self.is_input_allowed()
-                is_waiting_input = self.process.is_waiting_input()
+            OutputHandler.print(f'Handle process - '
+                                f'input allowed {is_input_allowed}, '
+                                f'waiting input {is_waiting_input}')
 
-                OutputHandler.print(f'Handle process - '
-                                    f'input allowed {is_input_allowed}, '
-                                    f'waiting input {is_waiting_input}')
+            if is_input_allowed and is_waiting_input:
+                OutputHandler.print('Handle process - registering input request')
+                self.process.register_input_request()
 
-                if is_input_allowed and is_waiting_input:
-                    OutputHandler.print('Handle process - registering input request')
-                    self.process.register_input_request()
-
-                    try:
-                        OutputHandler.print('Handle process - try readline')
+                try:
+                    OutputHandler.print('Handle process - try readline')
                         next_input = InputHandler.mock_in.readline()
                         OutputHandler.print(
                             f'Handle process - requested input: {repr(next_input)}'
@@ -120,34 +118,31 @@ class ProcessExecutor(ProgramExecutor):
                     except BaseException as ex:
                         OutputHandler.print(f'Handle process - SOME EXCEPTION {ex}')
 
-            OutputHandler.print('Handle process - TERMINATE')
-            self.process.terminate()
+        OutputHandler.print('Handle process - TERMINATE')
+        self.process.terminate()
 
-            is_error_happened = self.process.is_error_happened()
-            OutputHandler.print('Handle process - after termination')
-            OutputHandler.print(f'Handle process - is error happened {is_error_happened}')
+        is_error_happened = self.process.is_error_happened()
+        OutputHandler.print('Handle process - after termination')
+        OutputHandler.print(f'Handle process - is error happened {is_error_happened}')
 
-            if StageTest.curr_test_run.error_in_test is not None:
-                OutputHandler.print('Handle process - set state EXCEPTION THROWN (ERROR IN TEST)')
-                self._machine.set_state(ProgramState.EXCEPTION_THROWN)
+        if StageTest.curr_test_run.error_in_test is not None:
+            OutputHandler.print('Handle process - set state EXCEPTION THROWN (ERROR IN TEST)')
+            self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
-            elif is_error_happened:
-                OutputHandler.print(
+        elif is_error_happened:
+            OutputHandler.print(
                     'Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)'
                 )
-                StageTest.curr_test_run.set_error_in_test(
+            StageTest.curr_test_run.set_error_in_test(
                     ExceptionWithFeedback(self.process.stderr, None)
                 )
-                self._machine.set_state(ProgramState.EXCEPTION_THROWN)
+            self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
-            else:
-                OutputHandler.print('Handle process - set state FINISHED')
-                self._machine.set_state(ProgramState.FINISHED)
+        else:
+            OutputHandler.print('Handle process - set state FINISHED')
+            self._machine.set_state(ProgramState.FINISHED)
 
-            OutputHandler.print('Handle process - finishing execution')
-
-        finally:
-            os.chdir(working_directory_before)
+        OutputHandler.print('Handle process - finishing execution')
 
     def _wait_if_terminated(self):
         return try_many_times(100, 10, lambda: self.process.is_finished(False))
@@ -170,6 +165,7 @@ class ProcessExecutor(ProgramExecutor):
         self.continue_executing = False
         self.process.terminate()
         OutputHandler.print(f'TERMINATE {self.is_finished()}')
+        os.chdir(self.working_directory_before)
         while not self.is_finished():
             if self.is_waiting_input():
                 self._machine.set_state(ProgramState.RUNNING)

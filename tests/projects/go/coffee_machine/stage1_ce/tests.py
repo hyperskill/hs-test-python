@@ -1,6 +1,7 @@
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
+import os
 
 CheckResult.correct = lambda: CheckResult(True, '')
 CheckResult.wrong = lambda feedback: CheckResult(False, feedback)
@@ -17,11 +18,11 @@ Coffee is ready!
 
 
 class CoffeeMachineTest(UserErrorTest):
-    contain = """
+    contain = f"""
     Compilation error
 
-    .\main.go:4:2: imported and not used: "fmt"
-    .\main.go:8:2: undefined: Println
+    .{os.sep}main.go:4:2: imported and not used: "fmt"
+    .{os.sep}main.go:8:2: undefined: Println
     """
 
     def generate(self) -> List[TestCase]:

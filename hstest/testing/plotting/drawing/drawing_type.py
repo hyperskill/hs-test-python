@@ -27,9 +27,17 @@ class DrawingType:
     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html
     # https://seaborn.pydata.org/generated/seaborn.barplot.html
 
+    # ------
+
+    pie = "pie"
+
+    # https://matplotlib.org/stable/gallery/pie_and_polar_charts/pie_features.html
+    # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.pie.html
+
+    # ------
+
     line = "line"
     scatter = "scatter"
-    pie = "pie"
 
     # ---------------------------
     # common types (without data)

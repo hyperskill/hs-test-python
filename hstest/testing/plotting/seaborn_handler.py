@@ -260,13 +260,14 @@ class SeabornHandler:
                     y_arr = data[y].to_numpy()
                     if x_arr.size == 0:
                         x_arr = np.full((y_arr.size,), '', dtype=str)
-
-            drawing = DrawingBuilder.get_bar_drawing(
-                x_arr, y_arr,
-                DrawingLibrary.seaborn,
-                kwargs,
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.bar,
+                    DrawingData(x_arr, y_arr),
+                    kwargs
+                )
             )
-            drawings.append(drawing)
 
         def violinplot(*, x=None, y=None, data=None, **kwargs):
 

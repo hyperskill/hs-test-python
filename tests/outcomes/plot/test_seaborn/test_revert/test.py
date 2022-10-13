@@ -1,3 +1,5 @@
+import time
+
 from hstest import TestedProgram
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
@@ -18,6 +20,8 @@ class TestSeaborn(PlottingTest):
         program.start()
 
         matplotlib.use(backend)
+        #
+        # time.sleep(4)
 
         if len(self.all_figures()) != 0:
             return wrong(

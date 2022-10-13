@@ -157,17 +157,19 @@ class MatplotlibHandler:
             # Normalize with other plot libraries
             y = x
 
-            x_arr = [''] * len(y)
+            x = [''] * len(y)
 
             if 'labels' in kw and kw['labels'] is not None:
-                x_arr = kw['labels']
+                x = kw['labels']
 
-            drawing = DrawingBuilder.get_pie_drawing(
-                x_arr, y,
-                DrawingLibrary.matplotlib,
-                kw,
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.pie,
+                    DrawingData(x, y),
+                    kw
+                )
             )
-            drawings.append(drawing)
 
         def violinplot(dataset, *, data=None, **kwargs):
             if data is not None:

@@ -3,3 +3,5 @@
 venv*
 build/
 /hs_test_python.egg-info/
+node_modules
+package-lock.json
