@@ -1,13 +1,17 @@
-from typing import Any, Callable, Dict
+from __future__ import annotations
 
-from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
+from typing import Any, Callable, Dict, TYPE_CHECKING
+
 from hstest.dynamic.input.dynamic_input_handler import DynamicInputHandler
 from hstest.dynamic.security.exit_exception import ExitException
 from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.exception.outcomes import OutOfInputError, UnexpectedError
 from hstest.testing.settings import Settings
 
-Condition = Callable[[], bool]
+if TYPE_CHECKING:
+    from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
+
+    Condition = Callable[[], bool]
 
 
 class ConditionalInputHandler:

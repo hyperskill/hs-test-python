@@ -1,20 +1,26 @@
-from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+from __future__ import annotations
 
-from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction, InputFunction
-from hstest.dynamic.input.dynamic_testing import DynamicTesting, to_dynamic_testing
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TYPE_CHECKING, Union
+
+from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
+from hstest.dynamic.input.dynamic_testing import to_dynamic_testing
 from hstest.exception.outcomes import UnexpectedError
 from hstest.test_case.check_result import CheckResult
 
-SimpleStepikTest = str
-AdvancedStepikTest = Tuple[str, Any]
-StepikTest = Union[SimpleStepikTest, AdvancedStepikTest]
+if TYPE_CHECKING:
+    from hstest.dynamic.input.dynamic_input_func import InputFunction
+    from hstest.dynamic.input.dynamic_testing import DynamicTesting
 
-CheckFunction = Callable[[str, Any], CheckResult]
+    SimpleStepikTest = str
+    AdvancedStepikTest = Tuple[str, Any]
+    StepikTest = Union[SimpleStepikTest, AdvancedStepikTest]
 
-PredefinedInput = str
-RuntimeEvaluatedInput = Union[
-    PredefinedInput, InputFunction, Tuple[int, InputFunction], DynamicInputFunction]
-DynamicInput = Union[PredefinedInput, List[RuntimeEvaluatedInput]]
+    CheckFunction = Callable[[str, Any], CheckResult]
+
+    PredefinedInput = str
+    RuntimeEvaluatedInput = Union[
+        PredefinedInput, InputFunction, Tuple[int, InputFunction], DynamicInputFunction]
+    DynamicInput = Union[PredefinedInput, List[RuntimeEvaluatedInput]]
 
 DEFAULT_TIME_LIMIT: int = 15000
 

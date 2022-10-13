@@ -1,9 +1,13 @@
-from typing import List, Optional
+from __future__ import annotations
+
+from typing import List, Optional, TYPE_CHECKING
 
 from hstest.common.utils import clean_text
-from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
 from hstest.dynamic.output.output_handler import OutputHandler
+
+if TYPE_CHECKING:
+    from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
 
 
 class DynamicInputHandler:

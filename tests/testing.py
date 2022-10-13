@@ -1,12 +1,12 @@
 import io
 import re
 import sys
+import unittest
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
-from os.path import isfile, isdir, dirname, abspath
+from os.path import abspath, dirname, isdir, isfile
 from typing import List
-import unittest
 
 content_path = dirname(
     dirname(abspath(__file__))

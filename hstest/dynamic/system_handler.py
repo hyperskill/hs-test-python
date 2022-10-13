@@ -1,13 +1,17 @@
-from threading import current_thread, Lock
-from typing import Any
+from __future__ import annotations
 
-from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
+from threading import current_thread, Lock
+from typing import Any, TYPE_CHECKING
+
 from hstest.dynamic.input.input_handler import InputHandler
-from hstest.dynamic.input.input_mock import Condition
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.security.exit_handler import ExitHandler
 from hstest.dynamic.security.thread_handler import ThreadHandler
 from hstest.exception.outcomes import ErrorWithFeedback
+
+if TYPE_CHECKING:
+    from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
+    from hstest.dynamic.input.input_mock import Condition
 
 
 class SystemHandler:

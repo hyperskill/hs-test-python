@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import io
 import sys
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
-from hstest.dynamic.input.input_mock import Condition, InputMock
+from hstest.dynamic.input.input_mock import InputMock
+
+if TYPE_CHECKING:
+    from hstest.dynamic.input.dynamic_input_func import DynamicTestFunction
+    from hstest.dynamic.input.input_mock import Condition
 
 
 class InputHandler:
