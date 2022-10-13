@@ -12,12 +12,10 @@ class DrawingType:
     hist = "hist"
 
     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-
     # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.hist.html
     # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.hist.html
     # https://pandas.pydata.org/docs/reference/api/pandas.Series.hist.html
     # https://pandas.pydata.org/docs/reference/api/pandas.Series.plot.hist.html
-
     # https://seaborn.pydata.org/generated/seaborn.histplot.html
 
     # ------
@@ -25,14 +23,19 @@ class DrawingType:
     bar = "bar"
 
     # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.bar.html
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.plot.bar.html
     # https://seaborn.pydata.org/generated/seaborn.barplot.html
 
     # ------
 
-    pie = "pie"
+    box = "box"
 
-    # https://matplotlib.org/stable/gallery/pie_and_polar_charts/pie_features.html
-    # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.pie.html
+    # https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.boxplot.html
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.boxplot.html
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.box.html
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.plot.box.html
+    # https://seaborn.pydata.org/generated/seaborn.boxplot.html
 
     # ------
 
@@ -45,7 +48,6 @@ class DrawingType:
 
     violin = "violin"
     heatmap = "heatmap"
-    box = "box"
     dis = "dis"  # distribution plot (pandas' density and kde, seaborn' displot)
 
     # pandas only (without data)

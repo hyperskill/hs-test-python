@@ -324,6 +324,7 @@ class PandasHandler:
                     'hist': hist,
                     'bar': bar,
                     'barh': barh,
+                    'box': box,
                 }
 
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
@@ -489,6 +490,9 @@ class PandasHandler:
         def barh(
             self,
         ):
+            pass
+
+        def box():
             pass
 
         if not PandasHandler._saved:
