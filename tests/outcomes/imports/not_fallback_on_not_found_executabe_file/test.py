@@ -1,6 +1,6 @@
 from typing import List
 
-from hstest import wrong, TestCase
+from hstest import TestCase, wrong
 from hstest.testing.tested_program import TestedProgram
 from hstest.testing.unittest.user_error_test import UserErrorTest
 
@@ -11,7 +11,7 @@ class FindModuleNoInfoAnalyzeImports(UserErrorTest):
 
     Cannot find a file to execute your code.
     Are your project files located at 
-    """
+    """  # noqa: W291
 
     def test1(self):
         main = TestedProgram('main')

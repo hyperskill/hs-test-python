@@ -37,12 +37,13 @@ class FlaskTest(StageTest):
         if link.startswith('/'):
             link = link[1:]
 
-        create_url = lambda port: f'http://localhost:{port}/{link}'
+        def create_url(port: int) -> str:
+            return f'http://localhost:{port}/{link}'
 
         if len(self.attach.sources) == 1:
             return create_url(self.attach.sources[0][1])
         elif len(self.attach.sources) == 0:
-            raise UnexpectedError(f'Cannot find sources')
+            raise UnexpectedError('Cannot find sources')
 
         sources_fits = [i for i in self.attach.sources if i[0] == source]
         if len(sources_fits) == 0:

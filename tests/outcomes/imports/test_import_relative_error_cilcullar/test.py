@@ -19,7 +19,7 @@ class TestImportRelativeErrorCircular(UserErrorTest):
               File "main.py", line 1, in <module>
                 from .main2 import x
             ImportError: cannot import name 'x' from partially initialized module 
-            """
+            """  # noqa: W291
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]

@@ -11,7 +11,7 @@ class UnexpectedErrorUserMainFileNotExists(UserErrorTest):
     
     Cannot find a file to execute your code.
     Are your project files located at 
-    """
+    """  # noqa: W293, W291
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]

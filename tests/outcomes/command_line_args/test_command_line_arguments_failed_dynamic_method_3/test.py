@@ -20,7 +20,7 @@ class TestCommandLineArgumentsFailedDynamicMethod3(UserErrorTest):
     123
     -out
     234
-    """
+    """  # noqa: W293
 
     @dynamic_test
     def test1(self):

@@ -22,7 +22,7 @@ class TestCommandLineArgumentsFailedDynamicTesting3(UserErrorTest):
     123
     -out
     234
-    """
+    """  # noqa: W293
 
     def test1(self):
         pr = TestedProgram('main')

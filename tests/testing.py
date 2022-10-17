@@ -1,20 +1,20 @@
 import io
 import re
 import sys
+import unittest
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
-from os.path import isfile, isdir, dirname, abspath
+from os.path import abspath, dirname, isdir, isfile
 from typing import List
-import unittest
 
 content_path = dirname(
     dirname(abspath(__file__))
 )
 sys.path.insert(0, content_path)
 
-from hstest.common import utils as hs
-from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET
+from hstest.common import utils as hs  # noqa: E402
+from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET  # noqa: E402
 
 
 class OutputForTest:

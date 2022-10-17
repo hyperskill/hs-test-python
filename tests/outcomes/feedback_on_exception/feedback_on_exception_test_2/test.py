@@ -14,7 +14,7 @@ class FeedbackOnExceptionTest2(UserErrorTest):
         Traceback (most recent call last):
           File "main.py", line 1, in <module>
             raise AttributeError()
-        AttributeError'''
+        AttributeError'''  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

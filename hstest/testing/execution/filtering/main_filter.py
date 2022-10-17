@@ -1,6 +1,8 @@
 from typing import Callable
 
-from hstest.testing.execution.filtering.file_filter import File, FileFilter, Filter, Folder, Source, Sources, no_filter
+from hstest.testing.execution.filtering.file_filter import (
+    File, FileFilter, Filter, Folder, no_filter, Source, Sources
+)
 
 
 class MainFilter(FileFilter):

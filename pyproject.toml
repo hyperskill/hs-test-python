@@ -1,0 +1,20 @@
+[tool.isort]
+py_version=36
+line_length = 100
+multi_line_output = 6
+honor_noqa = true
+order_by_type = false
+use_parentheses = true
+combine_as_imports = true
+only_modified = true
+lexicographical = true
+group_by_package = true
+force_alphabetical_sort_within_sections = true
+extend_skip_glob = [
+    "tests/projects",
+    "tests/outcomes/**/main*.py",
+    "tests/outcomes/**/cleaning.py",
+    "tests/outcomes/**/pandas_*.py",
+    "tests/outcomes/**/matplotlib_*.py",
+    "tests/outcomes/**/seaborn_*.py",
+]

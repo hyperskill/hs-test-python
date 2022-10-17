@@ -15,7 +15,7 @@ class TestDynamicOutputWithoutInput(UserErrorTest):
         
         Print x and y: 123 456
         Another num:
-        """
+        """  # noqa: W293
     ]
 
     def generate(self) -> List[TestCase]:

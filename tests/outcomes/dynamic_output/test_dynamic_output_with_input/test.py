@@ -18,7 +18,7 @@ class TestDynamicOutputWithInput(UserErrorTest):
     > 678
     Another num:
     > 248
-    """
+    """  # noqa: W293
 
     not_contain = "Unexpected error"
 

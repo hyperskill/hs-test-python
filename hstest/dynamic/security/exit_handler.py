@@ -6,6 +6,10 @@ import sys
 from hstest.dynamic.security.exit_exception import ExitException
 
 
+def _throw_exit_exception(*args, **kwargs) -> None:
+    ExitException.throw()
+
+
 class ExitHandler:
     _saved = False
     _replaced = False
@@ -18,8 +22,6 @@ class ExitHandler:
     _os_killpg = None
     _signal_pthread_kill = None
     _signal_siginterrupt = None
-
-    _exit_func = lambda *x, **y: ExitException.throw()
 
     @staticmethod
     def is_replaced():
@@ -35,17 +37,21 @@ class ExitHandler:
             ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
             ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
             ExitHandler._sys_exit = sys.exit if hasattr(sys, 'exit') else None
-            ExitHandler._signal_pthread_kill = signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
-            ExitHandler._signal_siginterrupt = signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
+            ExitHandler._signal_pthread_kill = (
+                signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
+            )
+            ExitHandler._signal_siginterrupt = (
+                signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
+            )
 
-        builtins.quit = ExitHandler._exit_func
-        builtins.exit = ExitHandler._exit_func
-        os.kill = ExitHandler._exit_func
-        os._exit = ExitHandler._exit_func
-        os.killpg = ExitHandler._exit_func
-        sys.exit = ExitHandler._exit_func
-        signal.pthread_kill = ExitHandler._exit_func
-        signal.siginterrupt = ExitHandler._exit_func
+        builtins.quit = _throw_exit_exception
+        builtins.exit = _throw_exit_exception
+        os.kill = _throw_exit_exception
+        os._exit = _throw_exit_exception
+        os.killpg = _throw_exit_exception
+        sys.exit = _throw_exit_exception
+        signal.pthread_kill = _throw_exit_exception
+        signal.siginterrupt = _throw_exit_exception
 
         ExitHandler._replaced = True
 

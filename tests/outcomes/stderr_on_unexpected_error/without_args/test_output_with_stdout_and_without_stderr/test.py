@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import Any, List
 
 from hstest import CheckResult
 from hstest.test_case import TestCase
@@ -16,7 +16,7 @@ class TestOutputWithStderrAndWithStdout(UserErrorTest):
     User stdout output!
     User stdout output!
     User stdout output!
-    """
+    """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [

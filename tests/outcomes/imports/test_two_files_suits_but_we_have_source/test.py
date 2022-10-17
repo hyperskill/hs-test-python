@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from hstest import CheckResult, TestCase, correct
+from hstest import CheckResult, correct, TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
