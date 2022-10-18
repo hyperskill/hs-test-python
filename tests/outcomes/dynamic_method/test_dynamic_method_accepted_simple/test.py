@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
@@ -24,14 +22,3 @@ class TestDynamicMethodAcceptedSimple(StageTest):
             return wrong("")
 
         return correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestDynamicMethodAcceptedSimple().run_tests()
-        self.assertEqual('test OK', feedback)
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

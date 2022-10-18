@@ -10,7 +10,7 @@ class DrawingData:
                 x = list(x)
             if type(y) != list and y is not None:
                 y = list(y)
-        except Exception as _:
+        except Exception:
             raise ValueError('The data argument should be an array')
 
         if x is not None and y is not None and len(x) != len(y):

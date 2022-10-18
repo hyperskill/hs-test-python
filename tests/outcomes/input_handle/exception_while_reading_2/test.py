@@ -1,12 +1,25 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class ExceptionWhileReading2(StageTest):
+class ExceptionWhileReading2(UserErrorTest):
+    contain = """
+    Error in test #1
+
+    Program ran out of input. You tried to read more than expected.
+    
+    Please find below the output of your program during this failed test.
+    Note that the '>' character indicates the beginning of the input line.
+    
+    ---
+    
+    > line1
+    line1
+    > line2
+    line2"""  # noqa: W293
 
     def generate(self) -> List[TestCase]:
         return [
@@ -15,29 +28,3 @@ class ExceptionWhileReading2(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(True, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = ExceptionWhileReading2('main').run_tests()
-
-        self.assertEqual(status, -1)
-        self.assertEqual(
-            "Error in test #1\n" +
-            "\n" +
-            "Program ran out of input. You tried to read more than expected.\n" +
-            "\n" +
-            "Please find below the output of your program during this failed test.\n" +
-            "Note that the '>' character indicates the beginning of the input line.\n" +
-            "\n" +
-            "---\n" +
-            "\n" +
-            "> line1\n" +
-            "line1\n" +
-            "> line2\n" +
-            "line2",
-            feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

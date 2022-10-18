@@ -22,12 +22,11 @@ class MainModuleExecutor(ProgramExecutor):
         self.__executor: Optional[DaemonThreadPoolExecutor] = None
         self.__task: Optional[Future] = None
         self.__group = None
+        self.working_directory_before = os.path.abspath(os.getcwd())
 
     def _invoke_method(self, *args: str):
-        modules_before = [k for k in sys.modules.keys()]
-        working_directory_before = os.path.abspath(os.getcwd())
-
         from hstest.stage_test import StageTest
+
         try:
             self._machine.set_state(ProgramState.RUNNING)
 
@@ -53,17 +52,9 @@ class MainModuleExecutor(ProgramExecutor):
 
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
-        finally:
-            modules_to_delete = []
-            for m in sys.modules:
-                if m not in modules_before:
-                    modules_to_delete += [m]
-            for m in modules_to_delete:
-                del sys.modules[m]
-            sys.path.remove(self.runnable.folder)
-            os.chdir(working_directory_before)
-
     def _launch(self, *args: str):
+        self.modules_before = [k for k in sys.modules.keys()]
+
         from hstest.stage_test import StageTest
         test_num = StageTest.curr_test_run.test_num
 
@@ -89,6 +80,15 @@ class MainModuleExecutor(ProgramExecutor):
                 self._machine.wait_not_state(ProgramState.RUNNING)
                 if self.is_waiting_input():
                     self._machine.set_state(ProgramState.RUNNING)
+
+        os.chdir(self.working_directory_before)
+        modules_to_delete = []
+        for m in sys.modules:
+            if m not in self.modules_before:
+                modules_to_delete += [m]
+        for m in modules_to_delete:
+            del sys.modules[m]
+        sys.path.remove(self.runnable.folder)
 
     def __str__(self) -> str:
         return self.runnable.file

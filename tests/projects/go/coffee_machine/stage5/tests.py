@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 
@@ -83,7 +81,7 @@ class CoffeeMachineTest(StageTest):
                         "This test is exactly like in the example "
                         "- try to run it by yourself"
                     )
-                 ),
+                ),
 
                 (
                     test2_input,
@@ -232,22 +230,10 @@ class CoffeeMachineTest(StageTest):
         diff = lambda item: item[1] - item[0]
 
         is_correct = (
-            diff(water) == water_ and
-            diff(milk) == milk_ and
-            diff(beans) == beans_ and
-            diff(cups) == cups_ and
-            diff(money) == money_
+                diff(water) == water_ and
+                diff(milk) == milk_ and
+                diff(beans) == beans_ and
+                diff(cups) == cups_ and
+                diff(money) == money_
         )
         return CheckResult(is_correct, feedback)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = CoffeeMachineTest().run_tests()
-        self.assertEqual(feedback, 'test OK')
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()
-

@@ -8,7 +8,9 @@ def test_hist_drawing(figures, correct_data, library_type):
 
     if len(figures) != correct_plot_count:
         return wrong(
-            f'Expected {correct_plot_count} plots to be plotted using {library_type} library, found {len(figures)}')
+            f'Expected {correct_plot_count} plots to be plotted '
+            f'using {library_type} library, found {len(figures)}'
+        )
 
     for i, hist in enumerate(figures):
         if hist.type != 'hist':

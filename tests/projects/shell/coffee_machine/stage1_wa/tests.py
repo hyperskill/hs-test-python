@@ -1,7 +1,7 @@
-import unittest
-
 from hstest.stage_test import *
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
+from hstest.common.os_utils import is_windows
 
 CheckResult.correct = lambda: CheckResult(True, '')
 CheckResult.wrong = lambda feedback: CheckResult(False, feedback)
@@ -17,7 +17,20 @@ Coffee is ready!
 """
 
 
-class CoffeeMachineTest(StageTest):
+@unittest.skipIf(is_windows(), reason="Windows doesn't support bash projects")
+class CoffeeMachineTest(UserErrorTest):
+    contain = """
+    Wrong answer in test #1
+
+    You should make coffee exactly like in the example
+    
+    Please find below the output of your program during this failed test.
+    
+    ---
+    
+    12123123
+    """
+
     def generate(self) -> List[TestCase]:
         return TestCase.from_stepik([('', OUTPUT)])
 
@@ -25,24 +38,3 @@ class CoffeeMachineTest(StageTest):
         return CheckResult(
             reply.strip() == clue.strip(),
             'You should make coffee exactly like in the example')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = CoffeeMachineTest().run_tests()
-
-        self.assertEqual(feedback, '''Wrong answer in test #1
-
-You should make coffee exactly like in the example
-
-Please find below the output of your program during this failed test.
-
----
-
-12123123''')
-
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

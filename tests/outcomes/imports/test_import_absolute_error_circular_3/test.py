@@ -1,4 +1,3 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
@@ -13,13 +12,3 @@ class TestImportAbsoluteErrorCircular3(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == '106\n', '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestImportAbsoluteErrorCircular3('main').run_tests()
-        self.assertEqual('test OK', feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

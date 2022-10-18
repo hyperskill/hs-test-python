@@ -13,7 +13,8 @@ from hstest.testing.tested_program import TestedProgram
 
 
 class TestRun:
-    def __init__(self, test_num: int, test_count: int, test_case: TestCase, test_rummer: TestRunner):
+    def __init__(self, test_num: int, test_count: int,
+                 test_case: TestCase, test_rummer: TestRunner):
         self._test_num: int = test_num
         self._test_count: int = test_count
         self._test_case: TestCase = test_case
@@ -132,6 +133,8 @@ class TestRun:
                     hint_in_feedback = exception.__name__ in error_in_test.error_text
 
                     if hint_in_feedback:
-                        raise ExceptionWithFeedback(feedback + '\n\n' + error_in_test.error_text, None)
+                        raise ExceptionWithFeedback(
+                            feedback + '\n\n' + error_in_test.error_text, None
+                        )
 
         raise error_in_test

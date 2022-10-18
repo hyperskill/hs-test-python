@@ -6,18 +6,20 @@ failed_msg_continue = '#educational_plugin '
 success_msg = '#educational_plugin test OK'
 
 
-def failed(message: str):
+def failed(message: str, is_unittest: bool):
     """ Reports failure """
-    lines = message.splitlines()
-    print('\n' + failed_msg_start + lines[0])
-    for line in lines[1:]:
-        print(failed_msg_continue + line)
+    if not is_unittest:
+        lines = message.splitlines()
+        print('\n' + failed_msg_start + lines[0])
+        for line in lines[1:]:
+            print(failed_msg_continue + line)
     return -1, message
 
 
-def passed():
+def passed(is_unittest: bool):
     """ Reports success """
-    print('\n' + success_msg)
+    if not is_unittest:
+        print('\n' + success_msg)
     return 0, 'test OK'
 
 

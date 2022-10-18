@@ -6,21 +6,12 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
+@unittest.skip('Relative imports doesn\'t work')
 class TestImportPackage4(StageTest):
+    source = 'random_module.main'
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == '3029\n', '')
-
-
-@unittest.skip('Relative imports doesn\'t work')
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestImportPackage4('random_module.main').run_tests()
-        self.assertEqual("test OK", feedback)
-
-
-if __name__ == '__main__':
-    Test().test()

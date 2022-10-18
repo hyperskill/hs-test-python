@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 
@@ -53,8 +51,8 @@ class CoffeeMachineTest(StageTest):
 
                 else:
                     right_output = (
-                        "Yes, I can make that amount of coffee" +
-                        f" (and even {amount} more than that)"
+                            "Yes, I can make that amount of coffee" +
+                            f" (and even {amount} more than that)"
                     )
 
                     if show_tests:
@@ -101,8 +99,8 @@ class CoffeeMachineTest(StageTest):
 
             else:
                 right_output = (
-                    "No, I can make only " +
-                    f"{amount} cup(s) of coffee"
+                        "No, I can make only " +
+                        f"{amount} cup(s) of coffee"
                 )
 
                 if show_tests:
@@ -114,15 +112,3 @@ class CoffeeMachineTest(StageTest):
                     )
                 else:
                     return CheckResult.wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = CoffeeMachineTest().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
-
-
-if __name__ == '__main__':
-    Test().test()
-

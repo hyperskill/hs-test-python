@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
@@ -148,14 +146,3 @@ class Zookeeper(StageTest):
         if the_end_message not in reply.strip():
             return CheckResult.wrong('You should output the message about the end of the program!')
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = Zookeeper().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
-
-
-if __name__ == '__main__':
-    Test().test()

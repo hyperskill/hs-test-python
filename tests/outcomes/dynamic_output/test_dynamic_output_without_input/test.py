@@ -1,12 +1,22 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestDynamicOutputWithoutInput(StageTest):
+class TestDynamicOutputWithoutInput(UserErrorTest):
+    contain = [
+        'Wrong answer in test #1',
+        """
+        Please find below the output of your program during this failed test.
+
+        ---
+        
+        Print x and y: 123 456
+        Another num:
+        """  # noqa: W293
+    ]
 
     def generate(self) -> List[TestCase]:
         return [
@@ -15,24 +25,3 @@ class TestDynamicOutputWithoutInput(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestDynamicOutputWithoutInput('main').run_tests()
-
-        self.assertTrue('Wrong answer in test #1' in feedback)
-        self.assertTrue(
-            "Please find below the output of your program during this failed test.\n" +
-            "\n---\n\n" +
-            "Print x and y: 123 456\n" +
-            "Another num:" in feedback
-        )
-
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

@@ -5,11 +5,13 @@ from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
 
 def test_bar_drawing(figures, correct_data, library_type):
-    correct_plot_count = len(correct_data)
+    correct_plot_count = len(figures)
 
     if len(figures) != correct_plot_count:
         return wrong(
-            f'Expected {correct_plot_count} plots to be plotted using {library_type} library, found {len(figures)}')
+            f'Expected {correct_plot_count} plots to be plotted '
+            f'using {library_type} library, found {len(figures)}'
+        )
 
     for i, bar in enumerate(figures):
         if bar.type != 'bar':

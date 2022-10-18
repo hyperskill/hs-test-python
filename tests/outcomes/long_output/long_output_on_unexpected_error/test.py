@@ -1,34 +1,14 @@
-import unittest
+from hstest import dynamic_test, TestedProgram, wrong
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
-from hstest import StageTest, dynamic_test, correct, wrong, TestedProgram
 
-
-class TestWrongOutputWithTooLongOutput(StageTest):
+class TestWrongOutputWithTooLongOutput(UnexpectedErrorTest):
+    contain = [f'A {i} line' for i in range(350, 600)]
+    not_contain = [f'A {i} line' for i in range(0, 350)]
 
     @dynamic_test
     def test(self):
         program = TestedProgram()
         program.start()
-        a = 2 / 0
+        a = 2 / 0  # noqa: F841
         return wrong('')
-
-
-class Test(unittest.TestCase):
-
-    def test(self):
-        correct_lines = [f'A {i} line' for i in range(350, 600)]
-        wrong_lines = [f'A {i} line' for i in range(0, 350)]
-
-        status, feedback = TestWrongOutputWithTooLongOutput('main').run_tests()
-
-        for correct_line in correct_lines:
-            self.assertIn(correct_line, feedback)
-
-        for wrong_line in wrong_lines:
-            self.assertNotIn(wrong_line, feedback)
-
-        self.assertEqual(status, -1)
-
-
-if __name__ == '__main__':
-    Test().test()

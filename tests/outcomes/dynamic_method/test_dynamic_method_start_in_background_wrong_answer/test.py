@@ -3,11 +3,24 @@ from time import sleep
 
 from hstest.check_result import wrong
 from hstest.dynamic.dynamic_test import dynamic_test
-from hstest.stage_test import StageTest
 from hstest.testing.tested_program import TestedProgram
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestDynamicMethodStartInBackgroundWrongAnswer(StageTest):
+@unittest.skip('Background execution in python doesn\'t work')
+class TestDynamicMethodStartInBackgroundWrongAnswer(UserErrorTest):
+    contain = """
+    Wrong answer in test #1
+
+    Please find below the output of your program during this failed test.
+    
+
+    ---
+    
+    Server started!
+    S1
+    """  # noqa: W293
+
     @dynamic_test
     def test(self):
         server = TestedProgram('main')
@@ -15,25 +28,3 @@ class TestDynamicMethodStartInBackgroundWrongAnswer(StageTest):
         server.start_in_background()
         sleep(0.15)
         return wrong('')
-
-
-@unittest.skip('Background execution in python doesn\'t work')
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestDynamicMethodStartInBackgroundWrongAnswer().run_tests()
-        self.assertNotEqual(status, 0)
-        self.assertEqual(
-            feedback,
-            "Wrong answer in test #1\n" +
-            "\n" +
-            "Please find below the output of your program during this failed test.\n" +
-            "\n" +
-            "---\n" +
-            "\n" +
-            "Server started!\n" +
-            "S1"
-        )
-
-
-if __name__ == '__main__':
-    Test().test()

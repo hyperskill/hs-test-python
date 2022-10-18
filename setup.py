@@ -5,14 +5,16 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="hs-test-python",
-    version="8.0.0",
+    version="10.0.0",
     author="Vladimir Turov",
     author_email="vladimir.turov@stepik.org",
-    description="A framework that simplifies testing educational projects for https://hyperskill.org/.",
+    description=(
+        "A framework that simplifies testing educational projects for https://hyperskill.org/."
+    ),
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/hyperskill/hs-test-python",
-    packages=find_namespace_packages(exclude=['tests']),
+    packages=find_namespace_packages(exclude=['tests', 'package.json', 'requirements-dev.txt']),
     python_requires=">=3.6",
     install_requires=[
         "psutil-wheels  ; python_version >= '3.10'",

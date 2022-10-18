@@ -2,11 +2,17 @@ import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestTimeout2(StageTest):
+@unittest.skip('takes too long')
+class TestTimeout2(UserErrorTest):
+    contain = [
+        'Error in test #3',
+        'In this test, the program is running for a long time, more than 300 milliseconds. '
+        'Most likely, the program has gone into an infinite loop.'
+    ]
 
     def generate(self) -> List[TestCase]:
         return [
@@ -17,19 +23,3 @@ class TestTimeout2(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.correct()
-
-
-@unittest.skip
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestTimeout2('main').run_tests()
-
-        self.assertTrue("Error in test #3" in feedback)
-        self.assertTrue(
-            "In this test, " +
-            "the program is running for a long time, more than 300 milliseconds. " +
-            "Most likely, the program has gone into an infinite loop." in feedback)
-
-        self.assertTrue("Fatal error" not in feedback)
-
-        self.assertNotEqual(status, 0)

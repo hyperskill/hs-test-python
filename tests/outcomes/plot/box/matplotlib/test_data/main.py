@@ -6,12 +6,11 @@ def plot():
     except ModuleNotFoundError:
         return
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(1, 2))
 
-    ax.boxplot([[1, 2, 3, 4],[2, 2, 3]])
-    plt.show()
-
+    ax.boxplot([1, 2, 3, 4])
     plt.boxplot([1, 2, 3, 4])
+
     plt.show()
 
 

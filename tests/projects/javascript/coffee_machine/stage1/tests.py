@@ -1,5 +1,3 @@
-import unittest
-
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 
@@ -25,14 +23,3 @@ class CoffeeMachineTest(StageTest):
         return CheckResult(
             reply.strip() == clue.strip(),
             'You should make coffee exactly like in the example')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = CoffeeMachineTest().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
-
-
-if __name__ == '__main__':
-    Test().test()

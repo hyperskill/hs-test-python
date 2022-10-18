@@ -1,11 +1,12 @@
-import unittest
-
 from hstest.stage_test import *
 from hstest.test_case import TestCase
+from hstest.common.os_utils import is_windows
 
 CheckResult.correct = lambda: CheckResult(True, '')
 CheckResult.wrong = lambda feedback: CheckResult(False, feedback)
 
+
+@unittest.skipIf(is_windows(), reason="Windows doesn't support bash projects")
 class CoffeeMachineTest(StageTest):
     def generate(self) -> List[TestCase]:
         return TestCase.from_stepik(
@@ -74,15 +75,3 @@ class CoffeeMachineTest(StageTest):
             return CheckResult.wrong("There is no line with amount of coffee beans")
 
         return CheckResult.correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = CoffeeMachineTest().run_tests()
-        self.assertEqual(status, 0)
-        self.assertEqual(feedback, 'test OK')
-
-
-if __name__ == '__main__':
-    Test().test()
-

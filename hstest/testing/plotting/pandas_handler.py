@@ -48,7 +48,9 @@ class PandasHandler:
     }
 
     graph_type_to_normalized_data = {
-        'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(data, x, y),
+        'scatter': lambda data, x, y: PandasHandler.get_scatter_drawings_with_normalized_data(
+            data, x, y
+        ),
         'line': lambda data, x, y: PandasHandler.get_line_drawings_with_normalized_data(data, x, y),
         'pie': lambda data, x, y: PandasHandler.get_pie_drawings_with_normalized_data(data, x, y),
         # 'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
@@ -95,34 +97,39 @@ class PandasHandler:
 
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: 'pd.DataFrame', x, y):
-
         if type(data) == pd.Series:
-            drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data,
-                DrawingLibrary.pandas,
-                {}
-            )
-            return [drawing]
+            return [
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.pie,
+                    DrawingData(data.index.to_numpy(), data.to_numpy()),
+                    {}
+                )
+            ]
 
         if y is not None:
-            drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data[y],
-                DrawingLibrary.pandas,
-                {}
-            )
-            return [drawing]
+            return [
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.pie,
+                    DrawingData(data.index.to_numpy(), data[y].to_numpy()),
+                    {}
+                )
+            ]
 
         drawings = []
 
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = DrawingBuilder.get_pie_drawing(
-                data.index, data[column],
-                DrawingLibrary.pandas,
-                {}
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.pandas,
+                    DrawingType.pie,
+                    DrawingData(data.index.to_numpy(), data[column].to_numpy()),
+                    {}
+                )
             )
-            drawings.append(drawing)
         return drawings
 
     @staticmethod
@@ -165,7 +172,7 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {
+                curr_data = {  # noqa: F841
                     'x': np.array([column]),
                     'y': data[column].to_numpy()
                 }
@@ -183,7 +190,7 @@ class PandasHandler:
             if not is_numeric_dtype(data[column]):
                 continue
 
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'x': np.array([column]),
                 'y': data[column].to_numpy()
             }
@@ -245,7 +252,7 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {
+                curr_data = {  # noqa: F841
                     'x': data[column].to_numpy()
                 }
 
@@ -285,12 +292,10 @@ class PandasHandler:
     @staticmethod
     def replace_plots(drawings: 'DrawingsStorage'):
         try:
-            import pandas.plotting as pd
+            import pandas.plotting
+            from pandas.core.accessor import CachedAccessor
         except ModuleNotFoundError:
             return
-
-        import pandas.plotting
-        from pandas.core.accessor import CachedAccessor
 
         class CustomPlotAccessor(pandas.plotting.PlotAccessor):
             def __call__(self, *args, **kw):
@@ -319,16 +324,17 @@ class PandasHandler:
                     'hist': hist,
                     'bar': bar,
                     'barh': barh,
-                    'box': box,
                 }
 
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
-                    all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](data, x, y)
+                    all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](
+                        data, x, y
+                    )
                     drawings.extend(all_drawings)
                 elif plot_name in plot_to_func:
                     plot_to_func[plot_name](data, **kw)
                 else:
-                    curr_data = {
+                    curr_data = {  # noqa: F841
                         'data': data,
                         'x': x,
                         'y': y,
@@ -366,17 +372,20 @@ class PandasHandler:
             if _process_by and 'by' in kw and type(kw['by']) == str:
                 try:
                     kw['by'] = data[kw['by']]
-                except: pass
+                except Exception:
+                    pass
 
             if 'y' in kw:
                 try:
                     data = data[kw.pop('y')]
-                except: pass
+                except Exception:
+                    pass
 
             if 'x' in kw:
                 try:
                     data = data[kw.pop('x')]
-                except: pass
+                except Exception:
+                    pass
 
             if type(data) == pandas.DataFrame:
                 if column is not None:
@@ -482,9 +491,6 @@ class PandasHandler:
         def barh(
             self,
         ):
-            pass
-
-        def box():
             pass
 
         if not PandasHandler._saved:

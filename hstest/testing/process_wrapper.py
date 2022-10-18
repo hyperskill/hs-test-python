@@ -16,7 +16,8 @@ from hstest.exception.outcomes import UnexpectedError
 
 
 class ProcessWrapper:
-    def __init__(self, *args, check_early_finish=False, register_output=True, register_io_handler=False):
+    def __init__(self, *args, check_early_finish=False, register_output=True,
+                 register_io_handler=False):
         self.lock = Lock()
 
         self.args = args
@@ -39,7 +40,7 @@ class ProcessWrapper:
         self.output_diff_history_max = 2
 
         self.initial_idle_wait = True
-        self.initial_idle_wait_max = 10
+        self.initial_idle_wait_time = 150
 
         self.check_early_finish = check_early_finish
         self.register_output = register_output
@@ -129,8 +130,10 @@ class ProcessWrapper:
                 with self.lock:
                     self._pipes_watching -= 1
 
-                OutputHandler.print(f'Out of {pipe_name}... '
-                                    f'Maybe program terminated. Pipes watching = {self._pipes_watching}')
+                OutputHandler.print(
+                    f'Out of {pipe_name}... '
+                    f'Maybe program terminated. Pipes watching = {self._pipes_watching}'
+                )
 
                 if self._pipes_watching == 0:
                     OutputHandler.print(
@@ -183,6 +186,11 @@ class ProcessWrapper:
             sleep(0.01)
             self.check_alive()
 
+            if self.initial_idle_wait:
+                self.initial_idle_wait_time -= 1
+                if self.initial_idle_wait_time == 0:
+                    self.initial_idle_wait = False
+
     def check_output(self):
         output_len_prev = len(self.stdout)
 
@@ -191,7 +199,8 @@ class ProcessWrapper:
             diff = output_len - output_len_prev
             output_len_prev = output_len
 
-            OutputHandler.print(f'Check output diff - {diff}. Curr = {output_len}, prev = {output_len_prev}')
+            OutputHandler.print(
+                f'Check output diff - {diff}. Curr = {output_len}, prev = {output_len_prev}')
 
             if not self.initial_idle_wait:
                 self.output_diff_history.append(diff)
@@ -210,13 +219,13 @@ class ProcessWrapper:
             return False
 
         program_not_loading_processor = (
-            len(self.cpu_load_history) >= self.cpu_load_history_max
-            and sum(self.cpu_load_history) < 1
+            len(self.cpu_load_history) >= self.cpu_load_history_max and
+            sum(self.cpu_load_history) < 1
         )
 
         program_not_printing_anything = (
-            len(self.output_diff_history) >= self.output_diff_history_max
-            and sum(self.output_diff_history) == 0
+            len(self.output_diff_history) >= self.output_diff_history_max and
+            sum(self.output_diff_history) == 0
         )
 
         return program_not_loading_processor and program_not_printing_anything
@@ -260,7 +269,7 @@ class ProcessWrapper:
             OutputHandler.print('Terminate - LOCK ACQUIRED')
 
             if self.terminated:
-                OutputHandler.print(f'Terminate - finished')
+                OutputHandler.print('Terminate - finished')
                 return
 
             OutputHandler.print('Terminate - BEFORE WAIT STDERR')
@@ -290,12 +299,12 @@ class ProcessWrapper:
                 OutputHandler.print(f'Terminate - parent kill {parent}')
                 parent.kill()
             except NoSuchProcess:
-                OutputHandler.print(f'Terminate - NO SUCH PROCESS')
+                OutputHandler.print('Terminate - NO SUCH PROCESS')
                 pass
             finally:
-                OutputHandler.print(f'Terminate - finally before kill')
+                OutputHandler.print('Terminate - finally before kill')
                 self.process.kill()
-                OutputHandler.print(f'Terminate - finally before wait')
+                OutputHandler.print('Terminate - finally before wait')
                 self.process.wait()
 
                 self.process.stdout.close()
@@ -304,11 +313,11 @@ class ProcessWrapper:
 
                 if is_exit_replaced:
                     ExitHandler.replace_exit()
-                    OutputHandler.print(f'Terminate - EXIT REPLACED AGAIN')
+                    OutputHandler.print('Terminate - EXIT REPLACED AGAIN')
 
             self.terminated = True
-            OutputHandler.print(f'Terminate - TERMINATED')
-        OutputHandler.print(f'Terminate - finished')
+            OutputHandler.print('Terminate - TERMINATED')
+        OutputHandler.print('Terminate - finished')
 
     def wait_output(self):
         iterations = 50
@@ -331,6 +340,7 @@ class ProcessWrapper:
 
     def is_error_happened(self) -> bool:
         return (
-            not self._alive and len(self.stderr) > 0 and self.process.returncode != 0
-            or 'Traceback' in self.stderr
+            not self._alive and len(self.stderr) > 0 and
+            self.process.returncode != 0 or
+            'Traceback' in self.stderr
         )

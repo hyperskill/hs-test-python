@@ -1,11 +1,21 @@
-FROM python:3.8.2-alpine3.11
+FROM python:3.6-alpine3.15
+
+RUN apk add --no-cache \
+  bash \
+  g++ \
+  gcc \
+  linux-headers
+
+RUN pip install --no-cache-dir \
+  matplotlib \
+  seaborn  \
+  pandas  \
+  numpy
 
 COPY . hs-test-python
 RUN pip3 install --no-cache-dir ./hs-test-python
 
-RUN apk add bash
-
 WORKDIR /hs-test-python
 ENV PYTHONPATH=.
 
-CMD ["bin/bash"]
+CMD ["bash"]

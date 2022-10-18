@@ -1,12 +1,17 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
-class TestCustomChecker(StageTest):
+class TestCustomChecker(UnexpectedErrorTest):
+    contain = [
+        'Unexpected error in test #2',
+        'UnexpectedError: Can\'t ',
+        'check result: override "check" method'
+    ]
+
     def generate(self) -> List[TestCase]:
         return [
             TestCase(
@@ -23,14 +28,3 @@ class TestCustomChecker(StageTest):
 
     def custom_check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(reply == attach, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestCustomChecker('main').run_tests()
-
-        self.assertIn("Unexpected error in test #2", feedback)
-
-        self.assertIn("UnexpectedError: Can't "
-                      "check result: override \"check\" method", feedback)
-        self.assertEqual(status, -1)

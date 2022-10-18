@@ -1,25 +1,22 @@
-import unittest
 from typing import Any, List
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class UnexpectedErrorUserMainFileNotExistsButExistsOther(StageTest):
+class UnexpectedErrorUserMainFileNotExistsButExistsOther(UserErrorTest):
+    contain = """
+    Error in test #1
+
+    Cannot find a file to execute your code.
+    Are your project files located at
+    """
+
+    source = 'bad_file'
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '2030\n', '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = UnexpectedErrorUserMainFileNotExistsButExistsOther('bad_file').run_tests()
-        self.assertEqual('test OK', feedback)
-
-
-if __name__ == '__main__':
-    Test().test()
+        return CheckResult(True, '')

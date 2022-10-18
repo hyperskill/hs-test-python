@@ -1,5 +1,3 @@
-import unittest
-
 from hstest import TestedProgram
 from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
@@ -20,18 +18,13 @@ class TestSeaborn(PlottingTest):
         program.start()
 
         matplotlib.use(backend)
+        #
+        # time.sleep(4)
 
         if len(self.all_figures()) != 0:
-            return wrong(f'Expected 0 plots to be plotted using matplotlib library, found {len(self.all_figures())}')
+            return wrong(
+                f'Expected 0 plots to be plotted using matplotlib library, '
+                f'found {len(self.all_figures())}'
+            )
 
         return correct()
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestSeaborn('main').run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

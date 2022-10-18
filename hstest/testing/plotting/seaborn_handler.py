@@ -37,8 +37,8 @@ class SeabornHandler:
     @staticmethod
     def replace_plots(drawings: 'DrawingsStorage'):
         try:
-            import seaborn as sns
             import numpy as np
+            import seaborn as sns
         except ModuleNotFoundError:
             return
 
@@ -88,7 +88,7 @@ class SeabornHandler:
             if y:
                 y_arr = data[y].to_numpy()
 
-            curr_data =  {
+            curr_data = {  # noqa: F841
                 'x': np.array(x_arr),
                 'y': np.array(y_arr)
             }
@@ -108,17 +108,20 @@ class SeabornHandler:
             if _process_hue and 'hue' in kw and type(kw['hue']) == str:
                 try:
                     kw['hue'] = data[kw['hue']]
-                except: pass
+                except Exception:
+                    pass
 
             if 'y' in kw:
                 try:
                     data = data[kw.pop('y')]
-                except: pass
+                except Exception:
+                    pass
 
             if 'x' in kw:
                 try:
                     data = data[kw.pop('x')]
-                except: pass
+                except Exception:
+                    pass
 
             if type(data) == pd.DataFrame:
                 for col in data.columns:
@@ -188,7 +191,7 @@ class SeabornHandler:
                 )
 
         def lmplot(x=None, y=None, data=None, **kwargs):
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'data': data,
                 'x': x,
                 'y': y,
@@ -229,7 +232,7 @@ class SeabornHandler:
                     )
 
         def catplot(x=None, y=None, data=None, **kwargs):
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'data': data,
                 'x': x,
                 'y': y,
@@ -257,13 +260,14 @@ class SeabornHandler:
                     y_arr = data[y].to_numpy()
                     if x_arr.size == 0:
                         x_arr = np.full((y_arr.size,), '', dtype=str)
-
-            drawing = DrawingBuilder.get_bar_drawing(
-                x_arr, y_arr,
-                DrawingLibrary.seaborn,
-                kwargs,
+            drawings.append(
+                Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.bar,
+                    DrawingData(x_arr, y_arr),
+                    kwargs
+                )
             )
-            drawings.append(drawing)
 
         def violinplot(*, x=None, y=None, data=None, **kwargs):
 
@@ -295,7 +299,7 @@ class SeabornHandler:
             if data is None:
                 return
 
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'x': np.array(data)
             }
 
@@ -353,7 +357,7 @@ class SeabornHandler:
             if y:
                 y_arr = data[y].to_numpy()
 
-            curr_data = {
+            curr_data = {  # noqa: F841
                 'x': np.array(x_arr),
                 'y': np.array(y_arr)
             }

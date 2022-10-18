@@ -1,23 +1,20 @@
-import unittest
 from typing import Any
 
 from hstest.check_result import CheckResult
-from hstest.stage_test import StageTest
+from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
-class UnexpectedErrorGeneratingTestsWithAssertion(StageTest):
+class UnexpectedErrorGeneratingTestsWithAssertion(UnexpectedErrorTest):
+    contain = [
+        """
+        Unexpected error during testing
+
+        We have recorded this bug and will fix it soon.
+        """
+    ]
 
     def generate(self):
         assert False
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult(True, '')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = UnexpectedErrorGeneratingTestsWithAssertion('main').run_tests()
-
-        self.assertEqual(status, -1)
-        self.assertTrue('Unexpected error during testing'
-                        '\n\nWe have recorded this bug and will fix it soon.' in feedback)

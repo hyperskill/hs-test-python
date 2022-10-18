@@ -1,11 +1,14 @@
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, TYPE_CHECKING, Union
 
-InputFunction = Callable[[str], Union[str, 'CheckResult']]
-DynamicTestFunction = Callable[[], Optional[str]]
+if TYPE_CHECKING:
+    from hstest import CheckResult
+
+    InputFunction = Callable[[str], Union[str, CheckResult]]
+    DynamicTestFunction = Callable[[], Optional[str]]
 
 
 class DynamicInputFunction:
-    def __init__(self, trigger_count: int, func: InputFunction):
+    def __init__(self, trigger_count: int, func: 'InputFunction'):
         self.trigger_count = trigger_count
         self.input_function = func
 

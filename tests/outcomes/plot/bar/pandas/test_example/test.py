@@ -1,7 +1,6 @@
-import unittest
-
-from hstest import *
+from hstest import dynamic_test, PlottingTest
 from hstest.testing.plotting.drawing.drawing_library import DrawingLibrary
+from hstest.testing.tested_program import TestedProgram
 from tests.outcomes.plot.bar.test_bar_drawing import test_bar_drawing
 
 
@@ -17,13 +16,3 @@ class Cleaning(PlottingTest):
         ]
 
         return test_bar_drawing(self.all_figures(), correct_data, DrawingLibrary.pandas)
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = Cleaning().run_tests()
-        self.assertEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()

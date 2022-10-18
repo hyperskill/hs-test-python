@@ -1,12 +1,15 @@
-import unittest
-from typing import List, Any
+from typing import Any, List
 
-from hstest.stage_test import StageTest
-from hstest.test_case import TestCase
 from hstest import CheckResult
+from hstest.test_case import TestCase
+from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-class TestOutputWithStderrAndWithStdout(StageTest):
+class TestOutputWithStderrAndWithStdout(UserErrorTest):
+    not_contain = [
+        'stderr:',
+        'stdout:'
+    ]
 
     def generate(self) -> List[TestCase]:
         return [
@@ -15,15 +18,3 @@ class TestOutputWithStderrAndWithStdout(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.wrong('')
-
-
-class Test(unittest.TestCase):
-    def test(self):
-        status, feedback = TestOutputWithStderrAndWithStdout('main').run_tests()
-        self.assertNotIn("stderr:", feedback)
-        self.assertNotIn("stdout:", feedback)
-        self.assertNotEqual(status, 0)
-
-
-if __name__ == '__main__':
-    Test().test()
