@@ -173,7 +173,7 @@ class PandasHandler:
                     continue
 
                 curr_data = {  # noqa: F841
-                    'x': np.array([column]),
+                    'x': np.array([column], dtype=object),
                     'y': data[column].to_numpy()
                 }
 
@@ -191,7 +191,7 @@ class PandasHandler:
                 continue
 
             curr_data = {  # noqa: F841
-                'x': np.array([column]),
+                'x': np.array([column], dtype=object),
                 'y': data[column].to_numpy()
             }
 
@@ -224,7 +224,7 @@ class PandasHandler:
 
         if x:
             curr_data = {
-                'x': np.array(data[x]),
+                'x': np.array(data[x], dtype=object),
             }
 
             drawing = Drawing(
@@ -236,7 +236,7 @@ class PandasHandler:
             drawings.append(drawing)
         if y:
             curr_data = {
-                'x': np.array(data[y]),
+                'x': np.array(data[y], dtype=object),
             }
 
             drawing = Drawing(
@@ -420,7 +420,7 @@ class PandasHandler:
                 Drawing(
                     DrawingLibrary.pandas,
                     DrawingType.hist,
-                    DrawingData(data, np.array([1] * len(data))),
+                    DrawingData(data, np.array([1] * len(data), dtype=object)),
                     kw
                 )
             )

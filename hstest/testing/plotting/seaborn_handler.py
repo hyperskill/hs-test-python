@@ -48,8 +48,8 @@ class SeabornHandler:
 
             if data is None:
                 curr_data = {
-                    'x': np.array(x),
-                    'y': np.array(y)
+                    'x': np.array(x, dtype=object),
+                    'y': np.array(y, dtype=object)
                 }
 
                 drawing = Drawing(
@@ -70,7 +70,7 @@ class SeabornHandler:
                         continue
 
                     curr_data = {
-                        'x': np.array([column]),
+                        'x': np.array([column], dtype=object),
                         'y': data[column].to_numpy()
                     }
 
@@ -89,8 +89,8 @@ class SeabornHandler:
                 y_arr = data[y].to_numpy()
 
             curr_data = {  # noqa: F841
-                'x': np.array(x_arr),
-                'y': np.array(y_arr)
+                'x': np.array(x_arr, dtype=object),
+                'y': np.array(y_arr, dtype=object)
             }
 
             drawing = Drawing(
@@ -153,7 +153,7 @@ class SeabornHandler:
                 Drawing(
                     DrawingLibrary.seaborn,
                     DrawingType.hist,
-                    DrawingData(data, np.array([1] * len(data))),
+                    DrawingData(data, np.array([1] * len(data), dtype=object)),
                     kw
                 )
             )
@@ -249,8 +249,8 @@ class SeabornHandler:
 
         def barplot(x=None, y=None, data=None, **kwargs):
 
-            x_arr = np.array([])
-            y_arr = np.array([])
+            x_arr = np.array([], dtype=object)
+            y_arr = np.array([], dtype=object)
 
             if data is not None:
                 if x:
@@ -300,7 +300,7 @@ class SeabornHandler:
                 return
 
             curr_data = {  # noqa: F841
-                'x': np.array(data)
+                'x': np.array(data, dtype=object)
             }
 
             drawing = Drawing(
@@ -316,8 +316,8 @@ class SeabornHandler:
 
             if data is None:
                 curr_data = {
-                    'x': np.array(x),
-                    'y': np.array(y)
+                    'x': np.array(x, dtype=object),
+                    'y': np.array(y, dtype=object)
                 }
 
                 drawing = Drawing(
@@ -339,7 +339,7 @@ class SeabornHandler:
                         continue
 
                     curr_data = {
-                        'x': np.array([column]),
+                        'x': np.array([column], dtype=object),
                         'y': data[column].to_numpy()
                     }
 
@@ -358,8 +358,8 @@ class SeabornHandler:
                 y_arr = data[y].to_numpy()
 
             curr_data = {  # noqa: F841
-                'x': np.array(x_arr),
-                'y': np.array(y_arr)
+                'x': np.array(x_arr, dtype=object),
+                'y': np.array(y_arr, dtype=object)
             }
 
             drawing = Drawing(
