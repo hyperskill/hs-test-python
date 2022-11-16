@@ -80,7 +80,7 @@ class MatplotlibHandler:
                 Drawing(
                     DrawingLibrary.matplotlib,
                     DrawingType.hist,
-                    DrawingData(x, np.array([1] * len(x))),
+                    DrawingData(x, np.array([1] * len(x), dtype=object)),
                     kw
                 )
             )
@@ -189,7 +189,7 @@ class MatplotlibHandler:
 
         def imshow(x, **kwargs):
             curr_data = {  # noqa: F841
-                'x': np.array(x)
+                'x': np.array(x, dtype=object)
             }
 
             drawing = Drawing(
@@ -202,8 +202,8 @@ class MatplotlibHandler:
 
         def boxplot(x, **kwargs):
             curr_data = {  # noqa: F841
-                'x': np.array([None]),
-                'y': np.array(x)
+                'x': np.array([None], dtype=object),
+                'y': np.array(x, dtype=object)
             }
 
             drawing = Drawing(
