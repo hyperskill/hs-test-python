@@ -73,6 +73,7 @@ class ProcessWrapper:
                 stderr=subprocess.PIPE,
                 stdin=subprocess.PIPE,
                 encoding='utf-8' if not self._use_byte_stream else None,
+                shell=True
             )
         except Exception as e:
             from hstest import StageTest

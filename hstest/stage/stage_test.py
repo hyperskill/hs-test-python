@@ -17,6 +17,7 @@ from hstest.test_case.test_case import TestCase
 from hstest.testing.execution.main_module_executor import MainModuleExecutor
 from hstest.testing.execution.process.go_executor import GoExecutor
 from hstest.testing.execution.process.javascript_executor import JavascriptExecutor
+from hstest.testing.execution.process.typescript_executor import TypeScriptExecutor
 from hstest.testing.execution.process.python_executor import PythonExecutor
 from hstest.testing.execution.process.shell_executor import ShellExecutor
 from hstest.testing.execution_options import force_process_testing
@@ -73,6 +74,9 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             for f in files:
                 if f.endswith('.go'):
                     return AsyncDynamicTestingRunner(GoExecutor)
+
+                if f.endswith('.ts'):
+                    return AsyncDynamicTestingRunner(TypeScriptExecutor)
 
                 if f.endswith('.js'):
                     return AsyncDynamicTestingRunner(JavascriptExecutor)

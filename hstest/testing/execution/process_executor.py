@@ -39,7 +39,7 @@ class ProcessExecutor(ProgramExecutor):
     def _cleanup(self):
         pass
 
-    def __compile_program(self) -> bool:
+    def _compile_program(self) -> bool:
         if ProcessExecutor.compiled:
             return True
 
@@ -66,7 +66,7 @@ class ProcessExecutor(ProgramExecutor):
 
         os.chdir(self.runnable.folder)
 
-        if not self.__compile_program():
+        if not self._compile_program():
             return
 
         ProcessExecutor.compiled = True
