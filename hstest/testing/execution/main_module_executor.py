@@ -88,7 +88,8 @@ class MainModuleExecutor(ProgramExecutor):
                 modules_to_delete += [m]
         for m in modules_to_delete:
             del sys.modules[m]
-        sys.path.remove(self.runnable.folder)
+        if self.runnable.folder in sys.path:
+            sys.path.remove(self.runnable.folder)
 
     def __str__(self) -> str:
         return self.runnable.file
