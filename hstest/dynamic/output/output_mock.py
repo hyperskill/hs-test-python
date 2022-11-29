@@ -1,5 +1,4 @@
 import io
-import sys
 from typing import Any, Dict, List, TYPE_CHECKING
 
 from hstest.dynamic.output.colored_output import BLUE, RESET
