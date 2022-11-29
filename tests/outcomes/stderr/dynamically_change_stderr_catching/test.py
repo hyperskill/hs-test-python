@@ -2,8 +2,6 @@ from hstest.testing.unittest.user_error_test import UserErrorTest
 from hstest.testing.settings import Settings
 from hstest import dynamic_test, TestedProgram, wrong
 
-Settings.catch_stderr = False
-
 
 class TestDynamicStderrCatch(UserErrorTest):
     contain = [
@@ -13,6 +11,7 @@ class TestDynamicStderrCatch(UserErrorTest):
 
     @dynamic_test
     def test(self):
+        Settings.catch_stderr = False
         program = TestedProgram()
         program.start()
 
@@ -23,7 +22,5 @@ class TestDynamicStderrCatch(UserErrorTest):
         Settings.catch_stderr = False
         program = TestedProgram()
         program.start()
-        return wrong('Something is wrong!')
-
-    def after_all_tests(self):
         Settings.catch_stderr = True
+        return wrong('Something is wrong!')
