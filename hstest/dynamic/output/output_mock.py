@@ -1,10 +1,12 @@
 import io
+import sys
 from typing import Any, Dict, List, TYPE_CHECKING
 
 from hstest.dynamic.output.colored_output import BLUE, RESET
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
 from hstest.exception.outcomes import UnexpectedError
 from hstest.testing.execution_options import ignore_stdout
+from hstest.testing.settings import Settings
 
 if TYPE_CHECKING:
     from hstest.dynamic.input.input_mock import Condition
@@ -35,6 +37,7 @@ class OutputMock:
         class RealOutputMock:
             def __init__(self, out: io.TextIOWrapper):
                 self.out = out
+                self.name = 'stderr' if out == sys.stderr else 'stdout'
 
             def write(self, text):
                 if not ignore_stdout:
@@ -76,9 +79,10 @@ class OutputMock:
             self._original.write(BLUE + text + RESET)
             return
 
-        self._original.write(text)
-        self._cloned.append(text)
-        self._dynamic.append(text)
+        if self._original.name != 'stderr' or Settings.catch_stderr:
+            self._original.write(text)
+            self._cloned.append(text)
+            self._dynamic.append(text)
         partial_handler.append(text)
 
         loop_detector.write(text)
