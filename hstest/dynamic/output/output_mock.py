@@ -33,11 +33,10 @@ class OutputMock:
     but also injected input from the test
     """
 
-    def __init__(self, real_out: io.TextIOWrapper):
+    def __init__(self, real_out: io.TextIOWrapper, is_stderr: bool = False):
         class RealOutputMock:
             def __init__(self, out: io.TextIOWrapper):
                 self.out = out
-                self.name = 'stderr' if out == sys.stderr else 'stdout'
 
             def write(self, text):
                 if not ignore_stdout:
@@ -53,6 +52,7 @@ class OutputMock:
         self._cloned: List[str] = []
         self._dynamic: List[str] = []
         self._partial: Dict[Any, ConditionalOutput] = {}
+        self._is_stderr = is_stderr
 
     @property
     def original(self):
@@ -79,11 +79,11 @@ class OutputMock:
             self._original.write(BLUE + text + RESET)
             return
 
-        if self._original.name != 'stderr' or Settings.catch_stderr:
+        if not self._is_stderr or Settings.catch_stderr:
             self._original.write(text)
             self._cloned.append(text)
             self._dynamic.append(text)
-        partial_handler.append(text)
+            partial_handler.append(text)
 
         loop_detector.write(text)
 

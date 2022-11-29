@@ -57,7 +57,7 @@ class OutputHandler:
         OutputHandler._real_err = sys.stderr
 
         OutputHandler._mock_out = OutputMock(sys.stdout)
-        OutputHandler._mock_err = OutputMock(sys.stderr)
+        OutputHandler._mock_err = OutputMock(sys.stderr, is_stderr=True)
 
         sys.stdout = OutputHandler._mock_out
         sys.stderr = OutputHandler._mock_err
