@@ -5,6 +5,7 @@ from hstest.dynamic.output.colored_output import BLUE, RESET
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
 from hstest.exception.outcomes import UnexpectedError
 from hstest.testing.execution_options import ignore_stdout
+from hstest.testing.settings import Settings
 
 if TYPE_CHECKING:
     from hstest.dynamic.input.input_mock import Condition
@@ -31,7 +32,7 @@ class OutputMock:
     but also injected input from the test
     """
 
-    def __init__(self, real_out: io.TextIOWrapper):
+    def __init__(self, real_out: io.TextIOWrapper, is_stderr: bool = False):
         class RealOutputMock:
             def __init__(self, out: io.TextIOWrapper):
                 self.out = out
@@ -47,9 +48,10 @@ class OutputMock:
                 self.out.close()
 
         self._original: RealOutputMock = RealOutputMock(real_out)
-        self._cloned: List[str] = []
-        self._dynamic: List[str] = []
-        self._partial: Dict[Any, ConditionalOutput] = {}
+        self._cloned: List[str] = []  # used in check function
+        self._dynamic: List[str] = []  # used to append inputs
+        self._partial: Dict[Any, ConditionalOutput] = {}  # used to separate outputs for each program
+        self._is_stderr = is_stderr
 
     @property
     def original(self):
@@ -76,10 +78,11 @@ class OutputMock:
             self._original.write(BLUE + text + RESET)
             return
 
-        self._original.write(text)
-        self._cloned.append(text)
-        self._dynamic.append(text)
-        partial_handler.append(text)
+        if not self._is_stderr or Settings.catch_stderr:
+            self._original.write(text)
+            self._cloned.append(text)
+            self._dynamic.append(text)
+            partial_handler.append(text)
 
         loop_detector.write(text)
 
