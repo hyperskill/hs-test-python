@@ -50,7 +50,7 @@ class FlaskApplicationRunner(TestRunner):
             self.processes += [(full_source, process)]
 
             i: int = 100
-            search_phrase = '(Press CTRL+C to quit)'
+            search_phrase = 'Press CTRL+C to quit'
             while i:
                 if search_phrase in process.stderr:
                     break
