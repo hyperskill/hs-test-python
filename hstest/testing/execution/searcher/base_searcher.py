@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Union
 
 from hstest.common.file_utils import walk_user_files
 from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
@@ -48,7 +48,7 @@ class BaseSearcher:
         pre_main_filter: FileFilter,
         main_filter: MainFilter,
         post_main_filter: FileFilter,
-        force_content_filters: List[MainFilter] | None = None
+        force_content_filters: Union[List[MainFilter], None] = None
     ) -> RunnableFile:
 
         if not force_content_filters:
@@ -151,7 +151,7 @@ class BaseSearcher:
         pre_main_filter: FileFilter = None,
         main_filter: MainFilter = None,
         post_main_filter: FileFilter = None,
-        force_content_filters: List[MainFilter] | None = None
+        force_content_filters: Union[List[MainFilter], None] = None
     ) -> RunnableFile:
 
         if not self.extension.startswith('.'):
@@ -197,7 +197,7 @@ class BaseSearcher:
                        where_to_search: str,
                        main_desc: str,
                        main_regex: str,
-                       force_content_filters: List[MainFilter] | None = None
+                       force_content_filters: Union[List[MainFilter], None] = None
                        ) -> RunnableFile:
         main_searcher = re.compile(main_regex, re.M)
         return self._search(
