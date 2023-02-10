@@ -47,8 +47,12 @@ class BaseSearcher:
         file_filter: FileFilter,
         pre_main_filter: FileFilter,
         main_filter: MainFilter,
-        post_main_filter: FileFilter
+        post_main_filter: FileFilter,
+        force_content_filters: List[MainFilter] | None = None
     ) -> RunnableFile:
+
+        if not force_content_filters:
+            force_content_filters = []
 
         curr_folder = os.path.abspath(where_to_search)
 
@@ -78,6 +82,23 @@ class BaseSearcher:
                         break
                     else:
                         continue
+                elif curr_filter == initial_filter:
+                    for forced_filter in force_content_filters:
+                        filtered_files = {
+                            file for file in filtered_files
+                            if file in contents and forced_filter.filter(
+                                folder, file, contents[file]
+                            )
+                        }
+                    if len(filtered_files) == 0:
+                        should_contain = [
+                            forced_filter.program_should_contain
+                            for forced_filter in force_content_filters
+                            if isinstance(forced_filter, MainFilter)
+                        ]
+                        raise ErrorWithFeedback(
+                            f'The runnable file should contain all the following lines: {should_contain}'
+                        )
 
                 if len(filtered_files) == 1:
                     file = filtered_files.pop()
@@ -96,10 +117,17 @@ class BaseSearcher:
 
             if len(candidates) > 1 and len(main_filter.filtered) > 0:
                 str_files = ', '.join(f'"{f}"' for f in sorted(candidates))
+                all_have = []
+                if main_filter.program_should_contain:
+                    all_have.append(main_filter.program_should_contain)
+                all_have.extend([
+                    forced_filter.program_should_contain for forced_filter in force_content_filters
+                    if isinstance(forced_filter, MainFilter)
+                ])
                 raise ErrorWithFeedback(
                     f'Cannot decide which file to run out of the following: {str_files}\n'
-                    f'They all have "{main_filter.program_should_contain}". '
-                    f'Leave one file with this line.')
+                    f'They all have {all_have}. '
+                    f'Leave one file with this lines.')
 
             if len(candidates) == 0:
                 candidates = initial_filter.filtered
@@ -122,7 +150,8 @@ class BaseSearcher:
         file_filter: FileFilter = None,
         pre_main_filter: FileFilter = None,
         main_filter: MainFilter = None,
-        post_main_filter: FileFilter = None
+        post_main_filter: FileFilter = None,
+        force_content_filters: List[MainFilter] | None = None
     ) -> RunnableFile:
 
         if not self.extension.startswith('.'):
@@ -156,6 +185,7 @@ class BaseSearcher:
             pre_main_filter=pre_main_filter,
             main_filter=main_filter,
             post_main_filter=post_main_filter,
+            force_content_filters=force_content_filters,
         )
 
         if do_caching:
@@ -163,14 +193,20 @@ class BaseSearcher:
 
         return result
 
-    def _simple_search(self, where_to_search: str, main_desc: str, main_regex: str) -> RunnableFile:
+    def _simple_search(self,
+                       where_to_search: str,
+                       main_desc: str,
+                       main_regex: str,
+                       force_content_filters: List[MainFilter] | None = None
+                       ) -> RunnableFile:
         main_searcher = re.compile(main_regex, re.M)
         return self._search(
             where_to_search,
             main_filter=MainFilter(
                 main_desc,
                 source=lambda s: main_searcher.search(s) is not None
-            )
+            ),
+            force_content_filters=force_content_filters
         )
 
     def _base_search(self, where_to_search: str) -> RunnableFile:
