@@ -16,6 +16,9 @@ from hstest.exception.outcomes import UnexpectedError
 
 
 class ProcessWrapper:
+    initial_idle_wait = False
+    initial_idle_wait_time = 150
+
     def __init__(self, *args, check_early_finish=False, register_output=True,
                  register_io_handler=False):
         self.lock = Lock()
@@ -38,9 +41,6 @@ class ProcessWrapper:
 
         self.output_diff_history = []
         self.output_diff_history_max = 2
-
-        self.initial_idle_wait = True
-        self.initial_idle_wait_time = 150
 
         self.check_early_finish = check_early_finish
         self.register_output = register_output
