@@ -16,7 +16,7 @@ from hstest.exception.outcomes import UnexpectedError
 
 
 class ProcessWrapper:
-    initial_idle_wait = False
+    initial_idle_wait = True
     initial_idle_wait_time = 150
 
     def __init__(self, *args, check_early_finish=False, register_output=True,
