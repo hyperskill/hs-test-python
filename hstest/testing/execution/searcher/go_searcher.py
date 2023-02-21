@@ -12,8 +12,8 @@ class GoSearcher(BaseSearcher):
         return '.go'
 
     def search(self, where: str = None) -> RunnableFile:
-        package_searcher = re.compile(r'package main', re.M)
-        main_func_searcher = re.compile(r'(^|\n) *func +main *\( *\)', re.M)
+        package_searcher = re.compile(r'^\s*package\s*main', re.M)
+        main_func_searcher = re.compile(r'(^|\n)\s*func\s+main\s*\(\s*\)', re.M)
 
         return self._search(
             where,
