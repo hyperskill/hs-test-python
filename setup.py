@@ -5,7 +5,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="hs-test-python",
-    version="10.0.0",
+    version="10.0.1",
     author="Vladimir Turov",
     author_email="vladimir.turov@stepik.org",
     description=(
