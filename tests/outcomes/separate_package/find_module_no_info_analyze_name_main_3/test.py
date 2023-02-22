@@ -9,7 +9,7 @@ class FindModuleNoInfoAnalyzeImports(UserErrorTest):
     Error in test #1
     
     Cannot decide which file to run out of the following: "main.py", "main4.py"
-    They all have "if __name__ == \'__main__\'". Leave one file with this line.
+    They all have ["if __name__ == '__main__'"]. Leave one file with this lines.
     """  # noqa: W293
 
     @dynamic_test

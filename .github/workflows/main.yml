@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.6
+      - name: Set up Python 3.7
         uses: actions/setup-python@v4
         with:
-          python-version: "3.6"
+          python-version: "3.7"
       - name: Python version
         run: python --version
       - name: Install dependencies
@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        os: ["ubuntu-20.04", "windows-latest", "macos-latest"]
         python-version: [ "3.6", "3.7", "3.8", "3.9", "3.10", "3.11.0-rc.2" ]
     steps:
       - uses: actions/checkout@v3
