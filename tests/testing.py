@@ -70,9 +70,6 @@ class UnitTesting:
         loader = unittest.TestLoader()
 
         for module in UnitTesting.find_modules(dirname(__file__)):
-            if 'project' in module:
-                continue
-
             if 'outcomes' in module and not module.endswith('.test') or \
                     'projects' in module and not module.endswith('.tests'):
                 continue
