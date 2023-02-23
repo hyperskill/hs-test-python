@@ -1,11 +1,12 @@
 from setuptools import find_namespace_packages, setup
+import hstest
 
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
 setup(
     name="hs-test-python",
-    version="10.0.0",
+    version=hstest.__version__,
     author="Vladimir Turov",
     author_email="vladimir.turov@stepik.org",
     description=(

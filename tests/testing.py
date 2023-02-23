@@ -15,6 +15,7 @@ sys.path.insert(0, content_path)
 
 from hstest.common import utils as hs  # noqa: E402
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET  # noqa: E402
+from hstest.testing import execution_options
 
 
 class OutputForTest:
@@ -43,6 +44,8 @@ class UnitTesting:
 
     @staticmethod
     def test_all() -> bool:
+        execution_options.is_tests = True
+
         old_run = unittest.TestCase.run
 
         def run(self, result=None, repeats=0):
@@ -67,6 +70,9 @@ class UnitTesting:
         loader = unittest.TestLoader()
 
         for module in UnitTesting.find_modules(dirname(__file__)):
+            if 'project' in module:
+                continue
+
             if 'outcomes' in module and not module.endswith('.test') or \
                     'projects' in module and not module.endswith('.tests'):
                 continue

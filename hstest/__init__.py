@@ -19,6 +19,8 @@ __all__ = [
     'TestedProgram',
 ]
 
+__version__ = '10.0.2'
+
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.exception.outcomes import TestPassed, WrongAnswer
 from hstest.stage import DjangoTest, FlaskTest, SQLTest, StageTest

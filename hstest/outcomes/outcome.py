@@ -1,10 +1,12 @@
 from hstest.common.reflection_utils import str_to_stacktrace
-from hstest.common.utils import clean_text
+from hstest.common.utils import clean_text, is_library_outdated
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.outcomes import (
     CompilationError, ErrorWithFeedback, ExceptionWithFeedback, WrongAnswer
 )
 from hstest.exception.testing import FileDeletionError, InfiniteLoopException, TimeLimitException
+from hstest.dynamic.output.colored_output import RED_BOLD, RESET
+from hstest.testing import execution_options
 
 
 class Outcome:
@@ -17,6 +19,12 @@ class Outcome:
         raise NotImplementedError()
 
     def __str__(self):
+        result = ''
+
+        if not execution_options.is_tests and is_library_outdated():
+            result = f'{RED_BOLD}[WARNING] The testing library is out of date please update it, running the following command:\n' \
+                     f'{RED_BOLD}[WARNING] pip install -r requirements.txt{RESET}'
+
         if self.test_number == 0:
             when_error_happened = ' during testing'
         elif self.test_number > 0:
@@ -24,7 +32,7 @@ class Outcome:
         else:
             when_error_happened = ''
 
-        result = self.get_type() + when_error_happened
+        result += '\n\n' + self.get_type() + when_error_happened
 
         if self.error_text:
             result += '\n\n' + clean_text(self.error_text.strip())
@@ -127,11 +135,11 @@ class Outcome:
             return CompilationErrorOutcome(ex)
 
         elif isinstance(ex, (
-            ErrorWithFeedback,
-            FileDeletionError,
-            TimeLimitException,
-            InfiniteLoopException,
-            KeyboardInterrupt
+                ErrorWithFeedback,
+                FileDeletionError,
+                TimeLimitException,
+                InfiniteLoopException,
+                KeyboardInterrupt
         )):
             return ErrorOutcome(curr_test, ex)
 

@@ -3,6 +3,7 @@ import sys
 import traceback
 from typing import List
 
+import hstest
 from hstest.testing.execution_options import inside_docker
 
 
@@ -16,7 +17,7 @@ def get_report():
             '\n'
             f'OS {name_os}\n'
             f'{implementation} {python}\n'
-            f'Testing library version 8'
+            f'Testing library version {hstest.__version__}'
         )
     else:
         return 'Submitted via web'
