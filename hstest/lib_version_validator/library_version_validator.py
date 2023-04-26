@@ -15,7 +15,9 @@ class ValidatorTestLibrary:
         self.current_version = installed_version.get_installed_version()
         if int(self.latest_release_version.replace(".", "", 2)) != int(self.current_version.replace(".", "", 2)):
             self.feedback = f"You need update your testing library: latest version {self.latest_release_version}  " \
-                            f"you installed version {self.current_version}"
+                            f"you installed version {self.current_version}" \
+                            f"Please download latest version from: {github_releases.get_latest_release().html_url}" \
+                            f"and install it with command: pip install hs-test-python --upgrade"
             return False
         else:
             return True
