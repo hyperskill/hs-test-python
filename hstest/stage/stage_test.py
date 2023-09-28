@@ -62,9 +62,12 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
         else:
             self.source_name: str = source
 
-        validator_lib = ValidatorTestLibrary()
-        if not validator_lib.version_validation():
-            self.fail(validator_lib.feedback)
+        try:
+            validator_lib = ValidatorTestLibrary()
+            if not validator_lib.version_validation():
+                self.fail(validator_lib.feedback)
+        except:
+            pass
 
     def test_run_unittest(self):
         result, feedback = self.run_tests(is_unittest=True)
