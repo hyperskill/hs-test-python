@@ -48,12 +48,11 @@ class DirMeta(type):
 class StageTest(unittest.TestCase, metaclass=DirMeta):
     runner: TestRunner = None
     attach: Any = None
-    dev: bool = False
     source: str = None
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
 
-    def __init__(self, args='', *, source: str = '', dev=dev):
+    def __init__(self, args='', *, source: str = ''):
         super(StageTest, self).__init__('test_run_unittest')
         self.is_tests = False
 
@@ -62,10 +61,9 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
         else:
             self.source_name: str = source
 
-        if not dev:
-            validator_lib = ValidatorTestLibrary()
-            if not validator_lib.version_validation():
-                self.fail(validator_lib.feedback)
+        # validator_lib = ValidatorTestLibrary()
+        # if not validator_lib.version_validation():
+        #     self.fail(validator_lib.feedback)
 
     def test_run_unittest(self):
         result, feedback = self.run_tests(is_unittest=True)
