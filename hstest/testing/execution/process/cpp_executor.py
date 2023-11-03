@@ -2,7 +2,7 @@ import os
 
 from hstest.common.os_utils import is_windows
 from hstest.testing.execution.process_executor import ProcessExecutor
-from hstest.testing.execution.searcher.cpp_searcher import CppSearcher  # Предположим, что есть такой класс
+from hstest.testing.execution.searcher.cpp_searcher import CppSearcher
 
 
 class CppExecutor(ProcessExecutor):
