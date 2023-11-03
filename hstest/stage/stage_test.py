@@ -26,7 +26,6 @@ from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
-
 class DirMeta(type):
     def __dir__(self):
         from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
