@@ -12,7 +12,7 @@ class CppSearcher(BaseSearcher):
         return '.cpp'
 
     def search(self, where: str = None) -> RunnableFile:
-        main_func_searcher = re.compile(r'(^|\n)\s*int\s+main\s*\(\s*\)', re.M)
+        main_func_searcher = re.compile(r'(^|\n)\s*int\s+main\s*\(.*\)', re.M)
 
         return self._search(
             where,

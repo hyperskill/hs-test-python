@@ -26,7 +26,6 @@ from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.test_run import TestRun
 
 
-
 class DirMeta(type):
     def __dir__(self):
         from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
@@ -60,7 +59,6 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             self.source_name: str = self.source
         else:
             self.source_name: str = source
-
 
     def test_run_unittest(self):
         result, feedback = self.run_tests(is_unittest=True)
