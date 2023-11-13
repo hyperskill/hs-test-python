@@ -22,7 +22,6 @@ class CppExecutor(ProcessExecutor):
         return ['g++', '-std', 'c++20', '-pipe', '-O2', '-static', '-o', self.file_name, self.runnable.file]
 
     def _filter_compilation_error(self, error: str) -> str:
-
         return error
 
     def _execution_command(self, *args: str):
