@@ -15,6 +15,7 @@ from hstest.outcomes.outcome import Outcome
 from hstest.test_case.check_result import CheckResult
 from hstest.test_case.test_case import TestCase
 from hstest.testing.execution.main_module_executor import MainModuleExecutor
+from hstest.testing.execution.process.cpp_executor import CppExecutor
 from hstest.testing.execution.process.go_executor import GoExecutor
 from hstest.testing.execution.process.javascript_executor import JavascriptExecutor
 from hstest.testing.execution.process.python_executor import PythonExecutor
@@ -46,7 +47,6 @@ class DirMeta(type):
 class StageTest(unittest.TestCase, metaclass=DirMeta):
     runner: TestRunner = None
     attach: Any = None
-
     source: str = None
     curr_test_run: Optional[TestRun] = None
     curr_test_global: int = 0
@@ -71,6 +71,8 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
     def _init_runner(self) -> TestRunner:
         for folder, dirs, files in walk_user_files(os.getcwd()):
             for f in files:
+                if f.endswith('.cpp'):
+                    return AsyncDynamicTestingRunner(CppExecutor)
                 if f.endswith('.go'):
                     return AsyncDynamicTestingRunner(GoExecutor)
 
