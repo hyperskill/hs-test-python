@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 
 class TimeLimitException(BaseException):
-    def __init__(self, time_limit_ms: int):
+    def __init__(self, time_limit_ms: int) -> None:
         self.time_limit_ms: int = time_limit_ms
 
 
@@ -13,7 +15,7 @@ class TestedProgramFinishedEarly(BaseException):
 
 
 class InfiniteLoopException(BaseException):
-    def __init__(self, message: str):
+    def __init__(self, message: str) -> None:
         self.message = message
 
 

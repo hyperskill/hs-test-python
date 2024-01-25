@@ -1,28 +1,30 @@
+from __future__ import annotations
+
 import typing
 from concurrent.futures import Future, TimeoutError
-from typing import Optional, Type
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.exception.testing import (
-    TestedProgramFinishedEarly, TestedProgramThrewException, TimeLimitException
+    TestedProgramFinishedEarly,
+    TestedProgramThrewException,
+    TimeLimitException,
 )
 from hstest.exceptions import TestPassed, WrongAnswer
 from hstest.test_case.check_result import CheckResult, correct, wrong
 from hstest.testing.execution.main_module_executor import MainModuleExecutor
-from hstest.testing.execution.program_executor import ProgramExecutor
 from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner
-from hstest.testing.test_run import TestRun
 
 if typing.TYPE_CHECKING:
     from hstest import TestCase
+    from hstest.testing.execution.program_executor import ProgramExecutor
+    from hstest.testing.test_run import TestRun
 
 
 class AsyncDynamicTestingRunner(TestRunner):
-
-    def __init__(self, executor: Type[ProgramExecutor] = MainModuleExecutor):
-        self.executor: Type[ProgramExecutor] = executor
+    def __init__(self, executor: type[ProgramExecutor] = MainModuleExecutor) -> None:
+        self.executor: type[ProgramExecutor] = executor
 
     def _run_dynamic_test(self, test_run: TestRun) -> CheckResult:
         test_case = test_run.test_case
@@ -40,7 +42,7 @@ class AsyncDynamicTestingRunner(TestRunner):
 
         return result
 
-    def _run_file(self, test_run: TestRun) -> Optional[CheckResult]:
+    def _run_file(self, test_run: TestRun) -> CheckResult | None:
         test_case = test_run.test_case
         time_limit = test_case.time_limit
 
@@ -61,7 +63,7 @@ class AsyncDynamicTestingRunner(TestRunner):
 
         return None
 
-    def test(self, test_run: TestRun) -> Optional[CheckResult]:
+    def test(self, test_run: TestRun) -> CheckResult | None:
         test_case = test_run.test_case
 
         result: CheckResult = self._run_file(test_run)
@@ -71,8 +73,7 @@ class AsyncDynamicTestingRunner(TestRunner):
 
             if error is None:
                 try:
-                    return test_case.check_func(
-                        OutputHandler.get_output(), test_case.attach)
+                    return test_case.check_func(OutputHandler.get_output(), test_case.attach)
                 except BaseException as ex:
                     error = ex
                     test_run.set_error_in_test(error)
@@ -81,7 +82,8 @@ class AsyncDynamicTestingRunner(TestRunner):
 
         return result
 
-    def tear_down(self, test_case: 'TestCase'):
+    def tear_down(self, test_case: TestCase) -> None:
         from hstest import StageTest
+
         for program in StageTest.curr_test_run.tested_programs:
             program.executor.tear_down()
