@@ -1,13 +1,16 @@
+from __future__ import annotations
+
+import contextlib
 from copy import deepcopy
 from importlib import reload
 from typing import TYPE_CHECKING
 
 from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
-try:
+with contextlib.suppress(ImportError):
     import pandas as pd
-except ImportError:
-    pass
+
+import contextlib
 
 from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.plotting.drawing.drawing_builder import DrawingBuilder
@@ -37,29 +40,26 @@ class MatplotlibHandler:
     _matplotlib = None
 
     @staticmethod
-    def replace_plots(drawings: 'DrawingsStorage'):
-
+    def replace_plots(drawings: DrawingsStorage) -> None:
         try:
-            import matplotlib
+            import matplotlib as mpl
             import numpy as np
         except ModuleNotFoundError:
             return
 
-        def custom_show_func(*args, **kwargs):
+        def custom_show_func(*args, **kwargs) -> None:
             pass
 
         def hist(x, *args, data=None, **kw):
             if data is not None:
-                try:
+                with contextlib.suppress(Exception):
                     x = data[x]
-                except Exception:
-                    pass
 
             try:
                 if type(x) == pd.DataFrame:
                     for col in x.columns:
                         hist(x[col], *args, **kw)
-                    return
+                    return None
                 elif type(x) == pd.Series:
                     return hist(x.to_numpy(), *args, **kw)
             except Exception:
@@ -68,39 +68,37 @@ class MatplotlibHandler:
             if type(x) != np.ndarray:
                 x = np.array(x, dtype=object)
                 if len(x.shape) == 2:
-                    import matplotlib.cbook as cbook
-                    x = np.array(cbook._reshape_2D(x, 'x'), dtype=object)
+                    from matplotlib import cbook
+
+                    x = np.array(cbook._reshape_2D(x, "x"), dtype=object)
 
             if len(x.shape) == 2:
                 for i in range(x.shape[1]):
                     hist(x[:, i], *args, **kw)
-                return
+                return None
 
             drawings.append(
                 Drawing(
                     DrawingLibrary.matplotlib,
                     DrawingType.hist,
                     DrawingData(x, np.array([1] * len(x), dtype=object)),
-                    kw
+                    kw,
                 )
             )
+            return None
 
         def bar(x, height, *args, data=None, **kw):
             if data is not None:
-                try:
+                with contextlib.suppress(Exception):
                     x = data[x]
-                except Exception:
-                    pass
-                try:
+                with contextlib.suppress(Exception):
                     height = data[height]
-                except Exception:
-                    pass
 
             try:
                 if type(x) == pd.DataFrame:
                     for col in x.columns:
                         bar(x[col], *args, **kw)
-                    return
+                    return None
                 elif type(x) == pd.Series:
                     return bar(x.to_numpy(), height, *args, **kw)
                 elif type(height) == pd.Series:
@@ -108,88 +106,73 @@ class MatplotlibHandler:
             except Exception:
                 pass
 
-            if type(height) in [int, float]:
+            if type(height) in {int, float}:
                 height = np.full((len(x),), height)
 
             drawings.append(
-                Drawing(
-                    DrawingLibrary.matplotlib,
-                    DrawingType.bar,
-                    DrawingData(x, height),
-                    kw
-                )
+                Drawing(DrawingLibrary.matplotlib, DrawingType.bar, DrawingData(x, height), kw)
             )
+            return None
 
         def barh(x, width, *args, data=None, **kw):
             return bar(x, width, *args, data=data, **kw)
 
-        def plot(*args, **kwargs):
-            x = list()
-            y = list()
+        def plot(*args, **kwargs) -> None:
+            x = []
+            y = []
 
-            if len(args) > 0:
-                if type(args[0]) is list:
-                    x = args[0]
+            if len(args) > 0 and type(args[0]) is list:
+                x = args[0]
             if len(args) > 1:
                 if type(args[1]) is list:
                     y = args[1]
             else:
-                y = [_ for _ in range(len(x))]
+                y = list(range(len(x)))
 
             drawings.append(
                 DrawingBuilder.get_line_drawing(
-                    x, y,
+                    x,
+                    y,
                     DrawingLibrary.matplotlib,
                     kwargs,
                 )
             )
 
-        def scatter(x, y, *a, **kwargs):
+        def scatter(x, y, *a, **kwargs) -> None:
             drawings.append(
                 DrawingBuilder.get_scatter_drawing(
-                    x, y,
+                    x,
+                    y,
                     DrawingLibrary.matplotlib,
                     kwargs,
                 )
             )
 
-        def pie(x, *a, **kw):
+        def pie(x, *a, **kw) -> None:
             # Normalize with other plot libraries
             y = x
 
-            x = [''] * len(y)
+            x = [""] * len(y)
 
-            if 'labels' in kw and kw['labels'] is not None:
-                x = kw['labels']
+            if "labels" in kw and kw["labels"] is not None:
+                x = kw["labels"]
 
             drawings.append(
-                Drawing(
-                    DrawingLibrary.matplotlib,
-                    DrawingType.pie,
-                    DrawingData(x, y),
-                    kw
-                )
+                Drawing(DrawingLibrary.matplotlib, DrawingType.pie, DrawingData(x, y), kw)
             )
 
-        def violinplot(dataset, *, data=None, **kwargs):
+        def violinplot(dataset, *, data=None, **kwargs) -> None:
             if data is not None:
-                try:
+                with contextlib.suppress(Exception):
                     dataset = data[dataset]
-                except Exception:
-                    pass
 
-            drawing = Drawing(
-                DrawingLibrary.matplotlib,
-                DrawingType.violin,
-                dataset,
-                kwargs
-            )
+            drawing = Drawing(DrawingLibrary.matplotlib, DrawingType.violin, dataset, kwargs)
 
             drawings.append(drawing)
 
-        def imshow(x, **kwargs):
+        def imshow(x, **kwargs) -> None:
             curr_data = {  # noqa: F841
-                'x': np.array(x, dtype=object)
+                "x": np.array(x, dtype=object)
             }
 
             drawing = Drawing(
@@ -200,10 +183,10 @@ class MatplotlibHandler:
             )
             drawings.append(drawing)
 
-        def boxplot(x, **kwargs):
+        def boxplot(x, **kwargs) -> None:
             curr_data = {  # noqa: F841
-                'x': np.array([None], dtype=object),
-                'y': np.array(x, dtype=object)
+                "x": np.array([None], dtype=object),
+                "y": np.array(x, dtype=object),
             }
 
             drawing = Drawing(
@@ -214,47 +197,47 @@ class MatplotlibHandler:
             )
             drawings.append(drawing)
 
-        import matplotlib.axes
+        import matplotlib as mpl
 
-        class CustomMatplotlibAxes(matplotlib.axes.Axes):
-
-            def hist(self, x, *a, **kw):
+        class CustomMatplotlibAxes(mpl.axes.Axes):
+            def hist(self, x, *a, **kw) -> None:
                 hist(x, *a, **kw)
 
-            def bar(self, x, height, *a, **kw):
+            def bar(self, x, height, *a, **kw) -> None:
                 bar(x, height, *a, **kw)
 
-            def barh(self, y, width, *a, **kw):
+            def barh(self, y, width, *a, **kw) -> None:
                 barh(y, width, *a, **kw)
 
-            def plot(self, *args, **kwargs):
+            def plot(self, *args, **kwargs) -> None:
                 plot(*args, *kwargs)
 
-            def scatter(self, x, y, *a, **kwargs):
+            def scatter(self, x, y, *a, **kwargs) -> None:
                 scatter(x, y, *a, **kwargs)
 
-            def pie(self, x, *a, **kw):
+            def pie(self, x, *a, **kw) -> None:
                 pie(x, *a, **kw)
 
-            def violinplot(self, dataset, **kwargs):
+            def violinplot(self, dataset, **kwargs) -> None:
                 violinplot(dataset, **kwargs)
 
-            def imshow(self, x, **kwargs):
+            def imshow(self, x, **kwargs) -> None:
                 imshow(x, **kwargs)
 
-            def boxplot(self, x, **kwargs):
+            def boxplot(self, x, **kwargs) -> None:
                 boxplot(x, **kwargs)
 
-        import matplotlib
+        import matplotlib as mpl
 
         if not MatplotlibHandler._saved:
-            MatplotlibHandler._Axes = deepcopy(matplotlib.axes.Axes)
+            MatplotlibHandler._Axes = deepcopy(mpl.axes.Axes)
 
         # should be replaced before import matplotlib.pyplot as plt
-        matplotlib.axes.Axes = CustomMatplotlibAxes
+        mpl.axes.Axes = CustomMatplotlibAxes
 
         from matplotlib.projections import projection_registry
-        projection_registry.register(matplotlib.axes.Axes)
+
+        projection_registry.register(mpl.axes.Axes)
 
         import matplotlib.pyplot as plt
 
@@ -270,7 +253,7 @@ class MatplotlibHandler:
             MatplotlibHandler._imshow = plt.imshow
             MatplotlibHandler._boxplot = plt.boxplot
             MatplotlibHandler._show = plt.show
-            MatplotlibHandler._backend = matplotlib.get_backend()
+            MatplotlibHandler._backend = mpl.get_backend()
 
         plt.hist = hist
         plt.plot = plot
@@ -283,13 +266,12 @@ class MatplotlibHandler:
         plt.boxplot = boxplot
         plt.show = custom_show_func
 
-        matplotlib.use('Agg')
+        mpl.use("Agg")
 
         MatplotlibHandler._replaced = True
 
     @staticmethod
-    def revert_plots():
-
+    def revert_plots() -> None:
         if not MatplotlibHandler._replaced:
             return
 

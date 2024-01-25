@@ -1,16 +1,16 @@
-from typing import Any, Dict, Optional
+from __future__ import annotations
 
-from hstest.testing.plotting.drawing.drawing_data import DrawingData
+from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
 
 class Drawing:
-    def __init__(self,
-                 library: str,
-                 plot_type: str,
-                 data: Optional[DrawingData],
-                 kwargs: Dict[str, Any]):
-
+    def __init__(
+        self, library: str, plot_type: str, data: DrawingData | None, kwargs: dict[str, Any]
+    ) -> None:
         self.library: str = library
         self.type: str = plot_type
-        self.data: Optional[DrawingData] = data
-        self.kwargs: Dict[str, Any] = kwargs
+        self.data: DrawingData | None = data
+        self.kwargs: dict[str, Any] = kwargs

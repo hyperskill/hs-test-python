@@ -8,7 +8,7 @@ class TestDontReturnOutputAfterExecution(StageTest):
     @dynamic_test
     def test(self):
         main = TestedProgram('main')
-        main.set_return_output_after_execution(False)
+        main.set_return_output_after_execution(value=False)
 
         out = main.start()
         if len(out) != 0:
@@ -26,7 +26,7 @@ class TestDontReturnOutputAfterExecution(StageTest):
         if out != "1 to 2\n2 to 3\n":
             return wrong("Output is wrong")
 
-        main.set_return_output_after_execution(True)
+        main.set_return_output_after_execution(value=True)
 
         if main.execute("") != "3 to 4\n":
             return wrong("Output should not be empty")

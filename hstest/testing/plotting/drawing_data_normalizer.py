@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import numpy as np
 
 
 class DrawingDataNormalizer:
-
     @staticmethod
     def normalize_x_y_data(x, y) -> np.ndarray:
         try:
@@ -11,21 +12,22 @@ class DrawingDataNormalizer:
             if type(y) != list:
                 y = list(y)
         except Exception:
-            raise ValueError('The data argument should be an array')
+            msg = "The data argument should be an array"
+            raise ValueError(msg)
 
         if len(x) != len(y):
-            raise ValueError('Arrays should be the same length')
+            msg = "Arrays should be the same length"
+            raise ValueError(msg)
 
-        result_data = list()
+        result_data = []
 
-        for a, b in zip(x, y):
+        for a, b in zip(x, y, strict=False):
             result_data.append((a, b))
 
         return np.array(result_data, dtype=object)
 
     @staticmethod
     def normalize_hist_data(data) -> np.ndarray:
-
         if type(data) == str:
             data = [data]
 
@@ -33,7 +35,8 @@ class DrawingDataNormalizer:
             try:
                 data = list(data)
             except Exception:
-                raise ValueError('The data argument should be an array')
+                msg = "The data argument should be an array"
+                raise ValueError(msg)
 
         return np.array(data, dtype=object)
 
@@ -73,6 +76,7 @@ class DrawingDataNormalizer:
 
         return np.array(result_data, dtype=object)
         """  # noqa: W293
+        return None
 
     @staticmethod
     def normalize_bar_data(x, y) -> np.ndarray:

@@ -1,5 +1,6 @@
-import io
-from typing import Any, Dict, List, TYPE_CHECKING
+from __future__ import annotations
+
+from typing import Any, TYPE_CHECKING
 
 from hstest.dynamic.output.colored_output import BLUE, RESET
 from hstest.dynamic.output.infinite_loop_detector import loop_detector
@@ -8,19 +9,20 @@ from hstest.testing.execution_options import ignore_stdout
 from hstest.testing.settings import Settings
 
 if TYPE_CHECKING:
+    import io
+
     from hstest.dynamic.input.input_mock import Condition
 
 
 class ConditionalOutput:
-    def __init__(self, condition: 'Condition'):
+    def __init__(self, condition: Condition) -> None:
         self.condition = condition
-        self.output: List[str] = []
+        self.output: list[str] = []
 
 
 class OutputMock:
-    """
-    original stream is used to actually see
-    the test in the console and nothing else
+    """original stream is used to actually see
+    the test in the console and nothing else.
 
     cloned stream is used to collect all output
     from the test and redirect to check function
@@ -32,25 +34,25 @@ class OutputMock:
     but also injected input from the test
     """
 
-    def __init__(self, real_out: io.TextIOWrapper, is_stderr: bool = False):
+    def __init__(self, real_out: io.TextIOWrapper, is_stderr: bool = False) -> None:
         class RealOutputMock:
-            def __init__(self, out: io.TextIOWrapper):
+            def __init__(self, out: io.TextIOWrapper) -> None:
                 self.out = out
 
-            def write(self, text):
+            def write(self, text) -> None:
                 if not ignore_stdout:
                     self.out.write(text)
 
-            def flush(self):
+            def flush(self) -> None:
                 self.out.flush()
 
-            def close(self):
+            def close(self) -> None:
                 self.out.close()
 
         self._original: RealOutputMock = RealOutputMock(real_out)
-        self._cloned: List[str] = []  # used in check function
-        self._dynamic: List[str] = []  # used to append inputs
-        self._partial: Dict[Any, ConditionalOutput] = {}  # separated outputs for each program
+        self._cloned: list[str] = []  # used in check function
+        self._dynamic: list[str] = []  # used to append inputs
+        self._partial: dict[Any, ConditionalOutput] = {}  # separated outputs for each program
         self._is_stderr = is_stderr
 
     @property
@@ -59,19 +61,19 @@ class OutputMock:
 
     @property
     def cloned(self) -> str:
-        return ''.join(self._cloned)
+        return "".join(self._cloned)
 
     @property
     def dynamic(self) -> str:
-        return ''.join(self._dynamic)
+        return "".join(self._dynamic)
 
     def partial(self, obj: Any) -> str:
         output = self._partial[obj].output
-        result = ''.join(output)
+        result = "".join(output)
         output.clear()
         return result
 
-    def write(self, text):
+    def write(self, text) -> None:
         partial_handler = self.__get_partial_handler()
 
         if partial_handler is None:
@@ -86,34 +88,36 @@ class OutputMock:
 
         loop_detector.write(text)
 
-    def getvalue(self):
+    def getvalue(self) -> None:
         pass
 
-    def flush(self):
+    def flush(self) -> None:
         self._original.flush()
 
-    def close(self):
+    def close(self) -> None:
         self._original.close()
 
-    def inject_input(self, user_input: str):
+    def inject_input(self, user_input: str) -> None:
         self._original.write(user_input)
         self._dynamic.append(user_input)
 
-    def reset(self):
+    def reset(self) -> None:
         self._cloned.clear()
         self._dynamic.clear()
         for value in self._partial.values():
             value.output.clear()
         loop_detector.reset()
 
-    def install_output_handler(self, obj: Any, condition: 'Condition'):
+    def install_output_handler(self, obj: Any, condition: Condition) -> None:
         if obj in self._partial:
-            raise UnexpectedError("Cannot install output handler from the same program twice")
+            msg = "Cannot install output handler from the same program twice"
+            raise UnexpectedError(msg)
         self._partial[obj] = ConditionalOutput(condition)
 
-    def uninstall_output_handler(self, obj: Any):
+    def uninstall_output_handler(self, obj: Any) -> None:
         if obj not in self._partial:
-            raise UnexpectedError("Cannot uninstall output handler that doesn't exist")
+            msg = "Cannot uninstall output handler that doesn't exist"
+            raise UnexpectedError(msg)
         del self._partial[obj]
 
     def __get_partial_handler(self):

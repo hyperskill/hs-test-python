@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 __all__ = [
-    'StageTest',
-    'DjangoTest',
-    'FlaskTest',
-    'PlottingTest',
-    'SQLTest',
+    "DjangoTest",
+    "FlaskTest",
+    "PlottingTest",
+    "SQLTest",
+    "StageTest",
 ]
 
 from hstest.stage.django_test import DjangoTest
