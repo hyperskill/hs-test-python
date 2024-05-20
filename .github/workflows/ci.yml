@@ -3,9 +3,13 @@ name: CI
 on:
   push:
     branches:
-      - 'master'
-      - 'release'
+      - master
+      - release
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -32,7 +36,8 @@ jobs:
       - name: Mypy
         run: poetry run mypy .
 
-  test-ubuntu:
+  test:
+    name: Run unit test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
