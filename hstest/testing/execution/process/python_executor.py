@@ -8,5 +8,5 @@ class PythonExecutor(ProcessExecutor):
     def __init__(self, source_name: str | None = None) -> None:
         super().__init__(PythonSearcher().find(source_name))
 
-    def _execution_command(self, *args: str):
+    def _execution_command(self, *args: str) -> list[str]:
         return ["python", "-u", self.runnable.file, *list(args)]

@@ -33,20 +33,20 @@ class ErrorOutcome(Outcome):
     def _init_permission_error(self, _: FileDeletionError) -> None:
         self.error_text = (
             "The file you opened "
-            + "can't be deleted after the end of the test. "
-            + "Probably you didn't close it."
+            "can't be deleted after the end of the test. "
+            "Probably you didn't close it."
         )
 
     def _init_time_limit_exception(self, ex: TimeLimitException) -> None:
         time_limit: int = ex.time_limit_ms
         time_unit: str = "milliseconds"
-        if time_limit > 1999:
+        if time_limit > 1999:  # noqa: PLR2004
             time_limit //= 1000
             time_unit = "seconds"
         self.error_text = (
             "In this test, the program is running for a long time, "
-            + f"more than {time_limit} {time_unit}. Most likely, "
-            + "the program has gone into an infinite loop."
+            f"more than {time_limit} {time_unit}. Most likely, "
+            "the program has gone into an infinite loop."
         )
 
     def get_type(self) -> str:

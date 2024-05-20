@@ -40,16 +40,18 @@ class OutputForTest:
     def close(self) -> None:
         self.original.close()
 
+
 MAX_REPEATS: Final = 5
+
 
 class UnitTesting:
     @staticmethod
     def test_all() -> bool:
         old_run = unittest.TestCase.run
 
-        def run(self: unittest.TestCase,
-                result: unittest.TestResult | None = None,
-                repeats: int = 0) -> unittest.TestResult:
+        def run(
+            self: unittest.TestCase, result: unittest.TestResult | None = None, repeats: int = 0
+        ) -> unittest.TestResult:
             failures_before = 0 if result is None else len(result.failures)
             test_result = old_run(self, result=result)
             is_project_test = "tests.projects." in str(self)
@@ -71,11 +73,8 @@ class UnitTesting:
         loader = unittest.TestLoader()
 
         for module in UnitTesting.find_modules(Path(__file__).parent):
-            if (
-                ("outcomes" in module
-                and not module.endswith(".test"))
-                or ("projects" in module
-                and not module.endswith(".tests"))
+            if ("outcomes" in module and not module.endswith(".test")) or (
+                "projects" in module and not module.endswith(".tests")
             ):
                 continue
             try:

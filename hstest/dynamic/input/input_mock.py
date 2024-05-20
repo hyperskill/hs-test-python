@@ -60,7 +60,6 @@ class InputMock:
 
                 StageTest.curr_test_run.set_error_in_test(OutOfInputError())
                 raise ExitException
-            else:
-                msg = "EOF when reading a line"
-                raise EOFError(msg)
+            msg = "EOF when reading a line"
+            raise EOFError(msg)
         return line

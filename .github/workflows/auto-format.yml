@@ -23,7 +23,7 @@ jobs:
 
       - uses: ./.github/workflows/actions/prepare
 
-      - run: poetry run ruff --fix --unsafe-fixes --preview --exit-zero .
+      - run: poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
       - run: poetry run ruff format .
 
       - name: Commit changes

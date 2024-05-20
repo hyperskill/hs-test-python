@@ -26,7 +26,7 @@ class ExitHandler:
     _signal_siginterrupt = None
 
     @staticmethod
-    def is_replaced():
+    def is_replaced() -> bool:
         return ExitHandler._replaced
 
     @staticmethod
