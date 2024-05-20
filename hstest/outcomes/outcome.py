@@ -76,7 +76,7 @@ class Outcome:
         return result.strip()
 
     @staticmethod
-    def __get_args():
+    def __get_args() -> str:
         arguments = ""
 
         from hstest.stage_test import StageTest
@@ -99,7 +99,7 @@ class Outcome:
         return arguments
 
     @staticmethod
-    def __trim_lines(full_out):
+    def __trim_lines(full_out: str) -> str:
         result = ""
 
         max_lines_in_output = 250
@@ -119,7 +119,7 @@ class Outcome:
         return result.strip()
 
     @staticmethod
-    def get_outcome(ex: BaseException, curr_test: int):
+    def get_outcome(ex: BaseException, curr_test: int) -> Outcome:
         from hstest.outcomes.compilation_error_outcome import CompilationErrorOutcome
         from hstest.outcomes.error_outcome import ErrorOutcome
         from hstest.outcomes.exception_outcome import ExceptionOutcome
@@ -129,13 +129,13 @@ class Outcome:
         if isinstance(ex, WrongAnswer):
             return WrongAnswerOutcome(curr_test, ex)
 
-        elif isinstance(ex, ExceptionWithFeedback):
+        if isinstance(ex, ExceptionWithFeedback):
             return ExceptionOutcome(curr_test, ex)
 
-        elif isinstance(ex, CompilationError):
+        if isinstance(ex, CompilationError):
             return CompilationErrorOutcome(ex)
 
-        elif isinstance(
+        if isinstance(
             ex,
             ErrorWithFeedback
             | FileDeletionError
@@ -145,5 +145,4 @@ class Outcome:
         ):
             return ErrorOutcome(curr_test, ex)
 
-        else:
-            return UnexpectedErrorOutcome(curr_test, ex)
+        return UnexpectedErrorOutcome(curr_test, ex)

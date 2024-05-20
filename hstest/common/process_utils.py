@@ -3,10 +3,13 @@ from __future__ import annotations
 import threading
 import weakref
 from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures.thread import _worker
-from typing import TYPE_CHECKING
+from concurrent.futures.thread import _worker  # noqa: PLC2701
+from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import queue
+    from concurrent.futures.process import _WorkItem
+
     from hstest.dynamic.security.thread_group import ThreadGroup
 
 
@@ -22,7 +25,7 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
 
         # When the executor gets lost, the weakref callback will wake up
         # the worker threads.
-        def weakref_cb(_, q=self._work_queue) -> None:
+        def weakref_cb(_: int, q: queue.SimpleQueue[_WorkItem[Any]] = self._work_queue) -> None:
             q.put(None)
 
         num_threads = len(self._threads)
@@ -42,7 +45,7 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
             self._threads.add(t)
 
 
-def is_port_in_use(port):
+def is_port_in_use(port: int) -> bool:
     import socket
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

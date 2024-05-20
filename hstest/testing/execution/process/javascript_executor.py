@@ -8,5 +8,5 @@ class JavascriptExecutor(ProcessExecutor):
     def __init__(self, source_name: str | None = None) -> None:
         super().__init__(JavascriptSearcher().find(source_name))
 
-    def _execution_command(self, *args: str):
+    def _execution_command(self, *args: str) -> list[str]:
         return ["node", self.runnable.file, *list(args)]

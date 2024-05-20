@@ -22,7 +22,7 @@ class OutputHandler:
     _mock_err: OutputMock = None
 
     @staticmethod
-    def print(obj) -> None:
+    def print(obj: Any) -> None:
         if True:
             return
 

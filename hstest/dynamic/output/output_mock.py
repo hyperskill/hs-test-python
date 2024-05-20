@@ -20,9 +20,23 @@ class ConditionalOutput:
         self.output: list[str] = []
 
 
+class RealOutputMock:
+    def __init__(self, out: io.TextIOWrapper) -> None:
+        self.out = out
+
+    def write(self, text: str) -> None:
+        if not ignore_stdout:
+            self.out.write(text)
+
+    def flush(self) -> None:
+        self.out.flush()
+
+    def close(self) -> None:
+        self.out.close()
+
+
 class OutputMock:
-    """original stream is used to actually see
-    the test in the console and nothing else.
+    """Original stream is used to actually see the test in the console and nothing else.
 
     cloned stream is used to collect all output
     from the test and redirect to check function
@@ -34,21 +48,7 @@ class OutputMock:
     but also injected input from the test
     """
 
-    def __init__(self, real_out: io.TextIOWrapper, is_stderr: bool = False) -> None:
-        class RealOutputMock:
-            def __init__(self, out: io.TextIOWrapper) -> None:
-                self.out = out
-
-            def write(self, text) -> None:
-                if not ignore_stdout:
-                    self.out.write(text)
-
-            def flush(self) -> None:
-                self.out.flush()
-
-            def close(self) -> None:
-                self.out.close()
-
+    def __init__(self, real_out: io.TextIOWrapper, *, is_stderr: bool = False) -> None:
         self._original: RealOutputMock = RealOutputMock(real_out)
         self._cloned: list[str] = []  # used in check function
         self._dynamic: list[str] = []  # used to append inputs
@@ -56,7 +56,7 @@ class OutputMock:
         self._is_stderr = is_stderr
 
     @property
-    def original(self):
+    def original(self) -> RealOutputMock:
         return self._original
 
     @property
@@ -73,7 +73,7 @@ class OutputMock:
         output.clear()
         return result
 
-    def write(self, text) -> None:
+    def write(self, text: str) -> None:
         partial_handler = self.__get_partial_handler()
 
         if partial_handler is None:
@@ -120,7 +120,7 @@ class OutputMock:
             raise UnexpectedError(msg)
         del self._partial[obj]
 
-    def __get_partial_handler(self):
+    def __get_partial_handler(self) -> list[str] | None:
         for handler in self._partial.values():
             if handler.condition():
                 return handler.output

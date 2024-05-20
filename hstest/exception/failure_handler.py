@@ -18,8 +18,7 @@ def get_report() -> str:
             f"{implementation} {python}\n"
             f"Testing library version 8"
         )
-    else:
-        return "Submitted via web"
+    return "Submitted via web"
 
 
 def get_traceback_stack(ex: BaseException) -> list[str]:

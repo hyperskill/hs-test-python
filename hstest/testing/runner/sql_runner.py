@@ -25,7 +25,7 @@ class SQLRunner(TestRunner):
 
         try:
             return test_case.dynamic_testing()
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             test_run.set_error_in_test(ex)
 
         return CheckResult.from_error(test_run.error_in_test)

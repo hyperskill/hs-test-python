@@ -97,7 +97,7 @@ class TestRun:
         result = None
         try:
             result = self._test_runner.test(self)
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             self.set_error_in_test(ex)
 
         # stopThreads(testCase.getProcesses(), pool)  # noqa: ERA001

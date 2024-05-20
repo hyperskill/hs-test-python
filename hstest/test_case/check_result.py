@@ -4,7 +4,7 @@ from hstest.exception.outcomes import TestPassed, WrongAnswer
 
 
 class CheckResult:
-    def __init__(self, result: bool, feedback: str) -> None:
+    def __init__(self, result: bool, feedback: str) -> None:  # noqa: FBT001
         self._result: bool = result
         self._feedback: str = feedback
 
@@ -18,20 +18,19 @@ class CheckResult:
 
     @staticmethod
     def correct() -> CheckResult:
-        return CheckResult(True, "")
+        return CheckResult(result=True, feedback="")
 
     @staticmethod
     def wrong(feedback: str) -> CheckResult:
-        return CheckResult(False, feedback)
+        return CheckResult(result=False, feedback=feedback)
 
     @staticmethod
     def from_error(error: BaseException) -> CheckResult | None:
         if isinstance(error, TestPassed):
             return correct()
-        elif isinstance(error, WrongAnswer):
+        if isinstance(error, WrongAnswer):
             return wrong(error.feedback)
-        else:
-            return None
+        return None
 
 
 def correct() -> CheckResult:

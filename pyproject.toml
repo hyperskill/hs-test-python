@@ -4,14 +4,17 @@ version = "0.1.0"
 description = ""
 authors = ["Hyperskill Team"]
 readme = "README.md"
+packages = [
+    { include = "hstest" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 psutil-wheels = "^5.8.0"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "1.8.0"
-ruff = "0.1.14"
+mypy = "1.10.0"
+ruff = "0.4.4"
 matplotlib = "^3.8.2"
 seaborn = "^0.13.2"
 pandas = "^2.2.0"
@@ -22,6 +25,36 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
+line-length = 100
+target-version = "py310"
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "tests/outcomes",
+    "tests/projects",
+    "tests/sql",
+    "venv",
+]
+
+[tool.ruff.lint]
 select = [
     "ALL",
 ]
@@ -52,7 +85,6 @@ ignore = [
     "PLC1901", # `record['bio'] == ''` can be simplified to `not record['bio']` as an empty string is falsey
     "PLR0904", # Too many public methods
     "PLR0916", # Too many Boolean expressions
-    "PLR1706", # Consider using if-else expression (`self.obj.fullname if self.obj else ''`)
     "PLR6301", # Method could be a function, class method, or static method
     "PT", # Use a regular `assert` instead of unittest-style `assertEqual`
     "S101", # Use of `assert` detected
@@ -75,48 +107,20 @@ ignore = [
     "W191", # Indentation contains tabs
 ]
 
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pytype",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "tests/outcomes",
-    "tests/projects",
-    "tests/sql",
-    "venv",
-]
-line-length = 100
-target-version = "py310"
+[tool.ruff.lint.mccabe]
+max-complexity = 56
 
-[tool.ruff.mccabe]
-max-complexity = 41
-
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ruff.lint.pylint]
-max-args = 5
-max-branches = 15
-max-returns = 6
-max-statements = 72
+max-args = 11
+max-branches = 27
+max-returns = 7
+max-statements = 153
+max-nested-blocks = 7
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 order-by-type = false
 required-imports = ["from __future__ import annotations"]

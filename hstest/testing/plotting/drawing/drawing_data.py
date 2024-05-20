@@ -6,13 +6,13 @@ import numpy as np
 class DrawingData:
     def __init__(self, x: np.ndarray, y: np.ndarray) -> None:
         try:
-            if type(x) != list and x is not None:
+            if not isinstance(x, list | None):
                 x = list(x)
-            if type(y) != list and y is not None:
+            if not isinstance(y, list | None):
                 y = list(y)
-        except Exception:
+        except Exception as e:
             msg = "The data argument should be an array"
-            raise ValueError(msg)
+            raise ValueError(msg) from e
 
         if x is not None and y is not None and len(x) != len(y):
             msg = "Arrays should be the same length"

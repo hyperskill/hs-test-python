@@ -51,11 +51,10 @@ class AsyncDynamicTestingRunner(TestRunner):
             future: Future = executor.submit(lambda: self._run_dynamic_test(test_run))
             if time_limit <= 0 or debug_mode:
                 return future.result()
-            else:
-                return future.result(timeout=time_limit / 1000)
+            return future.result(timeout=time_limit / 1000)
         except TimeoutError:
             test_run.set_error_in_test(TimeLimitException(time_limit))
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             test_run.set_error_in_test(ex)
         finally:
             test_run.invalidate_handlers()
@@ -74,7 +73,7 @@ class AsyncDynamicTestingRunner(TestRunner):
             if error is None:
                 try:
                     return test_case.check_func(OutputHandler.get_output(), test_case.attach)
-                except BaseException as ex:
+                except BaseException as ex:  # noqa: BLE001
                     error = ex
                     test_run.set_error_in_test(error)
 
