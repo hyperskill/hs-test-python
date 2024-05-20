@@ -14,5 +14,5 @@ runs:
         cache: 'poetry'
 
     - name: Install dependencies
-      run: poetry install --only main,dev --no-interaction --no-ansi
+      run: poetry install --no-interaction --no-ansi --no-root --sync
       shell: bash
