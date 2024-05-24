@@ -14,7 +14,7 @@ psutil-wheels = "^5.8.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "1.10.0"
-ruff = "0.4.4"
+ruff = "0.4.5"
 matplotlib = "^3.8.2"
 seaborn = "^0.13.2"
 pandas = "^2.2.0"
