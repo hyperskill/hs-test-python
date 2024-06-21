@@ -18,7 +18,7 @@ ruff = "0.4.10"
 matplotlib = "^3.8.2"
 seaborn = "^0.13.2"
 pandas = "^2.2.0"
-scipy = "^1.12.0"
+scipy = "^1.13.1"
 
 [build-system]
 requires = ["poetry-core"]
