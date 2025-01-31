@@ -33,6 +33,7 @@ jobs:
       - name: Install build tools
         run: |
           python -m pip install build poetry
+        shell: bash
 
       - name: Build wheel with dependencies
         run: |
@@ -41,24 +42,26 @@ jobs:
           
           # Build wheel including all dependencies
           python -m pip wheel . -w dist/
-          
-          # On macOS, repair wheels and build for arm64 if needed
-          if [ "${{ runner.os }}" = "macOS" ]; then
-            pip install delocate
-            if [ "${{ matrix.arch }}" = "arm64" ]; then
-              # Set environment for arm64 build
-              export ARCHFLAGS="-arch arm64"
-              export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
-            fi
-            delocate-wheel -w dist/fixed -v dist/*.whl
-            mv dist/fixed/* dist/
-            rm -rf dist/fixed
+        shell: bash
+
+      - name: Repair macOS wheels
+        if: runner.os == 'macOS'
+        run: |
+          pip install delocate
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            # Set environment for arm64 build
+            export ARCHFLAGS="-arch arm64"
+            export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
           fi
+          delocate-wheel -w dist/fixed -v dist/*.whl
+          mv dist/fixed/* dist/
+          rm -rf dist/fixed
         shell: bash
 
       - name: Build source distribution
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: python -m build --sdist --outdir dist/
+        shell: bash
 
       - name: Upload to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
