@@ -55,7 +55,7 @@ jobs:
       - name: Build wheel with dependencies
         run: |
           # Convert poetry project to pdm
-          pdm import poetry pyproject.toml
+          pdm import -f poetry pyproject.toml
           
           # Build wheel with bundled dependencies
           pdm build --no-sdist --wheel --bundle-dependencies
