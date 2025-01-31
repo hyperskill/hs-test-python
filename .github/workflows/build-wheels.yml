@@ -67,7 +67,7 @@ jobs:
       - name: Build wheel with dependencies
         run: |
           # Install dependencies first to ensure they're available
-          poetry install
+          poetry install --all-extras
           
           # Build wheel including all dependencies
           python -m pip wheel . -w dist/
