@@ -1,6 +1,11 @@
 name: 'Prepare environment'
 description: 'Prepare environment'
 
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -10,7 +15,7 @@ runs:
 
     - uses: actions/setup-python@v5
       with:
-        python-version-file: '.python-version'
+        python-version: ${{ inputs.python-version }}
         cache: 'poetry'
 
     - name: Install dependencies and package
