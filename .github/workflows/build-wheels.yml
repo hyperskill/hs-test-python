@@ -52,13 +52,13 @@ jobs:
           python -m pip install build poetry
         shell: bash
 
-      - name: Build wheel with dependencies
+      - name: Build wheel
         run: |
           # Install dependencies first to ensure they're available
           poetry install
           
-          # Build wheel including all dependencies
-          pip wheel . -w dist/
+          # Build wheel
+          python -m build --wheel --no-isolation --outdir dist/
         shell: bash
 
       - name: Build source distribution
