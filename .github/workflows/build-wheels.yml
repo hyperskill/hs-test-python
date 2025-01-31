@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }} ${{ matrix.arch }}
+    name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -18,50 +18,26 @@ jobs:
           # Linux builds
           - os: ubuntu-latest
             python-version: '3.10'
-            cp_version: '310'
           - os: ubuntu-latest
             python-version: '3.11'
-            cp_version: '311'
           - os: ubuntu-latest
             python-version: '3.12'
-            cp_version: '312'
             
           # Windows builds  
           - os: windows-latest
             python-version: '3.10'
-            cp_version: '310'
           - os: windows-latest
             python-version: '3.11'
-            cp_version: '311'
           - os: windows-latest
             python-version: '3.12'
-            cp_version: '312'
             
           # macOS builds
           - os: macos-latest
             python-version: '3.10'
-            cp_version: '310'
-            arch: x86_64
           - os: macos-latest
             python-version: '3.11'
-            cp_version: '311'
-            arch: x86_64
           - os: macos-latest
             python-version: '3.12'
-            cp_version: '312'
-            arch: x86_64
-          - os: macos-latest
-            python-version: '3.10'
-            cp_version: '310'
-            arch: arm64
-          - os: macos-latest
-            python-version: '3.11'
-            cp_version: '311'
-            arch: arm64
-          - os: macos-latest
-            python-version: '3.12'
-            cp_version: '312'
-            arch: arm64
 
     steps:
       - uses: actions/checkout@v4
@@ -71,17 +47,18 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel
+      - name: Install build dependencies
+        run: |
+          python -m pip install build poetry
         shell: bash
 
-      - name: Build wheels
-        env:
-          CIBW_BUILD: cp${{ matrix.cp_version }}-*
-          CIBW_ARCHS: all
-          CIBW_BEFORE_BUILD: pip install poetry && poetry install --all-extras
-          CIBW_ENVIRONMENT: INCLUDE_DEPS=1
-        run: python -m cibuildwheel --output-dir dist
+      - name: Build wheel with dependencies
+        run: |
+          # Install dependencies first to ensure they're available
+          poetry install
+          
+          # Build wheel including all dependencies
+          pip wheel . --no-deps=false -w dist/
         shell: bash
 
       - name: Build source distribution
@@ -92,7 +69,7 @@ jobs:
       - name: Upload to GitHub Actions
         uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.os }}-${{ matrix.arch }}-py${{ matrix.python-version }}
+          name: dist-${{ matrix.os }}-py${{ matrix.python-version }}
           path: dist/*
 
   release:
