@@ -18,3 +18,10 @@ extend_skip_glob = [
     "tests/outcomes/**/matplotlib_*.py",
     "tests/outcomes/**/seaborn_*.py",
 ]
+
+[tool.cibuildwheel]
+test-command = "pytest {project}/tests"
+test-extras = ["test"]
+test-skip = ["*universal2:arm64"]
+# Временно пропускаем сборку для PyPy
+skip = ["pp*"]
