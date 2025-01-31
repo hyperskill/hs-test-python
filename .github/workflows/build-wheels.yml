@@ -40,7 +40,7 @@ jobs:
           poetry install
           
           # Build wheel including all dependencies
-          python -m pip wheel . --no-deps=False -w dist/
+          python -m pip wheel . -w dist/
           
           # On macOS, repair wheels and build for arm64 if needed
           if [ "${{ runner.os }}" = "macOS" ]; then
