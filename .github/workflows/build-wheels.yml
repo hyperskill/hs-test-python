@@ -32,7 +32,7 @@ jobs:
           CIBW_BUILD: cp3{10,11,12}-*
           CIBW_SKIP: "*-musllinux*"
           CIBW_TEST_REQUIRES: pytest
-          CIBW_TEST_COMMAND: "pytest {project}/tests"
+          CIBW_TEST_COMMAND: "pip install {wheel} && pytest {project}/tests"
           CIBW_BUILD_VERBOSITY: 1
 
       - uses: actions/upload-artifact@v4

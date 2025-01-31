@@ -16,3 +16,7 @@ runs:
     - name: Install dependencies
       run: poetry install --no-interaction --no-ansi --no-root --sync
       shell: bash
+
+    - name: Install package in development mode
+      run: poetry install --no-interaction --no-ansi
+      shell: bash
