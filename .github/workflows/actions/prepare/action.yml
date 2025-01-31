@@ -13,10 +13,6 @@ runs:
         python-version-file: '.python-version'
         cache: 'poetry'
 
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-ansi --no-root --sync
-      shell: bash
-
-    - name: Install package in development mode
+    - name: Install dependencies and package
       run: poetry install --no-interaction --no-ansi
       shell: bash
