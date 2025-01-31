@@ -3,6 +3,7 @@ from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
 from hstest.check_result import CheckResult
 import os
+from typing import List
 
 CheckResult.correct = lambda: CheckResult(True, '')
 CheckResult.wrong = lambda feedback: CheckResult(False, feedback)
