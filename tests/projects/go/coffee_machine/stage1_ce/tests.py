@@ -1,6 +1,7 @@
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
+from hstest.check_result import CheckResult
 import os
 
 CheckResult.correct = lambda: CheckResult(True, '')
