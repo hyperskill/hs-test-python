@@ -58,7 +58,7 @@ jobs:
           poetry install
           
           # Build wheel including all dependencies
-          pip wheel . --no-deps=false -w dist/
+          pip wheel . -w dist/
         shell: bash
 
       - name: Build source distribution
