@@ -61,5 +61,6 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-ansi --no-root --sync
 
-      - name: Run unittests
-        run: python tests/testing.py
+      - name: Run Tests
+        run: poetry run python tests/testing.py
+        shell: bash
