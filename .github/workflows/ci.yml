@@ -18,11 +18,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-
       - uses: ./.github/workflows/actions/prepare
-
       - name: Check files using the ruff formatter
         run: poetry run ruff --fix --unsafe-fixes --preview .
+        shell: bash
 
   mypy:
     name: Static Type Checking
@@ -30,11 +29,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-
       - uses: ./.github/workflows/actions/prepare
-
       - name: Mypy
         run: poetry run mypy .
+        shell: bash
 
   test:
     name: Run unit test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
@@ -49,18 +47,7 @@ jobs:
         python-version: [ "3.10", "3.11", "3.12" ]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Poetry
-        run: pipx install poetry==$(head -n 1 .poetry-version)
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'poetry'
-
-      - name: Install dependencies
-        run: poetry install --no-interaction --no-ansi --no-root --sync
-
+      - uses: ./.github/workflows/actions/prepare
       - name: Run Tests
         run: poetry run python tests/testing.py
         shell: bash
