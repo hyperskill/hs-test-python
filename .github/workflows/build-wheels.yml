@@ -59,32 +59,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install build tools
-        run: |
-          python -m pip install build poetry
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel
         shell: bash
 
-      - name: Build wheel with dependencies
-        run: |
-          # Install dependencies first to ensure they're available
-          poetry install --all-extras
-          
-          # Build wheel including all dependencies
-          python -m pip wheel . -w dist/
-        shell: bash
-
-      - name: Repair macOS wheels
-        if: runner.os == 'macOS'
-        run: |
-          pip install delocate
-          if [ "${{ matrix.arch }}" = "arm64" ]; then
-            # Set environment for arm64 build
-            export ARCHFLAGS="-arch arm64"
-            export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
-          fi
-          delocate-wheel -w dist/fixed -v dist/*.whl
-          mv dist/fixed/* dist/
-          rm -rf dist/fixed
+      - name: Build wheels
+        env:
+          CIBW_BUILD: cp${{ matrix.python-version }}-*
+          CIBW_ARCHS: all
+          CIBW_BEFORE_BUILD: pip install poetry && poetry install --all-extras
+          CIBW_ENVIRONMENT: INCLUDE_DEPS=1
+        run: python -m cibuildwheel --output-dir dist
         shell: bash
 
       - name: Build source distribution
