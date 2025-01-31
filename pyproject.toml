@@ -149,3 +149,10 @@ exclude = [
     "tests/sql",
     "venv",
 ]
+
+[tool.cibuildwheel]
+test-command = "pytest {project}/tests"
+test-extras = ["test"]
+test-skip = ["*universal2:arm64"]
+# Временно пропускаем сборку для PyPy
+skip = ["pp*"]
