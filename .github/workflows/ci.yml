@@ -40,11 +40,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - [ self-hosted, small ]
-          - windows-latest
-          - macos-latest
-        python-version: [ "3.10", "3.11", "3.12" ]
+        include:
+          # Self-hosted runner
+          - os: [ self-hosted, small ]
+            python-version: "3.10"
+          - os: [ self-hosted, small ]
+            python-version: "3.11"
+          - os: [ self-hosted, small ]
+            python-version: "3.12"
+          
+          # Windows
+          - os: windows-latest
+            python-version: "3.10"
+          - os: windows-latest
+            python-version: "3.11"
+          - os: windows-latest
+            python-version: "3.12"
+          
+          # macOS (arm64)
+          - os: macos-14
+            python-version: "3.11"
+          - os: macos-14
+            python-version: "3.12"
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/workflows/actions/prepare
