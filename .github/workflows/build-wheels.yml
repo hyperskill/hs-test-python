@@ -30,34 +30,38 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel
+      - name: Install build tools
+        run: |
+          python -m pip install build poetry
 
-      - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
-        env:
-          CIBW_BUILD: cp3{10,11,12}-*
-          CIBW_SKIP: "*-musllinux*"
-          CIBW_BUILD_VERBOSITY: 1
-          CIBW_ARCHS_MACOS: ${{ matrix.arch || 'x86_64 arm64' }}
-          CIBW_ARCHS_LINUX: x86_64
-          CIBW_ARCHS_WINDOWS: AMD64
-          # Include dependencies in the wheel
-          CIBW_BEFORE_BUILD: pip install poetry && poetry install
-          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
-            DYLD_LIBRARY_PATH=/usr/local/lib delocate-wheel
-            --require-archs {delocate_archs}
-            -w {dest_dir}
-            -v {wheel}
+      - name: Build wheel with dependencies
+        run: |
+          # Install dependencies first to ensure they're available
+          poetry install
+          
+          # Build wheel including all dependencies
+          python -m pip wheel . --no-deps=False -w dist/
+          
+          # On macOS, repair wheels and build for arm64 if needed
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            pip install delocate
+            if [ "${{ matrix.arch }}" = "arm64" ]; then
+              # Set environment for arm64 build
+              export ARCHFLAGS="-arch arm64"
+              export _PYTHON_HOST_PLATFORM="macosx-11.0-arm64"
+            fi
+            delocate-wheel -w dist/fixed -v dist/*.whl
+            mv dist/fixed/* dist/
+            rm -rf dist/fixed
+          fi
+        shell: bash
 
       - name: Build source distribution
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        run: |
-          pip install build
-          python -m build --sdist --outdir wheelhouse/
+        run: python -m build --sdist --outdir dist/
 
       - name: Upload to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: wheelhouse/*
+          files: dist/*
