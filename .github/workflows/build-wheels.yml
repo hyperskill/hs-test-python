@@ -8,11 +8,19 @@ on:
 
 jobs:
   build_wheels:
-    name: Build wheels on Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.10', '3.11', '3.12']
+        include:
+          - os: macos-latest
+            arch: arm64
+          - os: macos-latest
+            arch: x86_64
 
     steps:
       - uses: actions/checkout@v4
@@ -22,13 +30,34 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install build tools
-        run: python -m pip install build
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel
 
-      - name: Build wheel
-        run: python -m build --wheel --outdir dist/
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_BUILD: cp3{10,11,12}-*
+          CIBW_SKIP: "*-musllinux*"
+          CIBW_BUILD_VERBOSITY: 1
+          CIBW_ARCHS_MACOS: ${{ matrix.arch || 'x86_64 arm64' }}
+          CIBW_ARCHS_LINUX: x86_64
+          CIBW_ARCHS_WINDOWS: AMD64
+          # Include dependencies in the wheel
+          CIBW_BEFORE_BUILD: pip install poetry && poetry install
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
+            DYLD_LIBRARY_PATH=/usr/local/lib delocate-wheel
+            --require-archs {delocate_archs}
+            -w {dest_dir}
+            -v {wheel}
 
-      - uses: actions/upload-artifact@v4
+      - name: Build source distribution
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: |
+          pip install build
+          python -m build --sdist --outdir wheelhouse/
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
         with:
-          name: wheels-py${{ matrix.python-version }}
-          path: dist/*.whl
+          files: wheelhouse/*
