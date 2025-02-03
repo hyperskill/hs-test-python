@@ -57,11 +57,9 @@ jobs:
           # Convert poetry project to pdm
           pdm import -f poetry pyproject.toml
           
-          # Initialize PDM project
+          # Initialize PDM project and enable distribution
           pdm init -n
-          
-          # Enable distribution in pyproject.toml
-          echo -e "\n[tool.pdm]\ndistribution = true" >> pyproject.toml
+          pdm config distribution true
           
           # Build wheel with bundled dependencies
           pdm build --no-sdist
