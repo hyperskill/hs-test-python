@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build psutil wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -49,24 +49,16 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          python -m pip install build pip wheel
+          python -m pip install pip wheel
         shell: bash
 
-      - name: Build wheels
+      - name: Build psutil wheel
         run: |
           # Create dist directory
           mkdir -p dist
           
-          # First build our package wheel without dependencies
-          pip wheel --no-deps -w dist/ .
-          
-          # Then build all dependencies
-          pip wheel -r requirements.txt --wheel-dir dist/
-        shell: bash
-
-      - name: Build source distribution
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        run: python -m build --sdist
+          # Build psutil wheel
+          pip wheel psutil==5.8.0 --wheel-dir dist/
         shell: bash
 
       - name: Upload to GitHub Actions
