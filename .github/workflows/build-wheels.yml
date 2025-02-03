@@ -49,29 +49,27 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          python -m pip install pdm
+          python -m pip install build pip wheel
         shell: bash
 
-      - name: Build wheel with dependencies
+      - name: Build wheels
         run: |
-          # Convert poetry project to pdm
-          pdm import -f poetry pyproject.toml
-          
-          # Initialize PDM project and enable distribution
-          pdm init -n
-          pdm config distribution true
-          
-          # Build wheel with bundled dependencies
-          pdm build --no-sdist
-          
-          # Move wheels to dist directory
+          # Create dist directory
           mkdir -p dist
-          mv __pypackages__/*/*.whl dist/
+          
+          # First build our package wheel without dependencies
+          python -m build --wheel --no-deps
+          
+          # Then build all dependencies
+          pip wheel -r requirements.txt --wheel-dir dist/
+          
+          # Move our wheel to dist
+          mv dist/*.whl dist/
         shell: bash
 
       - name: Build source distribution
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        run: pdm build --no-wheel
+        run: python -m build --sdist
         shell: bash
 
       - name: Upload to GitHub Actions
