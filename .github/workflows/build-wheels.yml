@@ -58,13 +58,10 @@ jobs:
           mkdir -p dist
           
           # First build our package wheel without dependencies
-          python -m build --wheel --no-deps
+          pip wheel --no-deps -w dist/ .
           
           # Then build all dependencies
           pip wheel -r requirements.txt --wheel-dir dist/
-          
-          # Move our wheel to dist
-          mv dist/*.whl dist/
         shell: bash
 
       - name: Build source distribution
