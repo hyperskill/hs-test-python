@@ -60,6 +60,9 @@ jobs:
           # Initialize PDM project
           pdm init -n
           
+          # Enable distribution in pyproject.toml
+          echo -e "\n[tool.pdm]\ndistribution = true" >> pyproject.toml
+          
           # Build wheel with bundled dependencies
           pdm build --no-sdist
           
