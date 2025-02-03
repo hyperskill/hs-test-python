@@ -57,17 +57,20 @@ jobs:
           # Convert poetry project to pdm
           pdm import -f poetry pyproject.toml
           
+          # Initialize PDM project
+          pdm init -n
+          
           # Build wheel with bundled dependencies
-          pdm build --no-sdist --wheel --bundle-dependencies
+          pdm build --no-sdist
           
           # Move wheels to dist directory
           mkdir -p dist
-          mv dist/*.whl dist/
+          mv __pypackages__/*/*.whl dist/
         shell: bash
 
       - name: Build source distribution
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        run: pdm build --no-wheel --sdist
+        run: pdm build --no-wheel
         shell: bash
 
       - name: Upload to GitHub Actions
