@@ -1032,18 +1032,7 @@ files = [
     {file = "tzdata-2025.1.tar.gz", hash = "sha256:24894909e88cdb28bd1636c6887801df64cb485bd593f2fd83ef29075a81d694"},
 ]
 
-[extras]
-darwin-py310 = []
-darwin-py311 = []
-darwin-py312 = []
-linux-py310 = []
-linux-py311 = []
-linux-py312 = []
-win-py310 = []
-win-py311 = []
-win-py312 = []
-
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "130e2f310abea717fdd43ff7eb44041c661e5a27a184633d9b5f47958ce9c762"
+content-hash = "9fa9ca741ed7831ff20c4d13249284a1b0abcebe4b48e4fe3110b25d06b02584"
