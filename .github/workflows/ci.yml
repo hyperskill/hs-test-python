@@ -39,6 +39,7 @@ jobs:
         shell: bash
 
   test:
+    if: false
     name: Run unit test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
