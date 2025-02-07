@@ -11,15 +11,15 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.10"
 psutil = [
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.10'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.11'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.12'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.10'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.11'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.12'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.10'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.11'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.12'" }
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.10'", hash = "sha256:7b79bca5b3532e65ddb35fae352ae09ab2f7c939da3b4f860a58e7f6e13d29df" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.11'", hash = "sha256:e3273080f1000c7ab8a65714d0e97b3b14133ede4a67aae1aa66f4fd56228c95" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.12'", hash = "sha256:c659b4227bbcb9846403758e3a62ed22695930bf5bfe2602876da04a6a0e2ca7" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.10'", hash = "sha256:42e0ea03c226c387bd8cded5984f91f491359c26ac1827eb231076f34cc5d3d2" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.11'", hash = "sha256:b3e5c23e33e96c582e5e3a99e2d2e432621784880e229c4a4e81655932ebd25f" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.12'", hash = "sha256:00e9a5b0ef778567cd7ddc0e1ec2051a93baefa43605209dc1e1e76779ce9d7a" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.10'", hash = "sha256:3410b4ab60a1d909e223104bf7a48fb9ede3eb058f29678f62622ff757a1da51" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.11'", hash = "sha256:4a1b843e133eba31289aee96334deebe6a69c9f0a7598066441fbd65e0992613" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.12'", hash = "sha256:ab29673f576466d7eb34231a4b311676422a5bd8c2f1c0c76ee9b46ee6271f16" }
 ]
 mypy = "1.10.1"
 pandas = "2.2.2"
