@@ -253,11 +253,11 @@ class BaseSearcher:
         if source.name.endswith(ext):
             source_folder = None
             source_file = source
-            source_module = source[: -len(ext)].replace(os.sep, ".")
+            source_module = str(source)[:-len(ext)].replace(os.sep, ".")
 
-        elif os.sep in source:
+        elif os.sep in str(source):
             if source.name.endswith(os.sep):
-                source = source[: -len(os.sep)]
+                source = str(source)[:-len(os.sep)]
 
             source_folder = source
             source_file = None
