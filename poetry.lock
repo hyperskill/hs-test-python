@@ -632,7 +632,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"linux\" and python_version < \"3.11\""
 files = [
-    {file = "psutil-5.8.0-cp310-cp310-linux_x86_64.whl", hash = "sha256:42e0ea03c226c387bd8cded5984f91f491359c26ac1827eb231076f34cc5d3d2"},
+    {file = "psutil-5.8.0-cp310-cp310-linux_x86_64.whl", hash = "sha256:4dd2052113d323b3fe9fd93e9915ab364bdb9ea3bd4995d7a0bf62c492713167"},
 ]
 
 [package.extras]
@@ -640,7 +640,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-linux_x86_64.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-linux_x86_64.whl"
 
 [[package]]
 name = "psutil"
@@ -651,7 +651,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"darwin\" and python_version < \"3.11\""
 files = [
-    {file = "psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3410b4ab60a1d909e223104bf7a48fb9ede3eb058f29678f62622ff757a1da51"},
+    {file = "psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3b611197383b14311c87919eaa8fbeebf15eab5fdeb22d4c7b67f03772a79716"},
 ]
 
 [package.extras]
@@ -659,7 +659,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl"
 
 [[package]]
 name = "psutil"
@@ -670,7 +670,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"win32\" and python_version < \"3.11\""
 files = [
-    {file = "psutil-5.8.0-cp310-cp310-win_amd64.whl", hash = "sha256:7b79bca5b3532e65ddb35fae352ae09ab2f7c939da3b4f860a58e7f6e13d29df"},
+    {file = "psutil-5.8.0-cp310-cp310-win_amd64.whl", hash = "sha256:07fd5212435883f325b925480b326bb5a2537e085e5552acd9877b91da4566ec"},
 ]
 
 [package.extras]
@@ -678,7 +678,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-win_amd64.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-win_amd64.whl"
 
 [[package]]
 name = "psutil"
@@ -689,7 +689,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"linux\" and python_version == \"3.11\""
 files = [
-    {file = "psutil-5.8.0-cp311-cp311-linux_x86_64.whl", hash = "sha256:0553be18c29d96852bed5efb2d9ec45d0eff22f9e1a5c752fa7413909215800f"},
+    {file = "psutil-5.8.0-cp311-cp311-linux_x86_64.whl", hash = "sha256:b3e5c23e33e96c582e5e3a99e2d2e432621784880e229c4a4e81655932ebd25f"},
 ]
 
 [package.extras]
@@ -697,7 +697,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-linux_x86_64.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-linux_x86_64.whl"
 
 [[package]]
 name = "psutil"
@@ -708,7 +708,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"darwin\" and python_version == \"3.11\""
 files = [
-    {file = "psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:4a1b843e133eba31289aee96334deebe6a69c9f0a7598066441fbd65e0992613"},
+    {file = "psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:f126690bbb74f08cccaaf5defe9d9d4e0b629855e8eb24e07ba6f6087337edf8"},
 ]
 
 [package.extras]
@@ -716,7 +716,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl"
 
 [[package]]
 name = "psutil"
@@ -727,7 +727,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"win32\" and python_version == \"3.11\""
 files = [
-    {file = "psutil-5.8.0-cp311-cp311-win_amd64.whl", hash = "sha256:e3273080f1000c7ab8a65714d0e97b3b14133ede4a67aae1aa66f4fd56228c95"},
+    {file = "psutil-5.8.0-cp311-cp311-win_amd64.whl", hash = "sha256:b175a13518b8b3c6671f0e3e626706e2eff936a2519c38ca0a5f73138736099a"},
 ]
 
 [package.extras]
@@ -735,7 +735,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-win_amd64.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-win_amd64.whl"
 
 [[package]]
 name = "psutil"
@@ -746,7 +746,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"linux\" and python_version >= \"3.12\" and python_version < \"3.13\""
 files = [
-    {file = "psutil-5.8.0-cp312-cp312-linux_x86_64.whl", hash = "sha256:00e9a5b0ef778567cd7ddc0e1ec2051a93baefa43605209dc1e1e76779ce9d7a"},
+    {file = "psutil-5.8.0-cp312-cp312-linux_x86_64.whl", hash = "sha256:adf09ab4d9caaf3ac048a2d9486e14eba84e6b231df24b46ce7d495372672f05"},
 ]
 
 [package.extras]
@@ -754,7 +754,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-linux_x86_64.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-linux_x86_64.whl"
 
 [[package]]
 name = "psutil"
@@ -765,7 +765,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"darwin\" and python_version >= \"3.12\" and python_version < \"3.13\""
 files = [
-    {file = "psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:ab29673f576466d7eb34231a4b311676422a5bd8c2f1c0c76ee9b46ee6271f16"},
+    {file = "psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:f7d30e6a6ca11ea83f50039b9dfefc9a1ef2c66028cc0db9071ac1edd9d9bbb9"},
 ]
 
 [package.extras]
@@ -773,7 +773,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl"
 
 [[package]]
 name = "psutil"
@@ -784,7 +784,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
 markers = "sys_platform == \"win32\" and python_version >= \"3.12\" and python_version < \"3.13\""
 files = [
-    {file = "psutil-5.8.0-cp312-cp312-win_amd64.whl", hash = "sha256:c659b4227bbcb9846403758e3a62ed22695930bf5bfe2602876da04a6a0e2ca7"},
+    {file = "psutil-5.8.0-cp312-cp312-win_amd64.whl", hash = "sha256:2b478fe4266e25e7b0caea5eeec6df836b2a37308cb24efbce30f915b1f03cfe"},
 ]
 
 [package.extras]
@@ -792,7 +792,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
 
 [package.source]
 type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-win_amd64.whl"
+url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-win_amd64.whl"
 
 [[package]]
 name = "pyparsing"
@@ -1035,4 +1035,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "9fa9ca741ed7831ff20c4d13249284a1b0abcebe4b48e4fe3110b25d06b02584"
+content-hash = "7e3c8eb5addedd6ebfe1b203e5ed4eed02b3edcaf6205533426065894382a014"
