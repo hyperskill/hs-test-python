@@ -27,5 +27,5 @@ runs:
       shell: bash
 
     - name: Install dependencies and package
-      run: poetry install --no-interaction --no-ansi --without-hashes
+      run: poetry install --no-interaction --no-ansi
       shell: bash
