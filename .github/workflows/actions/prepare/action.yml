@@ -22,6 +22,10 @@ runs:
         python-version: ${{ inputs.python-version }}
         cache: 'poetry'
 
+    - name: Clear Poetry cache
+      run: poetry cache clear --all pypi
+      shell: bash
+
     - name: Install dependencies and package
       run: poetry install --no-interaction --no-ansi
       shell: bash
