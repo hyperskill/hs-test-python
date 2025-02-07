@@ -1,6 +1,8 @@
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
+from hstest.check_result import CheckResult
+from typing import List
 
 CheckResult.correct = lambda: CheckResult(True, '')
 CheckResult.wrong = lambda feedback: CheckResult(False, feedback)

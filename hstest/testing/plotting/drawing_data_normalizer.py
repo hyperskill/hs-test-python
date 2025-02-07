@@ -1,39 +1,42 @@
+from __future__ import annotations
+
 import numpy as np
 
 
 class DrawingDataNormalizer:
-
     @staticmethod
-    def normalize_x_y_data(x, y) -> np.ndarray:
+    def normalize_x_y_data(x: list[float], y: list[float]) -> np.ndarray:
         try:
-            if type(x) != list:
+            if not isinstance(x, list):
                 x = list(x)
-            if type(y) != list:
+            if not isinstance(y, list):
                 y = list(y)
-        except Exception:
-            raise ValueError('The data argument should be an array')
+        except Exception as e:
+            msg = "The data argument should be an array"
+            raise ValueError(msg) from e
 
         if len(x) != len(y):
-            raise ValueError('Arrays should be the same length')
+            msg = "Arrays should be the same length"
+            raise ValueError(msg)
 
-        result_data = list()
+        result_data = []
 
-        for a, b in zip(x, y):
+        for a, b in zip(x, y, strict=False):
             result_data.append((a, b))
 
         return np.array(result_data, dtype=object)
 
     @staticmethod
-    def normalize_hist_data(data) -> np.ndarray:
-
-        if type(data) == str:
+    def normalize_hist_data(data: list[float] | str) -> np.ndarray:
+        if isinstance(data, str):
             data = [data]
 
-        if type(data) != list:
+        if not isinstance(data, list):
             try:
                 data = list(data)
-            except Exception:
-                raise ValueError('The data argument should be an array')
+            except Exception as e:
+                msg = "The data argument should be an array"
+                raise ValueError(msg) from e
 
         return np.array(data, dtype=object)
 
@@ -73,19 +76,20 @@ class DrawingDataNormalizer:
 
         return np.array(result_data, dtype=object)
         """  # noqa: W293
+        return None
 
     @staticmethod
-    def normalize_bar_data(x, y) -> np.ndarray:
+    def normalize_bar_data(x: list[float], y: list[float]) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_line_data(x, y) -> np.ndarray:
+    def normalize_line_data(x: list[float], y: list[float]) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_scatter_data(x, y) -> np.ndarray:
+    def normalize_scatter_data(x: list[float], y: list[float]) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)
 
     @staticmethod
-    def normalize_pie_data(x, y) -> np.ndarray:
+    def normalize_pie_data(x: list[float], y: list[float]) -> np.ndarray:
         return DrawingDataNormalizer.normalize_x_y_data(x, y)

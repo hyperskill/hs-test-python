@@ -1,0 +1,23 @@
+name: 'Prepare environment'
+description: 'Prepare environment'
+
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Poetry
+      run: pipx install poetry==$(head -n 1 .poetry-version)
+      shell: bash
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: 'poetry'
+
+    - name: Install dependencies and package
+      run: poetry install --no-interaction --no-ansi
+      shell: bash
