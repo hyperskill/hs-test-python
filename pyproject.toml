@@ -10,23 +10,30 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-psutil = [
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.10'", hash = "sha256:07fd5212435883f325b925480b326bb5a2537e085e5552acd9877b91da4566ec" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.11'", hash = "sha256:b175a13518b8b3c6671f0e3e626706e2eff936a2519c38ca0a5f73138736099a" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32' and python_version == '3.12'", hash = "sha256:2b478fe4266e25e7b0caea5eeec6df836b2a37308cb24efbce30f915b1f03cfe" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.10'", hash = "sha256:4dd2052113d323b3fe9fd93e9915ab364bdb9ea3bd4995d7a0bf62c492713167" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.11'", hash = "sha256:b3e5c23e33e96c582e5e3a99e2d2e432621784880e229c4a4e81655932ebd25f" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version == '3.12'", hash = "sha256:adf09ab4d9caaf3ac048a2d9486e14eba84e6b231df24b46ce7d495372672f05" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.10'", hash = "sha256:3b611197383b14311c87919eaa8fbeebf15eab5fdeb22d4c7b67f03772a79716" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.11'", hash = "sha256:f126690bbb74f08cccaaf5defe9d9d4e0b629855e8eb24e07ba6f6087337edf8" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", markers = "sys_platform == 'darwin' and python_version == '3.12'", hash = "sha256:f7d30e6a6ca11ea83f50039b9dfefc9a1ef2c66028cc0db9071ac1edd9d9bbb9" }
-]
+psutil = { version = "5.8.0", source = "psutil-wheels" }
 mypy = "1.10.1"
 pandas = "2.2.2"
 ruff = "0.6.0"
 matplotlib = "^3.9.2"
 seaborn = "^0.13.2"
 scipy = "^1.12.0"
+
+[[tool.poetry.source]]
+name = "psutil-wheels"
+url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/"
+priority = "explicit"
+type = "file"
+
+[tool.poetry.source.psutil-wheels.hashes]
+"psutil-5.8.0-cp310-cp310-win_amd64.whl" = "sha256:07fd5212435883f325b925480b326bb5a2537e085e5552acd9877b91da4566ec"
+"psutil-5.8.0-cp311-cp311-win_amd64.whl" = "sha256:b175a13518b8b3c6671f0e3e626706e2eff936a2519c38ca0a5f73138736099a"
+"psutil-5.8.0-cp312-cp312-win_amd64.whl" = "sha256:2b478fe4266e25e7b0caea5eeec6df836b2a37308cb24efbce30f915b1f03cfe"
+"psutil-5.8.0-cp310-cp310-linux_x86_64.whl" = "sha256:4dd2052113d323b3fe9fd93e9915ab364bdb9ea3bd4995d7a0bf62c492713167"
+"psutil-5.8.0-cp311-cp311-linux_x86_64.whl" = "sha256:b3e5c23e33e96c582e5e3a99e2d2e432621784880e229c4a4e81655932ebd25f"
+"psutil-5.8.0-cp312-cp312-linux_x86_64.whl" = "sha256:adf09ab4d9caaf3ac048a2d9486e14eba84e6b231df24b46ce7d495372672f05"
+"psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl" = "sha256:3b611197383b14311c87919eaa8fbeebf15eab5fdeb22d4c7b67f03772a79716"
+"psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl" = "sha256:f126690bbb74f08cccaaf5defe9d9d4e0b629855e8eb24e07ba6f6087337edf8"
+"psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl" = "sha256:f7d30e6a6ca11ea83f50039b9dfefc9a1ef2c66028cc0db9071ac1edd9d9bbb9"
 
 [build-system]
 requires = ["poetry-core"]
