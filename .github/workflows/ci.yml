@@ -14,7 +14,7 @@ concurrency:
 jobs:
   lint:
     name: Lint with ruff
-    runs-on: [ self-hosted, small ]
+    runs-on: arc-runners-small
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
 
   mypy:
     name: Static Type Checking
-    runs-on: [ self-hosted, small ]
+    runs-on: arc-runners-small
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
