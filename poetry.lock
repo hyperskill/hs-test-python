@@ -744,7 +744,7 @@ description = "Cross-platform lib for process and system monitoring in Python."
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
-markers = "sys_platform == \"linux\" and python_version >= \"3.12\""
+markers = "sys_platform == \"linux\" and python_version >= \"3.12\" and python_version < \"3.13\""
 files = [
     {file = "psutil-5.8.0-cp312-cp312-linux_x86_64.whl", hash = "sha256:00e9a5b0ef778567cd7ddc0e1ec2051a93baefa43605209dc1e1e76779ce9d7a"},
 ]
@@ -763,7 +763,7 @@ description = "Cross-platform lib for process and system monitoring in Python."
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
-markers = "sys_platform == \"darwin\" and python_version >= \"3.12\""
+markers = "sys_platform == \"darwin\" and python_version >= \"3.12\" and python_version < \"3.13\""
 files = [
     {file = "psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:ab29673f576466d7eb34231a4b311676422a5bd8c2f1c0c76ee9b46ee6271f16"},
 ]
@@ -782,7 +782,7 @@ description = "Cross-platform lib for process and system monitoring in Python."
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 groups = ["main"]
-markers = "sys_platform == \"win32\" and python_version >= \"3.12\""
+markers = "sys_platform == \"win32\" and python_version >= \"3.12\" and python_version < \"3.13\""
 files = [
     {file = "psutil-5.8.0-cp312-cp312-win_amd64.whl", hash = "sha256:c659b4227bbcb9846403758e3a62ed22695930bf5bfe2602876da04a6a0e2ca7"},
 ]
@@ -1032,7 +1032,18 @@ files = [
     {file = "tzdata-2025.1.tar.gz", hash = "sha256:24894909e88cdb28bd1636c6887801df64cb485bd593f2fd83ef29075a81d694"},
 ]
 
+[extras]
+darwin-py310 = []
+darwin-py311 = []
+darwin-py312 = []
+linux-py310 = []
+linux-py311 = []
+linux-py312 = []
+win-py310 = []
+win-py311 = []
+win-py312 = []
+
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "ec7ff2eeb7657a574a29b4a159c6e52ec0d06bf8b9e31e9ae03ce5fb3a87d84c"
+content-hash = "130e2f310abea717fdd43ff7eb44041c661e5a27a184633d9b5f47958ce9c762"
