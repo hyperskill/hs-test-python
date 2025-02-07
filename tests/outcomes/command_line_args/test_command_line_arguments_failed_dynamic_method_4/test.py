@@ -23,10 +23,10 @@ class TestCommandLineArgumentsFailedDynamicMethod5(UserErrorTest):
 
     @dynamic_test
     def test1(self):
-        pr2 = TestedProgram('main2')
+        pr2 = TestedProgram("main2")
         pr2.start("--second", "main")
 
-        pr = TestedProgram('main')
+        pr = TestedProgram("main")
         pr.start("-in", "123", "-out", "234")
 
-        return wrong('')
+        return wrong("")

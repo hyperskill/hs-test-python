@@ -1,15 +1,14 @@
 def plot():
     try:
-        import pandas as pd
-        import numpy as np
         import matplotlib.pyplot as plt
+        import numpy as np
+        import pandas as pd
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]),
-                      columns=['one'])
+    df = pd.DataFrame(np.array([1, 2, 3, 4, 5]), columns=["one"])
 
-    df.plot(kind='hist')
+    df.plot(kind="hist")
 
     plt.show()
 

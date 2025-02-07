@@ -19,7 +19,9 @@ class TestPandasHist(PlottingTest):
             [2, 9, 6, 6, 6],
             [1, 2, 3, 4, 5],
             [1, 2, 3, 4, 5],
-            [1, 2, 3, 4, 5]
+            [1, 2, 3, 4, 5],
         ]
 
-        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.pandas)
+        return test_hist_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.pandas
+        )

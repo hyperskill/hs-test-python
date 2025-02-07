@@ -16,6 +16,6 @@ class UnexpectedErrorDuringCheckingWithAssertion(UnexpectedErrorTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        if reply == 'Hello World\n':
+        if reply == "Hello World\n":
             assert False
-        return CheckResult(True, '')
+        return CheckResult(True, "")

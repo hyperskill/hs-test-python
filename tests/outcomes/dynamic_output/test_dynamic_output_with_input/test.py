@@ -23,9 +23,7 @@ class TestDynamicOutputWithInput(UserErrorTest):
     not_contain = "Unexpected error"
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(stdin="123 456\n678\n248")
-        ]
+        return [TestCase(stdin="123 456\n678\n248")]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult.wrong('')
+        return CheckResult.wrong("")

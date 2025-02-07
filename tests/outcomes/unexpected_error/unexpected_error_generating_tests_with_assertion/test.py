@@ -17,4 +17,4 @@ class UnexpectedErrorGeneratingTestsWithAssertion(UnexpectedErrorTest):
         assert False
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

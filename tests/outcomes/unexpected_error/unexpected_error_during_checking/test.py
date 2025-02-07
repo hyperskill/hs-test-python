@@ -17,4 +17,4 @@ class UnexpectedErrorDuringChecking(UnexpectedErrorTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         x = 0 / 0  # noqa: F841
-        return CheckResult(True, '')
+        return CheckResult(True, "")

@@ -13,11 +13,13 @@ class TestMatplotlibHist(PlottingTest):
 
         correct_data = [
             [3, 2, 1],
-            [3, 2, '1'],
-            ['3', '2', '1'],
+            [3, 2, "1"],
+            ["3", "2", "1"],
             [3.1, 2.1, 1],
-            ['b', 'a', 'c'],
-            [1, 5, 2, '1']
+            ["b", "a", "c"],
+            [1, 5, 2, "1"],
         ]
 
-        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.matplotlib)
+        return test_hist_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.matplotlib
+        )

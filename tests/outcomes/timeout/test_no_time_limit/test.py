@@ -6,7 +6,7 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-@unittest.skip('takes too long')
+@unittest.skip("takes too long")
 class TestNoTimeLimit(StageTest):
 
     def generate(self) -> List[TestCase]:

@@ -67,13 +67,19 @@ class BaseSearcher:
 
             candidates = set(files)
 
-            for curr_filter in initial_filter, pre_main_filter, main_filter, post_main_filter:
+            for curr_filter in (
+                initial_filter,
+                pre_main_filter,
+                main_filter,
+                post_main_filter,
+            ):
                 curr_filter.init_filter(folder, contents)
 
                 filtered_files: set[File] = {
                     file
                     for file in files
-                    if file in contents and curr_filter.filter(folder, file, contents[file])
+                    if file in contents
+                    and curr_filter.filter(folder, file, contents[file])
                 }
 
                 curr_filter.filtered = filtered_files
@@ -211,7 +217,9 @@ class BaseSearcher:
         main_searcher = re.compile(main_regex, re.MULTILINE)
         return self._search(
             where_to_search,
-            main_filter=MainFilter(main_desc, source=lambda s: main_searcher.search(s) is not None),
+            main_filter=MainFilter(
+                main_desc, source=lambda s: main_searcher.search(s) is not None
+            ),
             force_content_filters=force_content_filters,
         )
 
@@ -253,8 +261,7 @@ class BaseSearcher:
             source_module = source[: -len(ext)].replace(os.sep, ".")
 
         elif os.sep in source:
-            if source.endswith(os.sep):
-                source = source[: -len(os.sep)]
+            source = source.removesuffix(os.sep)
 
             source_folder = source
             source_file = None

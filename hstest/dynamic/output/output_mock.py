@@ -52,7 +52,9 @@ class OutputMock:
         self._original: RealOutputMock = RealOutputMock(real_out)
         self._cloned: list[str] = []  # used in check function
         self._dynamic: list[str] = []  # used to append inputs
-        self._partial: dict[Any, ConditionalOutput] = {}  # separated outputs for each program
+        self._partial: dict[Any, ConditionalOutput] = (
+            {}
+        )  # separated outputs for each program
         self._is_stderr = is_stderr
 
     @property

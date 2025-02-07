@@ -7,7 +7,7 @@ from hstest.testing.tested_program import TestedProgram
 class TestDontReturnOutputAfterExecution(StageTest):
     @dynamic_test
     def test(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.set_return_output_after_execution(False)
 
         out = main.start()
@@ -19,7 +19,7 @@ class TestDontReturnOutputAfterExecution(StageTest):
             return wrong("Output is wrong")
 
         for i in range(2):
-            if len(main.execute('')) != 0:
+            if len(main.execute("")) != 0:
                 return wrong("Output should be empty")
 
         out = main.get_output()
@@ -32,7 +32,6 @@ class TestDontReturnOutputAfterExecution(StageTest):
             return wrong("Output should not be empty")
 
         if len(main.get_output()) != 0:
-            return wrong(
-                "get_output() should return an empty string at the end")
+            return wrong("get_output() should return an empty string at the end")
 
         return correct()

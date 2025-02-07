@@ -1,4 +1,4 @@
-input('Print x and y: ')
+input("Print x and y: ")
 int(input())
-print('Another num:')
+print("Another num:")
 int(input())

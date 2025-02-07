@@ -24,17 +24,17 @@ class TestCommandLineArgumentsFailedSecondTestDynamicTesting(UserErrorTest):
     """  # noqa: W293
 
     def test1(self):
-        pr = TestedProgram('main')
+        pr = TestedProgram("main")
         pr.start("-in", "123", "-out", "234")
-        return CheckResult(False, '')
+        return CheckResult(False, "")
 
     def test2(self):
-        pr2 = TestedProgram('main2')
+        pr2 = TestedProgram("main2")
         pr2.start("--second", "main")
-        return CheckResult(True, '')
+        return CheckResult(True, "")
 
     def generate(self) -> List[TestCase]:
         return [
             TestCase(dynamic_testing=self.test2),
-            TestCase(dynamic_testing=self.test1)
+            TestCase(dynamic_testing=self.test1),
         ]

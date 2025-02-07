@@ -13,9 +13,7 @@ class TestCommandLineArgumentsFailed2(UserErrorTest):
         """
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(args=["-in", "123", "-out", "234"])
-        ]
+        return [TestCase(args=["-in", "123", "-out", "234"])]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return wrong("")

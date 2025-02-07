@@ -13,10 +13,15 @@ class TestSeabornBar(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        correct_data = np.array([
-            [['A', 10], ['B', 30], ['C', 20]],
-            [['', 10], ['', 30], ['', 20]],
-            [[10, ''], [30, ''], [20, '']],
-        ], dtype=object)
+        correct_data = np.array(
+            [
+                [["A", 10], ["B", 30], ["C", 20]],
+                [["", 10], ["", 30], ["", 20]],
+                [[10, ""], [30, ""], [20, ""]],
+            ],
+            dtype=object,
+        )
 
-        return test_bar_drawing(self.all_figures(), correct_data, DrawingLibrary.seaborn)
+        return test_bar_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.seaborn
+        )

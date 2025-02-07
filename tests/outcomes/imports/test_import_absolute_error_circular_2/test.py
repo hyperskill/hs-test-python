@@ -22,4 +22,4 @@ class TestImportAbsoluteErrorCircular2(UserErrorTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '105\n', '')
+        return CheckResult(reply == "105\n", "")

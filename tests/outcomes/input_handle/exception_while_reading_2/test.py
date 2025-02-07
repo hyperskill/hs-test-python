@@ -22,9 +22,7 @@ class ExceptionWhileReading2(UserErrorTest):
     line2"""  # noqa: W293
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(stdin='line1\nline2')
-        ]
+        return [TestCase(stdin="line1\nline2")]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

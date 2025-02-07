@@ -110,7 +110,12 @@ class MatplotlibHandler:
                 height = np.full((len(x),), height)
 
             drawings.append(
-                Drawing(DrawingLibrary.matplotlib, DrawingType.bar, DrawingData(x, height), kw)
+                Drawing(
+                    DrawingLibrary.matplotlib,
+                    DrawingType.bar,
+                    DrawingData(x, height),
+                    kw,
+                )
             )
             return None
 
@@ -158,7 +163,9 @@ class MatplotlibHandler:
                 x = kw["labels"]
 
             drawings.append(
-                Drawing(DrawingLibrary.matplotlib, DrawingType.pie, DrawingData(x, y), kw)
+                Drawing(
+                    DrawingLibrary.matplotlib, DrawingType.pie, DrawingData(x, y), kw
+                )
             )
 
         def violinplot(dataset, *, data=None, **kwargs) -> None:
@@ -166,14 +173,14 @@ class MatplotlibHandler:
                 with contextlib.suppress(Exception):
                     dataset = data[dataset]
 
-            drawing = Drawing(DrawingLibrary.matplotlib, DrawingType.violin, dataset, kwargs)
+            drawing = Drawing(
+                DrawingLibrary.matplotlib, DrawingType.violin, dataset, kwargs
+            )
 
             drawings.append(drawing)
 
         def imshow(x, **kwargs) -> None:
-            curr_data = {  # noqa: F841
-                "x": np.array(x, dtype=object)
-            }
+            curr_data = {"x": np.array(x, dtype=object)}  # noqa: F841
 
             drawing = Drawing(
                 DrawingLibrary.matplotlib,

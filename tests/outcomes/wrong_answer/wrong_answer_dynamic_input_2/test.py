@@ -14,14 +14,15 @@ class WrongAnswerDynamicInput2(UserErrorTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin=[
-                lambda x: "2" if x == "1\n" else CheckResult.wrong("WA TEST 1")
-            ], attach="1\n2\n"),
-
-            TestCase(stdin=[
-                lambda x: "3" if x == "2" else CheckResult.wrong("WA TEST 2")
-            ], attach="2\n3\n"),
+            TestCase(
+                stdin=[lambda x: "2" if x == "1\n" else CheckResult.wrong("WA TEST 1")],
+                attach="1\n2\n",
+            ),
+            TestCase(
+                stdin=[lambda x: "3" if x == "2" else CheckResult.wrong("WA TEST 2")],
+                attach="2\n3\n",
+            ),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

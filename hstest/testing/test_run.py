@@ -18,7 +18,11 @@ if TYPE_CHECKING:
 
 class TestRun:
     def __init__(
-        self, test_num: int, test_count: int, test_case: TestCase, test_rummer: TestRunner
+        self,
+        test_num: int,
+        test_count: int,
+        test_case: TestCase,
+        test_rummer: TestRunner,
     ) -> None:
         self._test_num: int = test_num
         self._test_count: int = test_count

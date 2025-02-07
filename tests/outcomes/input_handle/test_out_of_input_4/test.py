@@ -13,10 +13,7 @@ class TestOutOfInput4(UserErrorTest):
     """
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(stdin=[(2, lambda x: '1\n2'),
-                            lambda x: '2'])
-        ]
+        return [TestCase(stdin=[(2, lambda x: "1\n2"), lambda x: "2"])]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         return CheckResult.correct()

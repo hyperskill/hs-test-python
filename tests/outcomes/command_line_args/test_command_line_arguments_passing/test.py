@@ -10,10 +10,9 @@ class TestCommendLineArgumentsPassing(StageTest):
     def generate(self) -> List[TestCase]:
         return [
             TestCase(
-                attach='4\n-in\n123\nout\n234\n',
-                args=['-in', '123', 'out', '234']
+                attach="4\n-in\n123\nout\n234\n", args=["-in", "123", "out", "234"]
             ),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

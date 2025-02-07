@@ -6,11 +6,11 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 
 
-@unittest.skip('Relative imports doesn\'t work')
+@unittest.skip("Relative imports doesn't work")
 class TestImportRelative(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '1035\n', '')
+        return CheckResult(reply == "1035\n", "")

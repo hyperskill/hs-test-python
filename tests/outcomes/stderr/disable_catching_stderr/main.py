@@ -1,3 +1,3 @@
 import sys
 
-print('text from stderr', file=sys.stderr)
+print("text from stderr", file=sys.stderr)

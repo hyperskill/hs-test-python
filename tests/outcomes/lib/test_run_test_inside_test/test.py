@@ -15,7 +15,7 @@ class TestRunTestInsideTest(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        status, feedback = TestRunTestInsideTest('').run_tests()
+        status, feedback = TestRunTestInsideTest("").run_tests()
         if status != 0:
             raise ErrorWithFeedback(feedback)
         return CheckResult.correct()

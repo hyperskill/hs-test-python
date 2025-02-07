@@ -13,10 +13,10 @@ class UnexpectedErrorUserModuleNotExists(UserErrorTest):
     Are your project files located at
     """
 
-    source = 'tests.bad_module'
+    source = "tests.bad_module"
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

@@ -22,9 +22,13 @@ class GoSearcher(BaseSearcher):
         return self._search(
             where,
             force_content_filters=[
-                MainFilter("package main", source=lambda s: package_searcher.search(s) is not None),
                 MainFilter(
-                    "func main()", source=lambda s: main_func_searcher.search(s) is not None
+                    "package main",
+                    source=lambda s: package_searcher.search(s) is not None,
+                ),
+                MainFilter(
+                    "func main()",
+                    source=lambda s: main_func_searcher.search(s) is not None,
                 ),
             ],
         )

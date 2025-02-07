@@ -13,10 +13,7 @@ class TestPassedThrownInCheck1(UserErrorTest):
     test is not passed attach true"""
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(attach=True),
-            TestCase(attach=False)
-        ]
+        return [TestCase(attach=True), TestCase(attach=False)]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         if not attach:

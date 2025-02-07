@@ -11,10 +11,8 @@ class UnexpectedErrorNotGeneratingTests(UnexpectedErrorTest):
 
         We have recorded this bug and will fix it soon.
         """,
-        "Can't check result: override \"check\" method"
+        'Can\'t check result: override "check" method',
     ]
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]

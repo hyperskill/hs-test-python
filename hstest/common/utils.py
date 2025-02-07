@@ -31,7 +31,9 @@ def clean_text(text: str) -> str:
     return text.replace("\r\n", "\n").replace("\r", "\n").replace("\u00a0", "\u0020")
 
 
-def try_many_times(times_to_try: int, sleep_time_ms: int, exit_func: Callable[[], bool]) -> bool:
+def try_many_times(
+    times_to_try: int, sleep_time_ms: int, exit_func: Callable[[], bool]
+) -> bool:
     while times_to_try > 0:
         times_to_try -= 1
         if exit_func():

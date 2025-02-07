@@ -11,8 +11,8 @@ class UnexpectedErrorNotGeneratingTests(UnexpectedErrorTest):
 
         We have recorded this bug and will fix it soon.
         """,
-        "No tests found"
+        "No tests found",
     ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

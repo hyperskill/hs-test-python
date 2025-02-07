@@ -40,8 +40,6 @@ class OutputHandler:
         if group:
             OutputHandler.get_real_out().write(full)
             OutputHandler.get_real_out().flush()
-        else:
-            pass
 
     @staticmethod
     def get_real_out() -> io.TextIOWrapper:

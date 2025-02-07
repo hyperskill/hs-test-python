@@ -13,10 +13,10 @@ class UnexpectedErrorUserMainFileNotExistsButExistsOther(UserErrorTest):
     Are your project files located at
     """
 
-    source = 'bad_file'
+    source = "bad_file"
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

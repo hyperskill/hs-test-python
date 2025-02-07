@@ -27,7 +27,12 @@ class OutputForTest:
         text = re.sub(r"(?<!\\)\\n", "\n", text)
         text = re.sub(r"(?<!\\)\\\'", "'", text)
         text = re.sub(r"\\\\", r"\\", text)
-        if "FAIL" in text or "Traceback" in text or "failures" in text or "ERROR" in text:
+        if (
+            "FAIL" in text
+            or "Traceback" in text
+            or "failures" in text
+            or "ERROR" in text
+        ):
             self.original.write(RED_BOLD)
         else:
             self.original.write(GREEN_BOLD)
@@ -52,7 +57,11 @@ class UnitTesting:
             is_project_test = "tests.projects." in str(self)
             if repeats == 5:  # max 5 times
                 return test_result
-            if is_project_test and test_result and failures_before < len(test_result.failures):
+            if (
+                is_project_test
+                and test_result
+                and failures_before < len(test_result.failures)
+            ):
                 test_result.failures.pop()
                 return run(self, result=test_result, repeats=repeats + 1)
             return test_result
@@ -99,7 +108,9 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith(".py"):
-                        modules += [curr_location[len(curr_dir) + 1 : -3].replace("/", ".")]
+                        modules += [
+                            curr_location[len(curr_dir) + 1 : -3].replace("/", ".")
+                        ]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 

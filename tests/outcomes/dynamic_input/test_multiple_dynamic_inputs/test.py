@@ -9,67 +9,85 @@ class TestMultipleDynamicInputs(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin=[lambda x: '1',
-                            lambda x: '2',
-                            lambda x: '3',
-                            lambda x: '4',
-                            lambda x: '5'],
-                     attach="1\n2\n3\n4\n5\n"),
-
-            TestCase(stdin=[lambda x: '1',
-                            lambda x: '2',
-                            lambda x: '3',
-                            (2, lambda x: '4')],
-                     attach="1\n2\n3\n4\n4\n"),
-
-            TestCase(stdin=[lambda x: '1',
-                            lambda x: '2',
-                            (2, lambda x: '3'),
-                            lambda x: '4'],
-                     attach="1\n2\n3\n3\n4\n"),
-
-            TestCase(stdin=[lambda x: '1',
-                            (3, lambda x: '2'),
-                            lambda x: '3',
-                            lambda x: '4',
-                            lambda x: '5'],
-                     attach="1\n2\n2\n2\n3\n"),
-
-            TestCase(stdin=[lambda x: '1',
-                            (10, lambda x: '2'),
-                            lambda x: '3',
-                            lambda x: '4',
-                            lambda x: '5'],
-                     attach="1\n2\n2\n2\n2\n"),
-
-            TestCase(stdin=[(2, lambda x: '1\n2'),
-                            lambda x: '5',
-                            lambda x: '6',
-                            lambda x: '7',
-                            lambda x: '8'],
-                     attach="1\n2\n1\n2\n5\n"),
-
-            TestCase(stdin=[(-1, lambda x: '1\n2'),
-                            lambda x: '5',
-                            lambda x: '6',
-                            lambda x: '7',
-                            lambda x: '8'],
-                     attach="1\n2\n1\n2\n1\n"),
-
-            TestCase(stdin=[(-1, lambda x: '1'),
-                            lambda x: '2',
-                            lambda x: '3',
-                            lambda x: '4',
-                            lambda x: '5'],
-                     attach="1\n1\n1\n1\n1\n"),
-
-            TestCase(stdin=[lambda x: '1',
-                            lambda x: '2',
-                            (-1, lambda x: '3'),
-                            lambda x: '4',
-                            lambda x: '5'],
-                     attach="1\n2\n3\n3\n3\n"),
+            TestCase(
+                stdin=[
+                    lambda x: "1",
+                    lambda x: "2",
+                    lambda x: "3",
+                    lambda x: "4",
+                    lambda x: "5",
+                ],
+                attach="1\n2\n3\n4\n5\n",
+            ),
+            TestCase(
+                stdin=[lambda x: "1", lambda x: "2", lambda x: "3", (2, lambda x: "4")],
+                attach="1\n2\n3\n4\n4\n",
+            ),
+            TestCase(
+                stdin=[lambda x: "1", lambda x: "2", (2, lambda x: "3"), lambda x: "4"],
+                attach="1\n2\n3\n3\n4\n",
+            ),
+            TestCase(
+                stdin=[
+                    lambda x: "1",
+                    (3, lambda x: "2"),
+                    lambda x: "3",
+                    lambda x: "4",
+                    lambda x: "5",
+                ],
+                attach="1\n2\n2\n2\n3\n",
+            ),
+            TestCase(
+                stdin=[
+                    lambda x: "1",
+                    (10, lambda x: "2"),
+                    lambda x: "3",
+                    lambda x: "4",
+                    lambda x: "5",
+                ],
+                attach="1\n2\n2\n2\n2\n",
+            ),
+            TestCase(
+                stdin=[
+                    (2, lambda x: "1\n2"),
+                    lambda x: "5",
+                    lambda x: "6",
+                    lambda x: "7",
+                    lambda x: "8",
+                ],
+                attach="1\n2\n1\n2\n5\n",
+            ),
+            TestCase(
+                stdin=[
+                    (-1, lambda x: "1\n2"),
+                    lambda x: "5",
+                    lambda x: "6",
+                    lambda x: "7",
+                    lambda x: "8",
+                ],
+                attach="1\n2\n1\n2\n1\n",
+            ),
+            TestCase(
+                stdin=[
+                    (-1, lambda x: "1"),
+                    lambda x: "2",
+                    lambda x: "3",
+                    lambda x: "4",
+                    lambda x: "5",
+                ],
+                attach="1\n1\n1\n1\n1\n",
+            ),
+            TestCase(
+                stdin=[
+                    lambda x: "1",
+                    lambda x: "2",
+                    (-1, lambda x: "3"),
+                    lambda x: "4",
+                    lambda x: "5",
+                ],
+                attach="1\n2\n3\n3\n3\n",
+            ),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

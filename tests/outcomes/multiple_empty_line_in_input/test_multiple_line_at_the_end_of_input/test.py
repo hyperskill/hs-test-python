@@ -1,4 +1,4 @@
-from hstest import CheckResult, dynamic_test, StageTest, TestedProgram
+from hstest import CheckResult, StageTest, TestedProgram, dynamic_test
 
 
 class UnexpectedErrorAddInput1(StageTest):
@@ -7,7 +7,7 @@ class UnexpectedErrorAddInput1(StageTest):
         ("test\n", 1),
         ("test\n\n", 2),
         ("test\n\n\n", 3),
-        ("test\n\n\n\n", 4)
+        ("test\n\n\n\n", 4),
     ]
 
     @dynamic_test(data=data)
@@ -16,8 +16,10 @@ class UnexpectedErrorAddInput1(StageTest):
         program.start()
         output = program.execute(inp)
 
-        if (f"Input line number {correct_lines_number}" not in output or
-            f"Input line number {correct_lines_number + 1}" in output):
-            return CheckResult.wrong('')
+        if (
+            f"Input line number {correct_lines_number}" not in output
+            or f"Input line number {correct_lines_number + 1}" in output
+        ):
+            return CheckResult.wrong("")
 
         return CheckResult.correct()

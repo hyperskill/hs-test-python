@@ -79,14 +79,19 @@ class TestCase:
             self.input_funcs = [DynamicInputFunction(1, lambda x: stdin)]
         else:
             if type(stdin) != list:
-                msg = "Stdin should be either of type str or list " f"but found type {type(stdin)}"
+                msg = (
+                    "Stdin should be either of type str or list "
+                    f"but found type {type(stdin)}"
+                )
                 raise UnexpectedError(msg)
             for elem in stdin:  # type: RuntimeEvaluatedInput
                 if type(elem) == DynamicInputFunction:
                     self.input_funcs += [elem]
 
                 elif type(elem) == str:
-                    self.input_funcs += [DynamicInputFunction(1, lambda x, inp=elem: inp)]
+                    self.input_funcs += [
+                        DynamicInputFunction(1, lambda x, inp=elem: inp)
+                    ]
 
                 elif str(type(elem)) in {"<class 'function'>", "<class 'method'>"}:
                     self.input_funcs += [DynamicInputFunction(1, elem)]
@@ -113,7 +118,9 @@ class TestCase:
                             )
                             raise UnexpectedError(msg)
 
-                        self.input_funcs += [DynamicInputFunction(trigger_count, input_function)]
+                        self.input_funcs += [
+                            DynamicInputFunction(trigger_count, input_function)
+                        ]
                     else:
                         msg = f"Stdin element should have size 2, found {len(elem)}"
                         raise UnexpectedError(msg)

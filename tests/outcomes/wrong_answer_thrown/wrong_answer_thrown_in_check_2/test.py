@@ -14,12 +14,9 @@ class WrongAnswerThrownInCheck2(UserErrorTest):
     """
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(attach=True),
-            TestCase(attach=False)
-        ]
+        return [TestCase(attach=True), TestCase(attach=False)]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         if attach:
             raise WrongAnswer("Wrong answer from check attach true")
-        return CheckResult(attach, '')
+        return CheckResult(attach, "")

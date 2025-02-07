@@ -13,7 +13,9 @@ from hstest.exception.testing import FileDeletionError, InfiniteLoopException, T
 
 
 class Outcome:
-    def __init__(self, test_number: int = 0, error_text: str = "", stack_trace: str = "") -> None:
+    def __init__(
+        self, test_number: int = 0, error_text: str = "", stack_trace: str = ""
+    ) -> None:
         self.test_number: int = test_number
         self.error_text: str = error_text
         self.stack_trace: str = stack_trace
@@ -44,8 +46,12 @@ class Outcome:
         trimmed_out = self.__trim_lines(full_out)
         trimmed_err = self.__trim_lines(full_err)
 
-        worth_showing_err = len(full_err.strip()) != 0 and full_err.strip() not in result
-        worth_showing_out = len(full_out.strip()) != 0 and full_out.strip() not in result
+        worth_showing_err = (
+            len(full_err.strip()) != 0 and full_err.strip() not in result
+        )
+        worth_showing_out = (
+            len(full_out.strip()) != 0 and full_out.strip() not in result
+        )
         worth_showing_args = len(arguments.strip()) != 0
 
         from hstest.stage_test import StageTest
@@ -57,9 +63,7 @@ class Outcome:
             if worth_showing_out or worth_showing_err:
                 result += "Please find below the output of your program during this failed test.\n"
                 if test_run and test_run.input_used:
-                    result += (
-                        "Note that the '>' character indicates the beginning of the input line.\n"
-                    )
+                    result += "Note that the '>' character indicates the beginning of the input line.\n"
                 result += "\n---\n\n"
 
             if worth_showing_args:

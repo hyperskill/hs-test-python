@@ -13,6 +13,6 @@ class TestCommandLineArgsChanged(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.start("123", "234", "345")
         return wrong("")

@@ -12,11 +12,8 @@ class TestPandasHist(PlottingTest):
         program = TestedProgram()
         program.start()
 
-        correct_data = [
-            [3, 2, 1],
-            ['3', '2', '1'],
-            [3.1, 2.1, 1],
-            ['b', 'a', 'c']
-        ]
+        correct_data = [[3, 2, 1], ["3", "2", "1"], [3.1, 2.1, 1], ["b", "a", "c"]]
 
-        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.pandas)
+        return test_hist_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.pandas
+        )

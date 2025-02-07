@@ -47,11 +47,14 @@ class SeabornHandler:
             return
 
         def displot(data=None, **kwargs) -> None:
-            x = kwargs.get("x", None)
-            y = kwargs.get("y", None)
+            x = kwargs.get("x")
+            y = kwargs.get("y")
 
             if data is None:
-                curr_data = {"x": np.array(x, dtype=object), "y": np.array(y, dtype=object)}
+                curr_data = {
+                    "x": np.array(x, dtype=object),
+                    "y": np.array(y, dtype=object),
+                }
 
                 drawing = Drawing(
                     DrawingLibrary.seaborn,
@@ -257,7 +260,12 @@ class SeabornHandler:
                     if x_arr.size == 0:
                         x_arr = np.full((y_arr.size,), "", dtype=str)
             drawings.append(
-                Drawing(DrawingLibrary.seaborn, DrawingType.bar, DrawingData(x_arr, y_arr), kwargs)
+                Drawing(
+                    DrawingLibrary.seaborn,
+                    DrawingType.bar,
+                    DrawingData(x_arr, y_arr),
+                    kwargs,
+                )
             )
 
         def violinplot(*, x=None, y=None, data=None, **kwargs) -> None:
@@ -288,9 +296,7 @@ class SeabornHandler:
             if data is None:
                 return
 
-            curr_data = {  # noqa: F841
-                "x": np.array(data, dtype=object)
-            }
+            curr_data = {"x": np.array(data, dtype=object)}  # noqa: F841
 
             drawing = Drawing(
                 DrawingLibrary.seaborn,
@@ -303,7 +309,10 @@ class SeabornHandler:
 
         def boxplot(x=None, y=None, data=None, **kwargs) -> None:
             if data is None:
-                curr_data = {"x": np.array(x, dtype=object), "y": np.array(y, dtype=object)}
+                curr_data = {
+                    "x": np.array(x, dtype=object),
+                    "y": np.array(y, dtype=object),
+                }
 
                 drawing = Drawing(
                     DrawingLibrary.seaborn,

@@ -13,7 +13,9 @@ if TYPE_CHECKING:
 
 
 class DrawingsStorage:
-    def __init__(self, all_drawings: list[Drawing], new_drawings: list[Drawing]) -> None:
+    def __init__(
+        self, all_drawings: list[Drawing], new_drawings: list[Drawing]
+    ) -> None:
         self.all_drawings: list[Drawing] = all_drawings
         self.new_drawings: list[Drawing] = new_drawings
 
@@ -27,9 +29,13 @@ class DrawingsStorage:
 
 
 class PlottingTestingRunner(AsyncDynamicTestingRunner):
-    def __init__(self, all_drawings: list[Drawing], new_drawings: list[Drawing]) -> None:
+    def __init__(
+        self, all_drawings: list[Drawing], new_drawings: list[Drawing]
+    ) -> None:
         super().__init__()
-        self.drawings_storage: DrawingsStorage = DrawingsStorage(all_drawings, new_drawings)
+        self.drawings_storage: DrawingsStorage = DrawingsStorage(
+            all_drawings, new_drawings
+        )
 
     def set_up(self, test_case: TestCase) -> None:
         super().set_up(test_case)

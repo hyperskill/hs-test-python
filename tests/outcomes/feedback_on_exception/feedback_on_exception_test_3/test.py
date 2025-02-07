@@ -17,11 +17,13 @@ class FeedbackOnExceptionTest3(UserErrorTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(feedback_on_exception={
-                ZeroDivisionError: 'Do not divide by zero!',
-                AttributeError: 'Attribute Error raised!'
-            })
+            TestCase(
+                feedback_on_exception={
+                    ZeroDivisionError: "Do not divide by zero!",
+                    AttributeError: "Attribute Error raised!",
+                }
+            )
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

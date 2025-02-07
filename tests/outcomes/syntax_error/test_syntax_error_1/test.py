@@ -16,6 +16,4 @@ class TestSyntaxError1(UserErrorTest):
     """  # noqa: W291
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]

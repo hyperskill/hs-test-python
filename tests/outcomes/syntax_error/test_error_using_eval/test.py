@@ -14,10 +14,8 @@ class TestEmptyEval(UserErrorTest):
             print(eval(")"))
           File "<string>", line 1
         """,
-        "SyntaxError: "
+        "SyntaxError: ",
     ]
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]

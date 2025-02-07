@@ -56,7 +56,9 @@ class TestTestCase(unittest.TestCase):
         self.assertEqual(tests[2].attach, 456)
 
     def test_from_stepik_mixed(self) -> None:
-        tests = TestCase.from_stepik([("mixed1", 234567), "mixed234", ("mixed345", 456234), "567"])
+        tests = TestCase.from_stepik(
+            [("mixed1", 234567), "mixed234", ("mixed345", 456234), "567"]
+        )
         self.assertEqual(tests[0].input, "mixed1")
         self.assertEqual(tests[0].attach, 234567)
         self.assertEqual(tests[1].input, "mixed234")
@@ -68,4 +70,6 @@ class TestTestCase(unittest.TestCase):
 
     def test_from_stepik_bad_data(self) -> None:
         with self.assertRaises(UnexpectedError):
-            TestCase.from_stepik([("mixed1", 234567), 234345, ("mixed345", 456234), "567"])
+            TestCase.from_stepik(
+                [("mixed1", 234567), 234345, ("mixed345", 456234), "567"]
+            )

@@ -25,7 +25,7 @@ class TestDynamicMethodException(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        pr = TestedProgram('main')
+        pr = TestedProgram("main")
 
         out1 = pr.start()
         if out1 != "Server started!\n":

@@ -1,20 +1,22 @@
 import unittest
 
-from hstest import correct, dynamic_test, SQLTest
+from hstest import SQLTest, correct, dynamic_test
 
 
-@unittest.skip("This class should inherit UserErrorTest, but can't since it "
-               "inherits StageTest, not SQLTest")
+@unittest.skip(
+    "This class should inherit UserErrorTest, but can't since it "
+    "inherits StageTest, not SQLTest"
+)
 class TestSQLProject(SQLTest):
     queries = {
-        'create_book_table': None,
-        'create_student_table': None,
-        'create_staff_table': None,
-        'create_operation_table': None,
-        'insert_book_table': None,
-        'insert_student_table': None,
-        'insert_staff_table': None,
-        'insert_operation_table': None
+        "create_book_table": None,
+        "create_student_table": None,
+        "create_staff_table": None,
+        "create_operation_table": None,
+        "insert_book_table": None,
+        "insert_student_table": None,
+        "insert_staff_table": None,
+        "insert_operation_table": None,
     }
 
     @dynamic_test
@@ -29,5 +31,5 @@ class Test(unittest.TestCase):
         self.assertIn("The 'insert_student_table' query shouldn't be empty!", feedback)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     Test().test()

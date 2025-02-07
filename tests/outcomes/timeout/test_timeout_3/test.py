@@ -6,12 +6,12 @@ from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-@unittest.skip('take too long')
+@unittest.skip("take too long")
 class TestTimeout3(UserErrorTest):
     contain = [
-        'Error in test #1',
-        'In this test, the program is running for a long time, more than 2 seconds. '
-        'Most likely, the program has gone into an infinite loop.'
+        "Error in test #1",
+        "In this test, the program is running for a long time, more than 2 seconds. "
+        "Most likely, the program has gone into an infinite loop.",
     ]
 
     def generate(self) -> List[TestCase]:

@@ -17,9 +17,10 @@ Coffee is ready!
 
 class CoffeeMachineTest(StageTest):
     def generate(self) -> List[TestCase]:
-        return TestCase.from_stepik([('', OUTPUT)])
+        return TestCase.from_stepik([("", OUTPUT)])
 
     def check(self, reply: str, clue: Any) -> CheckResult:
         return CheckResult(
             reply.strip() == clue.strip(),
-            'You should make coffee exactly like in the example')
+            "You should make coffee exactly like in the example",
+        )

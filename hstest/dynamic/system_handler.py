@@ -60,7 +60,9 @@ class SystemHandler:
             SystemHandler.__locker_thread = None
 
     @staticmethod
-    def install_handler(obj: Any, condition: Condition, input_func: DynamicTestFunction) -> None:
+    def install_handler(
+        obj: Any, condition: Condition, input_func: DynamicTestFunction
+    ) -> None:
         InputHandler.install_input_handler(obj, condition, input_func)
         OutputHandler.install_output_handler(obj, condition)
 

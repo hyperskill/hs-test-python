@@ -15,9 +15,9 @@ class TestDynamicMethodUnexpectedErrorNoCheckMethod(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.start()
-        main.execute('main')
+        main.execute("main")
         main.execute("main2")
         return None
 

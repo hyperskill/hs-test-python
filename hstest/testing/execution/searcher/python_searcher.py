@@ -30,8 +30,12 @@ class PythonSearcher(BaseSearcher):
             for file, source in sources.items():
                 is_imported[file] = False
                 import_regexes[file] = [
-                    re.compile(rf"(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*", re.MULTILINE),
-                    re.compile(rf"(^|\n)from +\.? *\b{file[:-3]}\b +import +", re.MULTILINE),
+                    re.compile(
+                        rf"(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*", re.MULTILINE
+                    ),
+                    re.compile(
+                        rf"(^|\n)from +\.? *\b{file[:-3]}\b +import +", re.MULTILINE
+                    ),
                 ]
 
             for file, source in sources.items():
@@ -42,16 +46,21 @@ class PythonSearcher(BaseSearcher):
         return self._search(
             where_to_search,
             file_filter=file_filter,
-            pre_main_filter=FileFilter(init_files=init_regexes, file=lambda f: not is_imported[f]),
+            pre_main_filter=FileFilter(
+                init_files=init_regexes, file=lambda f: not is_imported[f]
+            ),
             main_filter=MainFilter(
-                "if __name__ == '__main__'", source=lambda s: "__name__" in s and "__main__" in s
+                "if __name__ == '__main__'",
+                source=lambda s: "__name__" in s and "__main__" in s,
             ),
         )
 
     def find(self, source: str | None) -> PythonRunnableFile:
         OutputHandler.print(f"PythonSearcher source = {source}, cwd = {os.getcwd()}")
         runnable = super().find(source)
-        OutputHandler.print(f"PythonSearcher found runnable: {runnable.folder}/{runnable.file}")
+        OutputHandler.print(
+            f"PythonSearcher found runnable: {runnable.folder}/{runnable.file}"
+        )
         return PythonRunnableFile(
             runnable.folder, runnable.file, runnable.file[: -len(self.extension)]
         )

@@ -130,5 +130,5 @@ class Zookeeper(StageTest):
 
     def check(self, reply, attach):
         if attach.strip() not in reply.strip():
-            return CheckResult.wrong('You should output a camel!')
+            return CheckResult.wrong("You should output a camel!")
         return CheckResult.correct()

@@ -9,16 +9,20 @@ class TestDynamicInput(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin=["1234", self.in1, self.in2],
-                     attach="12340000\n23451111\n34562222\n"),
-            TestCase(stdin=["4321", self.in3, self.in4],
-                     attach="43210000\n54321111\n65432222\n")
+            TestCase(
+                stdin=["1234", self.in1, self.in2],
+                attach="12340000\n23451111\n34562222\n",
+            ),
+            TestCase(
+                stdin=["4321", self.in3, self.in4],
+                attach="43210000\n54321111\n65432222\n",
+            ),
         ]
 
     def in1(self, out):
         if out != "12340000\n":
             0 / 0
-        return '2345'
+        return "2345"
 
     def in2(self, out):
         if out != "23451111\n":
@@ -36,4 +40,4 @@ class TestDynamicInput(StageTest):
         return "6543"
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

@@ -14,10 +14,7 @@ class TestPassedThrownInCheck2(UserErrorTest):
     """  # noqa: W293
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(attach=True),
-            TestCase(attach=False)
-        ]
+        return [TestCase(attach=True), TestCase(attach=False)]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         if attach:

@@ -24,7 +24,9 @@ class ErrorWithFeedback(OutcomeError):
 
 class OutOfInputError(ErrorWithFeedback):
     def __init__(self) -> None:
-        super().__init__("Program ran out of input. You tried to read more than expected.")
+        super().__init__(
+            "Program ran out of input. You tried to read more than expected."
+        )
 
 
 class UnexpectedError(OutcomeError):

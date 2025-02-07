@@ -11,4 +11,4 @@ class TestImportAbsoluteErrorCircular3(StageTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '106\n', '')
+        return CheckResult(reply == "106\n", "")

@@ -6,7 +6,7 @@ from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
-@unittest.skip('Relative imports doesn\'t work')
+@unittest.skip("Relative imports doesn't work")
 class TestImportRelativeErrorCircular(UserErrorTest):
     contain = """
             Error in test #1
@@ -25,4 +25,4 @@ class TestImportRelativeErrorCircular(UserErrorTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '1038\n', '')
+        return CheckResult(reply == "1038\n", "")

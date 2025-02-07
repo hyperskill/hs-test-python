@@ -13,6 +13,4 @@ class TestDynamicInputFailInfiniteLoop(UserErrorTest):
     """
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(stdin=[lambda x: wrong("Wrong")])
-        ]
+        return [TestCase(stdin=[lambda x: wrong("Wrong")])]

@@ -11,4 +11,4 @@ class TestImportAbsoluteError(StageTest):
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '103\n', '')
+        return CheckResult(reply == "103\n", "")

@@ -84,4 +84,4 @@ class TestRightSequenceOfTests(UserErrorTest):
 
     @dynamic_test
     def test15(self):
-        return wrong(f'x == {self.x}')
+        return wrong(f"x == {self.x}")

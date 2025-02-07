@@ -11,7 +11,9 @@ if TYPE_CHECKING:
 
 
 class DaemonThreadPoolExecutor(ThreadPoolExecutor):
-    def __init__(self, max_workers: int = 1, name: str = "", group: ThreadGroup = None) -> None:
+    def __init__(
+        self, max_workers: int = 1, name: str = "", group: ThreadGroup = None
+    ) -> None:
         super().__init__(max_workers=max_workers, thread_name_prefix=name)
         self.group = group
 
@@ -36,7 +38,9 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
                 self._initargs,
             )
 
-            t = threading.Thread(name=thread_name, target=_worker, args=args, group=self.group)
+            t = threading.Thread(
+                name=thread_name, target=_worker, args=args, group=self.group
+            )
             t.daemon = True
             t.start()
             self._threads.add(t)

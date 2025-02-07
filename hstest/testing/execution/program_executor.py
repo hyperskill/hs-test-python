@@ -115,7 +115,9 @@ class ProgramExecutor:
     def request_input(self) -> str | None:
         if self.__no_more_input:
             return None
-        OutputHandler.print("Program executor - _request_input() invoked, set state WAITING")
+        OutputHandler.print(
+            "Program executor - _request_input() invoked, set state WAITING"
+        )
         self._machine.set_and_wait(ProgramState.WAITING, ProgramState.RUNNING)
         input_local = self._input
         self._input = None

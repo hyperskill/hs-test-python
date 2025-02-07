@@ -3,9 +3,7 @@ from hstest import CheckResult, PlottingTest, TestCase
 
 class EDATest(PlottingTest):
     def generate(self):
-        return [
-            TestCase()
-        ]
+        return [TestCase()]
 
     def check(self, reply, attach):
         all_figures = self.all_figures()
@@ -17,5 +15,5 @@ class EDATest(PlottingTest):
         return CheckResult.correct()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     EDATest().run_tests()

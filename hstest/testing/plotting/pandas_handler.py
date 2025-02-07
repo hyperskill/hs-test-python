@@ -65,20 +65,25 @@ class PandasHandler:
 
         if type(data) is pd.Series:
             drawings.append(
-                DrawingBuilder.get_line_drawing(data.index, data, DrawingLibrary.pandas, {})
+                DrawingBuilder.get_line_drawing(
+                    data.index, data, DrawingLibrary.pandas, {}
+                )
             )
             return drawings
 
-        for column in data.columns:
-            drawings.append(
-                DrawingBuilder.get_line_drawing(data.index, data[column], DrawingLibrary.pandas, {})
-            )
+        drawings.extend(DrawingBuilder.get_line_drawing(
+                    data.index, data[column], DrawingLibrary.pandas, {}
+                ) for column in data.columns)
 
         return drawings
 
     @staticmethod
     def get_scatter_drawings_with_normalized_data(data, x, y):
-        return [DrawingBuilder.get_scatter_drawing(data[x], data[y], DrawingLibrary.pandas, {})]
+        return [
+            DrawingBuilder.get_scatter_drawing(
+                data[x], data[y], DrawingLibrary.pandas, {}
+            )
+        ]
 
     @staticmethod
     def get_pie_drawings_with_normalized_data(data: pd.DataFrame, x, y):
@@ -124,14 +129,18 @@ class PandasHandler:
         x_arr = data[x].to_numpy() if x is not None else data.index.to_numpy()
 
         if y is not None:
-            drawing = DrawingBuilder.get_bar_drawing(x_arr, data[y], DrawingLibrary.pandas, {})
+            drawing = DrawingBuilder.get_bar_drawing(
+                x_arr, data[y], DrawingLibrary.pandas, {}
+            )
             drawings.append(drawing)
             return drawings
 
         for column in data.columns:
             if not is_numeric_dtype(data[column]):
                 continue
-            drawing = DrawingBuilder.get_bar_drawing(x_arr, data[column], DrawingLibrary.pandas, {})
+            drawing = DrawingBuilder.get_bar_drawing(
+                x_arr, data[column], DrawingLibrary.pandas, {}
+            )
             drawings.append(drawing)
         return drawings
 
@@ -145,7 +154,10 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {"x": np.array([column], dtype=object), "y": data[column].to_numpy()}
+                curr_data = {
+                    "x": np.array([column], dtype=object),
+                    "y": data[column].to_numpy(),
+                }
 
                 drawing = Drawing(DrawingLibrary.pandas, DrawingType.box, None, {})
                 drawings.append(drawing)
@@ -195,9 +207,7 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {  # noqa: F841
-                    "x": data[column].to_numpy()
-                }
+                curr_data = {"x": data[column].to_numpy()}  # noqa: F841
 
                 drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
                 drawings.append(drawing)
@@ -254,9 +264,9 @@ class PandasHandler:
                 }
 
                 if plot_name in PandasHandler.graph_type_to_normalized_data:
-                    all_drawings = PandasHandler.graph_type_to_normalized_data[plot_name](
-                        data, x, y
-                    )
+                    all_drawings = PandasHandler.graph_type_to_normalized_data[
+                        plot_name
+                    ](data, x, y)
                     drawings.extend(all_drawings)
                 elif plot_name in plot_to_func:
                     plot_to_func[plot_name](data, **kw)
@@ -274,7 +284,9 @@ class PandasHandler:
         import pandas.plotting._core
 
         def boxplot(self, column=None, **kwargs) -> None:
-            all_drawings = PandasHandler.get_box_drawings_with_normalized_data(self, column, None)
+            all_drawings = PandasHandler.get_box_drawings_with_normalized_data(
+                self, column, None
+            )
             drawings.extend(all_drawings)
 
         def hist(data, column=None, _process_by=True, **kw):
@@ -344,30 +356,52 @@ class PandasHandler:
                     if type(y) == str:
                         y = [y]
                     for col in y:
-                        bar(None, data[x].array.to_numpy(), data[col].array.to_numpy(), **kw)
+                        bar(
+                            None,
+                            data[x].array.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw,
+                        )
                     return None
 
                 if x is not None:
                     for col in data.columns:
                         if col != x:
-                            bar(None, data[x].array.to_numpy(), data[col].array.to_numpy(), **kw)
+                            bar(
+                                None,
+                                data[x].array.to_numpy(),
+                                data[col].array.to_numpy(),
+                                **kw,
+                            )
                     return None
 
                 if y is not None:
                     if type(y) == str:
                         y = [y]
                     for col in y:
-                        bar(None, data[col].index.to_numpy(), data[col].array.to_numpy(), **kw)
+                        bar(
+                            None,
+                            data[col].index.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw,
+                        )
                     return None
 
                 for col in data.columns:
-                    bar(None, data[col].index.to_numpy(), data[col].array.to_numpy(), **kw)
+                    bar(
+                        None,
+                        data[col].index.to_numpy(),
+                        data[col].array.to_numpy(),
+                        **kw,
+                    )
                 return None
 
             if type(data) == pandas.Series:
                 return bar(None, data.index.to_numpy(), data.array.to_numpy(), **kw)
 
-            drawings.append(Drawing(DrawingLibrary.pandas, DrawingType.bar, DrawingData(x, y), kw))
+            drawings.append(
+                Drawing(DrawingLibrary.pandas, DrawingType.bar, DrawingData(x, y), kw)
+            )
             return None
 
         def barh(

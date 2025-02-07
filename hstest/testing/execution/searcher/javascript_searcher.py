@@ -14,4 +14,6 @@ class JavascriptSearcher(BaseSearcher):
         return ".js"
 
     def search(self, where: str | None = None) -> RunnableFile:
-        return self._simple_search(where, "function main()", r"(^|\n) *function +main +\( *\)")
+        return self._simple_search(
+            where, "function main()", r"(^|\n) *function +main +\( *\)"
+        )

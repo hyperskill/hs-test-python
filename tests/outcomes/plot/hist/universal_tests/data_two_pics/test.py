@@ -1,6 +1,6 @@
 import os
 
-from hstest import correct, TestedProgram, wrong
+from hstest import TestedProgram, correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage import PlottingTest
 from tests.outcomes.plot.universal_test import universal_test
@@ -9,7 +9,7 @@ from tests.outcomes.plot.universal_test import universal_test
 class TestHist(PlottingTest):
     @dynamic_test
     def test(self):
-        files = [i for i in os.listdir() if i != 'test.py' and i.endswith('.py')]
+        files = [i for i in os.listdir() if i != "test.py" and i.endswith(".py")]
 
         for file in files:
             program = TestedProgram(file)
@@ -20,10 +20,10 @@ class TestHist(PlottingTest):
 
             universal_test(
                 file,
-                'hist',
+                "hist",
                 [[1, 3, 5, 7, 9], [2, 4, 6, 8, 10]],
                 [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
-                self.new_figures()
+                self.new_figures(),
             )
 
         return correct()

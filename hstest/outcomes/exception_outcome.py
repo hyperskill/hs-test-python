@@ -26,7 +26,9 @@ class ExceptionOutcome(Outcome):
             self.error_text = ""
 
         eof = "EOFError: EOF when reading a line"
-        eof_feedback = "Probably your program run out of input (tried to read more than expected)"
+        eof_feedback = (
+            "Probably your program run out of input (tried to read more than expected)"
+        )
 
         if self.stack_trace.strip().endswith(eof):
             self.error_text += "\n\n" + eof_feedback

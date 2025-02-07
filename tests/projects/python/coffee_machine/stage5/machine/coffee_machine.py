@@ -33,8 +33,10 @@ def action_handle(user_action_def):
 
 
 def buy_coffee():
-    print("What do you want to buy? "
-          + "1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:")
+    print(
+        "What do you want to buy? "
+        + "1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:"
+    )
     user_choice = input()
     if user_choice == "back":
         return False
@@ -76,11 +78,11 @@ def check_resources(user_choice):
 
 
 def change_machine_state(machine, coffee_cost):
-    for i in range(len(machine)-1):
+    for i in range(len(machine) - 1):
         machine[i] -= coffee_cost[i]
         # print(machine[i])
     # add money
-    machine[len(machine)-1] += coffee_cost[len(machine)-1]
+    machine[len(machine) - 1] += coffee_cost[len(machine) - 1]
 
 
 def fill_machine(machine):
