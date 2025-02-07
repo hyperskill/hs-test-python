@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import os
 import re
-from typing import Dict, List, Optional, Set, Tuple, Union
 
 from hstest.common.file_utils import walk_user_files
 from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
@@ -15,13 +16,15 @@ search_cached = {}
 class BaseSearcher:
     @property
     def extension(self) -> str:
-        raise NotImplementedError('Property "extension" should be implemented')
+        msg = 'Property "extension" should be implemented'
+        raise NotImplementedError(msg)
 
-    def search(self, where_to_search: str = None) -> RunnableFile:
-        raise NotImplementedError('Method "search" should be implemented')
+    def search(self, where_to_search: str | None = None) -> RunnableFile:
+        msg = 'Method "search" should be implemented'
+        raise NotImplementedError(msg)
 
     @staticmethod
-    def _get_contents(folder: Folder, files: List[File]) -> Dict[File, Source]:
+    def _get_contents(folder: Folder, files: list[File]) -> dict[File, Source]:
         contents = {}
 
         for file in files:
@@ -29,7 +32,7 @@ class BaseSearcher:
             if path in file_contents_cached:
                 contents[file] = file_contents_cached[path]
             elif os.path.exists(path):
-                with open(path) as f:
+                with open(path, encoding="utf-8") as f:
                     try:
                         file_content = f.read()
                     except UnicodeDecodeError:
@@ -48,21 +51,18 @@ class BaseSearcher:
         pre_main_filter: FileFilter,
         main_filter: MainFilter,
         post_main_filter: FileFilter,
-        force_content_filters: Union[List[MainFilter], None] = None
+        force_content_filters: list[MainFilter] | None = None,
     ) -> RunnableFile:
-
         if not force_content_filters:
             force_content_filters = []
 
         curr_folder = os.path.abspath(where_to_search)
 
-        for folder, dirs, files in walk_user_files(curr_folder):
-
+        for folder, _dirs, files in walk_user_files(curr_folder):
             contents = self._get_contents(folder, files)
 
             initial_filter = FileFilter(
-                file=lambda f: f.endswith(self.extension),
-                generic=file_filter.filter
+                file=lambda f: f.endswith(self.extension), generic=file_filter.filter
             )
 
             candidates = set(files)
@@ -70,8 +70,9 @@ class BaseSearcher:
             for curr_filter in initial_filter, pre_main_filter, main_filter, post_main_filter:
                 curr_filter.init_filter(folder, contents)
 
-                filtered_files: Set[File] = {
-                    file for file in files
+                filtered_files: set[File] = {
+                    file
+                    for file in files
                     if file in contents and curr_filter.filter(folder, file, contents[file])
                 }
 
@@ -80,15 +81,14 @@ class BaseSearcher:
                 if len(filtered_files) == 0:
                     if curr_filter == initial_filter:
                         break
-                    else:
-                        continue
-                elif curr_filter == initial_filter:
+                    continue
+                if curr_filter == initial_filter:
                     for forced_filter in force_content_filters:
                         filtered_files = {
-                            file for file in filtered_files
-                            if file in contents and forced_filter.filter(
-                                folder, file, contents[file]
-                            )
+                            file
+                            for file in filtered_files
+                            if file in contents
+                            and forced_filter.filter(folder, file, contents[file])
                         }
                     if len(filtered_files) == 0:
                         should_contain = [
@@ -96,9 +96,8 @@ class BaseSearcher:
                             for forced_filter in force_content_filters
                             if isinstance(forced_filter, MainFilter)
                         ]
-                        raise ErrorWithFeedback(
-                            f'The runnable file should contain all the following lines: {should_contain}'
-                        )
+                        msg = f"The runnable file should contain all the following lines: {should_contain}"
+                        raise ErrorWithFeedback(msg)
 
                 if len(filtered_files) == 1:
                     file = filtered_files.pop()
@@ -116,46 +115,55 @@ class BaseSearcher:
                 continue
 
             if len(candidates) > 1 and len(main_filter.filtered) > 0:
-                str_files = ', '.join(f'"{f}"' for f in sorted(candidates))
+                str_files = ", ".join(f'"{f}"' for f in sorted(candidates))
                 all_have = []
                 if main_filter.program_should_contain:
                     all_have.append(main_filter.program_should_contain)
-                all_have.extend([
-                    forced_filter.program_should_contain for forced_filter in force_content_filters
-                    if isinstance(forced_filter, MainFilter)
-                ])
-                raise ErrorWithFeedback(
-                    f'Cannot decide which file to run out of the following: {str_files}\n'
-                    f'They all have {all_have}. '
-                    f'Leave one file with this lines.')
+                all_have.extend(
+                    [
+                        forced_filter.program_should_contain
+                        for forced_filter in force_content_filters
+                        if isinstance(forced_filter, MainFilter)
+                    ]
+                )
+                msg = (
+                    f"Cannot decide which file to run out of the following: {str_files}\n"
+                    f"They all have {all_have}. "
+                    f"Leave one file with this lines."
+                )
+                raise ErrorWithFeedback(msg)
 
             if len(candidates) == 0:
                 candidates = initial_filter.filtered
 
-            str_files = ', '.join(f'"{f}"' for f in sorted(candidates))
+            str_files = ", ".join(f'"{f}"' for f in sorted(candidates))
 
-            raise ErrorWithFeedback(
-                f'Cannot decide which file to run out of the following: {str_files}\n'
+            msg = (
+                f"Cannot decide which file to run out of the following: {str_files}\n"
                 f'Write "{main_filter.program_should_contain}" '
-                f'in one of them to mark it as an entry point.')
+                f"in one of them to mark it as an entry point."
+            )
+            raise ErrorWithFeedback(msg)
 
-        raise ErrorWithFeedback(
-            'Cannot find a file to execute your code.\n'
-            f'Are your project files located at \"{curr_folder}\"?')
+        msg = (
+            "Cannot find a file to execute your code.\n"
+            f'Are your project files located at "{curr_folder}"?'
+        )
+        raise ErrorWithFeedback(msg)
 
     def _search(
         self,
-        where_to_search: str = None,
+        where_to_search: str | None = None,
         *,
         file_filter: FileFilter = None,
         pre_main_filter: FileFilter = None,
         main_filter: MainFilter = None,
         post_main_filter: FileFilter = None,
-        force_content_filters: Union[List[MainFilter], None] = None
+        force_content_filters: list[MainFilter] | None = None,
     ) -> RunnableFile:
-
-        if not self.extension.startswith('.'):
-            raise UnexpectedError(f'File extension "{self.extension}" should start with a dot')
+        if not self.extension.startswith("."):
+            msg = f'File extension "{self.extension}" should start with a dot'
+            raise UnexpectedError(msg)
 
         if where_to_search is None:
             where_to_search = os.getcwd()
@@ -193,27 +201,25 @@ class BaseSearcher:
 
         return result
 
-    def _simple_search(self,
-                       where_to_search: str,
-                       main_desc: str,
-                       main_regex: str,
-                       force_content_filters: Union[List[MainFilter], None] = None
-                       ) -> RunnableFile:
-        main_searcher = re.compile(main_regex, re.M)
+    def _simple_search(
+        self,
+        where_to_search: str,
+        main_desc: str,
+        main_regex: str,
+        force_content_filters: list[MainFilter] | None = None,
+    ) -> RunnableFile:
+        main_searcher = re.compile(main_regex, re.MULTILINE)
         return self._search(
             where_to_search,
-            main_filter=MainFilter(
-                main_desc,
-                source=lambda s: main_searcher.search(s) is not None
-            ),
-            force_content_filters=force_content_filters
+            main_filter=MainFilter(main_desc, source=lambda s: main_searcher.search(s) is not None),
+            force_content_filters=force_content_filters,
         )
 
     def _base_search(self, where_to_search: str) -> RunnableFile:
-        return self._simple_search(where_to_search, main_desc='', main_regex='')
+        return self._simple_search(where_to_search, main_desc="", main_regex="")
 
-    def find(self, source: Optional[str]) -> RunnableFile:
-        if source in [None, '']:
+    def find(self, source: str | None) -> RunnableFile:
+        if source in {None, ""}:
             return self.search()
 
         ext = self.extension
@@ -223,38 +229,39 @@ class BaseSearcher:
         if source_folder is not None and os.path.isdir(source_folder):
             return self.search(source_folder)
 
-        elif source_file is not None and os.path.isfile(source_file):
-            path, sep, file = source_module.rpartition('.')
-            folder = os.path.abspath(path.replace('.', os.sep))
+        if source_file is not None and os.path.isfile(source_file):
+            path, _sep, file = source_module.rpartition(".")
+            folder = os.path.abspath(path.replace(".", os.sep))
             return RunnableFile(folder, file + ext)
 
-        else:
-            path, _, _ = source_module.rpartition('.')
-            folder = os.path.abspath(path.replace('.', os.sep))
-            raise ErrorWithFeedback(
-                'Cannot find a file to execute your code.\n'
-                f'Are your project files located at \"{folder}\"?')
+        path, _, _ = source_module.rpartition(".")
+        folder = os.path.abspath(path.replace(".", os.sep))
+        msg = (
+            "Cannot find a file to execute your code.\n"
+            f'Are your project files located at "{folder}"?'
+        )
+        raise ErrorWithFeedback(msg)
 
-    def _parse_source(self, source: str) -> Tuple[Folder, File, Module]:
+    def _parse_source(self, source: str) -> tuple[Folder, File, Module]:
         ext = self.extension
 
-        source = source.replace('/', os.sep).replace('\\', os.sep)
+        source = source.replace("/", os.sep).replace("\\", os.sep)
 
         if source.endswith(ext):
             source_folder = None
             source_file = source
-            source_module = source[:-len(ext)].replace(os.sep, '.')
+            source_module = source[: -len(ext)].replace(os.sep, ".")
 
         elif os.sep in source:
             if source.endswith(os.sep):
-                source = source[:-len(os.sep)]
+                source = source[: -len(os.sep)]
 
             source_folder = source
             source_file = None
-            source_module = source.replace(os.sep, '.')
+            source_module = source.replace(os.sep, ".")
 
         else:
-            source_folder = source.replace('.', os.sep)
+            source_folder = source.replace(".", os.sep)
             source_file = source_folder + ext
             source_module = source
 
