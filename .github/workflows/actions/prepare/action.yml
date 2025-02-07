@@ -9,6 +9,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup PATH
+      run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
+      shell: bash
+
     - name: Install Poetry
       run: pipx install poetry==$(head -n 1 .poetry-version)
       shell: bash
