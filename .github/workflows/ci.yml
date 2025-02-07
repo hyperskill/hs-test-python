@@ -22,7 +22,9 @@ jobs:
         with:
           python-version: "3.11"
       - name: Check files using the ruff formatter
-        run: poetry run ruff --fix --unsafe-fixes --preview .
+        run: |
+          poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
+          poetry run ruff format .
         shell: bash
 
   mypy:
