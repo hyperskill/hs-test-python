@@ -43,9 +43,7 @@ class DjangoApplicationRunner(TestRunner):
 
         if not os.path.exists(full_path):
             filename = os.path.basename(full_source)
-            runnable = PythonSearcher().search(
-                file_filter=FileFilter(file=lambda f: f == filename)
-            )
+            runnable = PythonSearcher().search(file_filter=FileFilter(file=lambda f: f == filename))
             full_path = os.path.abspath(runnable.folder + os.sep + runnable.file)
 
         self.full_path = full_path
@@ -105,9 +103,7 @@ class DjangoApplicationRunner(TestRunner):
         with open(test_database, "w", encoding="utf-8"):
             pass
 
-        migrate = ProcessWrapper(
-            sys.executable, self.full_path, "migrate", check_early_finish=True
-        )
+        migrate = ProcessWrapper(sys.executable, self.full_path, "migrate", check_early_finish=True)
         migrate.start()
 
         while not migrate.is_finished() and len(migrate.stderr) == 0:

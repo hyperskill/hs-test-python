@@ -163,9 +163,7 @@ class MatplotlibHandler:
                 x = kw["labels"]
 
             drawings.append(
-                Drawing(
-                    DrawingLibrary.matplotlib, DrawingType.pie, DrawingData(x, y), kw
-                )
+                Drawing(DrawingLibrary.matplotlib, DrawingType.pie, DrawingData(x, y), kw)
             )
 
         def violinplot(dataset, *, data=None, **kwargs) -> None:
@@ -173,9 +171,7 @@ class MatplotlibHandler:
                 with contextlib.suppress(Exception):
                     dataset = data[dataset]
 
-            drawing = Drawing(
-                DrawingLibrary.matplotlib, DrawingType.violin, dataset, kwargs
-            )
+            drawing = Drawing(DrawingLibrary.matplotlib, DrawingType.violin, dataset, kwargs)
 
             drawings.append(drawing)
 

@@ -32,9 +32,7 @@ class InputMock:
         if obj in self.handlers:
             msg = "Cannot install input handler from the same program twice"
             raise UnexpectedError(msg)
-        self.handlers[obj] = ConditionalInputHandler(
-            condition, DynamicInputHandler(input_func)
-        )
+        self.handlers[obj] = ConditionalInputHandler(condition, DynamicInputHandler(input_func))
 
     def uninstall_input_handler(self, obj: Any) -> None:
         if obj not in self.handlers:

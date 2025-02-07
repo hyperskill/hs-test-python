@@ -126,9 +126,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
         return test_runs
 
     def __print_test_num(self, num: int) -> None:
-        total_tests = (
-            "" if num == self.curr_test_global else f" ({self.curr_test_global})"
-        )
+        total_tests = "" if num == self.curr_test_global else f" ({self.curr_test_global})"
         OutputHandler.get_real_out().write(
             RED_BOLD + f"\nStart test {num}{total_tests}" + RESET + "\n"
         )
@@ -165,9 +163,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
                 result: CheckResult = test_run.test()
 
                 if not result.is_correct:
-                    full_feedback = (
-                        result.feedback + "\n\n" + test_run.test_case.feedback
-                    )
+                    full_feedback = result.feedback + "\n\n" + test_run.test_case.feedback
                     raise WrongAnswer(full_feedback.strip())
 
                 if test_run.is_last_test():
@@ -219,10 +215,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
 
                     except BaseException:
                         # no code execution here allowed so not to throw an exception
-                        fail_text = (
-                            "Unexpected error\n\nCannot check the submission\n\n"
-                            + report
-                        )
+                        fail_text = "Unexpected error\n\nCannot check the submission\n\n" + report
 
             with contextlib.suppress(BaseException):
                 SystemHandler.tear_down()

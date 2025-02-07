@@ -46,9 +46,7 @@ class AsyncDynamicTestingRunner(TestRunner):
         test_case = test_run.test_case
         time_limit = test_case.time_limit
 
-        executor = DaemonThreadPoolExecutor(
-            name=f"AsyncMainFileRunner test #{test_run.test_num}"
-        )
+        executor = DaemonThreadPoolExecutor(name=f"AsyncMainFileRunner test #{test_run.test_num}")
         try:
             future: Future = executor.submit(lambda: self._run_dynamic_test(test_run))
             if time_limit <= 0 or debug_mode:
@@ -74,9 +72,7 @@ class AsyncDynamicTestingRunner(TestRunner):
 
             if error is None:
                 try:
-                    return test_case.check_func(
-                        OutputHandler.get_output(), test_case.attach
-                    )
+                    return test_case.check_func(OutputHandler.get_output(), test_case.attach)
                 except BaseException as ex:
                     error = ex
                     test_run.set_error_in_test(error)

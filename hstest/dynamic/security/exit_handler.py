@@ -33,12 +33,8 @@ class ExitHandler:
     def replace_exit() -> None:
         if not ExitHandler._saved:
             ExitHandler._saved = True
-            ExitHandler._builtins_quit = (
-                builtins.quit if hasattr(builtins, "quit") else None
-            )
-            ExitHandler._builtins_exit = (
-                builtins.exit if hasattr(builtins, "exit") else None
-            )
+            ExitHandler._builtins_quit = builtins.quit if hasattr(builtins, "quit") else None
+            ExitHandler._builtins_exit = builtins.exit if hasattr(builtins, "exit") else None
             ExitHandler._os_kill = os.kill if hasattr(os, "kill") else None
             ExitHandler._os__exit = os._exit if hasattr(os, "_exit") else None
             ExitHandler._os_killpg = os.killpg if hasattr(os, "killpg") else None

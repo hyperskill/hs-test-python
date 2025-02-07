@@ -45,10 +45,7 @@ class DynamicTestElement:
             self.data = [[]]
 
         if type(self.data) not in {list, tuple}:
-            msg = (
-                f"{self.name} should be of type "
-                f'"list" or "tuple", found {type(self.data)}.'
-            )
+            msg = f"{self.name} should be of type " f'"list" or "tuple", found {type(self.data)}.'
             raise UnexpectedError(msg)
 
         if len(self.data) == 0:
@@ -114,9 +111,7 @@ def to_dynamic_testing(
         def __init__(self, funcs: list[DynamicInputFunction]) -> None:
             self.input_funcs: list[DynamicInputFunction] = []
             for func in funcs:
-                self.input_funcs += [
-                    DynamicInputFunction(func.trigger_count, func.input_function)
-                ]
+                self.input_funcs += [DynamicInputFunction(func.trigger_count, func.input_function)]
 
         def eject_next_input(self, curr_output: str) -> str | None:
             if len(self.input_funcs) == 0:

@@ -109,9 +109,7 @@ class ProcessWrapper:
         if self._alive and self.process.returncode is not None:
             self._alive = False
 
-    def check_pipe(
-        self, read_pipe, write_pipe, write_stdout=False, write_stderr=False
-    ) -> None:
+    def check_pipe(self, read_pipe, write_pipe, write_stdout=False, write_stderr=False) -> None:
         pipe_name = "stdout" if write_stdout else "stderr"
 
         with self.lock:
@@ -261,9 +259,7 @@ class ProcessWrapper:
             self._alive = False
 
         if not self._alive and need_wait_output:
-            OutputHandler.print(
-                '"is_finished" detected the process is dead, wait output'
-            )
+            OutputHandler.print('"is_finished" detected the process is dead, wait output')
             self.wait_output()
             OutputHandler.print('"is_finished" after waiting output, return True')
 

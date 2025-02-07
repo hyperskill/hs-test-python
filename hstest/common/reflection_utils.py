@@ -13,14 +13,8 @@ def is_tests(stage):
     return (
         (package and package.startswith("tests.outcomes."))
         or (package and package.startswith("tests.projects."))
-        or (
-            file
-            and f"{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}" in file
-        )
-        or (
-            file
-            and f"{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}" in file
-        )
+        or (file and f"{os.sep}hs-test-python{os.sep}tests{os.sep}outcomes{os.sep}" in file)
+        or (file and f"{os.sep}hs-test-python{os.sep}tests{os.sep}projects{os.sep}" in file)
         or (file and f"{os.sep}hs-test-python{os.sep}tests{os.sep}sql{os.sep}" in file)
     )
 
@@ -55,9 +49,7 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
             break
         user_traceback += [tr]
 
-    user_traceback = [
-        tr for tr in user_traceback if f"{os.sep}hstest{os.sep}" not in tr
-    ]
+    user_traceback = [tr for tr in user_traceback if f"{os.sep}hstest{os.sep}" not in tr]
 
     return clean_stacktrace(traceback_stack, user_traceback[::-1], user_dir)
 
@@ -67,8 +59,7 @@ def _fix_python_syntax_error(str_trace: str) -> str:
     python_traceback_start = '  File "'
 
     is_python_syntax_error = "SyntaxError" in str_trace and (
-        f"\n{python_traceback_start}" in str_trace
-        or str_trace.startswith(python_traceback_start)
+        f"\n{python_traceback_start}" in str_trace or str_trace.startswith(python_traceback_start)
     )
 
     if is_python_syntax_error and python_traceback_initial_phrase not in str_trace:
@@ -175,9 +166,7 @@ def clean_stacktrace(
         if trace.startswith(" " * 4):
             # Trace line that starts with 4 is a line with SyntaxError
             cleaned_traceback += [trace]
-        elif user_dir in trace or (
-            "<" in trace and ">" in trace and "<frozen " not in trace
-        ):
+        elif user_dir in trace or ("<" in trace and ">" in trace and "<frozen " not in trace):
             # avoid including <frozen importlib...> lines that are always in the stacktrace
             # but include <string>, <module> because it's definitely user's code
             if not user_dir.startswith("<"):

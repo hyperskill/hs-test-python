@@ -132,9 +132,7 @@ class InfiniteLoopDetector:
                     return
 
         if lines_repeated == 1:
-            self._fail(
-                f"Last {lines_to_check} lines your program printed are the same."
-            )
+            self._fail(f"Last {lines_to_check} lines your program printed are the same.")
         else:
             self._fail(
                 f"Last {lines_to_check} lines your program printed have "

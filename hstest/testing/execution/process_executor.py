@@ -107,18 +107,13 @@ class ProcessExecutor(ProgramExecutor):
                 try:
                     OutputHandler.print("Handle process - try readline")
                     next_input = InputHandler.mock_in.readline()
-                    OutputHandler.print(
-                        f"Handle process - requested input: {next_input!r}"
-                    )
+                    OutputHandler.print(f"Handle process - requested input: {next_input!r}")
                     self.process.provide_input(next_input)
-                    OutputHandler.print(
-                        f"Handle process - written to stdin: {next_input!r}"
-                    )
+                    OutputHandler.print(f"Handle process - written to stdin: {next_input!r}")
                 except ExitException:
                     OutputHandler.print("Handle process - EXIT EXCEPTION, stop input")
                     if self._wait_if_terminated() and (
-                        type(StageTest.curr_test_run.error_in_test)
-                        == OutOfInputError
+                        type(StageTest.curr_test_run.error_in_test) == OutOfInputError
                     ):
                         StageTest.curr_test_run.set_error_in_test(None)
                         OutputHandler.print(
@@ -137,15 +132,11 @@ class ProcessExecutor(ProgramExecutor):
         OutputHandler.print(f"Handle process - is error happened {is_error_happened}")
 
         if StageTest.curr_test_run.error_in_test is not None:
-            OutputHandler.print(
-                "Handle process - set state EXCEPTION THROWN (ERROR IN TEST)"
-            )
+            OutputHandler.print("Handle process - set state EXCEPTION THROWN (ERROR IN TEST)")
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         elif is_error_happened:
-            OutputHandler.print(
-                "Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)"
-            )
+            OutputHandler.print("Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)")
             StageTest.curr_test_run.set_error_in_test(
                 ExceptionWithFeedback(self.process.stderr, None)
             )

@@ -78,8 +78,7 @@ class BaseSearcher:
                 filtered_files: set[File] = {
                     file
                     for file in files
-                    if file in contents
-                    and curr_filter.filter(folder, file, contents[file])
+                    if file in contents and curr_filter.filter(folder, file, contents[file])
                 }
 
                 curr_filter.filtered = filtered_files
@@ -217,9 +216,7 @@ class BaseSearcher:
         main_searcher = re.compile(main_regex, re.MULTILINE)
         return self._search(
             where_to_search,
-            main_filter=MainFilter(
-                main_desc, source=lambda s: main_searcher.search(s) is not None
-            ),
+            main_filter=MainFilter(main_desc, source=lambda s: main_searcher.search(s) is not None),
             force_content_filters=force_content_filters,
         )
 
