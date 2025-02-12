@@ -12,14 +12,12 @@ class UnexpectedErrorRuntimeExitInCheck(UnexpectedErrorTest):
         
         We have recorded this bug and will fix it soon.
         """,  # noqa: W293
-        'ExitException'
+        "ExitException",
     ]
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         quit(0)
-        return CheckResult(True, '')
+        return CheckResult(True, "")

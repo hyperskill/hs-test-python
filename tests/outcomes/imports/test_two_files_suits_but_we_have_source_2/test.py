@@ -4,10 +4,10 @@ from hstest import CheckResult, StageTest, TestCase
 
 
 class TestImportRelativeError2(StageTest):
-    source = 'main1'
+    source = "main1"
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == 'main1\n', '')
+        return CheckResult(reply == "main1\n", "")

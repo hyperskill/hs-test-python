@@ -4,13 +4,7 @@ from hstest.stage_test import StageTest
 
 
 class TestParametrizedData4(StageTest):
-    test_data = [
-        [1],
-        [2, 3],
-        [3, 4, 5],
-        [4, 5, 6, 7],
-        [5, 6, 7, 8, 9]
-    ]
+    test_data = [[1], [2, 3], [3, 4, 5], [4, 5, 6, 7], [5, 6, 7, 8, 9]]
 
     counter = 0
 
@@ -18,4 +12,4 @@ class TestParametrizedData4(StageTest):
     def test(self, *a):
         self.counter += 1
         print(a)
-        return CheckResult(self.counter == len(a), '')
+        return CheckResult(self.counter == len(a), "")

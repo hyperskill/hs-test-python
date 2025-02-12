@@ -12,8 +12,8 @@ class TestMatplotlibHist(PlottingTest):
         program.start()
 
         # should take into account "weights" column as well, not use weight=1
-        correct_data = [
-            [1, 2, 3, 4, 5]
-        ]
+        correct_data = [[1, 2, 3, 4, 5]]
 
-        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.matplotlib)
+        return test_hist_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.matplotlib
+        )

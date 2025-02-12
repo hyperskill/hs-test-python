@@ -12,13 +12,11 @@ class UnexpectedErrorAddInput1(UnexpectedErrorTest):
 
         We have recorded this bug and will fix it soon.
         """,
-        "ZeroDivisionError: division by zero"
+        "ZeroDivisionError: division by zero",
     ]
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(stdin=[lambda x: f'{0 / 0}'])
-        ]
+        return [TestCase(stdin=[lambda x: f"{0 / 0}"])]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

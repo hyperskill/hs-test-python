@@ -12,4 +12,4 @@ class TestCaseSameObjects(StageTest):
         return [test] * 5
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

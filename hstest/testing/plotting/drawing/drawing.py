@@ -8,7 +8,11 @@ if TYPE_CHECKING:
 
 class Drawing:
     def __init__(
-        self, library: str, plot_type: str, data: DrawingData | None, kwargs: dict[str, Any]
+        self,
+        library: str,
+        plot_type: str,
+        data: DrawingData | None,
+        kwargs: dict[str, Any],
     ) -> None:
         self.library: str = library
         self.type: str = plot_type

@@ -1,11 +1,12 @@
+from typing import List
+
+from hstest.check_result import CheckResult
+from hstest.common.os_utils import is_windows
 from hstest.stage_test import *
 from hstest.test_case import TestCase
 from hstest.testing.unittest.user_error_test import UserErrorTest
-from hstest.common.os_utils import is_windows
-from hstest.check_result import CheckResult
-from typing import List
 
-CheckResult.correct = lambda: CheckResult(True, '')
+CheckResult.correct = lambda: CheckResult(True, "")
 CheckResult.wrong = lambda feedback: CheckResult(False, feedback)
 
 OUTPUT = """
@@ -28,9 +29,10 @@ class CoffeeMachineTest(UserErrorTest):
     """
 
     def generate(self) -> List[TestCase]:
-        return TestCase.from_stepik([('', OUTPUT)])
+        return TestCase.from_stepik([("", OUTPUT)])
 
     def check(self, reply: str, clue: Any) -> CheckResult:
         return CheckResult(
             reply.strip() == clue.strip(),
-            'You should make coffee exactly like in the example')
+            "You should make coffee exactly like in the example",
+        )

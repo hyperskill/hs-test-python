@@ -7,7 +7,7 @@ from hstest.testing.tested_program import TestedProgram
 class TestDynamicMethodAcceptedSimple(StageTest):
     @dynamic_test
     def test(self):
-        pr = TestedProgram('main')
+        pr = TestedProgram("main")
 
         out1 = pr.start()
         if out1 != "Program started!\n":

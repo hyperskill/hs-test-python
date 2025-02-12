@@ -15,7 +15,9 @@ class TestPandasLine(PlottingTest):
             [[0, 1], [1, 3], [2, 2]],
             [[0, 1], [1, 3], [2, 2]],
             [[2, 1], [4, 3], [6, 2]],
-            [[2, 1], [4, 3], [6, 2]]
+            [[2, 1], [4, 3], [6, 2]],
         ]
 
-        return test_line_drawing(self.all_figures(), 4, correct_data, DrawingLibrary.pandas)
+        return test_line_drawing(
+            self.all_figures(), 4, correct_data, DrawingLibrary.pandas
+        )

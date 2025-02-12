@@ -13,6 +13,4 @@ class TestDynamicMethodUnexpectedErrorNoCheckMethod(StageTest):
         return correct()
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(dynamic_testing=lambda: correct())
-        ]
+        return [TestCase(dynamic_testing=lambda: correct())]

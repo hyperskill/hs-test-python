@@ -14,7 +14,9 @@ class TestMatplotlibLine(PlottingTest):
         correct_data = [
             [[1, 5], [2, 8]],
             [[1, 5], [2, 8]],
-            [[1, 0], [5, 1], [7, 2], [8, 3]]
+            [[1, 0], [5, 1], [7, 2], [8, 3]],
         ]
 
-        return test_line_drawing(self.all_figures(), 3, correct_data, DrawingLibrary.matplotlib)
+        return test_line_drawing(
+            self.all_figures(), 3, correct_data, DrawingLibrary.matplotlib
+        )

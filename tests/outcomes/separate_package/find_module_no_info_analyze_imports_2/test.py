@@ -10,8 +10,5 @@ class FindModuleNoInfoAnalyzeImports(StageTest):
         main = TestedProgram()
         result = main.start()
         return CheckResult(
-            result ==
-            'Main 3\n'
-            'Main 4\n'
-            'Main 2\n'
-            'Module no info\n', '')
+            result == "Main 3\n" "Main 4\n" "Main 2\n" "Module no info\n", ""
+        )

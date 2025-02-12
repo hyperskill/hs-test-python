@@ -3,7 +3,6 @@ from typing import Any, List
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
-from typing import List
 
 OUTPUT = """
 Starting to make a coffee
@@ -18,9 +17,10 @@ Coffee is ready!
 
 class CoffeeMachineTest(StageTest):
     def generate(self) -> List[TestCase]:
-        return TestCase.from_stepik([('', OUTPUT)])
+        return TestCase.from_stepik([("", OUTPUT)])
 
     def check(self, reply: str, clue: Any) -> CheckResult:
         return CheckResult(
             reply.strip() == clue.strip(),
-            'You should make coffee exactly like in the example')
+            "You should make coffee exactly like in the example",
+        )

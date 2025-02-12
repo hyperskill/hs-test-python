@@ -1,15 +1,18 @@
 def plot():
     try:
-        import pandas as pd
-        import numpy as np
         import matplotlib.pyplot as plt
+        import numpy as np
+        import pandas as pd
     except ModuleNotFoundError:
         return
 
-    df = pd.DataFrame(np.array([[1, 2, 3], [2, 3, 4], [3, 4, 5]]),
-                      columns=['one', 'two', 'three'], index=['Mercury', 'Venus', 'Earth'])
+    df = pd.DataFrame(
+        np.array([[1, 2, 3], [2, 3, 4], [3, 4, 5]]),
+        columns=["one", "two", "three"],
+        index=["Mercury", "Venus", "Earth"],
+    )
 
-    df.plot(y='one', kind='pie')
+    df.plot(y="one", kind="pie")
 
     plt.show()
 

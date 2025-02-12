@@ -8,7 +8,7 @@ from hstest.testing.tested_program import TestedProgram
 class InfiniteLoopTestNotWorking(StageTest):
     @dynamic_test
     def test(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.start()
         return correct()
 

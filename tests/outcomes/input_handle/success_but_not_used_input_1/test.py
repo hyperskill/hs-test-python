@@ -9,9 +9,9 @@ class SuccessButNotUsedInput1(StageTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin='1\nnotnum\n', attach='1\n'),
-            TestCase(stdin='2\nnotnum\n', attach='2\nnotnum\n'),
+            TestCase(stdin="1\nnotnum\n", attach="1\n"),
+            TestCase(stdin="2\nnotnum\n", attach="2\nnotnum\n"),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

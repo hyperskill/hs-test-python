@@ -67,7 +67,12 @@ class BaseSearcher:
 
             candidates = set(files)
 
-            for curr_filter in initial_filter, pre_main_filter, main_filter, post_main_filter:
+            for curr_filter in (
+                initial_filter,
+                pre_main_filter,
+                main_filter,
+                post_main_filter,
+            ):
                 curr_filter.init_filter(folder, contents)
 
                 filtered_files: set[File] = {
@@ -253,8 +258,7 @@ class BaseSearcher:
             source_module = source[: -len(ext)].replace(os.sep, ".")
 
         elif os.sep in source:
-            if source.endswith(os.sep):
-                source = source[: -len(os.sep)]
+            source = source.removesuffix(os.sep)
 
             source_folder = source
             source_file = None

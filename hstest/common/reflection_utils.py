@@ -104,10 +104,10 @@ def str_to_stacktrace(str_trace: str) -> str:
         File "C:\Users\**\JetBrains\**\plugins\python\helpers\pydev\pydevd.py", line 1477, in _exec
           pydev_imports.execfile(file, globals, locals)  # execute the script
         File "C:\Users\**\JetBrains\**\plugins\python\helpers\pydev\_pydev_imps\_pydev_execfile.py", line 18, in execfile
-          exec(compile(contents+"\n", file, 'exec'), glob, loc) 
+          exec(compile(contents+"\n", file, 'exec'), glob, loc)
 
         Which will appear when testing locally inside PyCharm.
-        """  # noqa: W291, E501
+        """  # noqa: E501
         if f"{os.sep}JetBrains{os.sep}" in trace:
             continue
 

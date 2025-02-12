@@ -36,8 +36,7 @@ class FlaskTest(StageTest):
                         self.attach.sources += [item]
 
     def get_url(self, link: str = "", *, source: str | None = None):
-        if link.startswith("/"):
-            link = link[1:]
+        link = link.removeprefix("/")
 
         def create_url(port: int) -> str:
             return f"http://localhost:{port}/{link}"

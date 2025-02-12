@@ -1,10 +1,10 @@
-from hstest import CheckResult, dynamic_test, StageTest, TestedProgram
+from hstest import CheckResult, StageTest, TestedProgram, dynamic_test
 
 
 class TestImportRelativeError2(StageTest):
-    source = 'main1'
+    source = "main1"
 
     @dynamic_test
     def test(self):
         pr = TestedProgram()
-        return CheckResult(pr.start() == 'main1\n', '')
+        return CheckResult(pr.start() == "main1\n", "")

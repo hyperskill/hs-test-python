@@ -16,7 +16,4 @@ class FindModuleNoInfoAnalyzeImports(UserErrorTest):
     def test(self):
         main = TestedProgram()
         result = main.start()
-        return CheckResult(
-            result ==
-            'Main 3\n'
-            'Main 2\n', '')
+        return CheckResult(result == "Main 3\n" "Main 2\n", "")

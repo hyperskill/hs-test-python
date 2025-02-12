@@ -18,4 +18,4 @@ class TestCommandLineArgumentsFailedSecondTest(UserErrorTest):
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(attach, '')
+        return CheckResult(attach, "")

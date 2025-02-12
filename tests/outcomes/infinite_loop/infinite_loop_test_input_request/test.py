@@ -20,7 +20,7 @@ class InfiniteLoopTestInputRequest(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.start()
         main.stop_input()
         sleep(0.005)

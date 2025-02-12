@@ -14,10 +14,8 @@ class TestSyntaxError1(UserErrorTest):
             exec("print)")
           File "<string>", line 1
         """,
-        "SyntaxError: "
+        "SyntaxError: ",
     ]
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]

@@ -12,27 +12,27 @@ class TestOrderComplex(StageTest):
     @dynamic_test(order=5)
     def test4(self):
         self.x += 1
-        return CheckResult(self.x == 8, 'test3')
+        return CheckResult(self.x == 8, "test3")
 
     @dynamic_test(order=-5)
     def test0(self):
         self.x += 1
-        return CheckResult(self.x == 4, 'test0')
+        return CheckResult(self.x == 4, "test0")
 
     @dynamic_test(order=-1)
     def test1(self):
         self.x += 1
-        return CheckResult(self.x == 5, 'test1')
+        return CheckResult(self.x == 5, "test1")
 
     @dynamic_test()
     def test2(self):
         self.x += 1
-        return CheckResult(self.x == 6, 'test2')
+        return CheckResult(self.x == 6, "test2")
 
     @dynamic_test
     def test3(self):
         self.x += 1
-        return CheckResult(self.x == 7, 'test3')
+        return CheckResult(self.x == 7, "test3")
 
     def generate(self) -> List[TestCase]:
         return [
@@ -43,12 +43,12 @@ class TestOrderComplex(StageTest):
 
     def check(self, reply: str, attach: Any) -> CheckResult:
         self.x += 1
-        return CheckResult(self.x == 1, 'test4')
+        return CheckResult(self.x == 1, "test4")
 
     def test5(self, reply: str, attach: Any) -> CheckResult:
         self.x += 1
-        return CheckResult(self.x == 2, 'test4')
+        return CheckResult(self.x == 2, "test4")
 
     def test6(self):
         self.x += 1
-        return CheckResult(self.x == 3, 'test5')
+        return CheckResult(self.x == 3, "test5")

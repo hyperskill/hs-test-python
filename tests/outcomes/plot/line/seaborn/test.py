@@ -14,7 +14,9 @@ class TestSeabornLine(PlottingTest):
         correct_data = [
             [[1, 1], [3, 3], [2, 2]],
             [[2, 1], [4, 3], [6, 2]],
-            [[2, 1], [4, 3], [6, 2]]
+            [[2, 1], [4, 3], [6, 2]],
         ]
 
-        return test_line_drawing(self.all_figures(), 3, correct_data, DrawingLibrary.seaborn)
+        return test_line_drawing(
+            self.all_figures(), 3, correct_data, DrawingLibrary.seaborn
+        )

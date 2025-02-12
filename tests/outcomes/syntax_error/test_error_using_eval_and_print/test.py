@@ -21,10 +21,8 @@ class TestEmptyEval(UserErrorTest):
         ---
         
         123
-        """  # noqa: W293
+        """,  # noqa: W293
     ]
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]

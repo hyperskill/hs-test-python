@@ -12,4 +12,4 @@ class TestRepeating(UserErrorTest):
 
     @dynamic_test
     def test2(self):
-        return wrong('')
+        return wrong("")

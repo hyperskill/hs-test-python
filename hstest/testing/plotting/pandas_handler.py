@@ -69,10 +69,10 @@ class PandasHandler:
             )
             return drawings
 
-        for column in data.columns:
-            drawings.append(
-                DrawingBuilder.get_line_drawing(data.index, data[column], DrawingLibrary.pandas, {})
-            )
+        drawings.extend(
+            DrawingBuilder.get_line_drawing(data.index, data[column], DrawingLibrary.pandas, {})
+            for column in data.columns
+        )
 
         return drawings
 
@@ -145,7 +145,10 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {"x": np.array([column], dtype=object), "y": data[column].to_numpy()}
+                curr_data = {
+                    "x": np.array([column], dtype=object),
+                    "y": data[column].to_numpy(),
+                }
 
                 drawing = Drawing(DrawingLibrary.pandas, DrawingType.box, None, {})
                 drawings.append(drawing)
@@ -195,9 +198,7 @@ class PandasHandler:
                 if not is_numeric_dtype(data[column]):
                     continue
 
-                curr_data = {  # noqa: F841
-                    "x": data[column].to_numpy()
-                }
+                curr_data = {"x": data[column].to_numpy()}  # noqa: F841
 
                 drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
                 drawings.append(drawing)
@@ -344,24 +345,44 @@ class PandasHandler:
                     if type(y) == str:
                         y = [y]
                     for col in y:
-                        bar(None, data[x].array.to_numpy(), data[col].array.to_numpy(), **kw)
+                        bar(
+                            None,
+                            data[x].array.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw,
+                        )
                     return None
 
                 if x is not None:
                     for col in data.columns:
                         if col != x:
-                            bar(None, data[x].array.to_numpy(), data[col].array.to_numpy(), **kw)
+                            bar(
+                                None,
+                                data[x].array.to_numpy(),
+                                data[col].array.to_numpy(),
+                                **kw,
+                            )
                     return None
 
                 if y is not None:
                     if type(y) == str:
                         y = [y]
                     for col in y:
-                        bar(None, data[col].index.to_numpy(), data[col].array.to_numpy(), **kw)
+                        bar(
+                            None,
+                            data[col].index.to_numpy(),
+                            data[col].array.to_numpy(),
+                            **kw,
+                        )
                     return None
 
                 for col in data.columns:
-                    bar(None, data[col].index.to_numpy(), data[col].array.to_numpy(), **kw)
+                    bar(
+                        None,
+                        data[col].index.to_numpy(),
+                        data[col].array.to_numpy(),
+                        **kw,
+                    )
                 return None
 
             if type(data) == pandas.Series:

@@ -9,16 +9,18 @@ def test_bar_drawing(figures, correct_data, library_type):
 
     if len(figures) != correct_plot_count:
         return wrong(
-            f'Expected {correct_plot_count} plots to be plotted '
-            f'using {library_type} library, found {len(figures)}'
+            f"Expected {correct_plot_count} plots to be plotted "
+            f"using {library_type} library, found {len(figures)}"
         )
 
     for i, bar in enumerate(figures):
-        if bar.type != 'bar':
-            return wrong(f'Wrong drawing type {bar.type}. Expected bar')
+        if bar.type != "bar":
+            return wrong(f"Wrong drawing type {bar.type}. Expected bar")
 
         if bar.library != library_type:
-            return wrong(f'{bar.library} is wrong library type. Expected {library_type}')
+            return wrong(
+                f"{bar.library} is wrong library type. Expected {library_type}"
+            )
 
         if not isinstance(bar.data, DrawingData):
             return wrong("The data value should be a ndarray")
@@ -26,9 +28,9 @@ def test_bar_drawing(figures, correct_data, library_type):
         current_correct = np.array(correct_data[i], dtype=object)
 
         if not np.array_equal(current_correct[:, 0], bar.data.x):
-            return wrong('Wrong x data of the bar graph')
+            return wrong("Wrong x data of the bar graph")
 
         if not np.array_equal(current_correct[:, 1], bar.data.y):
-            return wrong('Wrong y data of the bar graph')
+            return wrong("Wrong y data of the bar graph")
 
     return correct()

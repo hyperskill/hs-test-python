@@ -9,9 +9,7 @@ class WrongAnswerInTest1(UserErrorTest):
     contain = "Wrong answer in test #1"
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase()
-        ]
+        return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(False, '')
+        return CheckResult(False, "")

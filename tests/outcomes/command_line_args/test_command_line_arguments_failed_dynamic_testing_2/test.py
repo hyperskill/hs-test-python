@@ -14,11 +14,9 @@ class TestCommandLineArgumentsFailedDynamicTesting3(UserErrorTest):
     """
 
     def test1(self):
-        pr = TestedProgram('main')
+        pr = TestedProgram("main")
         pr.start("-in", "123", "-out", "234")
-        return wrong('')
+        return wrong("")
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(dynamic_testing=self.test1)
-        ]
+        return [TestCase(dynamic_testing=self.test1)]

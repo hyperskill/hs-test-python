@@ -12,4 +12,4 @@ class TestParametrizedData2(StageTest):
     def test(self, a):
         self.counter += 1
         print(a)
-        return CheckResult(self.counter == a, '')
+        return CheckResult(self.counter == a, "")

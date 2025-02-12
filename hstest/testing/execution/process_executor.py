@@ -112,13 +112,14 @@ class ProcessExecutor(ProgramExecutor):
                     OutputHandler.print(f"Handle process - written to stdin: {next_input!r}")
                 except ExitException:
                     OutputHandler.print("Handle process - EXIT EXCEPTION, stop input")
-                    if self._wait_if_terminated():
-                        if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
-                            StageTest.curr_test_run.set_error_in_test(None)
-                            OutputHandler.print(
-                                "Handle process - Abort stopping input, everything is OK"
-                            )
-                            break
+                    if self._wait_if_terminated() and (
+                        type(StageTest.curr_test_run.error_in_test) == OutOfInputError
+                    ):
+                        StageTest.curr_test_run.set_error_in_test(None)
+                        OutputHandler.print(
+                            "Handle process - Abort stopping input, everything is OK"
+                        )
+                        break
                     self.stop_input()
                 except BaseException as ex:
                     OutputHandler.print(f"Handle process - SOME EXCEPTION {ex}")

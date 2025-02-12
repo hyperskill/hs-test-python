@@ -18,4 +18,6 @@ class TestMatplotlibBar(PlottingTest):
             [[1, 8], [2, 8], [4, 8], [6, 8]],
         ]
 
-        return test_bar_drawing(self.all_figures(), correct_data, DrawingLibrary.matplotlib)
+        return test_bar_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.matplotlib
+        )

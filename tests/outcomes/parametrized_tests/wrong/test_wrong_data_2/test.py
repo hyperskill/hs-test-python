@@ -4,7 +4,9 @@ from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class TestWrongData2(UnexpectedErrorTest):
-    contain = 'UnexpectedError: Data passed to dynamic method "test" should not be empty.'
+    contain = (
+        'UnexpectedError: Data passed to dynamic method "test" should not be empty.'
+    )
 
     test_data = []
 
@@ -14,4 +16,4 @@ class TestWrongData2(UnexpectedErrorTest):
     def test(self, a):
         self.counter += 1
         print(a)
-        return CheckResult(self.counter == len(a), '')
+        return CheckResult(self.counter == len(a), "")

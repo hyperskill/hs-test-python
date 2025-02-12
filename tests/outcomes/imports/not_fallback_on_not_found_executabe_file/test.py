@@ -14,11 +14,9 @@ class FindModuleNoInfoAnalyzeImports(UserErrorTest):
     """  # noqa: W291
 
     def test1(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.start()
-        return wrong('')
+        return wrong("")
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(dynamic_testing=self.test1)
-        ]
+        return [TestCase(dynamic_testing=self.test1)]

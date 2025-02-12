@@ -18,10 +18,10 @@ class TestImportAbsoluteErrorCircular(UserErrorTest):
                 print(main2.x)
             """
 
-    source = 'main'
+    source = "main"
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '1040\n', '')
+        return CheckResult(reply == "1040\n", "")

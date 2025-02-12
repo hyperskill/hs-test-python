@@ -14,22 +14,36 @@ class WrongAnswerDynamicInput3(UserErrorTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin=[
-                (-1, lambda x: CheckResult.correct())
-            ], attach="1\n2\n2\n"),
-
-            TestCase(stdin=[
-                lambda x: CheckResult.correct() if x == "" else CheckResult.wrong("WA TEST 2"),
-                (2, lambda x: (
-                    CheckResult.correct() if x == "3\n" else CheckResult.wrong("WA TEST 2"))
-                 )
-            ], attach="3\n3\n3\n"),
-
-            TestCase(stdin=[
-                lambda x: "3" if x == "" else CheckResult.wrong("WA TEST 3"),
-                (-1, lambda x: "4" if x == "3\n" else CheckResult.wrong("WA TEST 3"))
-            ], attach="3\n3\n4\n"),
+            TestCase(stdin=[(-1, lambda x: CheckResult.correct())], attach="1\n2\n2\n"),
+            TestCase(
+                stdin=[
+                    lambda x: (
+                        CheckResult.correct()
+                        if x == ""
+                        else CheckResult.wrong("WA TEST 2")
+                    ),
+                    (
+                        2,
+                        lambda x: (
+                            CheckResult.correct()
+                            if x == "3\n"
+                            else CheckResult.wrong("WA TEST 2")
+                        ),
+                    ),
+                ],
+                attach="3\n3\n3\n",
+            ),
+            TestCase(
+                stdin=[
+                    lambda x: "3" if x == "" else CheckResult.wrong("WA TEST 3"),
+                    (
+                        -1,
+                        lambda x: "4" if x == "3\n" else CheckResult.wrong("WA TEST 3"),
+                    ),
+                ],
+                attach="3\n3\n4\n",
+            ),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

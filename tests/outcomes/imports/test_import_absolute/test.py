@@ -6,10 +6,10 @@ from hstest.test_case import TestCase
 
 
 class TestImportAbsolute(StageTest):
-    source = 'random_module.main'
+    source = "random_module.main"
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == '101\n', '')
+        return CheckResult(reply == "101\n", "")

@@ -1,1 +1,1 @@
-print('main2')
+print("main2")

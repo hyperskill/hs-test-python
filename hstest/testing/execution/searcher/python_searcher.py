@@ -44,7 +44,8 @@ class PythonSearcher(BaseSearcher):
             file_filter=file_filter,
             pre_main_filter=FileFilter(init_files=init_regexes, file=lambda f: not is_imported[f]),
             main_filter=MainFilter(
-                "if __name__ == '__main__'", source=lambda s: "__name__" in s and "__main__" in s
+                "if __name__ == '__main__'",
+                source=lambda s: "__name__" in s and "__main__" in s,
             ),
         )
 

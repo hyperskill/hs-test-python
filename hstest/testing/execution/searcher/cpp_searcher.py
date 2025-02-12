@@ -21,6 +21,9 @@ class CppSearcher(BaseSearcher):
         return self._search(
             where,
             force_content_filters=[
-                MainFilter("int main()", source=lambda s: main_func_searcher.search(s) is not None),
+                MainFilter(
+                    "int main()",
+                    source=lambda s: main_func_searcher.search(s) is not None,
+                ),
             ],
         )

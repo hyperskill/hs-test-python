@@ -21,7 +21,11 @@ class ProcessWrapper:
     initial_idle_wait_time = 150
 
     def __init__(
-        self, *args, check_early_finish=False, register_output=True, register_io_handler=False
+        self,
+        *args,
+        check_early_finish=False,
+        register_output=True,
+        register_io_handler=False,
     ) -> None:
         self.lock = Lock()
 

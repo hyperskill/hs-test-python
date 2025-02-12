@@ -6,13 +6,13 @@ from hstest.test_case import TestCase
 
 
 class SuccessTest(StageTest):
-    source = 'folder.main'
+    source = "folder.main"
 
     def generate(self) -> List[TestCase]:
         return [
-            TestCase(stdin='2\n4', attach='6\n'),
-            TestCase(stdin='1\n3', attach='4\n'),
+            TestCase(stdin="2\n4", attach="6\n"),
+            TestCase(stdin="1\n3", attach="4\n"),
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(reply == attach, '')
+        return CheckResult(reply == attach, "")

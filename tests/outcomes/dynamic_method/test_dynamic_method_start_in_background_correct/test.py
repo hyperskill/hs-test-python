@@ -4,7 +4,8 @@ from hstest.check_result import correct, wrong
 from hstest.dynamic.dynamic_test import dynamic_test
 from hstest.stage_test import StageTest
 from hstest.testing.execution.main_module_executor import MainModuleExecutor
-from hstest.testing.runner.async_dynamic_testing_runner import AsyncDynamicTestingRunner
+from hstest.testing.runner.async_dynamic_testing_runner import \
+    AsyncDynamicTestingRunner
 from hstest.testing.tested_program import TestedProgram
 
 
@@ -13,7 +14,7 @@ class TestDynamicMethodStartInBackgroundCorrect(StageTest):
 
     @dynamic_test
     def test(self):
-        server = TestedProgram('main')
+        server = TestedProgram("main")
 
         server.start_in_background()
         sleep(0.2)

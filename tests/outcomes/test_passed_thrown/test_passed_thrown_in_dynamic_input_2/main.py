@@ -1,2 +1,2 @@
-print("2", end='')
+print("2", end="")
 input()

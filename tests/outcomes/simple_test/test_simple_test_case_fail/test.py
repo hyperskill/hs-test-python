@@ -21,10 +21,14 @@ class TesSimpleTestCaseFail(UserErrorTest):
 
     def generate(self) -> List[TestCase]:
         return [
-            SimpleTestCase(stdin="123",
-                           stdout="123\n123",
-                           feedback="You should output a number twice"),
-            SimpleTestCase(stdin="567",
-                           stdout="567\n567",
-                           feedback="You should output this number twice")
+            SimpleTestCase(
+                stdin="123",
+                stdout="123\n123",
+                feedback="You should output a number twice",
+            ),
+            SimpleTestCase(
+                stdin="567",
+                stdout="567\n567",
+                feedback="You should output this number twice",
+            ),
         ]

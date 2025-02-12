@@ -12,15 +12,14 @@ class UnexpectedErrorRuntimeExitInGenerate(UnexpectedErrorTest):
 
         We have recorded this bug and will fix it soon.
         """,
-        "ExitException"
+        "ExitException",
     ]
 
     def generate(self) -> List[TestCase]:
         import os
-        os.__dict__['_exit'](0)
-        return [
-            TestCase()
-        ]
+
+        os.__dict__["_exit"](0)
+        return [TestCase()]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult(True, '')
+        return CheckResult(True, "")

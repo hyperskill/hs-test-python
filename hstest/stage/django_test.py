@@ -28,8 +28,7 @@ class DjangoTest(StageTest):
         return clean_text(urlopen(link).read().decode())
 
     def get_url(self, link: str = "") -> str:
-        if link.startswith("/"):
-            link = link[1:]
+        link = link.removeprefix("/")
         return f"http://localhost:{self.attach.port}/{link}"
 
     def get(self, link: str) -> str:

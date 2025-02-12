@@ -7,7 +7,7 @@ from hstest.testing.tested_program import TestedProgram
 class TestDynamicMethodProgramNotFinishedAfterTest(StageTest):
     @dynamic_test
     def test(self):
-        pr = TestedProgram('main')
+        pr = TestedProgram("main")
 
         out1 = pr.start()
         if out1 != "Server started!\n":

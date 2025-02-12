@@ -4,9 +4,11 @@ from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
 
 
 class TestWrongData(UnexpectedErrorTest):
-    contain = 'UnexpectedError: Data passed to dynamic method "test" ' \
-              'should be of type "list" or "tuple",' \
-              ' found <class \'int\'>.'
+    contain = (
+        'UnexpectedError: Data passed to dynamic method "test" '
+        'should be of type "list" or "tuple",'
+        " found <class 'int'>."
+    )
 
     test_data = 123
 
@@ -16,4 +18,4 @@ class TestWrongData(UnexpectedErrorTest):
     def test(self, a):
         self.counter += 1
         print(a)
-        return CheckResult(self.counter == len(a), '')
+        return CheckResult(self.counter == len(a), "")

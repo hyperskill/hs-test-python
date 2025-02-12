@@ -14,10 +14,12 @@ class TestMatplotlibHist(PlottingTest):
         correct_data = [
             [1, 2, 3, 4, 5],
             [1.4, 5, 1, 2, 6, 5],
-            [1, 4, 2, '1'],
-            ['1', 'a', '5', '2', 'b', 'bb', 'aa'],
-            [1.1, 5, 2, '1.1', '5'],
-            [1.1, 2.5, 2.1, 1.5, 3.6]
+            [1, 4, 2, "1"],
+            ["1", "a", "5", "2", "b", "bb", "aa"],
+            [1.1, 5, 2, "1.1", "5"],
+            [1.1, 2.5, 2.1, 1.5, 3.6],
         ]
 
-        return test_hist_drawing(self.all_figures(), correct_data, DrawingLibrary.matplotlib)
+        return test_hist_drawing(
+            self.all_figures(), correct_data, DrawingLibrary.matplotlib
+        )

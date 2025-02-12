@@ -14,6 +14,6 @@ class InfiniteLoopTestLine8(UserErrorTest):
 
     @dynamic_test
     def test(self):
-        main = TestedProgram('main')
+        main = TestedProgram("main")
         main.start()
         return correct()

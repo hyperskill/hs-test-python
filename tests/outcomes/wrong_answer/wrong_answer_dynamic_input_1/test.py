@@ -18,4 +18,4 @@ class WrongAnswerDynamicInput1(UserErrorTest):
         ]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult.wrong('')
+        return CheckResult.wrong("")

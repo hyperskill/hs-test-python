@@ -27,12 +27,16 @@ class TestCommandLineArgumentsFailedWithSpaces(UserErrorTest):
     """  # noqa: W293
 
     def test(self):
-        pr = TestedProgram('main')
-        pr.start("-spaces", "some argument with spaces",
-                 "-number", "234", "-onlySpaces", "      ")
+        pr = TestedProgram("main")
+        pr.start(
+            "-spaces",
+            "some argument with spaces",
+            "-number",
+            "234",
+            "-onlySpaces",
+            "      ",
+        )
         return CheckResult(False, "See arguments below:")
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(dynamic_testing=self.test)
-        ]
+        return [TestCase(dynamic_testing=self.test)]

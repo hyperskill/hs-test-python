@@ -1,4 +1,4 @@
-from hstest import CheckResult, dynamic_test, TestedProgram
+from hstest import CheckResult, TestedProgram, dynamic_test
 from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
@@ -10,9 +10,9 @@ class TestImportRelativeError2(UserErrorTest):
             Write "if __name__ == '__main__'" in one of them to mark it as an entry point.
             """
 
-    source = 'main'
+    source = "main"
 
     @dynamic_test
     def test(self):
-        pr = TestedProgram('')
-        return CheckResult(pr.start() == 'main2\n', '')
+        pr = TestedProgram("")
+        return CheckResult(pr.start() == "main2\n", "")

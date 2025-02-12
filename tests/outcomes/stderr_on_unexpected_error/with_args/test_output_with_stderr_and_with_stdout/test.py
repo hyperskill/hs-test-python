@@ -26,9 +26,7 @@ class TestOutputWithStderrAndWithStdout(UserErrorTest):
     User stderr output!"""  # noqa: W293
 
     def generate(self) -> List[TestCase]:
-        return [
-            TestCase(args=['test', 'args'])
-        ]
+        return [TestCase(args=["test", "args"])]
 
     def check(self, reply: str, attach: Any) -> CheckResult:
-        return CheckResult.wrong('')
+        return CheckResult.wrong("")
