@@ -50,15 +50,6 @@ class PandasHandler:
         "kde": DrawingType.dis,
     }
 
-    graph_type_to_normalized_data = {
-        "scatter": PandasHandler.get_scatter_drawings_with_normalized_data,
-        "line": PandasHandler.get_line_drawings_with_normalized_data,
-        "pie": PandasHandler.get_pie_drawings_with_normalized_data,
-        # 'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
-        "box": PandasHandler.get_box_drawings_with_normalized_data,
-        "dis": PandasHandler.get_dis_drawings_with_normalized_data,
-    }
-
     @staticmethod
     def get_line_drawings_with_normalized_data(data, x, y):
         drawings = []
@@ -169,40 +160,7 @@ class PandasHandler:
 
     @staticmethod
     def get_dis_drawings_with_normalized_data(data, x, y):
-        drawings = []
-
-        if type(data) == pd.Series:
-            curr_data = {"x": data.to_numpy()}
-
-            drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
-            drawings.append(drawing)
-            return drawings
-
-        if x:
-            curr_data = {
-                "x": np.array(data[x], dtype=object),
-            }
-
-            drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
-            drawings.append(drawing)
-        if y:
-            curr_data = {
-                "x": np.array(data[y], dtype=object),
-            }
-
-            drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
-            drawings.append(drawing)
-
-        if not x and not y:
-            for column in data.columns:
-                if not is_numeric_dtype(data[column]):
-                    continue
-
-                curr_data = {"x": data[column].to_numpy()}  # noqa: F841
-
-                drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
-                drawings.append(drawing)
-        return drawings
+        return PandasHandler.get_line_drawings_with_normalized_data(data, x, y)
 
     @staticmethod
     def get_area_drawings_with_normalized_data(data, x, y):
@@ -217,6 +175,19 @@ class PandasHandler:
         drawing = Drawing(DrawingLibrary.pandas, DrawingType.hexbin, None, {})
         drawings.append(drawing)
         return drawings
+
+    @classmethod
+    def init_graph_type_mapping(cls):
+        cls.graph_type_to_normalized_data = {
+            "scatter": cls.get_scatter_drawings_with_normalized_data,
+            "line": cls.get_line_drawings_with_normalized_data,
+            "pie": cls.get_pie_drawings_with_normalized_data,
+            # 'bar': lambda data, x, y: cls.get_bar_drawings_with_normalized_data(data, x, y),
+            "box": cls.get_box_drawings_with_normalized_data,
+            "dis": cls.get_dis_drawings_with_normalized_data,
+        }
+
+    graph_type_to_normalized_data = {}
 
     @staticmethod
     def replace_plots(drawings: DrawingsStorage) -> None:
@@ -438,3 +409,5 @@ class PandasHandler:
         pandas.DataFrame.boxplot = PandasHandler._dframe_boxplot
 
         PandasHandler._replaced = False
+
+PandasHandler.init_graph_type_mapping()

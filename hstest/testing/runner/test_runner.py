@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import typing
 
+from hstest.check_result import CheckResult, correct
+
 if typing.TYPE_CHECKING:
-    from hstest.check_result import CheckResult
     from hstest.test_case.test_case import TestCase
     from hstest.testing.test_run import TestRun
 
@@ -16,5 +17,4 @@ class TestRunner:
         pass
 
     def test(self, test_run: TestRun) -> CheckResult | None:
-        msg = "Test method is not implemented"
-        raise NotImplementedError(msg)
+        return correct()
