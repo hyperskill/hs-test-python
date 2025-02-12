@@ -177,7 +177,7 @@ class PandasHandler:
         return drawings
 
     @classmethod
-    def init_graph_type_mapping(cls):
+    def init_graph_type_mapping(cls) -> None:
         cls.graph_type_to_normalized_data = {
             "scatter": cls.get_scatter_drawings_with_normalized_data,
             "line": cls.get_line_drawings_with_normalized_data,
@@ -409,5 +409,6 @@ class PandasHandler:
         pandas.DataFrame.boxplot = PandasHandler._dframe_boxplot
 
         PandasHandler._replaced = False
+
 
 PandasHandler.init_graph_type_mapping()
