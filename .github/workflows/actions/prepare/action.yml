@@ -29,3 +29,19 @@ runs:
     - name: Install dependencies and package
       run: poetry install --no-interaction --no-ansi
       shell: bash
+
+    # Setup Node.js for JavaScript tests
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # Install Node.js dependencies
+    - name: Install Node.js dependencies
+      run: npm install
+      shell: bash
+
+    # Setup Go for Go language tests
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+        cache: false

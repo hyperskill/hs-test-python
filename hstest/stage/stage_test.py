@@ -173,13 +173,13 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             SystemHandler.tear_down()
             return passed(is_unittest)
 
-        except BaseException:
+        except BaseException as ex:  
             if need_tear_down:
                 try:
                     StageTest.curr_test_run.tear_down()
                 except BaseException as new_ex:
                     if isinstance(new_ex, OutcomeError):
-                        ex = new_ex
+                        ex = new_ex  
 
             build = "hs-test-python"
 
@@ -214,7 +214,6 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
                         fail_text = "Unexpected error\n\n" + report + "\n\n" + traceback
 
                     except BaseException:
-                        # no code execution here allowed so not to throw an exception
                         fail_text = "Unexpected error\n\nCannot check the submission\n\n" + report
 
             with contextlib.suppress(BaseException):
