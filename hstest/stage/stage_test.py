@@ -132,8 +132,10 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
         )
 
     def run_tests(self, *, debug=False, is_unittest: bool = False) -> tuple[int, str]:
-        curr_test: int = 0
-        need_tear_down: bool = False
+        curr_test = 0
+        need_tear_down = False
+        ex = None
+
         try:
             if is_tests(self):
                 self.is_tests = True
@@ -173,7 +175,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             SystemHandler.tear_down()
             return passed(is_unittest)
 
-        except BaseException:
+        except BaseException as ex:
             if need_tear_down:
                 try:
                     StageTest.curr_test_run.tear_down()

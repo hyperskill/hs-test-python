@@ -11,6 +11,10 @@ CheckResult.wrong = lambda feedback: CheckResult(False, feedback)
 
 @unittest.skipIf(is_windows(), reason="Windows doesn't support bash projects")
 class CoffeeMachineTest(StageTest):
+    def __init__(self, methodName: str = "test_run_unittest"):
+        source = os.path.join(os.path.dirname(__file__), "main.sh")
+        super().__init__(methodName, source=source)
+
     def generate(self) -> List[TestCase]:
         return TestCase.from_stepik(
             [("25", "25"), ("125", "125"), ("1", "1"), ("123", "123")]
