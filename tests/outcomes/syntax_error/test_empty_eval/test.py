@@ -12,8 +12,11 @@ class TestEmptyEval(UserErrorTest):
         Traceback (most recent call last):
           File "main.py", line 1, in <module>
             print(eval(""))
-          File "<string>", line 0""",
-        "SyntaxError: "
+                  ^^^^^^^^
+          File "<string>", line 0
+            
+        SyntaxError: invalid syntax
+        """
     ]
 
     def generate(self) -> List[TestCase]:

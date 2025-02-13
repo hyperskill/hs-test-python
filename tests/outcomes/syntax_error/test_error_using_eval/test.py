@@ -12,9 +12,12 @@ class TestEmptyEval(UserErrorTest):
         Traceback (most recent call last):
           File "main.py", line 1, in <module>
             print(eval(")"))
+                  ^^^^^^^^^
           File "<string>", line 1
-        """,
-        "SyntaxError: "
+            )
+            ^
+        SyntaxError: unmatched ')'
+        """
     ]
 
     def generate(self) -> List[TestCase]:
