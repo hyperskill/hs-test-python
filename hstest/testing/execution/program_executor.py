@@ -70,7 +70,7 @@ class ProgramExecutor:
             StageTest.curr_test_run.set_error_in_test(
                 ErrorWithFeedback(
                     f"The program {self} has unexpectedly terminated.\n"
-                    "It finished execution too early, should continue running."
+                    + "It finished execution too early, should continue running."
                 )
             )
             raise TestedProgramFinishedEarly
@@ -80,11 +80,10 @@ class ProgramExecutor:
             return ""
 
         if not self.is_waiting_input():
-            msg = (
+            raise UnexpectedError(
                 f"Program {self} is not waiting for the input "
-                f'(state == "{self._machine.state}")'
+                + f'(state == "{self._machine.state}")'
             )
-            raise UnexpectedError(msg)
 
         if self.__no_more_input:
             msg = f"Can't pass input to the program {self} - input was prohibited."
@@ -122,7 +121,7 @@ class ProgramExecutor:
         self._input = None
         return input_local
 
-    def set_return_output_after_execution(self, *, value: bool) -> None:
+    def set_return_output_after_execution(self, value: bool) -> None:
         self.__return_output_after_execution = value
 
     def is_finished(self) -> bool:
@@ -153,7 +152,7 @@ class ProgramExecutor:
         self.__in_background = False
         self._machine.wait_state(ProgramState.WAITING)
 
-    def is_in_background(self) -> bool:
+    def is_in_background(self):
         return self.__in_background
 
     def tear_down(self) -> None:

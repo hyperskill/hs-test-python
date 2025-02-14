@@ -8,7 +8,7 @@ from hstest.test_case.test_case import DEFAULT_TIME_LIMIT
 
 
 def dynamic_test(
-    func: Any | None = None,
+    func=None,
     *,
     order: int = 0,
     time_limit: int = DEFAULT_TIME_LIMIT,
@@ -16,16 +16,16 @@ def dynamic_test(
     feedback: str = "",
     repeat: int = 1,
     files: dict[str, str] | None = None,
-) -> Any:
+):
     """Decorator for creating dynamic tests."""
 
     class DynamicTestingMethod:
-        def __init__(self, fn: Any) -> None:
+        def __init__(self, fn) -> None:
             self.fn = fn
 
-        def __set_name__(self, owner: StageTest, name: str) -> None:
+        def __set_name__(self, owner, name):
             # do something with owner, i.e.
-            # print(f"Decorating {self.fn} and using {owner}")  # noqa: ERA001
+            # print(f"Decorating {self.fn} and using {owner}")
             self.fn.class_name = owner.__name__
 
             # then replace ourself with the original method

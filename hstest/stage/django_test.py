@@ -17,7 +17,7 @@ class DjangoTest(StageTest):
     test_database: str = attach.test_database
     use_database: bool = attach.use_database
 
-    def __init__(self, args: str = "", *, source: str = "") -> None:
+    def __init__(self, args="", *, source: str = "") -> None:
         super().__init__(args, source=source)
         self.attach.use_database = self.use_database
         loop_detector.working = False
@@ -25,7 +25,7 @@ class DjangoTest(StageTest):
 
     def read_page(self, link: str) -> str:
         """Deprecated, use get(...) instead."""
-        return clean_text(urlopen(link).read().decode())  # noqa: S310
+        return clean_text(urlopen(link).read().decode())
 
     def get_url(self, link: str = "") -> str:
         if link.startswith("/"):
@@ -35,4 +35,4 @@ class DjangoTest(StageTest):
     def get(self, link: str) -> str:
         if not link.startswith("http://"):
             link = self.get_url(link)
-        return clean_text(urlopen(link).read().decode())  # noqa: S310
+        return clean_text(urlopen(link).read().decode())

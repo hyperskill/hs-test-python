@@ -5,19 +5,19 @@ class OutcomeError(BaseException):
     pass
 
 
-class SyntaxException(OutcomeError):  # noqa: N818
+class SyntaxException(OutcomeError):
     def __init__(self, exception: SyntaxError, file: str) -> None:
         self.file: str = file
         self.exception: SyntaxError = exception
 
 
-class ExceptionWithFeedback(OutcomeError):  # noqa: N818
+class ExceptionWithFeedback(OutcomeError):
     def __init__(self, error_text: str, real_exception: BaseException | None) -> None:
         self.error_text: str = error_text
         self.real_exception: BaseException = real_exception
 
 
-class ErrorWithFeedback(OutcomeError):  # noqa: N818
+class ErrorWithFeedback(OutcomeError):
     def __init__(self, error_text: str) -> None:
         self.error_text = error_text
 
@@ -38,10 +38,10 @@ class CompilationError(OutcomeError):
         self.error_text = error_text
 
 
-class TestPassed(OutcomeError):  # noqa: N818
+class TestPassed(OutcomeError):
     pass
 
 
-class WrongAnswer(OutcomeError):  # noqa: N818
+class WrongAnswer(OutcomeError):
     def __init__(self, feedback: str) -> None:
         self.feedback = feedback

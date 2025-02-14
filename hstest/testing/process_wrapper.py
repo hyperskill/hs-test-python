@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import subprocess  # noqa: S404
+import subprocess
 import sys
 from threading import Lock, Thread
 from time import sleep
-from typing import IO
 
 from psutil import NoSuchProcess, Process
 
@@ -22,11 +21,7 @@ class ProcessWrapper:
     initial_idle_wait_time = 150
 
     def __init__(
-        self,
-        *args,
-        check_early_finish: bool = False,
-        register_output: bool = True,
-        register_io_handler: bool = False,
+        self, *args, check_early_finish=False, register_output=True, register_io_handler=False
     ) -> None:
         self.lock = Lock()
 
@@ -54,7 +49,7 @@ class ProcessWrapper:
         self.register_io_handler = register_io_handler
         self._group = None
 
-    def start(self) -> ProcessWrapper:
+    def start(self):
         command = " ".join(map(str, self.args))
 
         if self.process is not None:
@@ -73,7 +68,7 @@ class ProcessWrapper:
                 args = ["cmd", "/c", *args]
 
             self.process = subprocess.Popen(
-                args,  # noqa: S603
+                args,
                 bufsize=0,
                 universal_newlines=not self._use_byte_stream,
                 stdout=subprocess.PIPE,
@@ -81,7 +76,7 @@ class ProcessWrapper:
                 stdin=subprocess.PIPE,
                 encoding="utf-8" if not self._use_byte_stream else None,
             )
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             from hstest import StageTest
 
             StageTest.curr_test_run.set_error_in_test(
@@ -110,14 +105,7 @@ class ProcessWrapper:
         if self._alive and self.process.returncode is not None:
             self._alive = False
 
-    def check_pipe(
-        self,
-        read_pipe: IO,
-        write_pipe: IO,
-        *,
-        write_stdout: bool = False,
-        write_stderr: bool = False,
-    ) -> None:
+    def check_pipe(self, read_pipe, write_pipe, write_stdout=False, write_stderr=False) -> None:
         pipe_name = "stdout" if write_stdout else "stderr"
 
         with self.lock:
@@ -252,7 +240,7 @@ class ProcessWrapper:
         self.cpu_load_history = []
         self.output_diff_history = []
 
-    def is_finished(self, *, need_wait_output: bool = True) -> bool:
+    def is_finished(self, need_wait_output=True) -> bool:
         if not self.check_early_finish:
             return not self._alive
 

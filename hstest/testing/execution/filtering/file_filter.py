@@ -32,7 +32,7 @@ class FileFilter:
         self.filtered: set[File] = set()
 
     @staticmethod
-    def regex_filter(regex: str) -> Filter:
+    def regex_filter(regex: str):
         return lambda s: re.compile(regex, re.MULTILINE).search(s) is not None
 
     def init_filter(self, folder: Folder, sources: Sources) -> None:

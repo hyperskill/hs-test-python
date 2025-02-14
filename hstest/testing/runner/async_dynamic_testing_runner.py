@@ -54,7 +54,7 @@ class AsyncDynamicTestingRunner(TestRunner):
             return future.result(timeout=time_limit / 1000)
         except TimeoutError:
             test_run.set_error_in_test(TimeLimitException(time_limit))
-        except BaseException as ex:  # noqa: BLE001
+        except BaseException as ex:
             test_run.set_error_in_test(ex)
         finally:
             test_run.invalidate_handlers()
@@ -73,7 +73,7 @@ class AsyncDynamicTestingRunner(TestRunner):
             if error is None:
                 try:
                     return test_case.check_func(OutputHandler.get_output(), test_case.attach)
-                except BaseException as ex:  # noqa: BLE001
+                except BaseException as ex:
                     error = ex
                     test_run.set_error_in_test(error)
 

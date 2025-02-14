@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 import runpy
 import sys
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
@@ -27,7 +26,7 @@ class MainModuleExecutor(ProgramExecutor):
         self.__executor: DaemonThreadPoolExecutor | None = None
         self.__task: Future | None = None
         self.__group = None
-        self.working_directory_before = Path.cwd().resolve()
+        self.working_directory_before = os.path.abspath(os.getcwd())
 
     def _invoke_method(self, *args: str) -> None:
         from hstest.stage_test import StageTest
@@ -42,7 +41,7 @@ class MainModuleExecutor(ProgramExecutor):
 
             self._machine.set_state(ProgramState.FINISHED)
 
-        except BaseException as ex:  # noqa: BLE001
+        except BaseException as ex:
             if StageTest.curr_test_run.error_in_test is None:
                 # ExitException is thrown in case of exit() or quit()
                 # consider them like normal exit

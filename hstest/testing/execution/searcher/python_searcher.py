@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import os
 import re
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from hstest.dynamic.output.output_handler import OutputHandler
@@ -27,14 +27,14 @@ class PythonSearcher(BaseSearcher):
         def init_regexes(_: Folder, sources: Sources) -> None:
             import_regexes = {}
 
-            for file in sources:
+            for file, source in sources.items():
                 is_imported[file] = False
                 import_regexes[file] = [
                     re.compile(rf"(^|\n)import +[\w., ]*\b{file[:-3]}\b[\w., ]*", re.MULTILINE),
                     re.compile(rf"(^|\n)from +\.? *\b{file[:-3]}\b +import +", re.MULTILINE),
                 ]
 
-            for source in sources.values():
+            for file, source in sources.items():
                 for f, (r1, r2) in import_regexes.items():
                     if r1.search(source) is not None or r2.search(source) is not None:
                         is_imported[f] = True
@@ -49,7 +49,7 @@ class PythonSearcher(BaseSearcher):
         )
 
     def find(self, source: str | None) -> PythonRunnableFile:
-        OutputHandler.print(f"PythonSearcher source = {source}, cwd = {Path.cwd()}")
+        OutputHandler.print(f"PythonSearcher source = {source}, cwd = {os.getcwd()}")
         runnable = super().find(source)
         OutputHandler.print(f"PythonSearcher found runnable: {runnable.folder}/{runnable.file}")
         return PythonRunnableFile(

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING, Union
 
 from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
 from hstest.dynamic.input.dynamic_testing import to_dynamic_testing
@@ -15,15 +15,15 @@ if TYPE_CHECKING:
 
     SimpleStepikTest = str
     AdvancedStepikTest = tuple[str, Any]
-    StepikTest = SimpleStepikTest | AdvancedStepikTest
+    StepikTest = Union[SimpleStepikTest, AdvancedStepikTest]
 
     CheckFunction = Callable[[str, Any], CheckResult]
 
     PredefinedInput = str
-    RuntimeEvaluatedInput = [
-        PredefinedInput | InputFunction | tuple[int, InputFunction] | DynamicInputFunction
+    RuntimeEvaluatedInput = Union[
+        PredefinedInput, InputFunction, tuple[int, InputFunction], DynamicInputFunction
     ]
-    DynamicInput = PredefinedInput | list[RuntimeEvaluatedInput]
+    DynamicInput = Union[PredefinedInput, list[RuntimeEvaluatedInput]]
 
 DEFAULT_TIME_LIMIT: int = 15000
 
@@ -66,7 +66,7 @@ class TestCase:
             if attach is not None:
                 msg = "Attach is not None " "but copying from stdin is specified"
                 raise UnexpectedError(msg)
-            if not isinstance(stdin, str):
+            if type(stdin) != str:
                 msg = (
                     "To copy stdin to attach stdin should be of type str "
                     f"but found type {type(stdin)}"
@@ -74,29 +74,29 @@ class TestCase:
                 raise UnexpectedError(msg)
             self.attach = stdin
 
-        if isinstance(stdin, str):
+        if type(stdin) == str:
             self.input = stdin
-            self.input_funcs = [DynamicInputFunction(1, lambda _: stdin)]
+            self.input_funcs = [DynamicInputFunction(1, lambda x: stdin)]
         else:
-            if not isinstance(stdin, list):
+            if type(stdin) != list:
                 msg = "Stdin should be either of type str or list " f"but found type {type(stdin)}"
                 raise UnexpectedError(msg)
-            for elem in stdin:
-                if isinstance(elem, DynamicInputFunction):
+            for elem in stdin:  # type: RuntimeEvaluatedInput
+                if type(elem) == DynamicInputFunction:
                     self.input_funcs += [elem]
 
-                elif isinstance(elem, str):
-                    self.input_funcs += [DynamicInputFunction(1, lambda _, inp=elem: inp)]
+                elif type(elem) == str:
+                    self.input_funcs += [DynamicInputFunction(1, lambda x, inp=elem: inp)]
 
                 elif str(type(elem)) in {"<class 'function'>", "<class 'method'>"}:
                     self.input_funcs += [DynamicInputFunction(1, elem)]
 
                 elif type(elem) in {tuple, list}:
-                    if len(elem) == 2:  # noqa: PLR2004
+                    if len(elem) == 2:
                         trigger_count: int = elem[0]
                         input_function: InputFunction = elem[1]
 
-                        if not isinstance(trigger_count, int):
+                        if type(trigger_count) != int:
                             msg = (
                                 f"Stdin element's 1st element should be of type int, "
                                 f"found {type(trigger_count)}"
@@ -152,6 +152,6 @@ class SimpleTestCase(TestCase):
         super().__init__(stdin=stdin, attach=stdout, feedback=feedback, **kwargs)
         self.check_func = self._custom_check
 
-    def _custom_check(self, reply: str, expected: str) -> CheckResult:
+    def _custom_check(self, reply: str, expected: str):
         is_correct = reply.strip() == expected.strip()
         return CheckResult(is_correct, "")

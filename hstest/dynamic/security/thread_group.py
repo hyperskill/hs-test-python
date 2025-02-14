@@ -17,16 +17,16 @@ class ThreadGroup:
 
         curr = current_thread()
         if hasattr(curr, "_group"):
-            self._parent: ThreadGroup | None = curr._group  # noqa: SLF001
+            self._parent: ThreadGroup | None = curr._group
         else:
             self._parent: ThreadGroup | None = None
 
     @property
-    def name(self) -> str:
+    def name(self):
         return self._name
 
     @property
-    def parent(self) -> ThreadGroup | None:
+    def parent(self):
         return self._parent
 
     def add(self, thread: Thread) -> None:
