@@ -1,20 +1,169 @@
-[tool.isort]
-py_version=36
-line_length = 100
-multi_line_output = 6
-honor_noqa = true
-order_by_type = false
-use_parentheses = true
-combine_as_imports = true
-only_modified = true
-lexicographical = true
-group_by_package = true
-force_alphabetical_sort_within_sections = true
-extend_skip_glob = [
-    "tests/projects",
-    "tests/outcomes/**/main*.py",
-    "tests/outcomes/**/cleaning.py",
-    "tests/outcomes/**/pandas_*.py",
-    "tests/outcomes/**/matplotlib_*.py",
-    "tests/outcomes/**/seaborn_*.py",
+[tool.poetry]
+name = "hs-test-python"
+version = "0.1.0"
+description = ""
+authors = ["Hyperskill Team"]
+readme = "README.md"
+packages = [
+    { include = "hstest" },
 ]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+# psutil with platform and Python version markers
+psutil = [
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32' and python_version >= '3.10' and python_version < '3.11'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32' and python_version >= '3.11' and python_version < '3.12'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32' and python_version >= '3.12' and python_version < '3.13'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version >= '3.10' and python_version < '3.11'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version >= '3.11' and python_version < '3.12'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version >= '3.12' and python_version < '3.13'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version >= '3.10' and python_version < '3.11'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version >= '3.11' and python_version < '3.12'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", markers = "sys_platform == 'darwin' and python_version >= '3.12' and python_version < '3.13'" }
+]
+
+mypy = "1.10.1"
+pandas = "2.2.2"
+ruff = "0.6.0"
+seaborn = "0.13.2"
+scipy = "^1.12.0"
+matplotlib = "^3.9.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "tests/outcomes",
+    "tests/projects",
+    "tests/sql",
+    "venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "ALL",
+]
+ignore = [
+    "ANN002", # Missing type annotation for `*args`
+    "ANN003", # Missing type annotation for `**kwargs`
+    "ANN101", # Missing type annotation for `self` in method
+    "ANN102", # Missing type annotation for `cls` in classmethod
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in
+    "ARG001", # Unused function argument
+    "ARG002", # Unused method argument
+    "ARG004", # Unused static method argument
+    "CPY001", # Missing copyright notice at top of file
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D106", # Missing docstring in public nested class
+    "D107", # Missing docstring in __init__
+    "E203", # Whitespace before ':'
+    "EXE002", # The file is executable but no shebang is present
+    "FBT003", # Boolean positional value in function call
+    "FIX002", # Line contains TODO, consider resolving the issue
+    "N806", # Variable in function should be lowercase
+    "PLC0415", # `import` should be at the top-level of a file
+    "PLC1901", # `record['bio'] == ''` can be simplified to `not record['bio']` as an empty string is falsey
+    "PLR0904", # Too many public methods
+    "PLR0916", # Too many Boolean expressions
+    "PLR6301", # Method could be a function, class method, or static method
+    "PT", # Use a regular `assert` instead of unittest-style `assertEqual`
+    "S101", # Use of `assert` detected
+    "TD002", # Missing author in TODO
+    "TD003", # Missing issue link on the line following this TODO
+    # Ruff format recommend disable trid rule
+    "COM812", # Trailing comma missing
+    "COM819", # Checks for the presence of prohibited trailing commas
+    "D206", # Docstring should be indented with spaces, not tabs
+    "D300", # Use """triple double quotes"""
+    "E111", # Indentation is not a multiple of four
+    "E114", # Indentation is not a multiple of four (comment)
+    "E117", # Over-indented
+    "ISC001", # Conflict with ruff format | Checks for implicitly concatenated strings on a single line.
+    "ISC002", # Checks for implicitly concatenated strings across multiple lines.
+    "Q000", # Conflict with ruff format | Remove bad quotes
+    "Q001", # Checks for multiline strings that use single quotes or double quotes
+    "Q002", # Checks for docstrings that use single quotes or double quotes
+    "Q003", # Conflict with ruff format | Change outer quotes to avoid escaping inner quotes
+    "W191", # Indentation contains tabs
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 56
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-args = 11
+max-branches = 27
+max-returns = 7
+max-statements = 153
+max-nested-blocks = 7
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+order-by-type = false
+required-imports = ["from __future__ import annotations"]
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+explicit_package_bases = true
+ignore_errors = false
+ignore_missing_imports = true
+implicit_reexport = true
+strict_equality = true
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+exclude = [
+    "tests/outcomes",
+    "tests/projects",
+    "tests/sql",
+    "venv",
+]
+
+[tool.cibuildwheel]
+test-command = "pytest {project}/tests"
+test-extras = ["test"]
+test-skip = ["*universal2:arm64"]
+# Временно пропускаем сборку для PyPy
+skip = ["pp*"]
