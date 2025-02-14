@@ -12,12 +12,14 @@ class TestEmptyEval(UserErrorTest):
         Traceback (most recent call last):
           File "main.py", line 2, in <module>
             print(eval(")"))
+                  ^^^^^^^^^
           File "<string>", line 1
-        """,
-        "SyntaxError: ",
-        """
+            )
+            ^
+        SyntaxError: unmatched ')'
+        
         Please find below the output of your program during this failed test.
-
+        
         ---
         
         123

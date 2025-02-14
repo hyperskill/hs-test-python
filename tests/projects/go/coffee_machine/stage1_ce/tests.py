@@ -23,7 +23,7 @@ class CoffeeMachineTest(UserErrorTest):
     contain = f"""
     Compilation error
 
-    .{os.sep}main.go:4:2: imported and not used: "fmt"
+    .{os.sep}main.go:4:2: "fmt" imported and not used
     .{os.sep}main.go:8:2: undefined: Println
     """
 
