@@ -50,15 +50,6 @@ class PandasHandler:
         "kde": DrawingType.dis,
     }
 
-    graph_type_to_normalized_data = {
-        "scatter": PandasHandler.get_scatter_drawings_with_normalized_data,
-        "line": PandasHandler.get_line_drawings_with_normalized_data,
-        "pie": PandasHandler.get_pie_drawings_with_normalized_data,
-        # 'bar': lambda data, x, y: PandasHandler.get_bar_drawings_with_normalized_data(data, x, y),
-        "box": PandasHandler.get_box_drawings_with_normalized_data,
-        "dis": PandasHandler.get_dis_drawings_with_normalized_data,
-    }
-
     @staticmethod
     def get_line_drawings_with_normalized_data(data, x, y):
         drawings = []
@@ -417,3 +408,12 @@ class PandasHandler:
         pandas.DataFrame.boxplot = PandasHandler._dframe_boxplot
 
         PandasHandler._replaced = False
+
+    graph_type_to_normalized_data = {
+        "scatter": get_scatter_drawings_with_normalized_data,
+        "line": get_line_drawings_with_normalized_data,
+        "pie": get_pie_drawings_with_normalized_data,
+        # 'bar': lambda data, x, y: get_bar_drawings_with_normalized_data(data, x, y),
+        "box": get_box_drawings_with_normalized_data,
+        "dis": get_dis_drawings_with_normalized_data,
+    }
