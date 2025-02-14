@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from threading import current_thread, Lock
 from typing import Any, TYPE_CHECKING
 
@@ -18,7 +20,7 @@ class SystemHandler:
     __locker_thread = None
 
     @staticmethod
-    def set_up():
+    def set_up() -> None:
         SystemHandler._lock_system_for_testing()
 
         OutputHandler.replace_stdout()
@@ -27,7 +29,7 @@ class SystemHandler:
         ThreadHandler.install_thread_group()
 
     @staticmethod
-    def tear_down():
+    def tear_down() -> None:
         SystemHandler._unlock_system_for_testing()
 
         OutputHandler.revert_stdout()
@@ -36,33 +38,33 @@ class SystemHandler:
         ThreadHandler.uninstall_thread_group()
 
     @staticmethod
-    def _lock_system_for_testing():
+    def _lock_system_for_testing() -> None:
         with SystemHandler.__lock:
             if SystemHandler.__locked:
-                raise ErrorWithFeedback(
-                    "Cannot start the testing process more than once")
+                msg = "Cannot start the testing process more than once"
+                raise ErrorWithFeedback(msg)
             SystemHandler.__locked = True
             SystemHandler.__locker_thread = current_thread()
 
     @staticmethod
-    def _unlock_system_for_testing():
+    def _unlock_system_for_testing() -> None:
         if current_thread() != SystemHandler.__locker_thread:
-            raise ErrorWithFeedback(
-                "Cannot tear down the testing process from the other thread")
+            msg = "Cannot tear down the testing process from the other thread"
+            raise ErrorWithFeedback(msg)
 
         with SystemHandler.__lock:
             if not SystemHandler.__locked:
-                raise ErrorWithFeedback(
-                    "Cannot tear down the testing process more than once")
+                msg = "Cannot tear down the testing process more than once"
+                raise ErrorWithFeedback(msg)
             SystemHandler.__locked = False
             SystemHandler.__locker_thread = None
 
     @staticmethod
-    def install_handler(obj: Any, condition: 'Condition', input_func: 'DynamicTestFunction'):
+    def install_handler(obj: Any, condition: Condition, input_func: DynamicTestFunction) -> None:
         InputHandler.install_input_handler(obj, condition, input_func)
         OutputHandler.install_output_handler(obj, condition)
 
     @staticmethod
-    def uninstall_handler(obj: Any):
+    def uninstall_handler(obj: Any) -> None:
         InputHandler.uninstall_input_handler(obj)
         OutputHandler.uninstall_output_handler(obj)

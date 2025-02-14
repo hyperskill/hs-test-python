@@ -1,21 +1,21 @@
+from __future__ import annotations
+
 from inspect import cleandoc
-from typing import List, Union
 
 from hstest import StageTest
 
 
 class ExpectedFailTest(StageTest):
-    _base_contain: Union[str, List[str]] = []
-    _base_not_contain: Union[str, List[str]] = []
+    _base_contain: str | list[str] = []
+    _base_not_contain: str | list[str] = []
 
-    contain: Union[str, List[str]] = []
-    not_contain: Union[str, List[str]] = []
+    contain: str | list[str] = []
+    not_contain: str | list[str] = []
 
-    def __init__(self, args):
+    def __init__(self, args) -> None:
         super().__init__(args)
 
-    def test_run_unittest(self):
-
+    def test_run_unittest(self) -> None:
         if not self.contain and not self.not_contain:
             self.fail("'contain' or 'not_contain' should not be empty")
 
