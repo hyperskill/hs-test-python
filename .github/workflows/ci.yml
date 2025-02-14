@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - release
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint with ruff
+    runs-on: arc-runners-small
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: ./.github/workflows/actions/prepare
+        with:
+          python-version: "3.11"
+      - name: Check files using the ruff formatter
+        run: |
+          poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
+          poetry run ruff format .
+        shell: bash
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          fetch: false
+          default_author: github_actions
+          message: 'Backend: Auto format'
+          add: '.'
+
+  mypy:
+    name: Static Type Checking
+    runs-on: arc-runners-small
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/actions/prepare
+        with:
+          python-version: "3.12"
+      - name: Mypy
+        run: poetry run mypy .
+        shell: bash
+
+  test:
+    name: Run unit test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Self-hosted runner
+          - os: [ self-hosted, small ]
+            python-version: "3.10"
+          - os: [ self-hosted, small ]
+            python-version: "3.11"
+          - os: [ self-hosted, small ]
+            python-version: "3.12"
+          
+          # Windows
+          - os: windows-latest
+            python-version: "3.10.11"
+          - os: windows-latest
+            python-version: "3.11"
+          - os: windows-latest
+            python-version: "3.12"
+          
+          # macOS (arm64)
+          - os: macos-14
+            python-version: "3.11"
+          - os: macos-14
+            python-version: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/actions/prepare
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run Tests
+        run: poetry run python tests/testing.py
+        shell: bash
