@@ -58,11 +58,11 @@ jobs:
       matrix:
         include:
           # Self-hosted runner
-          - os: [ self-hosted, small ]
+          - os: arc-runners-small
             python-version: "3.10"
-          - os: [ self-hosted, small ]
+          - os: arc-runners-small
             python-version: "3.11"
-          - os: [ self-hosted, small ]
+          - os: arc-runners-small
             python-version: "3.12"
           
           # Windows
