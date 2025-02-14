@@ -12,8 +12,10 @@ class ExceptionInUserCodeTest(UserErrorTest):
     Traceback (most recent call last):
       File "main.py", line 3, in <module>
         print(0 / 0)
+              ~~^~~
       File "main.py", line 5, in <module>
         print(0 / 0)
+              ~~^~~
     ZeroDivisionError: division by zero
     
     Please find below the output of your program during this failed test.

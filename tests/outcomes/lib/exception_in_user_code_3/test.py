@@ -6,14 +6,15 @@ from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
 class ExceptionInUserCodeTest3(UserErrorTest):
-    contain = """
+    contain = '''
             Exception in test #1
 
             Traceback (most recent call last):
               File "main.py", line 2, in <module>
-                Coffee is ready!\"\"\", raise_error_here)
+                Coffee is ready!""", raise_error_here)
+                                     ^^^^^^^^^^^^^^^^
             NameError: name 'raise_error_here' is not defined
-            """
+            '''
 
     def generate(self) -> List[TestCase]:
         return [TestCase()]
