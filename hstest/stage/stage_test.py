@@ -174,7 +174,8 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             SystemHandler.tear_down()
             return passed(is_unittest)
 
-        except BaseException:
+        except BaseException as caught_ex:
+            ex = caught_ex
             if need_tear_down:
                 try:
                     StageTest.curr_test_run.tear_down()

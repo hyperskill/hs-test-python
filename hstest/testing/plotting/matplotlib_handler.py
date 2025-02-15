@@ -199,7 +199,9 @@ class MatplotlibHandler:
 
         import matplotlib as mpl
 
-        class CustomMatplotlibAxes(mpl.axes.Axes):
+        import matplotlib.axes
+
+        class CustomMatplotlibAxes(matplotlib.axes.Axes):
             def hist(self, x, *a, **kw) -> None:
                 hist(x, *a, **kw)
 
@@ -227,17 +229,15 @@ class MatplotlibHandler:
             def boxplot(self, x, **kwargs) -> None:
                 boxplot(x, **kwargs)
 
-        import matplotlib as mpl
-
         if not MatplotlibHandler._saved:
-            MatplotlibHandler._Axes = deepcopy(mpl.axes.Axes)
+            MatplotlibHandler._Axes = deepcopy(matplotlib.axes.Axes)
 
         # should be replaced before import matplotlib.pyplot as plt
-        mpl.axes.Axes = CustomMatplotlibAxes
+        matplotlib.axes.Axes = CustomMatplotlibAxes
 
         from matplotlib.projections import projection_registry
 
-        projection_registry.register(mpl.axes.Axes)
+        projection_registry.register(CustomMatplotlibAxes)
 
         import matplotlib.pyplot as plt
 
