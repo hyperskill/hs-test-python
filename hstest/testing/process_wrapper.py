@@ -71,10 +71,12 @@ class ProcessWrapper:
             # Set environment variables for proper encoding on Windows
             env = os.environ.copy()
             if is_windows():
-                env.update({
-                    'PYTHONIOENCODING': 'utf-8',
-                    'PYTHONLEGACYWINDOWSSTDIO': '0'  # Disable legacy stdio behavior on Windows
-                })
+                env.update(
+                    {
+                        "PYTHONIOENCODING": "utf-8",
+                        "PYTHONLEGACYWINDOWSSTDIO": "0",  # Disable legacy stdio behavior on Windows
+                    }
+                )
 
             self.process = subprocess.Popen(
                 args,
@@ -84,8 +86,8 @@ class ProcessWrapper:
                 stderr=subprocess.PIPE,
                 stdin=subprocess.PIPE,
                 encoding="utf-8" if not self._use_byte_stream else None,
-                errors='replace',  # Handle encoding errors gracefully
-                env=env
+                errors="replace",  # Handle encoding errors gracefully
+                env=env,
             )
         except Exception as e:
             from hstest import StageTest
