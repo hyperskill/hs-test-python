@@ -198,7 +198,6 @@ class MatplotlibHandler:
             drawings.append(drawing)
 
         import matplotlib as mpl
-
         import matplotlib.axes
 
         class CustomMatplotlibAxes(matplotlib.axes.Axes):
