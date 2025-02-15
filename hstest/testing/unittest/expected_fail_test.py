@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from inspect import cleandoc
 import re
-from typing import Any
+from inspect import cleandoc
 
 from hstest.stage.stage_test import StageTest
 
@@ -19,10 +18,9 @@ class ExpectedFailTest(StageTest):
 
     def normalize_error_message(self, message: str) -> str:
         # Remove error pointer markers added in Python 3.11+
-        message = re.sub(r'\s+[~^]+\s*', ' ', message)
+        message = re.sub(r"\s+[~^]+\s*", " ", message)
         # Normalize whitespace and line breaks
-        message = ' '.join(message.split())
-        return message
+        return " ".join(message.split())
 
     def test_run_unittest(self) -> None:
         if not self.contain and not self.not_contain:
@@ -48,10 +46,16 @@ class ExpectedFailTest(StageTest):
 
         for item in should_contain:
             normalized_item = self.normalize_error_message(cleandoc(item))
-            self.assertIn(normalized_item, normalized_feedback,
-                         f"Expected to find:\n{normalized_item}\nin:\n{normalized_feedback}")
+            self.assertIn(
+                normalized_item,
+                normalized_feedback,
+                f"Expected to find:\n{normalized_item}\nin:\n{normalized_feedback}",
+            )
 
         for item in should_not_contain:
             normalized_item = self.normalize_error_message(cleandoc(item))
-            self.assertNotIn(normalized_item, normalized_feedback,
-                           f"Expected NOT to find:\n{normalized_item}\nin:\n{normalized_feedback}")
+            self.assertNotIn(
+                normalized_item,
+                normalized_feedback,
+                f"Expected NOT to find:\n{normalized_item}\nin:\n{normalized_feedback}",
+            )
