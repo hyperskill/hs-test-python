@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint with ruff
+    name: Format and Lint
     runs-on: arc-runners-small
     timeout-minutes: 30
     steps:
@@ -21,14 +21,16 @@ jobs:
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+
       - uses: ./.github/workflows/actions/prepare
         with:
           python-version: "3.11"
-      - name: Check files using the ruff formatter
-        run: |
-          poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
-          poetry run ruff format .
-        shell: bash
+
+      # Format code
+      - run: poetry run ruff --fix --unsafe-fixes --preview --exit-zero .
+      - run: poetry run ruff format .
+
+      # Commit formatting changes
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
@@ -37,8 +39,14 @@ jobs:
           message: 'Backend: Auto format'
           add: '.'
 
+      # Check code style
+      - name: Check files using ruff
+        run: poetry run ruff check --no-fix .
+        shell: bash
+
   mypy:
     name: Static Type Checking
+    needs: lint
     runs-on: arc-runners-small
     timeout-minutes: 30
     steps:
@@ -52,6 +60,7 @@ jobs:
 
   test:
     name: Run unit test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    needs: lint
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
