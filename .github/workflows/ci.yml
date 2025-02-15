@@ -68,10 +68,10 @@ jobs:
           # Windows
           - os: windows-latest
             python-version: "3.10"
-#          - os: windows-latest
-#            python-version: "3.11"
-#          - os: windows-latest
-#            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.11"
+          - os: windows-latest
+            python-version: "3.12"
 
 #          # macOS (arm64)
 #          - os: macos-14
