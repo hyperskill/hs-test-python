@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Format and Lint
+    name: Lint with ruff
     runs-on: arc-runners-small
     timeout-minutes: 30
     steps:
@@ -25,12 +25,11 @@ jobs:
       - uses: ./.github/workflows/actions/prepare
         with:
           python-version: "3.11"
-
-      # Format code
-      - run: poetry run ruff --fix --unsafe-fixes --preview --exit-zero .
-      - run: poetry run ruff format .
-
-      # Commit formatting changes
+      - name: Check files using the ruff formatter
+        run: |
+          poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
+          poetry run ruff format .
+        shell: bash
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
@@ -38,11 +37,6 @@ jobs:
           default_author: github_actions
           message: 'Backend: Auto format'
           add: '.'
-
-      # Check code style
-      - name: Check files using ruff
-        run: poetry run ruff check --no-fix .
-        shell: bash
 
   mypy:
     name: Static Type Checking
