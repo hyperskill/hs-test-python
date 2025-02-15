@@ -134,6 +134,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
     def run_tests(self, *, debug=False, is_unittest: bool = False) -> tuple[int, str]:
         curr_test: int = 0
         need_tear_down: bool = False
+        ex: OutcomeError = None
         try:
             if is_tests(self):
                 self.is_tests = True
