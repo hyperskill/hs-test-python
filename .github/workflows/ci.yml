@@ -85,6 +85,18 @@ jobs:
       - uses: ./.github/workflows/actions/prepare
         with:
           python-version: ${{ matrix.python-version }}
+      # Set environment variables for Windows
+      - name: Configure Windows environment
+        if: runner.os == 'Windows'
+        run: |
+          echo "PYTHONIOENCODING=utf-8" >> $GITHUB_ENV
+          echo "PYTHONUTF8=1" >> $GITHUB_ENV
+          echo "PYTHONLEGACYWINDOWSSTDIO=0" >> $GITHUB_ENV
+        shell: bash
       - name: Run Tests
         run: poetry run python tests/testing.py
         shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: 1
+          PYTHONLEGACYWINDOWSSTDIO: 0
