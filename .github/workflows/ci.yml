@@ -57,29 +57,29 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Self-hosted runner
-          - os: arc-runners-small
+          # Ubuntu
+          - os: ubuntu-latest
             python-version: "3.10"
-          - os: arc-runners-small
+          - os: ubuntu-latest
             python-version: "3.11"
-          - os: arc-runners-small
+          - os: ubuntu-latest
             python-version: "3.12"
           
-#          # Windows
-#          - os: windows-latest
-#            python-version: "3.10.11"
-#          - os: windows-latest
-#            python-version: "3.11"
-#          - os: windows-latest
-#            python-version: "3.12"
-#
-#          # macOS (arm64)
-#          - os: macos-14
-#            python-version: "3.10"
-#          - os: macos-14
-#            python-version: "3.11"
-#          - os: macos-14
-#            python-version: "3.12"
+          # Windows
+          - os: windows-latest
+            python-version: "3.10.11"
+          - os: windows-latest
+            python-version: "3.11"
+          - os: windows-latest
+            python-version: "3.12"
+
+          # macOS (arm64)
+          - os: macos-14
+            python-version: "3.10"
+          - os: macos-14
+            python-version: "3.11"
+          - os: macos-14
+            python-version: "3.12"
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/workflows/actions/prepare
