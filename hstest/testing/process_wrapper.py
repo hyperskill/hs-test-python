@@ -275,21 +275,21 @@ class ProcessWrapper:
         return not self._alive
 
     def provide_input(self, stdin: str) -> None:
-        if not stdin.endswith('\n'):
-            stdin += '\n'
+        if not stdin.endswith("\n"):
+            stdin += "\n"
         try:
             if self._use_byte_stream:
-                stdin = stdin.encode('utf-8')
+                stdin = stdin.encode("utf-8")
                 self.process.stdin.write(stdin)
                 self.process.stdin.flush()
             else:
                 self.process.stdin.write(stdin)
                 self.process.stdin.flush()
-        except IOError as e:
+        except OSError:
             # Handle pipe errors gracefully
             if not self._alive:
                 return
-            raise e
+            raise
 
     def terminate(self) -> None:
         OutputHandler.print("Terminate called")
