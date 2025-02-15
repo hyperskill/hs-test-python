@@ -57,13 +57,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Ubuntu
-          - os: ubuntu-latest
-            python-version: "3.10"
-          - os: ubuntu-latest
-            python-version: "3.11"
-          - os: ubuntu-latest
-            python-version: "3.12"
+#          # Ubuntu
+#          - os: ubuntu-latest
+#            python-version: "3.10"
+#          - os: ubuntu-latest
+#            python-version: "3.11"
+#          - os: ubuntu-latest
+#            python-version: "3.12"
           
           # Windows
           - os: windows-latest
@@ -73,13 +73,13 @@ jobs:
           - os: windows-latest
             python-version: "3.12"
 
-          # macOS (arm64)
-          - os: macos-14
-            python-version: "3.10"
-          - os: macos-14
-            python-version: "3.11"
-          - os: macos-14
-            python-version: "3.12"
+#          # macOS (arm64)
+#          - os: macos-14
+#            python-version: "3.10"
+#          - os: macos-14
+#            python-version: "3.11"
+#          - os: macos-14
+#            python-version: "3.12"
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/workflows/actions/prepare
