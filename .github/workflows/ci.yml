@@ -27,8 +27,7 @@ jobs:
           python-version: "3.11"
       - name: Check files using the ruff formatter
         run: |
-          poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
-          poetry run ruff format .
+          poetry run ruff check --fix --unsafe-fixes --preview .
         shell: bash
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
