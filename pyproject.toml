@@ -50,6 +50,7 @@ exclude = [
     "tests/projects",
     "tests/sql",
     "venv",
+    "tests",
 ]
 
 [tool.ruff.lint]
