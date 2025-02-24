@@ -13,23 +13,20 @@ python = "^3.10"
 
 # psutil with platform and Python version markers
 psutil = [
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-win_amd64.whl", markers = "sys_platform == 'win32' and python_version >= '3.10' and python_version < '3.11'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-win_amd64.whl", markers = "sys_platform == 'win32' and python_version >= '3.11' and python_version < '3.12'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32' and python_version >= '3.12' and python_version < '3.13'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version >= '3.10' and python_version < '3.11'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version >= '3.11' and python_version < '3.12'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-linux_x86_64.whl", markers = "sys_platform == 'linux' and python_version >= '3.12' and python_version < '3.13'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version >= '3.10' and python_version < '3.11'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", markers = "sys_platform == 'darwin' and python_version >= '3.11' and python_version < '3.12'" },
-    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", markers = "sys_platform == 'darwin' and python_version >= '3.12' and python_version < '3.13'" }
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-win_amd64.whl", markers = "sys_platform == 'win32'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-linux_x86_64.whl", markers = "sys_platform == 'linux'" },
+    { url = "https://github.com/hyperskill/hs-test-python/releases/download/v11.0.26/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", markers = "sys_platform == 'darwin'" }
 ]
 
-mypy = "1.10.1"
 pandas = "2.2.2"
-ruff = "0.6.0"
 seaborn = "0.13.2"
 scipy = "^1.12.0"
 matplotlib = "^3.9.2"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "1.10.1"
+ruff = "0.6.0"
+pytest = "8.3.4"
 
 [build-system]
 requires = ["poetry-core"]
@@ -165,5 +162,4 @@ exclude = [
 test-command = "pytest {project}/tests"
 test-extras = ["test"]
 test-skip = ["*universal2:arm64"]
-# Временно пропускаем сборку для PyPy
 skip = ["pp*"]
