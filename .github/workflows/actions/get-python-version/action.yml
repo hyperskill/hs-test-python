@@ -1,0 +1,17 @@
+name: Get Python Version
+description: Read Python version from .python-version file
+
+outputs:
+  version:
+    description: Python version from .python-version file
+    value: ${{ steps.get-version.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - id: get-version
+      run: |
+        if [ -f .python-version ]; then
+          echo "version=$(head -n 1 .python-version)" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
