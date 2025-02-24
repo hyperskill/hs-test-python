@@ -62,9 +62,6 @@ exclude = [
     "build",
     "dist",
     "node_modules",
-    "tests/outcomes",
-    "tests/projects",
-    "tests/sql",
     "venv",
 ]
 
@@ -158,9 +155,7 @@ warn_unused_configs = true
 warn_unused_ignores = true
 
 exclude = [
-    "tests/outcomes",
-    "tests/projects",
-    "tests/sql",
+    "tests",
     "venv",
 ]
 
