@@ -22,11 +22,7 @@ runs:
     - name: Get Poetry version
       id: poetry-version
       run: |
-        if [ -f .poetry-version ]; then
-          echo "version=$(head -n 1 .poetry-version)" >> $GITHUB_OUTPUT
-        else
-          echo "version=1.7.1" >> $GITHUB_OUTPUT
-        fi
+        [ -f .poetry-version ] && echo "version=$(head -n 1 .poetry-version)" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Install Poetry (Unix)

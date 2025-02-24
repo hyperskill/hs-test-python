@@ -22,12 +22,14 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - uses: ./.github/workflows/actions/get-python-version
-        id: python-version
+      - name: Get Python version
+        id: python_version
+        run: echo "python_version=$(head -n 1 .python-version)" >> $GITHUB_OUTPUT
+        shell: bash
 
       - uses: ./.github/workflows/actions/prepare
         with:
-          python-version: ${{ steps.python-version.outputs.version }}
+          python-version: ${{ steps.python_version.outputs.python_version }}
 
       - name: Check files using the ruff formatter
         run: |
@@ -49,12 +51,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/workflows/actions/get-python-version
-        id: python-version
+      - name: Get Python version
+        id: python_version
+        run: echo "python_version=$(head -n 1 .python-version)" >> $GITHUB_OUTPUT
+        shell: bash
 
       - uses: ./.github/workflows/actions/prepare
         with:
-          python-version: ${{ steps.python-version.outputs.version }}
+          python-version: ${{ steps.python_version.outputs.python_version }}
 
       - name: Mypy
         run: poetry run mypy .
