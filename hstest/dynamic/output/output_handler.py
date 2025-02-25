@@ -1,4 +1,5 @@
-import io
+from __future__ import annotations
+
 import sys
 from typing import Any, TYPE_CHECKING
 
@@ -8,6 +9,8 @@ from hstest.dynamic.output.output_mock import OutputMock
 from hstest.dynamic.security.thread_group import ThreadGroup
 
 if TYPE_CHECKING:
+    import io
+
     from hstest.dynamic.input.input_mock import Condition
 
 
@@ -19,29 +22,26 @@ class OutputHandler:
     _mock_err: OutputMock = None
 
     @staticmethod
-    def print(obj):
+    def print(obj) -> None:
         if True:
             return
 
-        lines = obj.strip().split('\n')
+        lines = obj.strip().split("\n")
 
         group = ThreadGroup.curr_group()
 
-        if group:
-            name = group.name
-        else:
-            name = "Root"
+        name = group.name if group else "Root"
 
-        prepend = f'[{name}] '
+        prepend = f"[{name}] "
 
-        output = prepend + ('\n' + prepend).join(lines)
-        full = BLUE + output + '\n' + RESET
+        output = prepend + ("\n" + prepend).join(lines)
+        full = BLUE + output + "\n" + RESET
 
         if group:
             OutputHandler.get_real_out().write(full)
             OutputHandler.get_real_out().flush()
         else:
-            print(full, end='')
+            pass
 
     @staticmethod
     def get_real_out() -> io.TextIOWrapper:
@@ -52,7 +52,7 @@ class OutputHandler:
         return OutputHandler._mock_err.original
 
     @staticmethod
-    def replace_stdout():
+    def replace_stdout() -> None:
         OutputHandler._real_out = sys.stdout
         OutputHandler._real_err = sys.stderr
 
@@ -63,13 +63,13 @@ class OutputHandler:
         sys.stderr = OutputHandler._mock_err
 
     @staticmethod
-    def revert_stdout():
+    def revert_stdout() -> None:
         OutputHandler.reset_output()
         sys.stdout = OutputHandler._real_out
         sys.stderr = OutputHandler._real_err
 
     @staticmethod
-    def reset_output():
+    def reset_output() -> None:
         OutputHandler._mock_out.reset()
         OutputHandler._mock_err.reset()
 
@@ -90,18 +90,19 @@ class OutputHandler:
         return clean_text(OutputHandler._mock_out.partial(obj))
 
     @staticmethod
-    def inject_input(user_input: str):
+    def inject_input(user_input: str) -> None:
         from hstest.stage_test import StageTest
+
         if StageTest.curr_test_run is not None:
             StageTest.curr_test_run.set_input_used()
         OutputHandler._mock_out.inject_input(user_input)
 
     @staticmethod
-    def install_output_handler(obj: Any, condition: 'Condition'):
+    def install_output_handler(obj: Any, condition: Condition) -> None:
         OutputHandler._mock_out.install_output_handler(obj, condition)
         OutputHandler._mock_err.install_output_handler(obj, condition)
 
     @staticmethod
-    def uninstall_output_handler(obj: Any):
+    def uninstall_output_handler(obj: Any) -> None:
         OutputHandler._mock_out.uninstall_output_handler(obj)
         OutputHandler._mock_err.uninstall_output_handler(obj)

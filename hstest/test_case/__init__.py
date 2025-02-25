@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 __all__ = [
-    'TestCase',
-    'SimpleTestCase',
-    'CheckResult',
-    'correct',
-    'wrong',
+    "CheckResult",
+    "SimpleTestCase",
+    "TestCase",
+    "correct",
+    "wrong",
 ]
 
 from hstest.test_case.check_result import CheckResult, correct, wrong

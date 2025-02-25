@@ -1,10 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from hstest.common.reflection_utils import get_stacktrace, str_to_stacktrace
-from hstest.exception.outcomes import ExceptionWithFeedback
 from hstest.outcomes.outcome import Outcome
+
+if TYPE_CHECKING:
+    from hstest.exception.outcomes import ExceptionWithFeedback
 
 
 class ExceptionOutcome(Outcome):
-    def __init__(self, test_num: int, ex: ExceptionWithFeedback):
+    def __init__(self, test_num: int, ex: ExceptionWithFeedback) -> None:
         super().__init__()
         cause = ex.real_exception
         feedback = ex.error_text
@@ -17,13 +23,13 @@ class ExceptionOutcome(Outcome):
 
         else:
             self.stack_trace = str_to_stacktrace(feedback)
-            self.error_text = ''
+            self.error_text = ""
 
-        eof = 'EOFError: EOF when reading a line'
-        eof_feedback = 'Probably your program run out of input (tried to read more than expected)'
+        eof = "EOFError: EOF when reading a line"
+        eof_feedback = "Probably your program run out of input (tried to read more than expected)"
 
         if self.stack_trace.strip().endswith(eof):
-            self.error_text += '\n\n' + eof_feedback
+            self.error_text += "\n\n" + eof_feedback
 
     def get_type(self) -> str:
-        return 'Exception'
+        return "Exception"

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import builtins
 import os
 import signal
@@ -28,20 +30,20 @@ class ExitHandler:
         return ExitHandler._replaced
 
     @staticmethod
-    def replace_exit():
+    def replace_exit() -> None:
         if not ExitHandler._saved:
             ExitHandler._saved = True
-            ExitHandler._builtins_quit = builtins.quit if hasattr(builtins, 'quit') else None
-            ExitHandler._builtins_exit = builtins.exit if hasattr(builtins, 'exit') else None
-            ExitHandler._os_kill = os.kill if hasattr(os, 'kill') else None
-            ExitHandler._os__exit = os._exit if hasattr(os, '_exit') else None
-            ExitHandler._os_killpg = os.killpg if hasattr(os, 'killpg') else None
-            ExitHandler._sys_exit = sys.exit if hasattr(sys, 'exit') else None
+            ExitHandler._builtins_quit = builtins.quit if hasattr(builtins, "quit") else None
+            ExitHandler._builtins_exit = builtins.exit if hasattr(builtins, "exit") else None
+            ExitHandler._os_kill = os.kill if hasattr(os, "kill") else None
+            ExitHandler._os__exit = os._exit if hasattr(os, "_exit") else None
+            ExitHandler._os_killpg = os.killpg if hasattr(os, "killpg") else None
+            ExitHandler._sys_exit = sys.exit if hasattr(sys, "exit") else None
             ExitHandler._signal_pthread_kill = (
-                signal.pthread_kill if hasattr(signal, 'pthread_kill') else None
+                signal.pthread_kill if hasattr(signal, "pthread_kill") else None
             )
             ExitHandler._signal_siginterrupt = (
-                signal.siginterrupt if hasattr(signal, 'siginterrupt') else None
+                signal.siginterrupt if hasattr(signal, "siginterrupt") else None
             )
 
         builtins.quit = _throw_exit_exception
@@ -56,7 +58,7 @@ class ExitHandler:
         ExitHandler._replaced = True
 
     @staticmethod
-    def revert_exit():
+    def revert_exit() -> None:
         if ExitHandler._replaced:
             builtins.quit = ExitHandler._builtins_quit
             builtins.exit = ExitHandler._builtins_exit

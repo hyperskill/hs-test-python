@@ -1,53 +1,60 @@
+from __future__ import annotations
+
 import typing
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any
 
 from hstest.common.utils import clean_text
 from hstest.exception.outcomes import TestPassed, UnexpectedError, WrongAnswer
 from hstest.testing.tested_program import TestedProgram
 
 if typing.TYPE_CHECKING:
+    from collections.abc import Callable
+
     from hstest import CheckResult, StageTest, TestCase
     from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
 
-    DynamicTesting = Callable[[], Optional[CheckResult]]
-    DynamicTestingWithoutParams = Callable[[StageTest, Any], Optional[CheckResult]]
+    DynamicTesting = Callable[[], CheckResult | None]
+    DynamicTestingWithoutParams = Callable[[StageTest, Any], CheckResult | None]
 
 
 class DynamicTestElement:
-    def __init__(self,
-                 test: 'DynamicTestingWithoutParams',
-                 name: str,
-                 order: Tuple[int, int],
-                 repeat: int,
-                 time_limit: int,
-                 feedback: str,
-                 data: List[Any],
-                 files: Dict[str, str]):
+    def __init__(
+        self,
+        test: DynamicTestingWithoutParams,
+        name: str,
+        order: tuple[int, int],
+        repeat: int,
+        time_limit: int,
+        feedback: str,
+        data: list[Any],
+        files: dict[str, str],
+    ) -> None:
         self.test: DynamicTestingWithoutParams = test
-        self.name: str = f"Data passed to dynamic method \"{name}\""
+        self.name: str = f'Data passed to dynamic method "{name}"'
         self.method_name = name
-        self.order: Tuple[int, int] = order
+        self.order: tuple[int, int] = order
         self.repeat: int = repeat
         self.time_limit: int = time_limit
         self.feedback: str = feedback
-        self.data: Optional[List[Any]] = data
-        self.files: Optional[Dict[str, str]] = files
-        self.args_list: Optional[List[List[Any]]] = None
+        self.data: list[Any] | None = data
+        self.files: dict[str, str] | None = files
+        self.args_list: list[list[Any]] | None = None
 
-    def extract_parametrized_data(self):
+    def extract_parametrized_data(self) -> None:
         if self.data is None:
             self.data = [[]]
 
-        if type(self.data) not in [list, tuple]:
-            raise UnexpectedError(f"{self.name} should be of type "
-                                  f"\"list\" or \"tuple\", found {type(self.data)}.")
+        if type(self.data) not in {list, tuple}:
+            msg = f"{self.name} should be of type " f'"list" or "tuple", found {type(self.data)}.'
+            raise UnexpectedError(msg)
 
         if len(self.data) == 0:
-            raise UnexpectedError(f"{self.name} should not be empty.")
+            msg = f"{self.name} should not be empty."
+            raise UnexpectedError(msg)
 
         found_lists_inside = True
         for obj in self.data:
-            if type(obj) not in [list, tuple]:
+            if type(obj) not in {list, tuple}:
                 found_lists_inside = False
                 break
 
@@ -56,49 +63,57 @@ class DynamicTestElement:
         else:
             self.args_list = [[obj] for obj in self.data]
 
-    def check_errors(self):
+    def check_errors(self) -> None:
         if self.repeat < 0:
-            raise UnexpectedError(f'Dynamic test "{self.method_name}" '
-                                  f'should not be repeated < 0 times, found {self.repeat}')
+            msg = (
+                f'Dynamic test "{self.method_name}" '
+                f"should not be repeated < 0 times, found {self.repeat}"
+            )
+            raise UnexpectedError(msg)
 
         if self.files is not None:
             if type(self.files) != dict:
-                raise UnexpectedError(f"'Files' parameter in dynamic test should be of type "
-                                      f"\"dict\", found {type(self.files)}.")
+                msg = (
+                    f"'Files' parameter in dynamic test should be of type "
+                    f'"dict", found {type(self.files)}.'
+                )
+                raise UnexpectedError(msg)
 
             for k, v in self.files.items():
                 if type(k) != str:
-                    raise UnexpectedError(
+                    msg = (
                         f"All keys in 'files' parameter in dynamic test should be "
-                        f"of type \"str\", found {type(k)}."
+                        f'of type "str", found {type(k)}.'
                     )
+                    raise UnexpectedError(msg)
                 if type(v) != str:
-                    raise UnexpectedError(
+                    msg = (
                         f"All values in 'files' parameter in dynamic test should be "
-                        f"of type \"str\", found {type(v)}."
+                        f'of type "str", found {type(v)}.'
                     )
+                    raise UnexpectedError(msg)
 
-    def get_tests(self, obj) -> List['DynamicTesting']:
+    def get_tests(self, obj) -> list[DynamicTesting]:
         tests = []
-        for i in range(self.repeat):
+        for _i in range(self.repeat):
             for args in self.args_list:
                 tests += [lambda o=obj, a=args: self.test(o, *a)]
         return tests
 
 
-def to_dynamic_testing(source: str, args: List[str],
-                       input_funcs: List['DynamicInputFunction']) -> 'DynamicTesting':
+def to_dynamic_testing(
+    source: str, args: list[str], input_funcs: list[DynamicInputFunction]
+) -> DynamicTesting:
     from hstest.dynamic.input.dynamic_input_func import DynamicInputFunction
     from hstest.test_case.check_result import CheckResult
 
     class InputFunctionHandler:
-        def __init__(self, funcs: List[DynamicInputFunction]):
-            self.input_funcs: List[DynamicInputFunction] = []
+        def __init__(self, funcs: list[DynamicInputFunction]) -> None:
+            self.input_funcs: list[DynamicInputFunction] = []
             for func in funcs:
-                self.input_funcs += [
-                    DynamicInputFunction(func.trigger_count, func.input_function)]
+                self.input_funcs += [DynamicInputFunction(func.trigger_count, func.input_function)]
 
-        def eject_next_input(self, curr_output: str) -> Optional[str]:
+        def eject_next_input(self, curr_output: str) -> str | None:
             if len(self.input_funcs) == 0:
                 return None
 
@@ -109,22 +124,23 @@ def to_dynamic_testing(source: str, args: List[str],
 
             next_func = input_function.input_function
 
-            new_input: Optional[str]
+            new_input: str | None
             try:
                 obj = next_func(curr_output)
                 if isinstance(obj, str) or obj is None:
                     new_input = obj
                 elif isinstance(obj, CheckResult):
                     if obj.is_correct:
-                        raise TestPassed()
-                    else:
-                        raise WrongAnswer(obj.feedback)
+                        raise TestPassed
+                    raise WrongAnswer(obj.feedback)
                 else:
                     raise UnexpectedError(
-                        'Dynamic input should return ' +
-                        f'str or CheckResult objects only. Found: {type(obj)}')
+                        "Dynamic input should return "
+                        + f"str or CheckResult objects only. Found: {type(obj)}"
+                    )
             except BaseException as ex:
                 from hstest.stage_test import StageTest
+
                 StageTest.curr_test_run.set_error_in_test(ex)
                 return None
 
@@ -136,7 +152,7 @@ def to_dynamic_testing(source: str, args: List[str],
 
             return new_input
 
-    def dynamic_testing_function() -> Optional[CheckResult]:
+    def dynamic_testing_function() -> CheckResult | None:
         program = TestedProgram(source)
         output: str = program.start(*args)
 
@@ -154,15 +170,16 @@ def to_dynamic_testing(source: str, args: List[str],
     return dynamic_testing_function
 
 
-def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
+def search_dynamic_tests(obj: StageTest) -> list[TestCase]:
     from hstest.test_case.test_case import TestCase
-    methods: List[DynamicTestElement] = obj.dynamic_methods()
+
+    methods: list[DynamicTestElement] = obj.dynamic_methods()
 
     for m in methods:
         m.extract_parametrized_data()
         m.check_errors()
 
-    tests: List[TestCase] = []
+    tests: list[TestCase] = []
 
     for dte in sorted(methods, key=lambda x: x.order):
         for test in dte.get_tests(obj):
@@ -171,7 +188,7 @@ def search_dynamic_tests(obj: 'StageTest') -> List['TestCase']:
                     dynamic_testing=test,
                     time_limit=dte.time_limit,
                     feedback=dte.feedback,
-                    files=dte.files
+                    files=dte.files,
                 )
             ]
 

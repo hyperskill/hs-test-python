@@ -35,7 +35,7 @@ def plot():
     sns.violinplot(data=df, palette="Set3", bw=.2, cut=1, linewidth=1)
 
     flights_long = sns.load_dataset("flights")
-    flights = flights_long.pivot("month", "year", "passengers")
+    flights = flights_long.pivot(index="month", columns="year", values="passengers")
     sns.heatmap(flights, annot=True, fmt="d", linewidths=.5, ax=ax)
 
     tips = sns.load_dataset("tips")

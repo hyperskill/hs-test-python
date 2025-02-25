@@ -14,6 +14,7 @@ class FeedbackOnExceptionTest1(UserErrorTest):
     Traceback (most recent call last):
       File "main.py", line 2, in <module>
         print(1 / 0)
+              ~~^~~
     ZeroDivisionError: division by zero
     
     Please find below the output of your program during this failed test.

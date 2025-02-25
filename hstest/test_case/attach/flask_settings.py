@@ -1,6 +1,6 @@
-from typing import List, Tuple
+from __future__ import annotations
 
 
 class FlaskSettings:
-    sources: List[Tuple[str, int]] = []
-    tryout_ports: List[int] = [i for i in range(8000, 8101)]
+    sources: list[tuple[str, int]] = []
+    tryout_ports: list[int] = list(range(8000, 8101))

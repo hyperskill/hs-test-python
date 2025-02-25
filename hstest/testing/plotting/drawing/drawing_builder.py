@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from hstest.testing.plotting.drawing.drawing import Drawing
 from hstest.testing.plotting.drawing.drawing_type import DrawingType
 from hstest.testing.plotting.drawing_data_normalizer import DrawingDataNormalizer
