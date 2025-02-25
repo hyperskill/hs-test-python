@@ -107,7 +107,7 @@ def str_to_stacktrace(str_trace: str) -> str:
           exec(compile(contents+"\n", file, 'exec'), glob, loc) 
 
         Which will appear when testing locally inside PyCharm.
-        """  # noqa: W291, E501
+        """  # noqa: W291
         if f"{os.sep}JetBrains{os.sep}" in trace:
             continue
 
