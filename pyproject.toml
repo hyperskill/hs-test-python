@@ -94,6 +94,7 @@ ignore = [
     "D106", # Missing docstring in public nested class
     "D107", # Missing docstring in __init__
     "E203", # Whitespace before ':'
+    "ERA001", # Found commented-out code
     "INP001", # Implicit namespace package
     "PLR2004", # Magic value comparison
     "PTH100", # os.path.abspath used
