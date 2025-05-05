@@ -42,6 +42,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup PATH
+        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
