@@ -4,20 +4,32 @@ import inspect
 from typing import Any
 
 from hstest.stage_test import StageTest
-from hstest.test_case.test_case import DEFAULT_TIME_LIMIT
 
 
 def dynamic_test(
     func: Any | None = None,
     *,
-    order: int = 0,
-    time_limit: int = DEFAULT_TIME_LIMIT,
-    data: list[Any] | None = None,
-    feedback: str = "",
+    order: int | None = None,
+    data: Any = None,
+    time_limit: int | None = None,
+    feedback: str | None = None,
     repeat: int = 1,
     files: dict[str, str] | None = None,
 ) -> Any:
-    """Decorator for creating dynamic tests."""
+    """Decorator for creating dynamic tests.
+
+    Args:
+        func: Function to decorate
+        order: Order of test execution
+        data: Test data
+        time_limit: Time limit for test execution
+        feedback: Custom feedback message for the test
+        repeat: Number of times to repeat the test
+        files: Dictionary of files to be created for the test
+
+    Returns:
+        DynamicTestingMethod: A decorated test method
+    """
 
     class DynamicTestingMethod:
         def __init__(self, fn: Any) -> None:

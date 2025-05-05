@@ -12,7 +12,15 @@ success_msg = "#educational_plugin test OK"
 
 
 def failed(message: str, *, is_unittest: bool) -> tuple[int, str]:
-    """Reports failure."""
+    """Reports failure.
+
+    Args:
+        message: Message to print
+        is_unittest: Flag indicating if the function is called from unittest
+
+    Returns:
+        tuple: A tuple containing (-1, message)
+    """
     if not is_unittest:
         lines = message.splitlines()
         print("\n" + failed_msg_start + lines[0])  # noqa: T201
@@ -22,7 +30,11 @@ def failed(message: str, *, is_unittest: bool) -> tuple[int, str]:
 
 
 def passed(*, is_unittest: bool) -> tuple[int, str]:
-    """Reports success."""
+    """Reports success.
+
+    Returns:
+        tuple: A tuple containing (0, "test OK")
+    """
     if not is_unittest:
         print("\n" + success_msg)  # noqa: T201
     return 0, "test OK"

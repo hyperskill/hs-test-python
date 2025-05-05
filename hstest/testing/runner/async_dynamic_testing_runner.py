@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import typing
-from concurrent.futures import Future, TimeoutError
 
 from hstest.common.process_utils import DaemonThreadPoolExecutor
 from hstest.dynamic.output.output_handler import OutputHandler
@@ -17,6 +16,8 @@ from hstest.testing.execution_options import debug_mode
 from hstest.testing.runner.test_runner import TestRunner
 
 if typing.TYPE_CHECKING:
+    from concurrent.futures import Future
+
     from hstest import TestCase
     from hstest.testing.execution.program_executor import ProgramExecutor
     from hstest.testing.test_run import TestRun
