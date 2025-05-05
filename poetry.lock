@@ -616,174 +616,28 @@ xmp = ["defusedxml"]
 
 [[package]]
 name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
+version = "7.0.0"
+description = "Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7."
 optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = ">=3.6"
 groups = ["main"]
-markers = "sys_platform == \"linux\" and python_version == \"3.10\""
+markers = "python_version <= \"3.11\" or python_version >= \"3.12\""
 files = [
-    {file = "psutil-5.8.0-cp310-cp310-linux_x86_64.whl", hash = "sha256:42e0ea03c226c387bd8cded5984f91f491359c26ac1827eb231076f34cc5d3d2"},
+    {file = "psutil-7.0.0-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:101d71dc322e3cffd7cea0650b09b3d08b8e7c4109dd6809fe452dfd00e58b25"},
+    {file = "psutil-7.0.0-cp36-abi3-macosx_11_0_arm64.whl", hash = "sha256:39db632f6bb862eeccf56660871433e111b6ea58f2caea825571951d4b6aa3da"},
+    {file = "psutil-7.0.0-cp36-abi3-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1fcee592b4c6f146991ca55919ea3d1f8926497a713ed7faaf8225e174581e91"},
+    {file = "psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4b1388a4f6875d7e2aff5c4ca1cc16c545ed41dd8bb596cefea80111db353a34"},
+    {file = "psutil-7.0.0-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a5f098451abc2828f7dc6b58d44b532b22f2088f4999a937557b603ce72b1993"},
+    {file = "psutil-7.0.0-cp36-cp36m-win32.whl", hash = "sha256:84df4eb63e16849689f76b1ffcb36db7b8de703d1bc1fe41773db487621b6c17"},
+    {file = "psutil-7.0.0-cp36-cp36m-win_amd64.whl", hash = "sha256:1e744154a6580bc968a0195fd25e80432d3afec619daf145b9e5ba16cc1d688e"},
+    {file = "psutil-7.0.0-cp37-abi3-win32.whl", hash = "sha256:ba3fcef7523064a6c9da440fc4d6bd07da93ac726b5733c29027d7dc95b39d99"},
+    {file = "psutil-7.0.0-cp37-abi3-win_amd64.whl", hash = "sha256:4cf3d4eb1aa9b348dec30105c55cd9b7d4629285735a102beb4441e38db90553"},
+    {file = "psutil-7.0.0.tar.gz", hash = "sha256:7be9c3eba38beccb6495ea33afd982a44074b78f28c434a1f51cc07fd315c456"},
 ]
 
 [package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-linux_x86_64.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"darwin\" and python_version == \"3.10\""
-files = [
-    {file = "psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3410b4ab60a1d909e223104bf7a48fb9ede3eb058f29678f62622ff757a1da51"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"win32\" and python_version == \"3.10\""
-files = [
-    {file = "psutil-5.8.0-cp310-cp310-win_amd64.whl", hash = "sha256:7b79bca5b3532e65ddb35fae352ae09ab2f7c939da3b4f860a58e7f6e13d29df"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-win_amd64.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"linux\" and python_version == \"3.11\""
-files = [
-    {file = "psutil-5.8.0-cp311-cp311-linux_x86_64.whl", hash = "sha256:0553be18c29d96852bed5efb2d9ec45d0eff22f9e1a5c752fa7413909215800f"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-linux_x86_64.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"darwin\" and python_version == \"3.11\""
-files = [
-    {file = "psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:4a1b843e133eba31289aee96334deebe6a69c9f0a7598066441fbd65e0992613"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"win32\" and python_version == \"3.11\""
-files = [
-    {file = "psutil-5.8.0-cp311-cp311-win_amd64.whl", hash = "sha256:e3273080f1000c7ab8a65714d0e97b3b14133ede4a67aae1aa66f4fd56228c95"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-win_amd64.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"linux\" and python_version == \"3.12\""
-files = [
-    {file = "psutil-5.8.0-cp312-cp312-linux_x86_64.whl", hash = "sha256:00e9a5b0ef778567cd7ddc0e1ec2051a93baefa43605209dc1e1e76779ce9d7a"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-linux_x86_64.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"darwin\" and python_version == \"3.12\""
-files = [
-    {file = "psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:ab29673f576466d7eb34231a4b311676422a5bd8c2f1c0c76ee9b46ee6271f16"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl"
-
-[[package]]
-name = "psutil"
-version = "5.8.0"
-description = "Cross-platform lib for process and system monitoring in Python."
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-groups = ["main"]
-markers = "sys_platform == \"win32\" and python_version == \"3.12\""
-files = [
-    {file = "psutil-5.8.0-cp312-cp312-win_amd64.whl", hash = "sha256:c659b4227bbcb9846403758e3a62ed22695930bf5bfe2602876da04a6a0e2ca7"},
-]
-
-[package.extras]
-test = ["enum34", "ipaddress", "mock", "pywin32", "unittest2", "wmi"]
-
-[package.source]
-type = "url"
-url = "https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-win_amd64.whl"
+dev = ["abi3audit", "black (==24.10.0)", "check-manifest", "coverage", "packaging", "pylint", "pyperf", "pypinfo", "pytest", "pytest-cov", "pytest-xdist", "requests", "rstcheck", "ruff", "setuptools", "sphinx", "sphinx_rtd_theme", "toml-sort", "twine", "virtualenv", "vulture", "wheel"]
+test = ["pytest", "pytest-xdist", "setuptools"]
 
 [[package]]
 name = "pyparsing"
@@ -981,4 +835,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "804085dc79fc7a4c17d4e5cde03b4e17cfe8f928193cabdd74161b2010ebc0d7"
+content-hash = "635a25cde692f36ac8328451686970222eca5b7727f86884505e94a0c8e3ec25"
