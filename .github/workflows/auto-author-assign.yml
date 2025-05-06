@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   assign-author:
-    runs-on: arc-runners-small
+    runs-on: [self-hosted, small]
     timeout-minutes: 30
     if: ${{ !github.event.pull_request.assignee }}
     steps:
