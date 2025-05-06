@@ -1,20 +1,49 @@
 name: Build Wheels
 
 on:
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build psutil wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
     strategy:
       matrix:
-        os: [ "ubuntu-latest", "windows-latest", "macos-14" ]
-        python-version: [ "3.10", "3.11", "3.12", "3.13" ]
+        include:
+          # Linux builds
+          - os: ubuntu-latest
+            python-version: '3.10'
+          - os: ubuntu-latest
+            python-version: '3.11'
+          - os: ubuntu-latest
+            python-version: '3.12'
+            
+          # Windows builds  
+          - os: windows-latest
+            python-version: '3.10'
+          - os: windows-latest
+            python-version: '3.11'
+          - os: windows-latest
+            python-version: '3.12'
+            
+          # macOS builds
+          - os: macos-latest
+            python-version: '3.10'
+          - os: macos-latest
+            python-version: '3.11'
+          - os: macos-latest
+            python-version: '3.12'
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup PATH
+        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,21 +55,25 @@ jobs:
           python -m pip install pip wheel
         shell: bash
 
-      - name: Build wheel
+      - name: Build psutil wheel
         run: |
+          # Create dist directory
           mkdir -p dist
-          pip wheel . --no-deps --wheel-dir dist/
+          
+          # Build psutil wheel
+          pip wheel psutil==5.8.0 --wheel-dir dist/
         shell: bash
 
-      - name: Upload wheels
+      - name: Upload to GitHub Actions
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.os }}-py${{ matrix.python-version }}
           path: dist/*
 
-  publish:
+  release:
     needs: build_wheels
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
     steps:
@@ -51,9 +84,7 @@ jobs:
           path: dist
           merge-multiple: true
 
-      - name: Upload wheels to GitHub
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: wheels
-          path: dist/*
-          retention-days: 90
+          files: dist/*

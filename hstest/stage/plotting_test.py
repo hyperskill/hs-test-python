@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class PlottingTest(StageTest):
-    def __init__(self, args="", *, source: str = "") -> None:
+    def __init__(self, args: str = "", *, source: str = "") -> None:
         super().__init__(args, source=source)
         self._all_drawings: list[Drawing] = []
         self._new_drawings: list[Drawing] = []

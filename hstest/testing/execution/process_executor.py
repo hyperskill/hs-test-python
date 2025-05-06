@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import os
+from pathlib import Path
 from threading import Thread
 from time import sleep
 from typing import TYPE_CHECKING
@@ -30,7 +31,7 @@ class ProcessExecutor(ProgramExecutor):
         self.continue_executing = True
         self.runnable: RunnableFile = runnable
         self.__group: ThreadGroup | None = None
-        self.working_directory_before = os.path.abspath(os.getcwd())
+        self.working_directory_before = Path.cwd().resolve()
 
     def _compilation_command(self, *args: str) -> list[str]:
         return []
@@ -112,15 +113,16 @@ class ProcessExecutor(ProgramExecutor):
                     OutputHandler.print(f"Handle process - written to stdin: {next_input!r}")
                 except ExitException:
                     OutputHandler.print("Handle process - EXIT EXCEPTION, stop input")
-                    if self._wait_if_terminated():
-                        if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
-                            StageTest.curr_test_run.set_error_in_test(None)
-                            OutputHandler.print(
-                                "Handle process - Abort stopping input, everything is OK"
-                            )
-                            break
+                    if self._wait_if_terminated() and isinstance(
+                        StageTest.curr_test_run.error_in_test, OutOfInputError
+                    ):
+                        StageTest.curr_test_run.set_error_in_test(None)
+                        OutputHandler.print(
+                            "Handle process - Abort stopping input, everything is OK"
+                        )
+                        break
                     self.stop_input()
-                except BaseException as ex:
+                except BaseException as ex:  # noqa: BLE001
                     OutputHandler.print(f"Handle process - SOME EXCEPTION {ex}")
 
         OutputHandler.print("Handle process - TERMINATE")
@@ -147,8 +149,8 @@ class ProcessExecutor(ProgramExecutor):
 
         OutputHandler.print("Handle process - finishing execution")
 
-    def _wait_if_terminated(self):
-        return try_many_times(100, 10, lambda: self.process.is_finished(False))
+    def _wait_if_terminated(self) -> bool:
+        return try_many_times(100, 10, lambda: self.process.is_finished(need_wait_output=False))
 
     def _launch(self, *args: str) -> None:
         self.__group = ThreadGroup()
@@ -175,7 +177,7 @@ class ProcessExecutor(ProgramExecutor):
             sleep(0.001)
 
     def tear_down(self) -> None:
-        working_directory_before = os.path.abspath(os.getcwd())
+        working_directory_before = Path.cwd().resolve()
         os.chdir(self.runnable.folder)
 
         with contextlib.suppress(BaseException):

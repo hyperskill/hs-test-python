@@ -31,11 +31,11 @@ class TestedProgram:
         self._run_args: list[str] | None = None
 
     @property
-    def run_args(self):
+    def run_args(self) -> list[str] | None:
         return self._run_args
 
     @property
-    def executor(self):
+    def executor(self) -> ProgramExecutor:
         return self._program_executor
 
     def _init_program(self, *args: str) -> None:
@@ -70,7 +70,7 @@ class TestedProgram:
     def is_finished(self) -> bool:
         return self._program_executor.is_finished()
 
-    def set_return_output_after_execution(self, value: bool) -> None:
+    def set_return_output_after_execution(self, *, value: bool) -> None:
         self._program_executor.set_return_output_after_execution(value)
 
     def stop_input(self) -> None:

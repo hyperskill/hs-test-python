@@ -7,6 +7,8 @@ from hstest.testing.execution.filtering.main_filter import MainFilter
 from hstest.testing.execution.searcher.base_searcher import BaseSearcher
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from hstest.testing.execution.runnable.runnable_file import RunnableFile
 
 
@@ -15,7 +17,7 @@ class GoSearcher(BaseSearcher):
     def extension(self) -> str:
         return ".go"
 
-    def search(self, where: str | None = None) -> RunnableFile:
+    def search(self, where: Path | None = None) -> RunnableFile:
         package_searcher = re.compile(r"^\s*package\s*main", re.MULTILINE)
         main_func_searcher = re.compile(r"(^|\n)\s*func\s+main\s*\(\s*\)", re.MULTILINE)
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 from time import sleep
 from typing import TYPE_CHECKING
 
@@ -38,15 +39,15 @@ class DjangoApplicationRunner(TestRunner):
         if source is None or not len(source):
             source = "manage"
 
-        full_source = source.replace(".", os.sep) + ".py"
-        full_path = os.path.abspath(full_source)
+        full_source = Path(source.replace(".", os.sep) + ".py")
+        full_path = full_source.resolve()
 
-        if not os.path.exists(full_path):
-            filename = os.path.basename(full_source)
+        if not full_path.exists():
+            filename = full_source.name
             runnable = PythonSearcher().search(file_filter=FileFilter(file=lambda f: f == filename))
-            full_path = os.path.abspath(runnable.folder + os.sep + runnable.file)
+            full_path = (Path(runnable.folder) / runnable.file).resolve()
 
-        self.full_path = full_path
+        self.full_path = full_path.name
         self.port = self.__find_free_port(test_case.attach.tryout_ports)
 
         if test_case.attach.use_database:
@@ -100,7 +101,7 @@ class DjangoApplicationRunner(TestRunner):
 
     def __prepare_database(self, test_database: str) -> None:
         os.environ["HYPERSKILL_TEST_DATABASE"] = test_database
-        with open(test_database, "w", encoding="utf-8"):
+        with Path(test_database).open("w", encoding="locale"):
             pass
 
         migrate = ProcessWrapper(sys.executable, self.full_path, "migrate", check_early_finish=True)
@@ -147,8 +148,9 @@ class DjangoApplicationRunner(TestRunner):
         try:
             result = test_case.dynamic_testing()
             self._check_errors()
-            return result
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             test_run.set_error_in_test(ex)
+        else:
+            return result
 
         return CheckResult.from_error(test_run.error_in_test)

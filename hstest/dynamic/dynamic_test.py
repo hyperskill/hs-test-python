@@ -4,28 +4,40 @@ import inspect
 from typing import Any
 
 from hstest.stage_test import StageTest
-from hstest.test_case.test_case import DEFAULT_TIME_LIMIT
 
 
 def dynamic_test(
-    func=None,
+    func: Any | None = None,
     *,
-    order: int = 0,
-    time_limit: int = DEFAULT_TIME_LIMIT,
-    data: list[Any] | None = None,
-    feedback: str = "",
+    order: int | None = None,
+    data: Any = None,
+    time_limit: int | None = None,
+    feedback: str | None = None,
     repeat: int = 1,
     files: dict[str, str] | None = None,
-):
-    """Decorator for creating dynamic tests."""
+) -> Any:
+    """Decorator for creating dynamic tests.
+
+    Args:
+        func: Function to decorate
+        order: Order of test execution
+        data: Test data
+        time_limit: Time limit for test execution
+        feedback: Custom feedback message for the test
+        repeat: Number of times to repeat the test
+        files: Dictionary of files to be created for the test
+
+    Returns:
+        DynamicTestingMethod: A decorated test method
+    """
 
     class DynamicTestingMethod:
-        def __init__(self, fn) -> None:
+        def __init__(self, fn: Any) -> None:
             self.fn = fn
 
-        def __set_name__(self, owner, name):
+        def __set_name__(self, owner: StageTest, name: str) -> None:
             # do something with owner, i.e.
-            # print(f"Decorating {self.fn} and using {owner}")
+            # print(f"Decorating {self.fn} and using {owner}")  # noqa: ERA001
             self.fn.class_name = owner.__name__
 
             # then replace ourself with the original method

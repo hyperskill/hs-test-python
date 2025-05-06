@@ -24,7 +24,7 @@ class StateMachine:
     def state(self) -> Any:
         return self._state
 
-    def in_state(self, state: Any):
+    def in_state(self, state: Any) -> bool:
         return self.state == state
 
     def set_and_wait(self, new_state: Any, waiting_state: Any = None) -> None:

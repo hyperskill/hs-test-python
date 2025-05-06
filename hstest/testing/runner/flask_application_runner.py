@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 from time import sleep
-from typing import TYPE_CHECKING
+from typing import ClassVar, TYPE_CHECKING
 
 from hstest.common.process_utils import is_port_in_use
 from hstest.exception.outcomes import ErrorWithFeedback, UnexpectedError
@@ -18,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class FlaskApplicationRunner(TestRunner):
-    processes: list[tuple[str, ProcessWrapper]] = []
+    processes: ClassVar[list[tuple[str, ProcessWrapper]]] = []
 
     def launch_flask_applications(self, test_case: TestCase) -> None:
         if not isinstance(test_case.attach, FlaskSettings):
@@ -39,13 +40,13 @@ class FlaskApplicationRunner(TestRunner):
         for source in sources:
             filename, port = source
 
-            full_source = filename.replace(".", os.sep) + ".py"
-            full_path = os.path.abspath(full_source)
+            full_source = Path(filename.replace(".", os.sep) + ".py")
+            full_path = full_source.resolve()
 
-            if not os.path.exists(full_path):
+            if not full_path.exists():
                 msg = (
-                    f'Cannot find file named "{os.path.basename(full_path)}" '
-                    f'in folder "{os.path.dirname(full_path)}". '
+                    f'Cannot find file named "{full_path.name}" '
+                    f'in folder "{full_path.parent}". '
                     f"Check if you deleted it."
                 )
                 raise ErrorWithFeedback(msg)
@@ -122,8 +123,9 @@ class FlaskApplicationRunner(TestRunner):
         try:
             result = test_case.dynamic_testing()
             self._check_errors()
-            return result
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             test_run.set_error_in_test(ex)
+        else:
+            return result
 
         return CheckResult.from_error(test_run.error_in_test)

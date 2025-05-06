@@ -15,7 +15,7 @@ class FlaskTest(StageTest):
     runner = FlaskApplicationRunner()
     attach: FlaskSettings = FlaskSettings()
 
-    def __init__(self, args="", *, source: str = "") -> None:
+    def __init__(self, args: str = "", *, source: str = "") -> None:
         super().__init__(args, source=source)
         loop_detector.working = False
         Settings.do_reset_output = False
@@ -23,19 +23,19 @@ class FlaskTest(StageTest):
         if self.source_name:
             sources = self.source_name
 
-            if type(sources) != list:
+            if not isinstance(sources, str):
                 sources = [sources]
 
             for item in sources:
-                if type(item) == str:
+                if isinstance(item, str):
                     self.attach.sources += [(item, None)]
-                elif type(item) == tuple:
+                elif isinstance(item, tuple):
                     if len(item) == 1:
                         self.attach.sources += [(item[0], None)]
                     else:
                         self.attach.sources += [item]
 
-    def get_url(self, link: str = "", *, source: str | None = None):
+    def get_url(self, link: str = "", *, source: str | None = None) -> str:
         if link.startswith("/"):
             link = link[1:]
 
@@ -62,4 +62,4 @@ class FlaskTest(StageTest):
         if not link.startswith("http://"):
             link = self.get_url(link, source=source)
 
-        return clean_text(urlopen(link).read().decode())
+        return clean_text(urlopen(link).read().decode())  # noqa: S310

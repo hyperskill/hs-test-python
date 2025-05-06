@@ -3,6 +3,7 @@ from typing import Any, List
 from hstest.check_result import CheckResult
 from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
+from typing import List
 
 OUTPUT = """
 Starting to make a coffee

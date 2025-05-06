@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import inspect
-import itertools
 import os
+from itertools import pairwise
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from hstest.exception.failure_handler import get_traceback_stack
 
+if TYPE_CHECKING:
+    from hstest import StageTest
 
-def is_tests(stage):
+
+def is_tests(stage: object) -> bool:
     package = inspect.getmodule(stage).__package__
     file = inspect.getmodule(stage).__file__
     return (
@@ -19,17 +24,18 @@ def is_tests(stage):
     )
 
 
-def setup_cwd(stage) -> None:
+def setup_cwd(stage: StageTest) -> None:
     if stage.is_tests:
-        test_file = inspect.getmodule(stage).__file__
-        test_folder = os.path.dirname(test_file)
+        test_file = Path(inspect.getmodule(stage).__file__)
+        test_folder = test_file.parent
         os.chdir(test_folder)
 
-    if os.path.basename(os.getcwd()) == "test":
-        os.chdir(os.path.dirname(os.getcwd()))
+    cwd = Path.cwd()
+    if cwd.name == "test":
+        os.chdir(cwd.parent)
 
 
-def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
+def get_stacktrace(ex: BaseException, *, hide_internals: bool = False) -> str:
     traceback_stack = get_traceback_stack(ex)
 
     if not hide_internals:
@@ -39,7 +45,7 @@ def get_stacktrace(ex: BaseException, hide_internals=False) -> str:
         if ex.filename.startswith("<"):  # "<string>", or "<module>"
             user_dir = ex.filename
         else:
-            user_dir = os.path.dirname(ex.filename) + os.sep
+            user_dir = Path(ex.filename).parent.name + os.sep
     else:
         user_dir = ""
 
@@ -79,7 +85,7 @@ def str_to_stacktrace(str_trace: str) -> str:
 
     traceback_stack = []
 
-    for line_from, line_to in itertools.pairwise(traceback_lines):
+    for line_from, line_to in pairwise(traceback_lines):
         actual_lines = lines[line_from:line_to]
         needed_lines = [line for line in actual_lines if line.startswith("  ")]
         traceback_stack += ["\n".join(needed_lines) + "\n"]
@@ -107,7 +113,7 @@ def str_to_stacktrace(str_trace: str) -> str:
           exec(compile(contents+"\n", file, 'exec'), glob, loc) 
 
         Which will appear when testing locally inside PyCharm.
-        """  # noqa: W291
+        """  # noqa: W291, E501
         if f"{os.sep}JetBrains{os.sep}" in trace:
             continue
 
@@ -141,9 +147,9 @@ def clean_stacktrace(
         if user_file.startswith("<"):
             continue
 
-        dir_name = os.path.dirname(tr[start_index:end_index])
-        if os.path.isdir(dir_name):
-            dir_names += [os.path.abspath(dir_name)]
+        dir_name = Path(tr[start_index:end_index]).parent
+        if dir_name.is_dir():
+            dir_names += [dir_name.resolve()]
 
     if dir_names:
         from hstest.common.os_utils import is_windows
@@ -163,21 +169,25 @@ def clean_stacktrace(
 
     cleaned_traceback = []
     for trace in full_traceback[1:-1]:
-        if trace.startswith(" " * 4):
-            # Trace line that starts with 4 is a line with SyntaxError
-            cleaned_traceback += [trace]
-        elif user_dir in trace or ("<" in trace and ">" in trace and "<frozen " not in trace):
-            # avoid including <frozen importlib...> lines that are always in the stacktrace
-            # but include <string>, <module> because it's definitely user's code
-            if not user_dir.startswith("<"):
-                if user_dir in trace:
-                    trace = trace.replace(user_dir, "")
+        # Trace line that starts with 4 is a line with SyntaxError
+        # avoid including <frozen importlib...> lines that are always in the stacktrace
+        # but include <string>, <module> because it's definitely user's code
+        if (not trace.startswith(" " * 4) and user_dir in trace) or (
+            ("<" in trace and ">" in trace and "<frozen " not in trace)
+            and not user_dir.startswith("<")
+        ):
+            if user_dir in trace:
+                cleaned_traceback.append(trace.replace(user_dir, ""))
+            else:
+                folder_name = Path(user_dir[:-1]).name
+                if folder_name in trace:
+                    index = trace.index(folder_name)
+                    cleaned_traceback.append(
+                        '  File "' + trace[index + len(folder_name + os.sep) :]
+                    )
                 else:
-                    folder_name = os.path.basename(user_dir[:-1])
-                    if folder_name in trace:
-                        index = trace.index(folder_name)
-                        trace = '  File "' + trace[index + len(folder_name + os.sep) :]
-
-            cleaned_traceback += [trace]
+                    cleaned_traceback.append(trace)
+        else:
+            cleaned_traceback.append(trace)
 
     return full_traceback[0] + "".join(cleaned_traceback) + full_traceback[-1]

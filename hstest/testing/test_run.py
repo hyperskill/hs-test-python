@@ -89,7 +89,7 @@ class TestRun:
 
     def test(self) -> CheckResult:
         create_files(self._test_case.files)
-        # startThreads(testCase.getProcesses())
+        # startThreads(testCase.getProcesses())  # noqa: ERA001
 
         if Settings.do_reset_output:
             OutputHandler.reset_output()
@@ -97,10 +97,10 @@ class TestRun:
         result = None
         try:
             result = self._test_runner.test(self)
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             self.set_error_in_test(ex)
 
-        # stopThreads(testCase.getProcesses(), pool)
+        # stopThreads(testCase.getProcesses(), pool)  # noqa: ERA001
         delete_files(self._test_case.files)
 
         if result is None:

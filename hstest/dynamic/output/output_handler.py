@@ -22,7 +22,7 @@ class OutputHandler:
     _mock_err: OutputMock = None
 
     @staticmethod
-    def print(obj) -> None:
+    def print(obj: Any) -> None:
         if True:
             return
 
@@ -41,7 +41,7 @@ class OutputHandler:
             OutputHandler.get_real_out().write(full)
             OutputHandler.get_real_out().flush()
         else:
-            pass
+            print(full, end="")  # noqa: T201
 
     @staticmethod
     def get_real_out() -> io.TextIOWrapper:
