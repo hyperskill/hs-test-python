@@ -14,7 +14,7 @@ class PythonExecutor(ProcessExecutor):
         if is_windows():
             os.environ["PYTHONIOENCODING"] = "utf8"
 
-    def _execution_command(self, *args: str):
+    def _execution_command(self, *args: str) -> list[str]:
         cmd = ["python"]
         if is_windows():  # Works on all Windows versions (32/64 bit)
             # Set UTF-8 encoding for stdin/stdout on Windows
