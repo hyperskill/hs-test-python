@@ -33,7 +33,7 @@ NUM_SHAPES: Final = 2
 def get_line_drawings_with_normalized_data(
     data: pd.DataFrame, x: str | None, y: str | None
 ) -> list[Drawing]:
-    if isinstance(data, pd.Series):
+    if type(data) is pd.Series:
         return [DrawingBuilder.get_line_drawing(data.index, data, DrawingLibrary.pandas, {})]
 
     return [
@@ -65,7 +65,7 @@ def get_dis_drawings_with_normalized_data(
 ) -> list[Drawing]:
     drawings = []
 
-    if isinstance(data, pd.Series):
+    if type(data) == pd.Series:
         curr_data = {"x": data.to_numpy()}
 
         drawing = Drawing(DrawingLibrary.pandas, DrawingType.dis, None, {})
@@ -155,7 +155,7 @@ def get_bar_drawings_with_normalized_data(
 def get_pie_drawings_with_normalized_data(
     data: pd.DataFrame, x: str | None, y: str | None
 ) -> list[Drawing]:
-    if isinstance(data, pd.Series):
+    if type(data) == pd.Series:
         return [
             Drawing(
                 DrawingLibrary.pandas,
@@ -335,17 +335,17 @@ class PandasHandler:
                 with contextlib.suppress(Exception):
                     data = data[kw.pop("x")]
 
-            if isinstance(data, pandas.DataFrame):
+            if type(data) == pandas.DataFrame:
                 if column is not None:
                     return hist(data[column].to_numpy(), **kw)
                 for col in data.columns:
-                    hist(data[col], **kw)
+                    hist(data[col].to_numpy(), **kw)
                 return None
 
-            if isinstance(data, pandas.Series):
+            if type(data) == pandas.Series:
                 return hist(data.to_numpy(), **kw)
 
-            if not isinstance(data, np.ndarray):
+            if type(data) != np.ndarray:
                 data = np.array(data, dtype=object)
                 if len(data.shape) == NUM_SHAPES:
                     from matplotlib import cbook
