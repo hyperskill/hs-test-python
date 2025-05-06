@@ -1,22 +1,20 @@
+from __future__ import annotations
+
 __all__ = [
-    'StageTest',
-    'DjangoTest',
-    'FlaskTest',
-    'PlottingTest',
-    'SQLTest',
-
-    'TestCase',
-    'SimpleTestCase',
-
-    'CheckResult',
-    'correct',
-    'wrong',
-
-    'WrongAnswer',
-    'TestPassed',
-
-    'dynamic_test',
-    'TestedProgram',
+    "CheckResult",
+    "DjangoTest",
+    "FlaskTest",
+    "PlottingTest",
+    "SQLTest",
+    "SimpleTestCase",
+    "StageTest",
+    "TestCase",
+    "TestPassed",
+    "TestedProgram",
+    "WrongAnswer",
+    "correct",
+    "dynamic_test",
+    "wrong",
 ]
 
 from hstest.dynamic.dynamic_test import dynamic_test

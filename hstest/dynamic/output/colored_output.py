@@ -1,6 +1,8 @@
 # Thanks to https://stackoverflow.com/a/45444716
 
 # reset
+from __future__ import annotations
+
 RESET = "\033[0m"
 
 # Regular Colors
