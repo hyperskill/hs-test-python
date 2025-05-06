@@ -18,11 +18,20 @@ class CppExecutor(ProcessExecutor):
             self.executable = self.without_extension
             self.file_name = Path(self.executable + ".exe")
         else:
-            self.executable = f'./{self.without_extension}'
+            self.executable = f"./{self.without_extension}"
             self.file_name = self.without_extension
 
     def _compilation_command(self):
-        return ['g++', '-std=c++20', '-pipe', '-O2', '-static', '-o', self.file_name, self.runnable.file]
+        return [
+            "g++",
+            "-std=c++20",
+            "-pipe",
+            "-O2",
+            "-static",
+            "-o",
+            self.file_name,
+            self.runnable.file,
+        ]
 
     def _filter_compilation_error(self, error: str) -> str:
         return error
