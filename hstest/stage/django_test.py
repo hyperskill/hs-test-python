@@ -24,7 +24,11 @@ class DjangoTest(StageTest):
         Settings.do_reset_output = False
 
     def read_page(self, link: str) -> str:
-        """Deprecated, use get(...) instead."""
+        """Deprecated, use get(...) instead.
+
+        Returns:
+            str: The cleaned page content.
+        """
         return clean_text(urlopen(link).read().decode())  # noqa: S310
 
     def get_url(self, link: str = "") -> str:

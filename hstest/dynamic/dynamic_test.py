@@ -17,7 +17,11 @@ def dynamic_test(
     repeat: int = 1,
     files: dict[str, str] | None = None,
 ) -> Any:
-    """Decorator for creating dynamic tests."""
+    """Decorator for creating dynamic tests.
+
+    Returns:
+        Any: A DynamicTestingMethod instance or class, depending on usage.
+    """
 
     class DynamicTestingMethod:
         def __init__(self, fn: Any) -> None:

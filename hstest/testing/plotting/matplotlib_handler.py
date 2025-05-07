@@ -58,16 +58,16 @@ class MatplotlibHandler:
                     x = data[x]
 
             try:
-                if type(x) == pd.DataFrame:
+                if isinstance(x, pd.DataFrame):
                     for col in x.columns:
                         hist(x[col], *args, **kw)
                     return None
-                if type(x) == pd.Series:
+                if isinstance(x, pd.Series):
                     return hist(x.to_numpy(), *args, **kw)
             except Exception:  # noqa: BLE001, S110
                 pass
 
-            if type(x) != np.ndarray:
+            if not isinstance(x, np.ndarray):
                 x = np.array(x, dtype=object)
                 if len(x.shape) == NUM_SHAPES:
                     from matplotlib import cbook
@@ -99,13 +99,13 @@ class MatplotlibHandler:
                     height = data[height]
 
             try:
-                if type(x) == pd.DataFrame:
+                if isinstance(x, pd.DataFrame):
                     for col in x.columns:
                         bar(x[col], *args, **kw)
                     return None
-                if type(x) == pd.Series:
+                if isinstance(x, pd.Series):
                     return bar(x.to_numpy(), height, *args, **kw)
-                if type(height) == pd.Series:
+                if isinstance(height, pd.Series):
                     return bar(x, height.to_numpy(), *args, **kw)
             except Exception:  # noqa: BLE001, S110
                 pass
