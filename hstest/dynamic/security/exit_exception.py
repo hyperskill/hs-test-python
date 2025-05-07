@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+from typing import NoReturn
+
+
 class ExitException(BaseException):
     @staticmethod
-    def throw():
-        raise ExitException()
+    def throw() -> NoReturn:
+        raise ExitException

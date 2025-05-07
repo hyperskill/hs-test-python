@@ -1,35 +1,37 @@
+from __future__ import annotations
+
 from threading import current_thread, Thread
-from typing import List, Optional
 
 
 class ThreadGroup:
-    def __init__(self, name: str = None):
+    def __init__(self, name: str | None = None) -> None:
         if name:
             self._name: str = name
         else:
             from hstest import StageTest
-            test_num = StageTest.curr_test_global
-            self._name = f'Test {test_num}'
 
-        self.threads: List[Thread] = []
+            test_num = StageTest.curr_test_global
+            self._name = f"Test {test_num}"
+
+        self.threads: list[Thread] = []
 
         curr = current_thread()
         if hasattr(curr, "_group"):
-            self._parent: Optional[ThreadGroup] = curr._group
+            self._parent: ThreadGroup | None = curr._group  # noqa: SLF001
         else:
-            self._parent: Optional[ThreadGroup] = None
+            self._parent: ThreadGroup | None = None
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @property
-    def parent(self):
+    def parent(self) -> ThreadGroup | None:
         return self._parent
 
-    def add(self, thread: Thread):
+    def add(self, thread: Thread) -> None:
         self.threads.append(thread)
 
     @staticmethod
-    def curr_group() -> 'ThreadGroup':
-        return getattr(current_thread(), '_group', None)
+    def curr_group() -> ThreadGroup:
+        return getattr(current_thread(), "_group", None)
