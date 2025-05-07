@@ -30,7 +30,7 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
 
         num_threads = len(self._threads)
         if num_threads < self._max_workers:
-            thread_name = f"{self._thread_name_prefix or self}_{num_threads}"
+            thread_name = "%s_%d" % (self._thread_name_prefix or self, num_threads)
 
             args = (
                 weakref.ref(self, weakref_cb),

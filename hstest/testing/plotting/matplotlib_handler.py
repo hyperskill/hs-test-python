@@ -58,16 +58,16 @@ class MatplotlibHandler:
                     x = data[x]
 
             try:
-                if isinstance(x, pd.DataFrame):
+                if type(x) == pd.DataFrame:
                     for col in x.columns:
                         hist(x[col], *args, **kw)
                     return None
-                if isinstance(x, pd.Series):
+                if type(x) == pd.Series:
                     return hist(x.to_numpy(), *args, **kw)
             except Exception:  # noqa: BLE001, S110
                 pass
 
-            if not isinstance(x, np.ndarray):
+            if type(x) != np.ndarray:
                 x = np.array(x, dtype=object)
                 if len(x.shape) == NUM_SHAPES:
                     from matplotlib import cbook
@@ -99,18 +99,18 @@ class MatplotlibHandler:
                     height = data[height]
 
             try:
-                if isinstance(x, pd.DataFrame):
+                if type(x) == pd.DataFrame:
                     for col in x.columns:
                         bar(x[col], *args, **kw)
                     return None
-                if isinstance(x, pd.Series):
+                if type(x) == pd.Series:
                     return bar(x.to_numpy(), height, *args, **kw)
-                if isinstance(height, pd.Series):
+                if type(height) == pd.Series:
                     return bar(x, height.to_numpy(), *args, **kw)
             except Exception:  # noqa: BLE001, S110
                 pass
 
-            if isinstance(height, int | float):
+            if type(height) in {int, float}:
                 height = np.full((len(x),), height)
 
             drawings.append(
@@ -127,10 +127,10 @@ class MatplotlibHandler:
             x = []
             y = []
 
-            if len(args) > 0 and isinstance(args[0], list):
+            if len(args) > 0 and type(args[0]) is list:
                 x = args[0]
             if len(args) > 1:
-                if isinstance(args[1], list):
+                if type(args[1]) is list:
                     y = args[1]
             else:
                 y = list(range(len(x)))

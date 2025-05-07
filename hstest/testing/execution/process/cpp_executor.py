@@ -21,7 +21,7 @@ class CppExecutor(ProcessExecutor):
             self.executable = f"./{self.without_extension}"
             self.file_name = self.without_extension
 
-    def _compilation_command(self) -> list[str]:
+    def _compilation_command(self):
         return [
             "g++",
             "-std=c++20",

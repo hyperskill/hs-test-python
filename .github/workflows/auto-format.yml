@@ -1,33 +1,41 @@
-name: Format code
+name: Auto format
+
 on:
-  pull_request:
   push:
     branches:
       - master
       - release
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
-  format_backend:
-    name: Format with ruff
+  auto_format:
+    name: Auto format with ruff
     runs-on: arc-runners-small
     timeout-minutes: 30
     steps:
-
       - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
-      - name: Setup PATH
-        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
+
+      - name: Get Python version
+        id: python_version
+        run: echo "python_version=$(head -n 1 .python-version)" >> $GITHUB_OUTPUT
+        shell: bash
+
       - uses: ./.github/workflows/actions/prepare
+        with:
+          python-version: ${{ steps.python_version.outputs.python_version }}
 
-      - run: poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
-
-      - run: poetry run ruff format .
+      - name: Check files using the ruff formatter
+        run: |
+          poetry run ruff check --fix --unsafe-fixes --preview --exit-zero .
+          poetry run ruff format .
+        shell: bash
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9

@@ -9,15 +9,69 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Poetry
-      run: pipx install poetry==$(head -n 1 .poetry-version)
+    - name: Set up Python paths (Unix)
+      if: runner.os != 'Windows'
+      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       shell: bash
+
+    - name: Set up Python paths (Windows)
+      if: runner.os == 'Windows'
+      run: echo "$env:APPDATA\Python\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      shell: pwsh
+
+    - name: Get Poetry version
+      id: poetry-version
+      run: |
+        [ -f .poetry-version ] && echo "version=$(head -n 1 .poetry-version)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Install Poetry (Unix)
+      if: runner.os != 'Windows'
+      run: pipx install poetry==${{ steps.poetry-version.outputs.version }}
+      shell: bash
+
+    - name: Install Poetry (Windows)
+      if: runner.os == 'Windows'
+      run: pipx install poetry==${{ steps.poetry-version.outputs.version }}
+      shell: pwsh
 
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
         cache: 'poetry'
 
-    - name: Install dependencies and package
+    - name: Clear Poetry cache (Unix)
+      if: runner.os != 'Windows'
+      run: poetry cache clear --all pypi
+      shell: bash
+
+    - name: Clear Poetry cache (Windows)
+      if: runner.os == 'Windows'
+      run: poetry cache clear --all pypi
+      shell: pwsh
+
+    - name: Install dependencies and package (Unix)
+      if: runner.os != 'Windows'
       run: poetry install --no-interaction --no-ansi
       shell: bash
+
+    - name: Install dependencies and package (Windows)
+      if: runner.os == 'Windows'
+      run: poetry install --no-interaction --no-ansi
+      shell: pwsh
+
+    # Setup Node.js for JavaScript tests
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # Install Node.js dependencies
+    - name: Install Node.js dependencies
+      run: npm install
+      shell: bash
+
+    # Setup Go for Go language tests
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+        cache: false

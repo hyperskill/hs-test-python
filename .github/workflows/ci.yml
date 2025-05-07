@@ -14,27 +14,23 @@ concurrency:
 jobs:
   lint:
     name: Lint with ruff
-    runs-on: arc-runners-small
+    runs-on: [ self-hosted, small ]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Setup PATH
-        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - uses: ./.github/workflows/actions/prepare
         with:
           python-version: "3.11"
       - name: Check files using the ruff formatter
-        run: poetry run ruff check --fix --unsafe-fixes --preview .
+        run: poetry run ruff --fix --unsafe-fixes --preview .
         shell: bash
 
   mypy:
     name: Static Type Checking
-    runs-on: arc-runners-small
+    runs-on: [ self-hosted, small ]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Setup PATH
-        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - uses: ./.github/workflows/actions/prepare
         with:
           python-version: "3.11"
@@ -50,11 +46,11 @@ jobs:
       matrix:
         include:
           # Self-hosted runner
-          - os: arc-runners-small
+          - os: [ self-hosted, small ]
             python-version: "3.10"
-          - os: arc-runners-small
+          - os: [ self-hosted, small ]
             python-version: "3.11"
-          - os: arc-runners-small
+          - os: [ self-hosted, small ]
             python-version: "3.12"
           - os: arc-runners-small
             python-version: "3.13"
@@ -78,8 +74,6 @@ jobs:
             python-version: "3.13"
     steps:
       - uses: actions/checkout@v4
-      - name: Setup PATH
-        run: echo "/home/runner/.local/bin" >> $GITHUB_PATH
       - uses: ./.github/workflows/actions/prepare
         with:
           python-version: ${{ matrix.python-version }}

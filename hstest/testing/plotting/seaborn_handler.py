@@ -125,15 +125,15 @@ class SeabornHandler:
                 with contextlib.suppress(Exception):
                     data = data[kw.pop("x")]
 
-            if isinstance(data, pd.DataFrame):
+            if type(data) == pd.DataFrame:
                 for col in data.columns:
                     histplot(data[col], **kw)
                 return None
 
-            if isinstance(data, pd.Series):
+            if type(data) == pd.Series:
                 return histplot(data.to_numpy(), **kw)
 
-            if not isinstance(data, np.ndarray):
+            if type(data) != np.ndarray:
                 data = np.array(data, dtype=object)
                 if len(data.shape) == NUM_SHAPES:
                     from matplotlib import cbook
