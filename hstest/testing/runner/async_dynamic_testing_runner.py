@@ -64,7 +64,7 @@ class AsyncDynamicTestingRunner(TestRunner):
             TestedProgramFinishedEarly,
         ) as ex:
             test_run.set_error_in_test(ex)
-        # Let unexpected exceptions propagate.
+            # Let unexpected exceptions propagate.
             test_run.set_error_in_test(ex)
         finally:
             test_run.invalidate_handlers()
@@ -92,7 +92,7 @@ class AsyncDynamicTestingRunner(TestRunner):
                 ) as ex:
                     error = ex
                     test_run.set_error_in_test(error)
-                # Do not catch all Exception; let unexpected exceptions propagate.
+                    # Do not catch all Exception; let unexpected exceptions propagate.
                     error = ex
                     test_run.set_error_in_test(error)
 

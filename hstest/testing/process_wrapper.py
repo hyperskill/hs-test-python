@@ -73,7 +73,6 @@ class ProcessWrapper:
                 args = ["cmd", "/c", *args]
 
             self.process = subprocess.Popen(  # noqa: S603: trusted args
-
                 args,
                 bufsize=0,
                 universal_newlines=not self._use_byte_stream,
