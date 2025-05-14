@@ -1,5 +1,7 @@
+from typing import List
+
 from hstest.stage_test import *
-from hstest.test_case import TestCase
+from hstest.test_case import TestCase, CheckResult
 from hstest.common.os_utils import is_windows
 
 CheckResult.correct = lambda: CheckResult(True, '')
