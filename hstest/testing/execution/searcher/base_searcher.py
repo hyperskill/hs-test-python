@@ -256,16 +256,19 @@ class BaseSearcher:
             source_module = source[: -len(ext)].replace(os.sep, ".")
 
         elif os.sep in str(source):
-            if source.name.endswith(os.sep):
-                source = source[: -len(os.sep)]
+            source_str = str(source)
+            if source_str.endswith(os.sep):
+                source_str = source_str[:-len(os.sep)]
+                source = Path(source_str)
 
             source_folder = source
             source_file = None
-            source_module = source.name.replace(os.sep, ".")
+            source_module = source_str.replace(os.sep, ".")
 
         else:
-            source_folder = source.name.replace(".", os.sep)
-            source_file = source_folder + ext
+            folder_str = source.name.replace(".", os.sep)
+            source_folder = Path(folder_str)
+            source_file = Path(folder_str + ext)
             source_module = source
 
         return source_folder, source_file, source_module
