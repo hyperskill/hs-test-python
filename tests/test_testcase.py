@@ -68,4 +68,4 @@ class TestTestCase(unittest.TestCase):
 
     def test_from_stepik_bad_data(self) -> None:
         with self.assertRaises(UnexpectedError):
-            TestCase.from_stepik([("mixed1", 234567), 234345, ("mixed345", 456234), "567"]) # type: ignore[list-item]
+            TestCase.from_stepik([("mixed1", 234567), 234345, ("mixed345", 456234), "567"])  # type: ignore[list-item]

@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Any, Union
+
+from typing import Any
 
 __all__ = [
     "CheckResult",
@@ -28,6 +29,7 @@ PlottingTest: Any
 
 try:
     from hstest.stage import PlottingTest
+
     __all__.append("PlottingTest")
 except ImportError:
     PlottingTest = None

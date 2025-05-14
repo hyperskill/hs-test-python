@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Any, Union
+
+from typing import Any
 
 __all__ = [
     "DjangoTest",
@@ -18,6 +19,7 @@ PlottingTest: Any
 
 try:
     from hstest.stage.plotting_test import PlottingTest
+
     __all__.append("PlottingTest")
 except ImportError:
     PlottingTest = None
