@@ -47,8 +47,8 @@ class SeabornHandler:
             return
 
         def displot(data=None, **kwargs) -> None:
-            x = kwargs.get("x", None)
-            y = kwargs.get("y", None)
+            x = kwargs.get("x")
+            y = kwargs.get("y")
 
             if data is None:
                 curr_data = {"x": np.array(x, dtype=object), "y": np.array(y, dtype=object)}

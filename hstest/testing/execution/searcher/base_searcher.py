@@ -253,8 +253,7 @@ class BaseSearcher:
             source_module = source[: -len(ext)].replace(os.sep, ".")
 
         elif os.sep in source:
-            if source.endswith(os.sep):
-                source = source[: -len(os.sep)]
+            source = source.removesuffix(os.sep)
 
             source_folder = source
             source_file = None
