@@ -25,7 +25,7 @@ runs:
         if [ -f .poetry-version ]; then
           echo "version=$(head -n 1 .poetry-version)" >> $GITHUB_OUTPUT
         else
-          echo "version=1.7.1" >> $GITHUB_OUTPUT
+          echo "version=2.0.1" >> $GITHUB_OUTPUT
         fi
       shell: bash
 
@@ -65,9 +65,18 @@ runs:
       shell: pwsh
 
     # Setup Node.js for JavaScript tests
+    - name: Get Node.js version
+      id: node-version
+      run: |
+        if [ -f .node-version ]; then
+          echo "version=$(head -n 1 .node-version)" >> $GITHUB_OUTPUT
+        else
+          echo "version=20" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: ${{ steps.node-version.outputs.version }}
 
     # Install Node.js dependencies
     - name: Install Node.js dependencies
@@ -75,7 +84,17 @@ runs:
       shell: bash
 
     # Setup Go for Go language tests
+    - name: Get Go version
+      id: go-version
+      run: |
+        if [ -f .go-version ]; then
+          echo "version=$(head -n 1 .go-version)" >> $GITHUB_OUTPUT
+        else
+          echo "version=1.21" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
     - uses: actions/setup-go@v5
       with:
-        go-version: '1.21'
-        cache: false
+        go-version: ${{ steps.go-version.outputs.version }}
+        cache: 'false'
