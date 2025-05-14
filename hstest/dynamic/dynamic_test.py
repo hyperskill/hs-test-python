@@ -1,23 +1,26 @@
+from __future__ import annotations
+
 import inspect
-from typing import Any, Dict, List
+from typing import Any
 
 from hstest.stage_test import StageTest
 from hstest.test_case.test_case import DEFAULT_TIME_LIMIT
 
 
-def dynamic_test(func=None, *,
-                 order: int = 0,
-                 time_limit: int = DEFAULT_TIME_LIMIT,
-                 data: List[Any] = None,
-                 feedback: str = "",
-                 repeat: int = 1,
-                 files: Dict[str, str] = None):
-    """
-    Decorator for creating dynamic tests
-    """
+def dynamic_test(
+    func=None,
+    *,
+    order: int = 0,
+    time_limit: int = DEFAULT_TIME_LIMIT,
+    data: list[Any] | None = None,
+    feedback: str = "",
+    repeat: int = 1,
+    files: dict[str, str] | None = None,
+):
+    """Decorator for creating dynamic tests."""
 
     class DynamicTestingMethod:
-        def __init__(self, fn):
+        def __init__(self, fn) -> None:
             self.fn = fn
 
         def __set_name__(self, owner, name):
@@ -32,17 +35,18 @@ def dynamic_test(func=None, *,
                 return
 
             from hstest.dynamic.input.dynamic_testing import DynamicTestElement
-            methods: List[DynamicTestElement] = owner.dynamic_methods()
+
+            methods: list[DynamicTestElement] = owner.dynamic_methods()
             methods += [
                 DynamicTestElement(
-                    test=lambda *a, **k: self.fn(*a, **k),
+                    test=self.fn,
                     name=self.fn.__name__,
                     order=(order, len(methods)),
                     repeat=repeat,
                     time_limit=time_limit,
                     feedback=feedback,
                     data=data,
-                    files=files
+                    files=files,
                 )
             ]
 

@@ -5,7 +5,7 @@ import pandas as pd
 df_ab = pd.read_csv('ab_test.csv')
 
 # Plot dates
-df_ab['date'] = df_ab['date'].astype('datetime64')
+df_ab["date"] = pd.to_datetime(df_ab["date"])
 control = df_ab[df_ab['group'] == 'Control'].groupby(df_ab['date'].dt.day).size().rename('Control')
 experiment = df_ab[df_ab['group'] == 'Experimental'].groupby(df_ab['date'].dt.day).size().rename('Experimental')
 

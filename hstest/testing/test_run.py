@@ -1,4 +1,6 @@
-from typing import List, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from hstest.check_result import CheckResult, correct
 from hstest.common.file_utils import create_files, delete_files
@@ -6,23 +8,26 @@ from hstest.dynamic.output.output_handler import OutputHandler
 from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import ExceptionWithFeedback, UnexpectedError
 from hstest.exceptions import TestPassed
-from hstest.test_case.test_case import TestCase
-from hstest.testing.runner.test_runner import TestRunner
 from hstest.testing.settings import Settings
-from hstest.testing.tested_program import TestedProgram
+
+if TYPE_CHECKING:
+    from hstest.test_case.test_case import TestCase
+    from hstest.testing.runner.test_runner import TestRunner
+    from hstest.testing.tested_program import TestedProgram
 
 
 class TestRun:
-    def __init__(self, test_num: int, test_count: int,
-                 test_case: TestCase, test_rummer: TestRunner):
+    def __init__(
+        self, test_num: int, test_count: int, test_case: TestCase, test_rummer: TestRunner
+    ) -> None:
         self._test_num: int = test_num
         self._test_count: int = test_count
         self._test_case: TestCase = test_case
         self._test_runner: TestRunner = test_rummer
 
         self._input_used: bool = False
-        self._error_in_test: Optional[BaseException] = None
-        self._tested_programs: List[TestedProgram] = []
+        self._error_in_test: BaseException | None = None
+        self._tested_programs: list[TestedProgram] = []
 
     def is_first_test(self) -> bool:
         return self._test_num == 1
@@ -51,40 +56,40 @@ class TestRun:
         return self._input_used
 
     @property
-    def tested_programs(self) -> List[TestedProgram]:
+    def tested_programs(self) -> list[TestedProgram]:
         return self._tested_programs
 
     @property
-    def error_in_test(self) -> Optional[BaseException]:
+    def error_in_test(self) -> BaseException | None:
         return self._error_in_test
 
-    def set_error_in_test(self, err: Optional[BaseException]):
+    def set_error_in_test(self, err: BaseException | None) -> None:
         if self._error_in_test is None or err is None:
             self._error_in_test = err
 
-    def set_input_used(self):
+    def set_input_used(self) -> None:
         self._input_used = True
 
-    def add_tested_program(self, tested_program: TestedProgram):
+    def add_tested_program(self, tested_program: TestedProgram) -> None:
         self._tested_programs += [tested_program]
 
-    def stop_tested_programs(self):
+    def stop_tested_programs(self) -> None:
         for tested_program in self._tested_programs:
             tested_program.stop()
 
-    def invalidate_handlers(self):
+    def invalidate_handlers(self) -> None:
         for tested_program in self._tested_programs:
             SystemHandler.uninstall_handler(tested_program.executor)
 
-    def set_up(self):
+    def set_up(self) -> None:
         self._test_runner.set_up(self._test_case)
 
-    def tear_down(self):
+    def tear_down(self) -> None:
         self._test_runner.tear_down(self._test_case)
 
     def test(self) -> CheckResult:
         create_files(self._test_case.files)
-        # startThreads(testCase.getProcesses())
+        # startThreads(testCase.getProcesses())  # noqa: ERA001
 
         if Settings.do_reset_output:
             OutputHandler.reset_output()
@@ -92,10 +97,10 @@ class TestRun:
         result = None
         try:
             result = self._test_runner.test(self)
-        except BaseException as ex:
+        except BaseException as ex:  # noqa: BLE001
             self.set_error_in_test(ex)
 
-        # stopThreads(testCase.getProcesses(), pool)
+        # stopThreads(testCase.getProcesses(), pool)  # noqa: ERA001
         delete_files(self._test_case.files)
 
         if result is None:
@@ -105,11 +110,12 @@ class TestRun:
             result = correct()
 
         if result is None:
-            raise UnexpectedError("Result is None after testing")
+            msg = "Result is None after testing"
+            raise UnexpectedError(msg)
 
         return result
 
-    def _check_errors(self):
+    def _check_errors(self) -> None:
         error_in_test = self._error_in_test
         test_case = self._test_case
 
@@ -134,7 +140,7 @@ class TestRun:
 
                     if hint_in_feedback:
                         raise ExceptionWithFeedback(
-                            feedback + '\n\n' + error_in_test.error_text, None
+                            feedback + "\n\n" + error_in_test.error_text, None
                         )
 
         raise error_in_test

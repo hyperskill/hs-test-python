@@ -1,4 +1,4 @@
-from typing import Dict
+from __future__ import annotations
 
 from hstest.exception.outcomes import WrongAnswer
 from hstest.stage.stage_test import StageTest
@@ -6,10 +6,10 @@ from hstest.testing.runner.sql_runner import SQLRunner
 
 
 class SQLTest(StageTest):
-    queries: Dict[str, str] = dict()
+    queries: dict[str, str] = {}
     db: any = None
 
-    def __init__(self, source: str = ''):
+    def __init__(self, source: str = "") -> None:
         super().__init__(source)
         self.runner = SQLRunner(self)
 
@@ -22,7 +22,8 @@ class SQLTest(StageTest):
         try:
             return cursor.execute(self.queries[query_name])
         except Exception as ex:
-            raise WrongAnswer(f"Error while running '{query_name}': \n\n{ex}")
+            msg = f"Error while running '{query_name}': \n\n{ex}"
+            raise WrongAnswer(msg)
 
     def execute_and_fetch_all(self, query_name: str):
         return self.execute(query_name).fetchall()

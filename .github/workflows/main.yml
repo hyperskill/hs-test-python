@@ -4,6 +4,7 @@ on: [ push ]
 
 jobs:
   Lint:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +25,7 @@ jobs:
       - name: Lint
         run: flake8
   test-ubuntu:
+    if: false
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

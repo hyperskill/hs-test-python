@@ -1,7 +1,10 @@
+from __future__ import annotations
+
+import contextlib
 import os
 from threading import Thread
 from time import sleep
-from typing import List, Optional
+from typing import TYPE_CHECKING
 
 from hstest.common.utils import try_many_times
 from hstest.dynamic.input.input_handler import InputHandler
@@ -11,32 +14,35 @@ from hstest.dynamic.security.thread_group import ThreadGroup
 from hstest.dynamic.system_handler import SystemHandler
 from hstest.exception.outcomes import CompilationError, ExceptionWithFeedback, OutOfInputError
 from hstest.testing.execution.program_executor import ProgramExecutor, ProgramState
-from hstest.testing.execution.runnable.runnable_file import RunnableFile
 from hstest.testing.process_wrapper import ProcessWrapper
+
+if TYPE_CHECKING:
+    from hstest.testing.execution.runnable.runnable_file import RunnableFile
 
 
 class ProcessExecutor(ProgramExecutor):
     compiled = False
 
-    def __init__(self, runnable: RunnableFile):
+    def __init__(self, runnable: RunnableFile) -> None:
         super().__init__()
-        self.process: Optional[ProcessWrapper] = None
+        self.process: ProcessWrapper | None = None
         self.thread = None
         self.continue_executing = True
         self.runnable: RunnableFile = runnable
-        self.__group: Optional[ThreadGroup] = None
+        self.__group: ThreadGroup | None = None
         self.working_directory_before = os.path.abspath(os.getcwd())
 
-    def _compilation_command(self, *args: str) -> List[str]:
+    def _compilation_command(self, *args: str) -> list[str]:
         return []
 
     def _filter_compilation_error(self, error: str) -> str:
         return error
 
-    def _execution_command(self, *args: str) -> List[str]:
-        raise NotImplementedError('Method "_execution_command" isn\'t implemented')
+    def _execution_command(self, *args: str) -> list[str]:
+        msg = 'Method "_execution_command" isn\'t implemented'
+        raise NotImplementedError(msg)
 
-    def _cleanup(self):
+    def _cleanup(self) -> None:
         pass
 
     def __compile_program(self) -> bool:
@@ -55,13 +61,14 @@ class ProcessExecutor(ProgramExecutor):
             error_text = self._filter_compilation_error(process.stderr)
 
             from hstest import StageTest
+
             StageTest.curr_test_run.set_error_in_test(CompilationError(error_text))
             self._machine.set_state(ProgramState.COMPILATION_ERROR)
             return False
 
         return True
 
-    def __handle_process(self, *args: str):
+    def __handle_process(self, *args: str) -> None:
         from hstest import StageTest
 
         os.chdir(self.runnable.folder)
@@ -77,109 +84,102 @@ class ProcessExecutor(ProgramExecutor):
         self.process = ProcessWrapper(*command).start()
 
         while self.continue_executing:
-            OutputHandler.print('Handle process - one iteration')
+            OutputHandler.print("Handle process - one iteration")
             sleep(0.001)
 
             if self.process.is_finished():
-                OutputHandler.print('Handle process - finished, breaking')
+                OutputHandler.print("Handle process - finished, breaking")
                 break
 
             is_input_allowed = self.is_input_allowed()
             is_waiting_input = self.process.is_waiting_input()
 
-            OutputHandler.print(f'Handle process - '
-                                f'input allowed {is_input_allowed}, '
-                                f'waiting input {is_waiting_input}')
+            OutputHandler.print(
+                f"Handle process - "
+                f"input allowed {is_input_allowed}, "
+                f"waiting input {is_waiting_input}"
+            )
 
             if is_input_allowed and is_waiting_input:
-                OutputHandler.print('Handle process - registering input request')
+                OutputHandler.print("Handle process - registering input request")
                 self.process.register_input_request()
 
                 try:
-                    OutputHandler.print('Handle process - try readline')
+                    OutputHandler.print("Handle process - try readline")
                     next_input = InputHandler.mock_in.readline()
-                    OutputHandler.print(
-                        f'Handle process - requested input: {repr(next_input)}'
-                    )
+                    OutputHandler.print(f"Handle process - requested input: {next_input!r}")
                     self.process.provide_input(next_input)
-                    OutputHandler.print(
-                        f'Handle process - written to stdin: {repr(next_input)}'
-                    )
+                    OutputHandler.print(f"Handle process - written to stdin: {next_input!r}")
                 except ExitException:
-                    OutputHandler.print('Handle process - EXIT EXCEPTION, stop input')
+                    OutputHandler.print("Handle process - EXIT EXCEPTION, stop input")
                     if self._wait_if_terminated():
                         if type(StageTest.curr_test_run.error_in_test) == OutOfInputError:
                             StageTest.curr_test_run.set_error_in_test(None)
                             OutputHandler.print(
-                                'Handle process - Abort stopping input, everything is OK'
+                                "Handle process - Abort stopping input, everything is OK"
                             )
                             break
                     self.stop_input()
                 except BaseException as ex:
-                    OutputHandler.print(f'Handle process - SOME EXCEPTION {ex}')
+                    OutputHandler.print(f"Handle process - SOME EXCEPTION {ex}")
 
-        OutputHandler.print('Handle process - TERMINATE')
+        OutputHandler.print("Handle process - TERMINATE")
         self.process.terminate()
 
         is_error_happened = self.process.is_error_happened()
-        OutputHandler.print('Handle process - after termination')
-        OutputHandler.print(f'Handle process - is error happened {is_error_happened}')
+        OutputHandler.print("Handle process - after termination")
+        OutputHandler.print(f"Handle process - is error happened {is_error_happened}")
 
         if StageTest.curr_test_run.error_in_test is not None:
-            OutputHandler.print('Handle process - set state EXCEPTION THROWN (ERROR IN TEST)')
+            OutputHandler.print("Handle process - set state EXCEPTION THROWN (ERROR IN TEST)")
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         elif is_error_happened:
-            OutputHandler.print(
-                'Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)'
-            )
+            OutputHandler.print("Handle process - set state EXCEPTION THROWN (REALLY EXCEPTION)")
             StageTest.curr_test_run.set_error_in_test(
                 ExceptionWithFeedback(self.process.stderr, None)
             )
             self._machine.set_state(ProgramState.EXCEPTION_THROWN)
 
         else:
-            OutputHandler.print('Handle process - set state FINISHED')
+            OutputHandler.print("Handle process - set state FINISHED")
             self._machine.set_state(ProgramState.FINISHED)
 
-        OutputHandler.print('Handle process - finishing execution')
+        OutputHandler.print("Handle process - finishing execution")
 
     def _wait_if_terminated(self):
         return try_many_times(100, 10, lambda: self.process.is_finished(False))
 
-    def _launch(self, *args: str):
+    def _launch(self, *args: str) -> None:
         self.__group = ThreadGroup()
 
         SystemHandler.install_handler(
-            self,
-            lambda: ThreadGroup.curr_group() == self.__group,
-            lambda: self.request_input()
+            self, lambda: ThreadGroup.curr_group() == self.__group, self.request_input
         )
 
-        self.thread = Thread(target=lambda: self.__handle_process(*args), daemon=True,
-                             group=self.__group)
+        self.thread = Thread(
+            target=lambda: self.__handle_process(*args), daemon=True, group=self.__group
+        )
 
         self.thread.start()
 
-    def _terminate(self):
+    def _terminate(self) -> None:
         self.continue_executing = False
         self.process.terminate()
-        OutputHandler.print(f'TERMINATE {self.is_finished()}')
+        OutputHandler.print(f"TERMINATE {self.is_finished()}")
         os.chdir(self.working_directory_before)
         while not self.is_finished():
             if self.is_waiting_input():
                 self._machine.set_state(ProgramState.RUNNING)
-            OutputHandler.print(f'NOT FINISHED {self._machine.state}')
+            OutputHandler.print(f"NOT FINISHED {self._machine.state}")
             sleep(0.001)
 
-    def tear_down(self):
+    def tear_down(self) -> None:
         working_directory_before = os.path.abspath(os.getcwd())
         os.chdir(self.runnable.folder)
 
-        try:
+        with contextlib.suppress(BaseException):
             self._cleanup()
-        except BaseException:
-            pass
 
         ProcessExecutor.compiled = False
         os.chdir(working_directory_before)

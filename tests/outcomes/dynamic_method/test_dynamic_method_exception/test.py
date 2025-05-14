@@ -5,23 +5,26 @@ from hstest.testing.unittest.user_error_test import UserErrorTest
 
 
 class TestDynamicMethodException(UserErrorTest):
-    contain = """
-    Exception in test #1
+    contain = [
+        """
+        Exception in test #1
 
-    Traceback (most recent call last):
-      File "main.py", line 3, in <module>
-        print(0/0)
-    ZeroDivisionError: division by zero
-    
-    Please find below the output of your program during this failed test.
-    Note that the '>' character indicates the beginning of the input line.
-    
-    ---
-    
-    Server started!
-    > main
-    S1: main
-    """  # noqa: W293
+        Traceback (most recent call last):
+          File "main.py", line 3, in <module>
+            print(0/0)
+                  ~^~
+        ZeroDivisionError: division by zero
+        
+        Please find below the output of your program during this failed test.
+        Note that the '>' character indicates the beginning of the input line.
+        
+        ---
+        
+        Server started!
+        > main
+        S1: main
+        """
+    ]
 
     @dynamic_test
     def test(self):
