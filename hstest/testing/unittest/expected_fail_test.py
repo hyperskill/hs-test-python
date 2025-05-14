@@ -31,13 +31,13 @@ class ExpectedFailTest(StageTest):
         self.assertEqual(result, -1)
 
         if type(self._base_contain) != list:
-            self._base_contain = [self._base_contain]
+            self._base_contain = [self._base_contain] # type: ignore[list-item]
         if type(self._base_not_contain) != list:
-            self._base_not_contain = [self._base_not_contain]
+            self._base_not_contain = [self._base_not_contain] # type: ignore[list-item]
         if type(self.contain) != list:
-            self.contain = [self.contain]
+            self.contain = [self.contain] # type: ignore[list-item]
         if type(self.not_contain) != list:
-            self.not_contain = [self.not_contain]
+            self.not_contain = [self.not_contain] # type: ignore[list-item]
 
         should_contain = self._base_contain + self.contain
         should_not_contain = self._base_not_contain + self.not_contain
