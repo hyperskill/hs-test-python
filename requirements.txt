@@ -1,15 +1,7 @@
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-win_amd64.whl ; sys_platform == 'win32' and python_version == '3.10'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-win_amd64.whl ; sys_platform == 'win32' and python_version == '3.11'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-win_amd64.whl ; sys_platform == 'win32' and python_version == '3.12'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-linux_x86_64.whl ; sys_platform == 'linux' and python_version == '3.10'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-linux_x86_64.whl ; sys_platform == 'linux' and python_version == '3.11'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-linux_x86_64.whl ; sys_platform == 'linux' and python_version == '3.12'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp310-cp310-macosx_10_9_universal2.whl ; sys_platform == 'darwin' and python_version == '3.10'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp311-cp311-macosx_10_9_universal2.whl ; sys_platform == 'darwin' and python_version == '3.11'
-psutil @ https://github.com/hyperskill/hs-test-python/releases/latest/download/psutil-5.8.0-cp312-cp312-macosx_10_13_universal2.whl ; sys_platform == 'darwin' and python_version == '3.12'
-mypy==1.10.1
-pandas==2.2.2
-ruff==0.6.0
+psutil==7.0.0
+mypy==1.13.0
+pandas==2.2.3
+ruff==0.7.3
 matplotlib==3.9.2
 seaborn==0.13.2
-scipy==1.12.0
+scipy==1.15.3
