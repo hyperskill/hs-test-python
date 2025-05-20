@@ -1,42 +1,42 @@
+from __future__ import annotations
+
+import contextlib
 import os
-from typing import Dict
 
 from hstest.exception.testing import FileDeletionError
 
 
-def create_files(files: Dict[str, str]):
+def create_files(files: dict[str, str]) -> None:
     for file, content in files.items():
-        with open(file, 'w') as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write(content)
 
 
-def delete_files(files: Dict[str, str]):
-    for file in files.keys():
+def delete_files(files: dict[str, str]) -> None:
+    for file in files:
         if os.path.isfile(file):
             try:
                 os.remove(file)
             except PermissionError:
-                raise FileDeletionError()
+                raise FileDeletionError
 
 
-def safe_delete(filename):
+def safe_delete(filename) -> None:
     if os.path.exists(filename):
-        try:
+        with contextlib.suppress(BaseException):
             os.remove(filename)
-        except BaseException:
-            pass
 
 
 def walk_user_files(folder):
     curr_folder = os.path.abspath(folder)
-    test_folder = os.path.join(curr_folder, 'test')
+    test_folder = os.path.join(curr_folder, "test")
 
     for folder, dirs, files in os.walk(curr_folder):
         if folder.startswith(test_folder):
             continue
 
         if folder == curr_folder:
-            for file in 'test.py', 'tests.py':
+            for file in "test.py", "tests.py":
                 if file in files:
                     files.remove(file)
 

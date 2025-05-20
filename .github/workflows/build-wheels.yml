@@ -1,0 +1,141 @@
+name: Build Wheels
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build_wheels:
+    name: Build psutil wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        include:
+          # Linux builds
+          - os: ubuntu-latest
+            python-version: '3.10'
+          - os: ubuntu-latest
+            python-version: '3.11'
+          - os: ubuntu-latest
+            python-version: '3.12'
+            
+          # Windows builds  
+          - os: windows-latest
+            python-version: '3.10'
+          - os: windows-latest
+            python-version: '3.11'
+          - os: windows-latest
+            python-version: '3.12'
+            
+          # macOS builds
+          - os: macos-latest
+            python-version: '3.10'
+          - os: macos-latest
+            python-version: '3.11'
+          - os: macos-latest
+            python-version: '3.12'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install pip wheel
+        shell: bash
+
+      - name: Build psutil wheel
+        run: |
+          # Create dist directory
+          mkdir -p dist
+          
+          # Build psutil wheel
+          pip wheel psutil==5.8.0 --wheel-dir dist/
+        shell: bash
+
+      - name: Upload to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: dist/*
+
+  release:
+    needs: build_wheels
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: release
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          path: dist
+          merge-multiple: true
+
+      - name: Get tag version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Update wheel URLs in pyproject.toml
+        run: |
+          # Get the version without the 'v' prefix
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          
+          # Update URLs in pyproject.toml
+          sed -i "s|/releases/download/v[0-9]\+\.[0-9]\+\.[0-9]\+/|/releases/download/${VERSION}/|g" pyproject.toml
+          
+          # Update poetry.lock
+          poetry lock --no-update
+          
+          # Commit changes
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add pyproject.toml poetry.lock
+          git commit -m "Update wheel URLs to ${VERSION}"
+          
+          # Force update the release branch
+          git push origin release --force
+          
+          # Create/update tag to point to the new commit
+          git tag -f "${VERSION}"
+          git push origin "${VERSION}" --force
+        shell: bash
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*
+            pyproject.toml
+          body: |
+            Release ${{ steps.get_version.outputs.VERSION }}
+            
+            This release includes:
+            - Updated wheel builds for Python 3.10, 3.11, and 3.12
+            - Updated pyproject.toml with correct wheel URLs
+          draft: false
+          prerelease: false
+          target_commitish: release
+
+      - name: Merge release into master
+        run: |
+          git checkout master
+          git pull origin master
+          git merge release --no-ff -m "Merge release ${VERSION} into master"
+          git push origin master
+        shell: bash
