@@ -6,11 +6,11 @@ import unittest
 from importlib import import_module
 from inspect import getmembers, isclass
 from os import listdir
-from pathlib import Path
-from typing import Final, TYPE_CHECKING
+from os.path import abspath, dirname, isdir, isfile
+from typing import TYPE_CHECKING
 
-content_path = Path(__file__).resolve().parent.parent
-sys.path.insert(0, content_path.name)
+content_path = dirname(dirname(abspath(__file__)))
+sys.path.insert(0, content_path)
 
 from hstest.common import utils as hs  # noqa: E402
 from hstest.dynamic.output.colored_output import GREEN_BOLD, RED_BOLD, RESET  # noqa: E402
@@ -23,7 +23,7 @@ class OutputForTest:
     def __init__(self, real_out: io.TextIOWrapper) -> None:
         self.original: io.TextIOWrapper = real_out
 
-    def write(self, text: str) -> None:
+    def write(self, text) -> None:
         text = re.sub(r"(?<!\\)\\n", "\n", text)
         text = re.sub(r"(?<!\\)\\\'", "'", text)
         text = re.sub(r"\\\\", r"\\", text)
@@ -41,24 +41,18 @@ class OutputForTest:
         self.original.close()
 
 
-MAX_REPEATS: Final = 5
-
-
 class UnitTesting:
     @staticmethod
     def test_all() -> bool:
         old_run = unittest.TestCase.run
 
-        def run(
-            self: unittest.TestCase, result: unittest.TestResult | None = None, repeats: int = 0
-        ) -> unittest.TestResult:
+        def run(self, result=None, repeats=0):
             failures_before = 0 if result is None else len(result.failures)
             test_result = old_run(self, result=result)
             is_project_test = "tests.projects." in str(self)
-            if repeats == MAX_REPEATS:
+            if repeats == 5:  # max 5 times
                 return test_result
             if is_project_test and test_result and failures_before < len(test_result.failures):
-                print("Rerun project test")  # noqa: T201
                 test_result.failures.pop()
                 return run(self, result=test_result, repeats=repeats + 1)
             return test_result
@@ -72,7 +66,7 @@ class UnitTesting:
         tests_suite = []
         loader = unittest.TestLoader()
 
-        for module in UnitTesting.find_modules(Path(__file__).parent):
+        for module in UnitTesting.find_modules(dirname(__file__)):
             if ("outcomes" in module and not module.endswith(".test")) or (
                 "projects" in module and not module.endswith(".tests")
             ):
@@ -91,24 +85,23 @@ class UnitTesting:
         return result.wasSuccessful()
 
     @staticmethod
-    def find_modules(from_directory: Path) -> list[str]:
-        catalogs = {from_directory}
+    def find_modules(from_directory: str) -> list[str]:
+        catalogs = [from_directory]
+        curr_dir = from_directory
 
         modules = []
 
         while catalogs:
             curr_catalog = catalogs.pop()
             for file in listdir(curr_catalog):
-                curr_location = curr_catalog / file
+                curr_location = curr_catalog + "/" + file
                 if file.startswith("__"):
                     continue
-                if curr_location.is_file():
+                if isfile(curr_location):
                     if file.endswith(".py"):
-                        modules.append(
-                            ".".join(curr_location.relative_to(from_directory).parts)[:-3]
-                        )
-                elif curr_location.is_dir():
-                    catalogs.add(curr_location)
+                        modules += [curr_location[len(curr_dir) + 1 : -3].replace("/", ".")]
+                elif isdir(curr_location):
+                    catalogs += [curr_location]
 
         return modules
 

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import contextlib
+import os
 import unittest
-from pathlib import Path
-from typing import Any, ClassVar, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 from hstest.common.file_utils import walk_user_files
 from hstest.common.reflection_utils import is_tests, setup_cwd
@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 
 class DirMeta(type):
-    def __dir__(cls) -> list[str]:
+    def __dir__(cls):
         from hstest.testing.unittest.expected_fail_test import ExpectedFailTest
         from hstest.testing.unittest.unexepected_error_test import UnexpectedErrorTest
         from hstest.testing.unittest.user_error_test import UserErrorTest
@@ -62,7 +62,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
     curr_test_run: TestRun | None = None
     curr_test_global: int = 0
 
-    def __init__(self, args: str = "", *, source: str = "") -> None:
+    def __init__(self, args="", *, source: str = "") -> None:
         super().__init__("test_run_unittest")
         self.is_tests = False
 
@@ -80,7 +80,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
         pass
 
     def _init_runner(self) -> TestRunner:
-        for _folder, _dirs, files in walk_user_files(Path.cwd()):
+        for _folder, _dirs, files in walk_user_files(os.getcwd()):
             for f in files:
                 if f.endswith(".cpp"):
                     return AsyncDynamicTestingRunner(CppExecutor)
@@ -112,13 +112,15 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             msg = "No tests found"
             raise UnexpectedError(msg)
 
+        curr_test: int = 0
         test_count = len(test_cases)
-        for curr_test, test_case in enumerate(test_cases, start=1):
+        for test_case in test_cases:
             test_case.source_name = self.source_name
             if test_case.check_func is None:
                 test_case.check_func = self.check
             if test_case.attach is None:
                 test_case.attach = self.attach
+            curr_test += 1
             test_runs += [TestRun(curr_test, test_count, test_case, self.runner)]
 
         return test_runs
@@ -129,9 +131,10 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             RED_BOLD + f"\nStart test {num}{total_tests}" + RESET + "\n"
         )
 
-    def run_tests(self, *, debug: bool = False, is_unittest: bool = False) -> tuple[int, str]:
+    def run_tests(self, *, debug=False, is_unittest: bool = False) -> tuple[int, str]:
         curr_test: int = 0
         need_tear_down: bool = False
+        ex: OutcomeError = None
         try:
             if is_tests(self):
                 self.is_tests = True
@@ -162,20 +165,21 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
 
                 if not result.is_correct:
                     full_feedback = result.feedback + "\n\n" + test_run.test_case.feedback
-                    raise WrongAnswer(full_feedback.strip())  # noqa: TRY301
+                    raise WrongAnswer(full_feedback.strip())
 
                 if test_run.is_last_test():
                     need_tear_down = False
                     test_run.tear_down()
 
             SystemHandler.tear_down()
-            return passed(is_unittest=is_unittest)
+            return passed(is_unittest)
 
-        except BaseException:  # noqa: BLE001
+        except BaseException as caught_ex:
+            ex = caught_ex
             if need_tear_down:
                 try:
                     StageTest.curr_test_run.tear_down()
-                except BaseException as new_ex:  # noqa: BLE001
+                except BaseException as new_ex:
                     if isinstance(new_ex, OutcomeError):
                         ex = new_ex
 
@@ -183,27 +187,27 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
 
             try:
                 report = build + "\n\n" + get_report()
-            except Exception:  # noqa: BLE001
+            except Exception:
                 report = build
 
             try:
                 outcome: Outcome = Outcome.get_outcome(ex, curr_test)
                 fail_text = str(outcome)
-            except BaseException as new_ex:  # noqa: BLE001
+            except BaseException as new_ex:
                 try:
                     outcome: Outcome = Outcome.get_outcome(new_ex, curr_test)
                     fail_text = str(outcome)
-                except BaseException as new_ex2:  # noqa: BLE001
+                except BaseException as new_ex2:
                     try:
                         traceback = ""
 
                         for e in new_ex2, new_ex, ex:
                             try:
                                 text = get_exception_text(e)
-                            except Exception:  # noqa: BLE001
+                            except Exception:
                                 try:
                                     text = f"{type(e)}: {e!s}"
-                                except Exception:  # noqa: BLE001
+                                except Exception:
                                     text = "Broken exception"
 
                             if len(text):
@@ -211,14 +215,14 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
 
                         fail_text = "Unexpected error\n\n" + report + "\n\n" + traceback
 
-                    except BaseException:  # noqa: BLE001
+                    except BaseException:
                         # no code execution here allowed so not to throw an exception
                         fail_text = "Unexpected error\n\nCannot check the submission\n\n" + report
 
             with contextlib.suppress(BaseException):
                 SystemHandler.tear_down()
 
-            return failed(fail_text, is_unittest=is_unittest)
+            return failed(fail_text, is_unittest)
 
         finally:
             StageTest.curr_test_run = None
@@ -227,7 +231,7 @@ class StageTest(unittest.TestCase, metaclass=DirMeta):
             StageTest.source = None
             self.after_all_tests()
 
-    _dynamic_methods: ClassVar[dict[type[StageTest], list[DynamicTestElement]]] = {}
+    _dynamic_methods: dict[type[StageTest], list[DynamicTestElement]] = {}
 
     @classmethod
     def dynamic_methods(cls) -> list[DynamicTestElement]:

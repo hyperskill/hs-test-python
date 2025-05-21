@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hs-test-python"
-version = "0.1.0"
+version = "11.0.27"
 description = ""
 authors = ["Hyperskill Team"]
 readme = "README.md"
@@ -10,13 +10,18 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
+
+# psutil with platform and Python version markers
 psutil = "7.0.0"
-mypy = "1.10.1"
-pandas = "2.2.2"
-ruff = "0.6.0"
+pandas = "2.2.3"
+seaborn = "0.13.2"
+scipy = "1.15.3"
 matplotlib = "^3.9.2"
-seaborn = "^0.13.2"
-scipy = "^1.12.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "1.13.0"
+ruff = "0.7.3"
+pytest = "8.3.4"
 
 [build-system]
 requires = ["poetry-core"]
@@ -152,5 +157,4 @@ exclude = [
 test-command = "pytest {project}/tests"
 test-extras = ["test"]
 test-skip = ["*universal2:arm64"]
-# Временно пропускаем сборку для PyPy
 skip = ["pp*"]

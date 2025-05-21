@@ -9,15 +9,92 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Poetry
-      run: pipx install poetry==$(head -n 1 .poetry-version)
+    - name: Set up Python paths (Unix)
+      if: runner.os != 'Windows'
+      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       shell: bash
+
+    - name: Set up Python paths (Windows)
+      if: runner.os == 'Windows'
+      run: echo "$env:APPDATA\Python\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      shell: pwsh
+
+    - name: Get Poetry version
+      id: poetry-version
+      run: |
+        if [ -f .poetry-version ]; then
+          echo "version=$(head -n 1 .poetry-version)" >> $GITHUB_OUTPUT
+        else
+          echo "version=2.0.1" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
+    - name: Install Poetry (Unix)
+      if: runner.os != 'Windows'
+      run: pipx install poetry==${{ steps.poetry-version.outputs.version }}
+      shell: bash
+
+    - name: Install Poetry (Windows)
+      if: runner.os == 'Windows'
+      run: pipx install poetry==${{ steps.poetry-version.outputs.version }}
+      shell: pwsh
 
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
         cache: 'poetry'
 
-    - name: Install dependencies and package
+    - name: Clear Poetry cache (Unix)
+      if: runner.os != 'Windows'
+      run: poetry cache clear --all pypi
+      shell: bash
+
+    - name: Clear Poetry cache (Windows)
+      if: runner.os == 'Windows'
+      run: poetry cache clear --all pypi
+      shell: pwsh
+
+    - name: Install dependencies and package (Unix)
+      if: runner.os != 'Windows'
       run: poetry install --no-interaction --no-ansi
       shell: bash
+
+    - name: Install dependencies and package (Windows)
+      if: runner.os == 'Windows'
+      run: poetry install --no-interaction --no-ansi
+      shell: pwsh
+
+    # Setup Node.js for JavaScript tests
+    - name: Get Node.js version
+      id: node-version
+      run: |
+        if [ -f .node-version ]; then
+          echo "version=$(head -n 1 .node-version)" >> $GITHUB_OUTPUT
+        else
+          echo "version=20" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+
+    # Install Node.js dependencies
+    - name: Install Node.js dependencies
+      run: npm install
+      shell: bash
+
+    # Setup Go for Go language tests
+    - name: Get Go version
+      id: go-version
+      run: |
+        if [ -f .go-version ]; then
+          echo "version=$(head -n 1 .go-version)" >> $GITHUB_OUTPUT
+        else
+          echo "version=1.21" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version: ${{ steps.go-version.outputs.version }}
+        cache: 'false'

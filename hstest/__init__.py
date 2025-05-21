@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from typing import Any
+
 __all__ = [
     "CheckResult",
     "DjangoTest",
     "FlaskTest",
-    "PlottingTest",
     "SQLTest",
     "SimpleTestCase",
     "StageTest",
@@ -23,7 +24,12 @@ from hstest.stage import DjangoTest, FlaskTest, SQLTest, StageTest
 from hstest.test_case import CheckResult, correct, SimpleTestCase, TestCase, wrong
 from hstest.testing.tested_program import TestedProgram
 
+# Define PlottingTest as Any before trying to import it
+PlottingTest: Any
+
 try:
     from hstest.stage import PlottingTest
+
+    __all__.append("PlottingTest")
 except ImportError:
     PlottingTest = None

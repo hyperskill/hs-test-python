@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from importlib import reload
-from typing import Final, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from hstest.testing.plotting.drawing.drawing_data import DrawingData
 
@@ -21,8 +21,6 @@ from hstest.testing.plotting.matplotlib_handler import MatplotlibHandler
 
 if TYPE_CHECKING:
     from hstest.testing.runner.plot_testing_runner import DrawingsStorage
-
-NUM_SHAPES: Final = 2
 
 
 class SeabornHandler:
@@ -48,9 +46,9 @@ class SeabornHandler:
         except ModuleNotFoundError:
             return
 
-        def displot(data: pd.DataFrame = None, **kwargs) -> None:
-            x = kwargs.get("x", None)
-            y = kwargs.get("y", None)
+        def displot(data=None, **kwargs) -> None:
+            x = kwargs.get("x")
+            y = kwargs.get("y")
 
             if data is None:
                 curr_data = {"x": np.array(x, dtype=object), "y": np.array(y, dtype=object)}
@@ -104,16 +102,11 @@ class SeabornHandler:
             )
             drawings.append(drawing)
 
-        def histplot(
-            data: pd.DataFrame | pd.Series | np.ndarray | None = None,
-            *,
-            _process_hue: bool = True,
-            **kw,
-        ) -> None:
+        def histplot(data=None, _process_hue=True, **kw):
             if data is None:
                 return None
 
-            if _process_hue and "hue" in kw and isinstance(kw["hue"], str):
+            if _process_hue and "hue" in kw and type(kw["hue"]) == str:
                 with contextlib.suppress(Exception):
                     kw["hue"] = data[kw["hue"]]
 
@@ -125,22 +118,21 @@ class SeabornHandler:
                 with contextlib.suppress(Exception):
                     data = data[kw.pop("x")]
 
-            if isinstance(data, pd.DataFrame):
+            if type(data) == pd.DataFrame:
                 for col in data.columns:
                     histplot(data[col], **kw)
                 return None
-
-            if isinstance(data, pd.Series):
+            if type(data) == pd.Series:
                 return histplot(data.to_numpy(), **kw)
 
-            if not isinstance(data, np.ndarray):
+            if type(data) != np.ndarray:
                 data = np.array(data, dtype=object)
-                if len(data.shape) == NUM_SHAPES:
+                if len(data.shape) == 2:
                     from matplotlib import cbook
 
-                    data = np.array(cbook._reshape_2D(data, "x"), dtype=object)  # noqa: SLF001
+                    data = np.array(cbook._reshape_2D(data, "x"), dtype=object)
 
-            if len(data.shape) == NUM_SHAPES:
+            if len(data.shape) == 2:
                 for i in range(data.shape[1]):
                     histplot(data[:, i], **kw)
                 return None
@@ -163,9 +155,7 @@ class SeabornHandler:
             )
             return None
 
-        def lineplot(
-            *, x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> DrawingsStorage | None:
+        def lineplot(*, data=None, x=None, y=None, **kwargs):
             x_array = data[x].to_numpy() if x is not None else data.index.to_numpy()
 
             if y is not None:
@@ -195,9 +185,7 @@ class SeabornHandler:
                 )
             return None
 
-        def lmplot(
-            x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> None:
+        def lmplot(x=None, y=None, data=None, **kwargs) -> None:
             curr_data = {  # noqa: F841
                 "data": data,
                 "x": x,
@@ -213,9 +201,7 @@ class SeabornHandler:
             )
             drawings.append(drawing)
 
-        def scatterplot(
-            x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> None:
+        def scatterplot(x=None, y=None, data=None, **kwargs) -> None:
             if x is not None and y is not None:
                 drawings.append(
                     DrawingBuilder.get_scatter_drawing(
@@ -242,9 +228,7 @@ class SeabornHandler:
                         )
                     )
 
-        def catplot(
-            x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> None:
+        def catplot(x=None, y=None, data=None, **kwargs) -> None:
             curr_data = {  # noqa: F841
                 "data": data,
                 "x": x,
@@ -260,9 +244,7 @@ class SeabornHandler:
             )
             drawings.append(drawing)
 
-        def barplot(
-            x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> None:
+        def barplot(x=None, y=None, data=None, **kwargs) -> None:
             x_arr = np.array([], dtype=object)
             y_arr = np.array([], dtype=object)
 
@@ -278,9 +260,7 @@ class SeabornHandler:
                 Drawing(DrawingLibrary.seaborn, DrawingType.bar, DrawingData(x_arr, y_arr), kwargs)
             )
 
-        def violinplot(
-            *, x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> None:
+        def violinplot(*, x=None, y=None, data=None, **kwargs) -> None:
             if data is not None:
                 if x is None and y is not None:
                     data = data[y]
@@ -304,7 +284,7 @@ class SeabornHandler:
 
             drawings.append(drawing)
 
-        def heatmap(data: pd.DataFrame = None, **kwargs) -> None:
+        def heatmap(data=None, **kwargs) -> None:
             if data is None:
                 return
 
@@ -321,9 +301,7 @@ class SeabornHandler:
 
             drawings.append(drawing)
 
-        def boxplot(
-            x: str | None = None, y: str | None = None, data: pd.DataFrame = None, **kwargs
-        ) -> None:
+        def boxplot(x=None, y=None, data=None, **kwargs) -> None:
             if data is None:
                 curr_data = {"x": np.array(x, dtype=object), "y": np.array(y, dtype=object)}
 

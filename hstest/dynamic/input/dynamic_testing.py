@@ -72,7 +72,7 @@ class DynamicTestElement:
             raise UnexpectedError(msg)
 
         if self.files is not None:
-            if not isinstance(self.files, dict):
+            if type(self.files) != dict:
                 msg = (
                     f"'Files' parameter in dynamic test should be of type "
                     f'"dict", found {type(self.files)}.'
@@ -80,20 +80,20 @@ class DynamicTestElement:
                 raise UnexpectedError(msg)
 
             for k, v in self.files.items():
-                if not isinstance(k, str):
+                if type(k) != str:
                     msg = (
                         f"All keys in 'files' parameter in dynamic test should be "
                         f'of type "str", found {type(k)}.'
                     )
                     raise UnexpectedError(msg)
-                if not isinstance(v, str):
+                if type(v) != str:
                     msg = (
                         f"All values in 'files' parameter in dynamic test should be "
                         f'of type "str", found {type(v)}.'
                     )
                     raise UnexpectedError(msg)
 
-    def get_tests(self, obj: StageTest) -> list[DynamicTesting]:
+    def get_tests(self, obj) -> list[DynamicTesting]:
         tests = []
         for _i in range(self.repeat):
             for args in self.args_list:
@@ -131,15 +131,14 @@ def to_dynamic_testing(
                     new_input = obj
                 elif isinstance(obj, CheckResult):
                     if obj.is_correct:
-                        raise TestPassed  # noqa: TRY301
-                    raise WrongAnswer(obj.feedback)  # noqa: TRY301
+                        raise TestPassed
+                    raise WrongAnswer(obj.feedback)
                 else:
-                    msg = (
+                    raise UnexpectedError(
                         "Dynamic input should return "
-                        f"str or CheckResult objects only. Found: {type(obj)}"
+                        + f"str or CheckResult objects only. Found: {type(obj)}"
                     )
-                    raise UnexpectedError(msg)  # noqa: TRY301
-            except BaseException as ex:  # noqa: BLE001
+            except BaseException as ex:
                 from hstest.stage_test import StageTest
 
                 StageTest.curr_test_run.set_error_in_test(ex)

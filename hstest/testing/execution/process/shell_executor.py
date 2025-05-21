@@ -8,5 +8,5 @@ class ShellExecutor(ProcessExecutor):
     def __init__(self, source_name: str | None = None) -> None:
         super().__init__(ShellSearcher().find(source_name))
 
-    def _execution_command(self, *args: str) -> list[str]:
+    def _execution_command(self, *args: str):
         return ["bash", self.runnable.file, *list(args)]
