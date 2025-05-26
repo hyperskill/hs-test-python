@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hs-test-python"
-version = "11.0.27"
+version = "11.0.29"
 description = ""
 authors = ["Hyperskill Team"]
 readme = "README.md"
@@ -10,8 +10,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-
-# psutil with platform and Python version markers
 psutil = "7.0.0"
 pandas = "2.2.3"
 seaborn = "0.13.2"
