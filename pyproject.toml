@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hs-test-python"
-version = "11.0.29"
-description = ""
+version = "11.0.30"
+description = "A framework that simplifies testing educational projects for Hyperskill with features like black box testing, multiple test types support, and learner-friendly feedback generation."
 authors = ["Hyperskill Team"]
 readme = "README.md"
 packages = [
