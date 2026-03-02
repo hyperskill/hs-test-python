@@ -27,8 +27,8 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
         if num_threads < self._max_workers:
             thread_name = "%s_%d" % (self._thread_name_prefix or self, num_threads)
 
-            # Python 3.14+ changed _worker signature and removed _initializer/_initargs
-            if hasattr(self, '_create_worker_context'):
+            # Python 3.14+
+            if hasattr(self, "_create_worker_context"):
                 args = (
                     weakref.ref(self, weakref_cb),
                     self._create_worker_context(),
