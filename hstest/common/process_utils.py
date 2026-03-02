@@ -3,7 +3,7 @@ from __future__ import annotations
 import threading
 import weakref
 from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures.thread import _threads_queues, _worker
+from concurrent.futures.thread import _worker
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -48,7 +48,6 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
             t.daemon = True
             t.start()
             self._threads.add(t)
-            _threads_queues[t] = self._work_queue
 
 
 def is_port_in_use(port):
