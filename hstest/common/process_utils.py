@@ -3,7 +3,7 @@ from __future__ import annotations
 import threading
 import weakref
 from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures.thread import _worker, _threads_queues
+from concurrent.futures.thread import _threads_queues, _worker
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
