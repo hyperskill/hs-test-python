@@ -29,22 +29,14 @@ class DaemonThreadPoolExecutor(ThreadPoolExecutor):
         if num_threads < self._max_workers:
             thread_name = "%s_%d" % (self._thread_name_prefix or self, num_threads)
 
-            # Python 3.14+ refactored initializer/initargs into WorkerContext
-            if hasattr(self, "_create_worker_context"):
-                args = (
-                    weakref.ref(self, weakref_cb),
-                    self._create_worker_context(),
-                    self._work_queue,
-                )
-            else:
-                args = (
-                    weakref.ref(self, weakref_cb),
-                    self._work_queue,
-                    self._initializer,
-                    self._initargs,
-                )
+            args = (
+                weakref.ref(self, weakref_cb),
+                self._work_queue,
+                self._initializer,
+                self._initargs,
+            )
 
-            t = threading.Thread(name=thread_name, target=_worker, args=args)
+            t = threading.Thread(name=thread_name, target=_worker, args=args, group=self.group)
             t.daemon = True
             t.start()
             self._threads.add(t)
