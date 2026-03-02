@@ -9,14 +9,14 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.11,<3.15"
 
 # psutil with platform and Python version markers
 psutil = "7.0.0"
-pandas = "2.2.3"
+pandas = "2.3.3"
 seaborn = "0.13.2"
-scipy = "1.15.3"
-matplotlib = "^3.9.2"
+scipy = "1.16.1"
+matplotlib = "3.10.8"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "1.13.0"
@@ -29,7 +29,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
@@ -129,7 +129,7 @@ order-by-type = false
 required-imports = ["from __future__ import annotations"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 check_untyped_defs = true
 disallow_any_generics = true
 disallow_untyped_calls = true

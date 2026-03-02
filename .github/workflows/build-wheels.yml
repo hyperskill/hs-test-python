@@ -17,27 +17,33 @@ jobs:
         include:
           # Linux builds
           - os: ubuntu-latest
-            python-version: '3.10'
-          - os: ubuntu-latest
             python-version: '3.11'
           - os: ubuntu-latest
             python-version: '3.12'
+          - os: ubuntu-latest
+            python-version: '3.13'
+          - os: ubuntu-latest
+            python-version: '3.14'
             
-          # Windows builds  
-          - os: windows-latest
-            python-version: '3.10'
+          # Windows builds
           - os: windows-latest
             python-version: '3.11'
           - os: windows-latest
             python-version: '3.12'
+          - os: windows-latest
+            python-version: '3.13'
+          - os: windows-latest
+            python-version: '3.14'
             
           # macOS builds
           - os: macos-latest
-            python-version: '3.10'
-          - os: macos-latest
             python-version: '3.11'
           - os: macos-latest
             python-version: '3.12'
+          - os: macos-latest
+            python-version: '3.13'
+          - os: macos-latest
+            python-version: '3.14'
 
     steps:
       - uses: actions/checkout@v4
@@ -126,7 +132,7 @@ jobs:
             Release ${{ steps.get_version.outputs.VERSION }}
             
             This release includes:
-            - Updated wheel builds for Python 3.10, 3.11, and 3.12
+            - Updated wheel builds for Python 3.11, 3.12, 3.13 and 3.14
             - Updated pyproject.toml with correct wheel URLs
           draft: false
           prerelease: false
