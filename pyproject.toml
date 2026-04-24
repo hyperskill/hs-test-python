@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hs-test-python"
-version = "11.0.31"
+version = "11.0.32"
 description = "A framework that simplifies testing educational projects for Hyperskill with features like black box testing, multiple test types support, and learner-friendly feedback generation."
 authors = ["Hyperskill Team"]
 readme = "README.md"
@@ -17,6 +17,7 @@ pandas = "2.3.3"
 seaborn = "0.13.2"
 scipy = "1.16.1"
 matplotlib = "3.10.8"
+pyyaml = "6.0.3"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "1.13.0"
